@@ -1,1 +1,1 @@
-# OpenNodeGraph
+# OpenShaderDesigner
