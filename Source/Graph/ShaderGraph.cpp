@@ -207,17 +207,12 @@ void ShaderGraph::DrawWindow()
 
 void ShaderGraph::HandleInput()
 {
-	// Window Info
-	const ImVec2 CanvasMin = ImGui::GetWindowPos() + ImGui::GetWindowContentRegionMin();
-	const ImVec2 CanvasMax = ImGui::GetWindowPos() + ImGui::GetWindowContentRegionMax();
-	const ImVec2 CanvasSize = CanvasMax - CanvasMin;
-	const ImVec2 CanvasCenter = CanvasMin + CanvasSize * 0.5f;
 
 	Focused = ImGui::IsWindowFocused();
 
 	// Calculate Mouse Delta
 	Mouse.ClickedSomething = false;
-	Mouse.Location = (Mouse.ScreenLocation - CanvasCenter + Camera.Location) * Camera.Zoom;
+	Mouse.Location = ScreenToGrid(Mouse.ScreenLocation);
 	Mouse.Delta = ImGui::GetMousePos() - Mouse.ScreenLocation;
 	Mouse.ScreenLocation = ImGui::GetMousePos();
 	Mouse.Scroll = ImGui::GetIO().MouseWheel;
@@ -332,26 +327,35 @@ void ShaderGraph::DrawNode(Node& node, NodeId id)
 	// Window Info
 	const ImVec2 CanvasMin = ImGui::GetWindowPos() + ImGui::GetWindowContentRegionMin();
 	const ImVec2 CanvasMax = ImGui::GetWindowPos() + ImGui::GetWindowContentRegionMax();
-	const ImVec2 CanvasSize = CanvasMax - CanvasMin;
-	const ImVec2 CanvasCenter = CanvasMin + CanvasSize * 0.5f;
 
 	// ImGui Vars
 	ImDrawList& DrawList = *ImGui::GetWindowDrawList();
 
 	// Draw Vars
+	const float HeaderHeight = Style.FontSize;
 	const ImVec2 Padding = { Style.Grid.Lines.Padding, Style.Grid.Lines.Padding };
-	const float HeaderHeight = Style.FontSize / Camera.Zoom;
-	const ImVec2 Size = node.Info.Size / Camera.Zoom;
-	const ImVec2 Position = CanvasCenter - Camera.Location + node.Position / Camera.Zoom + Padding;
-	const bool NodeHovered = ImGui::IsMouseHoveringRect(Position, Position + Size);
-	const bool HeaderHovered = ImGui::IsMouseHoveringRect(Position, Position + ImVec2(Size.x, HeaderHeight));
+	const ImVec2 NodePos = node.Position + Padding;
+	const ImVec2 NodeRoot = GridToScreen(NodePos);
+	const ImVec2 NodeEdge = GridToScreen(NodePos + node.Info.Size);
+	const ImVec2 HeaderEdge = GridToScreen(NodePos + ImVec2(node.Info.Size.x, HeaderHeight));
+	const ImVec2 HeaderText = GridToScreen(NodePos + ImVec2(Style.Nodes.Rounding, 0) + Padding * 0.5f);
+	const ImVec2 InputRoot = GridToScreen(NodePos + ImVec2(Style.Nodes.Pins.Padding, HeaderHeight));
+	const ImVec2 OutputRoot = GridToScreen(NodePos + ImVec2(node.Info.Size.x - HeaderHeight - Style.Nodes.Pins.Padding, HeaderHeight));
+
 	const bool HasLock = Mouse.FocusedNode();
+	const bool NodeHovered = ImGui::IsMouseHoveringRect(NodeRoot, NodeEdge);
+	const bool HeaderHovered = ImGui::IsMouseHoveringRect(NodeRoot, HeaderEdge);
 	const ImColor HeaderColor = node.Header.Color * (HeaderHovered || HasLock ? 1.2f : 1.0f) * (HasLock ? 0.8f : 1.0f);
-	const ImVec2 InputLoc = Position + ImVec2(Style.Nodes.Pins.Padding / Camera.Zoom, HeaderHeight);
-	const ImVec2 OutputLoc = Position + ImVec2(Size.x - HeaderHeight - Style.Nodes.Pins.Padding / Camera.Zoom, HeaderHeight);
+
+	const float Rounding = Style.Nodes.Rounding / Camera.Zoom;
+	const float PinSpacing = HeaderHeight / Camera.Zoom;
+	const float BorderThickness = Style.Nodes.Border.Thickness / Camera.Zoom;
+
 	const float GridSize = (Style.FontSize + Style.Grid.Lines.Padding);
 	const bool Ctrl = ImGui::IsKeyDown(ImGuiKey_ModCtrl);
 	const bool Shift = ImGui::IsKeyDown(ImGuiKey_ModShift);
+
+	if(!AABB(CanvasMin, CanvasMax, NodeRoot, NodeEdge)) return;
 
 	// Input ===========================================================================================================
 
@@ -409,8 +413,8 @@ void ShaderGraph::DrawNode(Node& node, NodeId id)
 			ImVec2 Drag = ImGui::GetMouseDragDelta() * Camera.Zoom;
 			ImVec2 A0 = Mouse.Location - Drag;
 			ImVec2 A1 = Mouse.Location;
-			ImVec2 B0 = node.Position;
-			ImVec2 B1 = node.Position + node.Info.Size;
+			ImVec2 B0 = NodePos;
+			ImVec2 B1 = NodePos + node.Info.Size;
 			bool Intersect = AABB(A0, A1, B0, B1);
 
 			// Clear selection for new selection
@@ -484,38 +488,38 @@ void ShaderGraph::DrawNode(Node& node, NodeId id)
 
 	// Content =========================================================================================================
 
-	DrawList.AddRectFilled(Position, Position + Size, Style.Nodes.Content, Style.Nodes.Rounding / Camera.Zoom + 1);
+	DrawList.AddRectFilled(NodeRoot, NodeEdge, Style.Nodes.Content, Rounding + 1);
 
 	// Header ==========================================================================================================
 
 	if(node.Header.Enabled)
 	{
-		DrawList.PushClipRect(Position, Position + ImVec2(Size.x, HeaderHeight), true);
-		DrawList.AddRectFilled(Position, Position + Size, HeaderColor, Style.Nodes.Rounding / Camera.Zoom + 1);
-		DrawList.AddText(NULL, Style.FontSize / Camera.Zoom, Position + ImVec2(Style.Nodes.Rounding / Camera.Zoom, 0) + Padding / 2.0f, Style.Nodes.Title, node.Header.Title.c_str());
+		DrawList.PushClipRect(NodeRoot, HeaderEdge, true);
+		DrawList.AddRectFilled(NodeRoot, NodeEdge, HeaderColor, Rounding + 1);
+		DrawList.AddText(NULL, Style.FontSize / Camera.Zoom, HeaderText, Style.Nodes.Title, node.Header.Title.c_str());
 		DrawList.PopClipRect();
 
-		DrawList.AddLine(InputLoc, Position + ImVec2(Size.x, HeaderHeight), Style.Nodes.Border.Color, Style.Nodes.Border.Thickness / Camera.Zoom);
+		DrawList.AddLine(InputRoot, HeaderEdge, Style.Nodes.Border.Color, BorderThickness);
 	}
 
 	// Border ==========================================================================================================
 
-	if(Selected.contains(id)) DrawList.AddRect(Position, Position + Size, Style.Nodes.SelectedBorder.Color, Style.Nodes.Rounding / Camera.Zoom, 0, Style.Nodes.SelectedBorder.Thickness / Camera.Zoom);
-	else DrawList.AddRect(Position, Position + Size, Style.Nodes.Border.Color, Style.Nodes.Rounding / Camera.Zoom, 0, Style.Nodes.Border.Thickness / Camera.Zoom);
+	if(Selected.contains(id)) DrawList.AddRect(NodeRoot, NodeEdge, Style.Nodes.SelectedBorder.Color, Rounding, 0, Style.Nodes.SelectedBorder.Thickness / Camera.Zoom);
+	else DrawList.AddRect(NodeRoot, NodeEdge, Style.Nodes.Border.Color, Rounding, 0, BorderThickness);
 
 	// Pins ============================================================================================================
 
 	int i = 0;
 	for(Pin& pin : node.IO.Inputs)
 	{
-		DrawPin(id, pin, i, InputLoc + ImVec2(0, HeaderHeight) * (i + 0.5f), true);
+		DrawPin(id, pin, i, InputRoot + ImVec2(0, PinSpacing) * (i + 0.5f), true);
 		++i;
 	}
 
 	int j = 0;
 	for(Pin& pin : node.IO.Outputs)
 	{
-		DrawPin(id, pin, j, OutputLoc + ImVec2(0, HeaderHeight) * (j + 0.5f), false);
+		DrawPin(id, pin, j, OutputRoot + ImVec2(0, PinSpacing) * (j + 0.5f), false);
 		++j;
 	}
 }
@@ -529,9 +533,14 @@ void ShaderGraph::DrawPin(NodeId node_id, Pin& pin, PinId pin_id, ImVec2 locatio
 
 	// Draw Vars
 	const float HeaderHeight = Style.FontSize / Camera.Zoom;
-	const float PinRadius = (Style.FontSize - Style.Nodes.Pins.Padding - 2.0f * Style.Nodes.Pins.BorderThickness) * 0.5f / Camera.Zoom;
 	const ImVec2 Offset = ImVec2(HeaderHeight, HeaderHeight) * 0.5f;
-	const bool Hovered = ImGui::IsMouseHoveringRect(location, location + ImVec2(HeaderHeight, HeaderHeight) / Camera.Zoom);
+	const ImVec2 PinRoot = location;
+	const ImVec2 PinEdge = PinRoot + Offset * 2.0f;
+	const ImVec2 PinCenter = PinRoot + Offset;
+	const float PinPadding = Style.Nodes.Pins.Padding / Camera.Zoom;
+	const float BorderThickness = Style.Nodes.Pins.BorderThickness / Camera.Zoom;
+	const float PinRadius = (HeaderHeight - PinPadding - 2.0f * Style.Nodes.Pins.BorderThickness) * 0.5f;
+	const bool Hovered = ImGui::IsMouseHoveringRect(PinRoot, PinEdge);
 
 	// Pin =============================================================================================================
 
@@ -544,16 +553,16 @@ void ShaderGraph::DrawPin(NodeId node_id, Pin& pin, PinId pin_id, ImVec2 locatio
 	// Circle
 	PinPtr ptr = { node_id, pin_id, input };
 	auto it = Connections.find(ptr);
-	if(Mouse.NewConnection() && *Mouse.NewConnection == ptr) DrawList.AddCircleFilled(location + Offset, PinRadius, Pin::Colors[pin.Type]);
-	else if(!input && it != Connections.end())               DrawList.AddCircleFilled(location + Offset, PinRadius, Pin::Colors[pin.Type] * (Hovered ? 0.8f : 1.0f));
-	else if(it != Connections.end())                         DrawList.AddCircleFilled(location + Offset, PinRadius, Pin::Colors[Nodes[it->second.Node]->IO.Outputs[it->second.Pin].Type] * (Hovered ? 0.8f : 1.0f));
-	else if(Hovered)                                         DrawList.AddCircleFilled(location + Offset, PinRadius, Pin::Colors[pin.Type]);
-	else                                                     DrawList.AddCircleFilled(location + Offset, PinRadius, Style.Nodes.Pins.Background);
-	DrawList.AddCircle(location + Offset, PinRadius, Pin::Colors[pin.Type], 0, Style.Nodes.Pins.BorderThickness / Camera.Zoom);
+	if(Mouse.NewConnection() && *Mouse.NewConnection == ptr) DrawList.AddCircleFilled(PinCenter, PinRadius, Pin::Colors[pin.Type]);
+	else if(!input && it != Connections.end())               DrawList.AddCircleFilled(PinCenter, PinRadius, Pin::Colors[pin.Type] * (Hovered ? 0.8f : 1.0f));
+	else if(it != Connections.end())                         DrawList.AddCircleFilled(PinCenter, PinRadius, Pin::Colors[Nodes[it->second.Node]->IO.Outputs[it->second.Pin].Type] * (Hovered ? 0.8f : 1.0f));
+	else if(Hovered)                                         DrawList.AddCircleFilled(PinCenter, PinRadius, Pin::Colors[pin.Type]);
+	else                                                     DrawList.AddCircleFilled(PinCenter, PinRadius, Style.Nodes.Pins.Background);
+	DrawList.AddCircle(PinCenter, PinRadius, Pin::Colors[pin.Type], 0, BorderThickness);
 
 	// Text
 	const ImVec2 TextOffset = location + ImVec2((input ? HeaderHeight : -ImGui::CalcTextSize(pin.Name.c_str()).x / Camera.Zoom), 0);
-	DrawList.AddText(NULL, Style.FontSize / Camera.Zoom, TextOffset, Style.Nodes.Pins.Text, pin.Name.c_str());
+	DrawList.AddText(NULL, HeaderHeight, TextOffset, Style.Nodes.Pins.Text, pin.Name.c_str());
 
 	// Input ===========================================================================================================
 
@@ -585,6 +594,10 @@ void ShaderGraph::DrawContextMenu()
 			EraseSelection();
 		}
 		if(ImGui::MenuItem("Paste", "Ctrl+V", false, !Clipboard.Nodes.empty())) Paste(ContextMenuPosition);
+
+		ImGui::Separator();
+
+		ImGui::Text("Create");
 
 		ImGui::Separator();
 
@@ -665,10 +678,6 @@ void ShaderGraph::DrawConnections()
 	const float HeaderHeight = Style.FontSize / Camera.Zoom;
 	const float PinRadius = (Style.FontSize - Style.Nodes.Pins.Padding - 2.0f * Style.Nodes.Pins.BorderThickness) * 0.5f / Camera.Zoom;
 	const ImVec2 Padding = { Style.Grid.Lines.Padding, Style.Grid.Lines.Padding };
-	const ImVec2 CanvasMin = ImGui::GetWindowPos() + ImGui::GetWindowContentRegionMin();
-	const ImVec2 CanvasMax = ImGui::GetWindowPos() + ImGui::GetWindowContentRegionMax();
-	const ImVec2 CanvasSize = CanvasMax - CanvasMin;
-	const ImVec2 CanvasCenter = CanvasMin + CanvasSize * 0.5f;
 	const ImVec2 Offset = ImVec2(HeaderHeight, HeaderHeight) * 0.5f;
 
 	// Connections =============================================================================================================
@@ -683,12 +692,11 @@ void ShaderGraph::DrawConnections()
 		const Node& Node = *Nodes[Mouse.NewConnection->Node];
 		const Pin&  Pin  = Mouse.NewConnection->Input ? Node.IO.Inputs[Mouse.NewConnection->Pin] : Node.IO.Outputs[Mouse.NewConnection->Pin];
 
-		const ImVec2 Size = Node.Info.Size / Camera.Zoom;
-		const ImVec2 Position = CanvasCenter - Camera.Location + Node.Position / Camera.Zoom + Padding;
-		const ImVec2 InputLoc = Position + ImVec2(Style.Nodes.Pins.Padding / Camera.Zoom, HeaderHeight);
-		const ImVec2 OutputLoc = Position + ImVec2(Size.x - HeaderHeight - Style.Nodes.Pins.Padding / Camera.Zoom, HeaderHeight);
+		const ImVec2 NodePos = Node.Position + Padding;
+		const ImVec2 InputRoot = GridToScreen(NodePos + ImVec2(Style.Nodes.Pins.Padding, HeaderHeight));
+		const ImVec2 OutputRoot = GridToScreen(NodePos + ImVec2(Node.Info.Size.x - HeaderHeight - Style.Nodes.Pins.Padding, HeaderHeight));
 
-		const ImVec2 Root = (Mouse.NewConnection->Input ? InputLoc : OutputLoc) + ImVec2(0, HeaderHeight) * (Mouse.NewConnection->Pin + 0.5f);
+		const ImVec2 Root = (Mouse.NewConnection->Input ? InputRoot : OutputRoot) + ImVec2(0, HeaderHeight) * (Mouse.NewConnection->Pin + 0.5f);
 
 		const ImVec2 A = Root + Offset + ImVec2(Mouse.NewConnection->Input ? -PinRadius : PinRadius, 0);
 		const ImVec2 D = ImGui::GetMousePos();
@@ -853,6 +861,7 @@ NodeId ShaderGraph::AddNode(Node* node)
 void ShaderGraph::RemoveNode(NodeId id)
 {
 	Node* node = Nodes[id];
+	if(node->Info.Const) return;
 
 	PinId i = 0;
 	for(const auto& pin : node->IO.Inputs) EraseConnections({ id, i++, true });
@@ -874,6 +883,8 @@ void ShaderGraph::ClearClipboard()
 
 void ShaderGraph::Copy()
 {
+	if(Selected.empty()) return;
+
 	// Helper for connections
 	std::unordered_map<NodeId, NodeId> clipboardTransform;
 	ImVec2 min = Nodes[*Selected.begin()]->Position;
@@ -917,14 +928,18 @@ void ShaderGraph::Paste(const ImVec2& location)
 	const float GridSize = (Style.FontSize + Style.Grid.Lines.Padding);
 	std::unordered_map<NodeId, NodeId> clipboardTransform;
 	ImVec2 root = ImFloor(location / GridSize + ImVec2(0.5f, 0.5f)) * GridSize;
+	Selected.clear();
 
+	// Paste the nodes
 	NodeId id = 0;
 	for(Node* node : Clipboard.Nodes)
 	{
-		node->Position += root;
-		clipboardTransform[id++] = AddNode(node->Copy(*this));
+		NodeId index = clipboardTransform[id++] = AddNode(node->Copy(*this));
+		Nodes[index]->Position += root;
+		Selected.insert(index);
 	}
 
+	// Paste the connections
 	for(const Connection& connection : Clipboard.Connections)
 	{
 		CreateConnection(
@@ -960,6 +975,21 @@ bool ShaderGraph::AABB(const ImVec2& a0, const ImVec2& a1, const ImVec2& b0, con
 		  && glm::max(b0.y, b1.y) >= glm::min(a0.y, a1.y);
 
 	return X && Y;
+}
+
+ImVec2 ShaderGraph::GridToScreen(const ImVec2& position)
+{
+	// Window Info
+	const ImVec2 CanvasCenter = ImGui::GetWindowPos()
+	                          + (ImGui::GetWindowContentRegionMin() + ImGui::GetWindowContentRegionMax()) * 0.5f;
+	return CanvasCenter - Camera.Location + position / Camera.Zoom;
+}
+
+ImVec2 ShaderGraph::ScreenToGrid(const ImVec2& position)
+{
+	const ImVec2 CanvasCenter = ImGui::GetWindowPos()
+							  + (ImGui::GetWindowContentRegionMin() + ImGui::GetWindowContentRegionMax()) * 0.5f;
+	return (position - CanvasCenter + Camera.Location) * Camera.Zoom;
 }
 
 void ShaderGraph::Register(const std::filesystem::path& path, ConstructorPtr constructor)

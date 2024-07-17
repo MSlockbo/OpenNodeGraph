@@ -10,6 +10,8 @@
 #include <imgui-docking/backends/imgui_impl_opengl3.h>
 #include <imgui-docking/misc/freetype/imgui_freetype.h>
 
+#include <imnodes-master/imnodes.h>
+
 using namespace OpenShaderDesigner;
 
 void EditorSystem::Initialize()
@@ -19,6 +21,7 @@ void EditorSystem::Initialize()
 	Console::Log(Console::Severity::ALERT, "Initializing Dear ImGUI");
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
+	ImNodes::CreateContext();
 
 
 	// https://github.com/ocornut/imgui/issues/707#issuecomment-917151020
@@ -50,7 +53,7 @@ void EditorSystem::Initialize()
 	colors[ImGuiCol_Header]                 = ImVec4(0.00f, 0.00f, 0.00f, 0.52f);
 	colors[ImGuiCol_HeaderHovered]          = ImVec4(0.00f, 0.00f, 0.00f, 0.36f);
 	colors[ImGuiCol_HeaderActive]           = ImVec4(0.20f, 0.22f, 0.23f, 0.33f);
-	colors[ImGuiCol_Separator]              = ImVec4(0.28f, 0.28f, 0.28f, 0.29f);
+	colors[ImGuiCol_Separator]              = ImVec4(0.40f, 0.40f, 0.40f, 0.29f);
 	colors[ImGuiCol_SeparatorHovered]       = ImVec4(0.44f, 0.44f, 0.44f, 0.29f);
 	colors[ImGuiCol_SeparatorActive]        = ImVec4(0.40f, 0.44f, 0.47f, 1.00f);
 	colors[ImGuiCol_ResizeGrip]             = ImVec4(0.28f, 0.28f, 0.28f, 0.29f);
@@ -122,6 +125,7 @@ void EditorSystem::Initialize()
 	ImGui_ImplOpenGL3_Init("#version 460 core");
 
 	//ImGui::GetBackgroundDrawList()->AddText(ImVec2(0, 0), ImColor(0, 0, 0), "setup");
+	Console::Log(Console::Severity::ALERT, "Initialized ImGui ({})", IMGUI_VERSION);
 }
 
 void EditorSystem::Draw()
@@ -158,6 +162,7 @@ void EditorSystem::Shutdown()
 	// Shutdown ImGui
 	ImGui_ImplSDL2_Shutdown();
 	ImGui::DestroyContext();
+	ImNodes::DestroyContext();
 }
 
 void EditorSystem::HandleEvents(SDL_Event* event)

@@ -91,6 +91,12 @@ Window::Window(const Configuration& config)
 
     // Set running
     Open = true;
+
+    const char* glVersion = reinterpret_cast<const char*>(glGetString(GL_VERSION));
+    const char* glewVersion = reinterpret_cast<const char*>(glewGetString(GLEW_VERSION));
+    SDL_version sdlVersion; SDL_GetVersion(&sdlVersion);
+	Console::Log(Console::Severity::ALERT, "Initialized SDL ({}.{}.{})", sdlVersion.major, sdlVersion.minor, sdlVersion.patch);
+    Console::Log(Console::Severity::ALERT, "Running OpenGL ({}), GLEW ({})", glVersion, glewVersion);
 }
 
 Window::~Window()

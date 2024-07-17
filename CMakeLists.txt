@@ -33,6 +33,8 @@ endif()
 include_directories(Include)
 include_directories(External)
 
+add_subdirectory(External/imnodes-master)
+
 add_executable(OpenShaderDesigner
         Source/Entry.cpp
 
@@ -75,4 +77,5 @@ target_link_libraries(OpenShaderDesigner PRIVATE
         GLEW::GLEW
         OpenGL::GL
         ${SDL2_LIBRARIES}
+        imnodes
 )

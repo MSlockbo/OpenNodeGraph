@@ -171,6 +171,9 @@ namespace OpenShaderDesigner
 		float BezierOffset(const ImVec2& out, const ImVec2& in);
 		bool AABB(const ImVec2& a0, const ImVec2& a1, const ImVec2& b0, const ImVec2& b1);
 
+		ImVec2 GridToScreen(const ImVec2& position);
+		ImVec2 ScreenToGrid(const ImVec2& position);
+
 	public:
 		ShaderGraph();
 		~ShaderGraph();
