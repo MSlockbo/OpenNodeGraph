@@ -1,6 +1,18 @@
+// =====================================================================================================================
+// Copyright 2024 Medusa Slockbower
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
 //
-// Created by Maddie on 7/1/2024.
+// 	http://www.apache.org/licenses/LICENSE-2.0
 //
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+// =====================================================================================================================
+
 
 #include <filesystem>
 #include <stack>
@@ -195,7 +207,7 @@ void ShaderGraph::DrawWindow()
 	{
 		if(Drag.x == 0 && Drag.y == 0 && !Mouse.NodeHovered && !(Ctrl || Shift))
 		{
-			Selected.clear();
+			Mouse.Selected.clear();
 		}
 
 		Mouse.Locks.clear();
@@ -373,7 +385,7 @@ void ShaderGraph::DrawNode(Node& node, NodeId id)
 				Mouse.FocusedNode  = id;
 				Mouse.LocksDragged = false;
 
-				for(NodeId selected : Selected)
+				for(NodeId selected : Mouse.Selected)
 				{
 					Mouse.Locks.emplace(selected, Mouse.Location - Nodes[selected]->Position);
 				}
@@ -385,22 +397,22 @@ void ShaderGraph::DrawNode(Node& node, NodeId id)
 	if(ImGui::IsMouseDragging(ImGuiMouseButton_Left) && !Mouse.NewConnection() && Focused)
 	{
 		// Reset When Dragging a New Node
-		if(Mouse.FocusedNode() && Mouse.FocusedNode == id && !Selected.contains(id))
+		if(Mouse.FocusedNode() && Mouse.FocusedNode == id && !Mouse.Selected.contains(id))
 		{
 			if(!(Ctrl || Shift))
 			{
-				Selected.clear();
+				Mouse.Selected.clear();
 				Mouse.Locks.clear();
 			}
-			Selected.insert(id);
+			Mouse.Selected.insert(id);
 		}
 
 		// Begin selection
-		if(Mouse.FocusedNode() && Selected.contains(id) && !(Ctrl || Shift))
+		if(Mouse.FocusedNode() && Mouse.Selected.contains(id) && !(Ctrl || Shift))
 		{
 			Mouse.LocksDragged = true;
 
-			for(NodeId selected : Selected)
+			for(NodeId selected : Mouse.Selected)
 			{
 				Mouse.Locks.emplace(selected, Mouse.Location - Nodes[selected]->Position);
 			}
@@ -420,7 +432,7 @@ void ShaderGraph::DrawNode(Node& node, NodeId id)
 			// Clear selection for new selection
 			if(Mouse.DragSelect.empty() && !Shift && !Ctrl && !Mouse.FocusedNode())
 			{
-				Selected.clear();
+				Mouse.Selected.clear();
 			}
 
 			// Select nodes
@@ -428,16 +440,16 @@ void ShaderGraph::DrawNode(Node& node, NodeId id)
 			{
 				if(!Ctrl)
 				{
-					if(!Selected.contains(id))
+					if(!Mouse.Selected.contains(id))
 					{
-						Selected.insert(id);
+						Mouse.Selected.insert(id);
 						Mouse.DragSelect.insert(id);
 					}
 				}
 				else
 				{
-					if(Selected.contains(id)) Selected.erase(id);
-					else Selected.insert(id);
+					if(Mouse.Selected.contains(id)) Mouse.Selected.erase(id);
+					else Mouse.Selected.insert(id);
 
 					Mouse.DragSelect.insert(id);
 				}
@@ -450,12 +462,12 @@ void ShaderGraph::DrawNode(Node& node, NodeId id)
 
 				if(!Ctrl)
 				{
-					Selected.erase(id);
+					Mouse.Selected.erase(id);
 				}
 				else
 				{
-					if(Selected.contains(id)) Selected.erase(id);
-					else Selected.insert(id);
+					if(Mouse.Selected.contains(id)) Mouse.Selected.erase(id);
+					else Mouse.Selected.insert(id);
 				}
 			}
 		}
@@ -463,20 +475,20 @@ void ShaderGraph::DrawNode(Node& node, NodeId id)
 
 	if(ImGui::IsMouseReleased(ImGuiMouseButton_Left) && HeaderHovered)
 	{
-		if(Selected.contains(id))
+		if(Mouse.Selected.contains(id))
 		{
-			if(Ctrl) Selected.erase(id);
+			if(Ctrl) Mouse.Selected.erase(id);
 			else if(!Shift && !Mouse.LocksDragged)
 			{
-				Selected.clear();
-				Selected.insert(id);
+				Mouse.Selected.clear();
+				Mouse.Selected.insert(id);
 			}
 		}
 		else
 		{
 			if(!(Ctrl || Shift))
-				Selected.clear();
-			Selected.insert(id);
+				Mouse.Selected.clear();
+			Mouse.Selected.insert(id);
 		}
 	}
 
@@ -504,7 +516,7 @@ void ShaderGraph::DrawNode(Node& node, NodeId id)
 
 	// Border ==========================================================================================================
 
-	if(Selected.contains(id)) DrawList.AddRect(NodeRoot, NodeEdge, Style.Nodes.SelectedBorder.Color, Rounding, 0, Style.Nodes.SelectedBorder.Thickness / Camera.Zoom);
+	if(Mouse.Selected.contains(id)) DrawList.AddRect(NodeRoot, NodeEdge, Style.Nodes.SelectedBorder.Color, Rounding, 0, Style.Nodes.SelectedBorder.Thickness / Camera.Zoom);
 	else DrawList.AddRect(NodeRoot, NodeEdge, Style.Nodes.Border.Color, Rounding, 0, BorderThickness);
 
 	// Pins ============================================================================================================
@@ -587,8 +599,8 @@ void ShaderGraph::DrawContextMenu()
 
 	if(ImGui::BeginPopupContextWindow())
 	{
-		if(ImGui::MenuItem("Copy", "Ctrl+C", false, !Selected.empty())) Copy();
-		if(ImGui::MenuItem("Cut", "Ctrl+X", false, !Selected.empty()))
+		if(ImGui::MenuItem("Copy", "Ctrl+C", false, !Mouse.Selected.empty())) Copy();
+		if(ImGui::MenuItem("Cut", "Ctrl+X", false, !Mouse.Selected.empty()))
 		{
 			Copy();
 			EraseSelection();
@@ -849,7 +861,7 @@ NodeId ShaderGraph::AddNode(Node* node)
 	if(Erased.empty())
 	{
 		Nodes.push_back(node);
-		return Nodes.size() - 1;
+		return static_cast<NodeId>(Nodes.size() - 1);
 	}
 
 	NodeId id = *Erased.begin();
@@ -883,21 +895,21 @@ void ShaderGraph::ClearClipboard()
 
 void ShaderGraph::Copy()
 {
-	if(Selected.empty()) return;
+	if(Mouse.Selected.empty()) return;
 
 	// Helper for connections
 	std::unordered_map<NodeId, NodeId> clipboardTransform;
-	ImVec2 min = Nodes[*Selected.begin()]->Position;
+	ImVec2 min = Nodes[*Mouse.Selected.begin()]->Position;
 
 	// Reset Clipboard
 	ClearClipboard();
-	Clipboard.Nodes.reserve(Selected.size());
+	Clipboard.Nodes.reserve(Mouse.Selected.size());
 
 	// Copy nodes
-	for(auto id : Selected)
+	for(auto id : Mouse.Selected)
 	{
 		Node* node = Nodes[id];
-		clipboardTransform[id] = Clipboard.Nodes.size();
+		clipboardTransform[id] = static_cast<NodeId>(Clipboard.Nodes.size());
 		Clipboard.Nodes.push_back(node->Copy(*this));
 		min = ImMin(node->Position, min);
 	}
@@ -911,7 +923,7 @@ void ShaderGraph::Copy()
 	// Copy connections
 	for(const Connection& connection : Connections)
 	{
-		if(!(Selected.contains(connection.first.Node) && Selected.contains(connection.second.Node))) continue;
+		if(!(Mouse.Selected.contains(connection.first.Node) && Mouse.Selected.contains(connection.second.Node))) continue;
 
 		Connection copy = {
 			{ clipboardTransform[connection.first.Node], connection.first.Pin, connection.first.Input }
@@ -928,7 +940,7 @@ void ShaderGraph::Paste(const ImVec2& location)
 	const float GridSize = (Style.FontSize + Style.Grid.Lines.Padding);
 	std::unordered_map<NodeId, NodeId> clipboardTransform;
 	ImVec2 root = ImFloor(location / GridSize + ImVec2(0.5f, 0.5f)) * GridSize;
-	Selected.clear();
+	Mouse.Selected.clear();
 
 	// Paste the nodes
 	NodeId id = 0;
@@ -936,7 +948,7 @@ void ShaderGraph::Paste(const ImVec2& location)
 	{
 		NodeId index = clipboardTransform[id++] = AddNode(node->Copy(*this));
 		Nodes[index]->Position += root;
-		Selected.insert(index);
+		Mouse.Selected.insert(index);
 	}
 
 	// Paste the connections
@@ -951,11 +963,11 @@ void ShaderGraph::Paste(const ImVec2& location)
 
 void ShaderGraph::EraseSelection()
 {
-	for(auto node : Selected)
+	for(auto node : Mouse.Selected)
 	{
 		RemoveNode(node);
 	}
-	Selected.clear();
+	Mouse.Selected.clear();
 }
 
 float ShaderGraph::BezierOffset(const ImVec2& out, const ImVec2& in)

@@ -33,8 +33,6 @@ endif()
 include_directories(Include)
 include_directories(External)
 
-add_subdirectory(External/imnodes-master)
-
 add_executable(OpenShaderDesigner
         Source/Entry.cpp
 
@@ -67,8 +65,7 @@ add_executable(OpenShaderDesigner
         External/imgui-docking/backends/imgui_impl_opengl3.cpp
         External/imgui-docking/misc/cpp/imgui_stdlib.cpp
         External/imgui-docking/misc/freetype/imgui_freetype.cpp
-        Include/Utility/DirectedGraph.h
-        Include/Utility/Optional.h
+        Include/OpenGL/BufferObject.h
 )
 
 
@@ -77,5 +74,4 @@ target_link_libraries(OpenShaderDesigner PRIVATE
         GLEW::GLEW
         OpenGL::GL
         ${SDL2_LIBRARIES}
-        imnodes
 )
