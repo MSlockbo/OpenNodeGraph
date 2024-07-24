@@ -16,6 +16,7 @@
 #include <Core/Console.h>
 #include <Editor/EditorSystem.h>
 #include <Core/Engine.h>
+#include <imgui-docking/imgui_internal.h>
 
 #include <imgui-docking/backends/imgui_impl_sdl2.h>
 #include <imgui-docking/backends/imgui_impl_opengl3.h>
@@ -117,12 +118,12 @@ void EditorSystem::Initialize()
 
 	ImGuiIO& io = ImGui::GetIO();
 
-	io.Fonts->AddFontFromFileTTF("./Assets/Fonts/FiraMono-Regular.ttf", 20.0f);
 	static ImWchar ranges[] = { 0x1, static_cast<ImWchar>(0x1FFFF), 0 };
 	static ImFontConfig cfg;
-	cfg.OversampleH = cfg.OversampleV = 1;
+	cfg.OversampleH = cfg.OversampleV = 2;
 	cfg.MergeMode = true;
 	cfg.FontBuilderFlags |= ImGuiFreeTypeBuilderFlags_LoadColor;
+	io.Fonts->AddFontFromFileTTF("./Assets/Fonts/FiraMono-Regular.ttf", 20.0f);
 	io.Fonts->AddFontFromFileTTF("./Assets/Fonts/remixicon.ttf", 18.0f, &cfg, ranges);
 
 
@@ -139,8 +140,8 @@ void EditorSystem::Initialize()
 void EditorSystem::Draw()
 {
 	ImGui_ImplOpenGL3_NewFrame();
-
 	ImGui_ImplSDL2_NewFrame();
+
 	ImGui::NewFrame();
 	ImGui::DockSpaceOverViewport(0, ImGui::GetMainViewport(), ImGuiDockNodeFlags_PassthruCentralNode);
 

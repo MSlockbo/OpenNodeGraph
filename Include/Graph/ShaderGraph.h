@@ -23,6 +23,7 @@
 #include <unordered_map>
 #include <filesystem>
 #include <unordered_set>
+#include <stack>
 
 #include <Utility/DirectedGraph.h>
 #include <Utility/Optional.h>
@@ -37,6 +38,26 @@ namespace OpenShaderDesigner
 	using PinId = uint16_t;
 	using NodeId = uint32_t;
 
+	struct PinPtr
+	{
+		struct Hash
+		{
+			size_t operator()(const PinPtr& p) const
+			{
+				return p.hash();
+			}
+		};
+
+		NodeId Node;
+		PinId  Pin;
+		bool Input;
+
+		size_t hash() const { return (Input ? 0 : 0x8000000) | static_cast<size_t>(Node) << 32 | static_cast<size_t>(Pin & 0x7FFFFFFF); }
+
+		bool operator<(const PinPtr& o) const { return hash() < o.hash(); }
+		bool operator==(const PinPtr& o) const { return hash() == o.hash(); }
+	};
+
 	struct Pin
 	{
 		enum PinType
@@ -45,9 +66,8 @@ namespace OpenShaderDesigner
 		,	UINT
 		,	FLOAT
 		,	VECTOR
-		,	TEXTURE
-		,	ANY
 
+		,	ANY
 		,	COUNT
 		};
 
@@ -62,8 +82,15 @@ namespace OpenShaderDesigner
 		,	ImColor(0x8C, 0xC0, 0x8C)
 		,	ImColor(0x37, 0x95, 0x85)
 		,	ImColor(0xE3, 0x7D, 0xDC)
-		,	ImColor(0xD2, 0x6E, 0x46)
+//		,	ImColor(0xD2, 0x6E, 0x46)
 		,	ImColor(0xD2, 0xD5, 0xD3)
+		};
+
+		inline const static std::string TypeNames[COUNT] = {
+			"Int"
+		,	"Unsigned Int"
+		,	"Float"
+		,	"Vector"
 		};
 
 		std::string   Name;
@@ -73,6 +100,7 @@ namespace OpenShaderDesigner
 
 	struct Node
 	{
+	public:
 		ImVec2 Position = { 0, 0 };
 
 		struct
@@ -91,7 +119,7 @@ namespace OpenShaderDesigner
 		struct
 		{
 			ImVec2 Size;
-			bool Const;
+			bool   Const;
 		} Info;
 
 		Node(
@@ -100,8 +128,10 @@ namespace OpenShaderDesigner
 		,	const std::vector<Pin>& inputs, bool dyn_inputs
 		,	const std::vector<Pin>& outputs
 		,	bool constant = false);
+		~Node() = default;
 
 		virtual Node* Copy(ShaderGraph& graph) const = 0;
+		virtual void Inspect() = 0;
 	};
 
 	class ShaderGraph
@@ -109,25 +139,6 @@ namespace OpenShaderDesigner
 	{
 	private:
 		friend Node;
-		struct PinPtr
-		{
-			struct Hash
-			{
-				size_t operator()(const PinPtr& p) const
-				{
-					return p.hash();
-				}
-			};
-
-			NodeId Node;
-			PinId  Pin;
-			bool Input;
-
-			size_t hash() const { return (Input ? 0 : 0x8000000) | static_cast<size_t>(Node) << 32 | static_cast<size_t>(Pin & 0x7FFFFFFF); }
-
-			bool operator<(const PinPtr& o) const { return hash() < o.hash(); }
-			bool operator==(const PinPtr& o) const { return hash() == o.hash(); }
-		};
 
 		using Connection = std::pair<const PinPtr, PinPtr>;
 		using ConnectionMap = std::unordered_multimap<PinPtr, PinPtr, PinPtr::Hash>;
@@ -143,6 +154,20 @@ namespace OpenShaderDesigner
 		{
 			std::string Name;
 			ConstructorPtr    Constructor;
+		};
+
+		struct GraphState
+		{
+			ShaderGraph&               Parent;
+			std::vector<Node*>         Nodes;
+			std::unordered_set<PinId>  Erased;
+			ConnectionMap              Connections;
+
+			GraphState(ShaderGraph& parent);
+			GraphState(const GraphState& other);
+			~GraphState();
+
+			GraphState& operator=(const GraphState& other);
 		};
 
 		using ContextMenuHierarchy = DirectedGraph<ContextMenuItem>;
@@ -178,12 +203,19 @@ namespace OpenShaderDesigner
 		void Paste(const ImVec2& location);
 		void EraseSelection();
 
+		// History Functionality
+		void PushState();
+		void PopState();
+
 		// Helper functions
 		float BezierOffset(const ImVec2& out, const ImVec2& in);
 		bool AABB(const ImVec2& a0, const ImVec2& a1, const ImVec2& b0, const ImVec2& b1);
 
 		ImVec2 GridToScreen(const ImVec2& position);
 		ImVec2 ScreenToGrid(const ImVec2& position);
+		ImVec2 SnapToGrid(const ImVec2& position);
+
+		Pin& GetPin(const PinPtr& ptr);
 
 	public:
 		ShaderGraph();
@@ -194,12 +226,9 @@ namespace OpenShaderDesigner
 
 		static void Register(const std::filesystem::path& path, ConstructorPtr constructor);
 
-
-
 	private:
-		std::vector<Node*>         Nodes;
-		std::unordered_set<PinId>  Erased;
-		ConnectionMap              Connections;
+		GraphState             State;
+		std::stack<GraphState> History;
 
 		struct
 		{
@@ -279,6 +308,22 @@ namespace OpenShaderDesigner
 
 		bool Focused;
 		ImVec2 ContextMenuPosition;
+
+		friend class Inspector;
+	};
+
+	class Inspector
+		: public EditorWindow
+	{
+	public:
+		Inspector();
+
+		void DrawWindow() override;
+
+	private:
+		ShaderGraph* Graph;
+
+		friend class ShaderGraph;
 	};
 }
 

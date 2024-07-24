@@ -19,6 +19,7 @@
 
 #include <Core/Engine.h>
 #include <Core/Console.h>
+#include <Editor/EditorSystem.h>
 
 #include <glm/common.hpp>
 #include <Graph/ShaderGraph.h>
@@ -29,6 +30,56 @@ using namespace OpenShaderDesigner;
 ImColor operator*(const ImColor& c, float f)
 {
 	return ImVec4(c.Value.x * f, c.Value.y * f, c.Value.z * f, c.Value.w);
+}
+
+ShaderGraph::GraphState::GraphState(ShaderGraph& parent)
+	: Parent(parent)
+{
+}
+
+ShaderGraph::GraphState::GraphState(const GraphState& other)
+	: Parent(other.Parent)
+	, Nodes(other.Nodes.size(), nullptr)
+	, Connections(other.Connections)
+	, Erased(other.Erased)
+{
+	NodeId id = 0;
+	for(const Node* node : other.Nodes)
+	{
+		if(node) Nodes[id] = node->Copy(Parent);
+		++id;
+	}
+}
+
+ShaderGraph::GraphState::~GraphState()
+{
+	for(Node* node : Nodes)
+	{
+		if(node) delete node;
+	}
+}
+
+ShaderGraph::GraphState& ShaderGraph::GraphState::operator=(const GraphState& other)
+{
+	for(Node* node : Nodes)
+	{
+		if(node) delete node;
+	}
+
+	Nodes.clear();
+	Nodes.resize(other.Nodes.size(), nullptr);
+
+	NodeId id = 0;
+	for(const Node* node : other.Nodes)
+	{
+		if(node) Nodes[id] = node->Copy(Parent);
+		++id;
+	}
+
+	Connections = other.Connections;
+	Erased = other.Erased;
+
+	return *this;
 }
 
 float ShaderGraph::CalculateWidth(Node& node)
@@ -50,7 +101,7 @@ float ShaderGraph::CalculateWidth(Node& node)
 		OutputWidth = glm::max(OutputWidth, HeaderHeight + ImGui::CalcTextSize(pin.Name.c_str()).x);
 	}
 
-	float Width = glm::max(InputWidth, HeaderWidth) + OutputWidth + 1 * HeaderHeight;
+	float Width = glm::max(InputWidth + OutputWidth, HeaderWidth) + HeaderHeight;
 	Width += GridSize - std::fmod(1.0f + Style.Grid.Lines.Padding + Width, GridSize);
 
 	return Width;
@@ -90,6 +141,7 @@ Node::Node(
 
 ShaderGraph::ShaderGraph()
 	: EditorWindow("\uED46 Shader Graph", 0)
+	, State(*this)
 	, Style
 	{
 		.Grid
@@ -166,6 +218,8 @@ void ShaderGraph::OnOpen()
 {
 	Mouse.Location = ImGui::GetMousePos();
 	Camera.Scroll = Camera.Zoom = 1.0f;
+
+	EditorSystem::Open<Inspector>()->Graph = this;
 }
 
 void ShaderGraph::DrawWindow()
@@ -175,8 +229,9 @@ void ShaderGraph::DrawWindow()
 
 	DrawGrid();
 
+
 	NodeId uid = 0;
-	for(Node* node : Nodes)
+	for(Node* node : State.Nodes)
 	{
 		if(node == nullptr) { ++uid; continue; }
 		DrawNode(*node, uid++);
@@ -344,26 +399,23 @@ void ShaderGraph::DrawNode(Node& node, NodeId id)
 	ImDrawList& DrawList = *ImGui::GetWindowDrawList();
 
 	// Draw Vars
-	const float HeaderHeight = Style.FontSize;
-	const ImVec2 Padding = { Style.Grid.Lines.Padding, Style.Grid.Lines.Padding };
-	const ImVec2 NodePos = node.Position + Padding;
-	const ImVec2 NodeRoot = GridToScreen(NodePos);
-	const ImVec2 NodeEdge = GridToScreen(NodePos + node.Info.Size);
-	const ImVec2 HeaderEdge = GridToScreen(NodePos + ImVec2(node.Info.Size.x, HeaderHeight));
-	const ImVec2 HeaderText = GridToScreen(NodePos + ImVec2(Style.Nodes.Rounding, 0) + Padding * 0.5f);
-	const ImVec2 InputRoot = GridToScreen(NodePos + ImVec2(Style.Nodes.Pins.Padding, HeaderHeight));
-	const ImVec2 OutputRoot = GridToScreen(NodePos + ImVec2(node.Info.Size.x - HeaderHeight - Style.Nodes.Pins.Padding, HeaderHeight));
-
-	const bool HasLock = Mouse.FocusedNode();
-	const bool NodeHovered = ImGui::IsMouseHoveringRect(NodeRoot, NodeEdge);
-	const bool HeaderHovered = ImGui::IsMouseHoveringRect(NodeRoot, HeaderEdge);
-	const ImColor HeaderColor = node.Header.Color * (HeaderHovered || HasLock ? 1.2f : 1.0f) * (HasLock ? 0.8f : 1.0f);
-
-	const float Rounding = Style.Nodes.Rounding / Camera.Zoom;
-	const float PinSpacing = HeaderHeight / Camera.Zoom;
+	const float HeaderHeight    = Style.FontSize;
+	const ImVec2 Padding        = { Style.Grid.Lines.Padding, Style.Grid.Lines.Padding };
+	const ImVec2 NodePos        = node.Position + Padding;
+	const ImVec2 NodeRoot       = GridToScreen(NodePos);
+	const ImVec2 NodeEdge       = GridToScreen(NodePos + node.Info.Size);
+	const ImVec2 HeaderEdge     = GridToScreen(NodePos + ImVec2(node.Info.Size.x, HeaderHeight));
+	const ImVec2 HeaderText     = GridToScreen(NodePos + ImVec2(Style.Nodes.Rounding, 0) + Padding * 0.5f);
+	const ImVec2 InputRoot      = GridToScreen(NodePos + ImVec2(Style.Nodes.Pins.Padding, HeaderHeight));
+	const ImVec2 OutputRoot     = GridToScreen(NodePos + ImVec2(node.Info.Size.x - HeaderHeight - Style.Nodes.Pins.Padding, HeaderHeight));
+	const bool HasLock          = Mouse.FocusedNode();
+	const bool NodeHovered      = ImGui::IsMouseHoveringRect(NodeRoot, NodeEdge);
+	const bool HeaderHovered    = ImGui::IsMouseHoveringRect(NodeRoot, HeaderEdge);
+	const ImColor HeaderColor   = node.Header.Color * (HeaderHovered || HasLock ? 1.2f : 1.0f) * (HasLock ? 0.8f : 1.0f);
+	const float Rounding        = Style.Nodes.Rounding / Camera.Zoom;
+	const float PinSpacing      = HeaderHeight / Camera.Zoom;
 	const float BorderThickness = Style.Nodes.Border.Thickness / Camera.Zoom;
 
-	const float GridSize = (Style.FontSize + Style.Grid.Lines.Padding);
 	const bool Ctrl = ImGui::IsKeyDown(ImGuiKey_ModCtrl);
 	const bool Shift = ImGui::IsKeyDown(ImGuiKey_ModShift);
 
@@ -387,7 +439,7 @@ void ShaderGraph::DrawNode(Node& node, NodeId id)
 
 				for(NodeId selected : Mouse.Selected)
 				{
-					Mouse.Locks.emplace(selected, Mouse.Location - Nodes[selected]->Position);
+					Mouse.Locks.emplace(selected, Mouse.Location - State.Nodes[selected]->Position);
 				}
 			}
 		}
@@ -407,14 +459,16 @@ void ShaderGraph::DrawNode(Node& node, NodeId id)
 			Mouse.Selected.insert(id);
 		}
 
-		// Begin selection
+		// Begin Dragging
 		if(Mouse.FocusedNode() && Mouse.Selected.contains(id) && !(Ctrl || Shift))
 		{
+			if(Mouse.LocksDragged == false) PushState();
+
 			Mouse.LocksDragged = true;
 
 			for(NodeId selected : Mouse.Selected)
 			{
-				Mouse.Locks.emplace(selected, Mouse.Location - Nodes[selected]->Position);
+				Mouse.Locks.emplace(selected, Mouse.Location - State.Nodes[selected]->Position);
 			}
 		}
 
@@ -495,7 +549,7 @@ void ShaderGraph::DrawNode(Node& node, NodeId id)
 	if(Mouse.Locks.contains(id))
 	{
 		node.Position = Mouse.Location - Mouse.Locks[id];
-		node.Position = ImFloor(node.Position / GridSize + ImVec2(0.5f, 0.5f)) * GridSize;
+		node.Position = SnapToGrid(node.Position);
 	}
 
 	// Content =========================================================================================================
@@ -511,7 +565,7 @@ void ShaderGraph::DrawNode(Node& node, NodeId id)
 		DrawList.AddText(NULL, Style.FontSize / Camera.Zoom, HeaderText, Style.Nodes.Title, node.Header.Title.c_str());
 		DrawList.PopClipRect();
 
-		DrawList.AddLine(InputRoot, HeaderEdge, Style.Nodes.Border.Color, BorderThickness);
+		DrawList.AddLine(ImVec2(NodeRoot.x, HeaderEdge.y), HeaderEdge, Style.Nodes.Border.Color, BorderThickness);
 	}
 
 	// Border ==========================================================================================================
@@ -551,26 +605,45 @@ void ShaderGraph::DrawPin(NodeId node_id, Pin& pin, PinId pin_id, ImVec2 locatio
 	const ImVec2 PinCenter = PinRoot + Offset;
 	const float PinPadding = Style.Nodes.Pins.Padding / Camera.Zoom;
 	const float BorderThickness = Style.Nodes.Pins.BorderThickness / Camera.Zoom;
-	const float PinRadius = (HeaderHeight - PinPadding - 2.0f * Style.Nodes.Pins.BorderThickness) * 0.5f;
+	const float PinRadius = (HeaderHeight - PinPadding - 2.0f * BorderThickness) * 0.5f;
 	const bool Hovered = ImGui::IsMouseHoveringRect(PinRoot, PinEdge);
+	const bool MouseDown = ImGui::IsMouseDown(ImGuiMouseButton_Left);
+	const bool MouseClicked = ImGui::IsMouseClicked(ImGuiMouseButton_Left);
 
 	// Pin =============================================================================================================
 
 	// Input
-	if(ImGui::IsMouseClicked(ImGuiMouseButton_Left) && Hovered && !Mouse.NewConnection() && !ImGui::IsKeyDown(ImGuiKey_ModAlt))
+	if(MouseClicked && Hovered && !Mouse.NewConnection() && !ImGui::IsKeyDown(ImGuiKey_ModAlt))
 	{
 		StartConnection({ node_id, pin_id, input });
 	}
 
 	// Circle
 	PinPtr ptr = { node_id, pin_id, input };
-	auto it = Connections.find(ptr);
-	if(Mouse.NewConnection() && *Mouse.NewConnection == ptr) DrawList.AddCircleFilled(PinCenter, PinRadius, Pin::Colors[pin.Type]);
-	else if(!input && it != Connections.end())               DrawList.AddCircleFilled(PinCenter, PinRadius, Pin::Colors[pin.Type] * (Hovered ? 0.8f : 1.0f));
-	else if(it != Connections.end())                         DrawList.AddCircleFilled(PinCenter, PinRadius, Pin::Colors[Nodes[it->second.Node]->IO.Outputs[it->second.Pin].Type] * (Hovered ? 0.8f : 1.0f));
-	else if(Hovered)                                         DrawList.AddCircleFilled(PinCenter, PinRadius, Pin::Colors[pin.Type]);
-	else                                                     DrawList.AddCircleFilled(PinCenter, PinRadius, Style.Nodes.Pins.Background);
-	DrawList.AddCircle(PinCenter, PinRadius, Pin::Colors[pin.Type], 0, BorderThickness);
+	auto it = State.Connections.find(ptr);
+	const bool Connected         = (it != State.Connections.end());
+	const bool NewConnectionRoot = Mouse.NewConnection() && *Mouse.NewConnection == ptr;
+	const bool NewConnectionNext = Mouse.NewConnection() && *Mouse.NewConnection != ptr && Hovered;
+	const bool Pressed           = Hovered && MouseDown;
+	const bool Filled            = Hovered || Connected || NewConnectionRoot || NewConnectionNext;
+	ImColor pinColor             = Pin::Colors[pin.Type];
+	ImColor fillColor            = Style.Nodes.Pins.Background;
+
+	if(input)
+	{
+		if(Connected)              pinColor = Pin::Colors[GetPin(it->second).Type];
+		else if(NewConnectionNext)
+		{
+			Pin& Next = GetPin(*Mouse.NewConnection);
+			if(pin.Type == Next.Type || pin.Type == Pin::ANY) pinColor = Pin::Colors[Next.Type];
+		}
+	}
+
+	if(Pressed && !NewConnectionNext) pinColor = pinColor * 0.8f;
+	if(Filled)  fillColor = pinColor;
+
+	DrawList.AddCircleFilled(PinCenter, PinRadius, fillColor);
+	DrawList.AddCircle(PinCenter, PinRadius, pinColor, 0, BorderThickness);
 
 	// Text
 	const ImVec2 TextOffset = location + ImVec2((input ? HeaderHeight : -ImGui::CalcTextSize(pin.Name.c_str()).x / Camera.Zoom), 0);
@@ -615,7 +688,7 @@ void ShaderGraph::DrawContextMenu()
 
 		// Create Nodes
 		ImVec2 position = ContextMenuPosition;
-		position = ImFloor(position / GridSize) * GridSize;
+		position = SnapToGrid(position);
 
 		std::stack<ContextID> context; context.push(0);
 
@@ -694,32 +767,39 @@ void ShaderGraph::DrawConnections()
 
 	// Connections =============================================================================================================
 
-	for(const Connection& connection : Connections)
+	for(const Connection& connection : State.Connections)
 	{
 		DrawConnection(connection.first, connection.second);
 	}
 
 	if(Mouse.NewConnection())
 	{
-		const Node& Node = *Nodes[Mouse.NewConnection->Node];
+		const Node& Node = *State.Nodes[Mouse.NewConnection->Node];
 		const Pin&  Pin  = Mouse.NewConnection->Input ? Node.IO.Inputs[Mouse.NewConnection->Pin] : Node.IO.Outputs[Mouse.NewConnection->Pin];
+		const auto Connection = State.Connections.find(*Mouse.NewConnection);
+		const bool Connected  = Connection != State.Connections.end();
 
 		const ImVec2 NodePos = Node.Position + Padding;
 		const ImVec2 InputRoot = GridToScreen(NodePos + ImVec2(Style.Nodes.Pins.Padding, HeaderHeight));
 		const ImVec2 OutputRoot = GridToScreen(NodePos + ImVec2(Node.Info.Size.x - HeaderHeight - Style.Nodes.Pins.Padding, HeaderHeight));
-
 		const ImVec2 Root = (Mouse.NewConnection->Input ? InputRoot : OutputRoot) + ImVec2(0, HeaderHeight) * (Mouse.NewConnection->Pin + 0.5f);
 
-		const ImVec2 A = Root + Offset + ImVec2(Mouse.NewConnection->Input ? -PinRadius : PinRadius, 0);
-		const ImVec2 D = ImGui::GetMousePos();
+		const ImVec2 PinLoc = Root + Offset + ImVec2(Mouse.NewConnection->Input ? -PinRadius : PinRadius, 0);
+		const ImVec2 MouseLoc = ImGui::GetMousePos();
+
+		const ImVec2 A = Mouse.NewConnection->Input ? MouseLoc : PinLoc;
+		const ImVec2 D = Mouse.NewConnection->Input ? PinLoc   : MouseLoc;
 		const float Off = BezierOffset(A, D);
 
-		const ImVec2 B = ImVec2(A.x + (Mouse.NewConnection->Input ? -Off :  Off), A.y);
-		const ImVec2 C = ImVec2(D.x + (Mouse.NewConnection->Input ?  Off : -Off), D.y);
+		const ImVec2 B = ImVec2(A.x + Off, A.y);
+		const ImVec2 C = ImVec2(D.x - Off, D.y);
+
+		const ImColor Color = Mouse.NewConnection->Input && Connected
+		                    ? Pin::Colors[GetPin(Connection->second).Type] : Pin::Colors[Pin.Type];
 
 		DrawList.AddBezierCubic(
 			A, B, C, D
-		,	Pin::Colors[Pin.Type], Style.Nodes.Pins.Connections.Thickness / Camera.Zoom
+		,	Color, Style.Nodes.Pins.Connections.Thickness / Camera.Zoom
 		);
 	}
 
@@ -751,12 +831,12 @@ void ShaderGraph::DrawConnection(const PinPtr& a, const PinPtr& b)
 	const PinPtr& In = a.Input ? a : b;
 	const PinPtr& Out = a.Input ? b : a;
 
-	const Node& OutNode = *Nodes[Out.Node];
+	const Node& OutNode = *State.Nodes[Out.Node];
 	const ImVec2 OutSize = OutNode.Info.Size / Camera.Zoom;
 	const ImVec2 OutPosition = CanvasCenter - Camera.Location + OutNode.Position / Camera.Zoom + Padding;
 	const ImVec2 OutputLoc = OutPosition + ImVec2(OutSize.x - HeaderHeight - Style.Nodes.Pins.Padding / Camera.Zoom, HeaderHeight);
 
-	const Node& InNode = *Nodes[In.Node];
+	const Node& InNode = *State.Nodes[In.Node];
 	const ImVec2 InPosition = CanvasCenter - Camera.Location + InNode.Position / Camera.Zoom + Padding;
 	const ImVec2 InputLoc = InPosition + ImVec2(Style.Nodes.Pins.Padding / Camera.Zoom, HeaderHeight);
 
@@ -794,11 +874,11 @@ void ShaderGraph::CreateConnection(const PinPtr& a, const PinPtr& b)
 	if(a.Node  == b.Node) return;
 
 	const PinPtr& In     = a.Input ? a : b;
-	const Node&   InNode = *Nodes[In.Node];
+	const Node&   InNode = *State.Nodes[In.Node];
 	const Pin&    InPin  = InNode.IO.Inputs[In.Pin];
 
 	const PinPtr& Out     = a.Input ? b : a;
-	const Node&   OutNode = *Nodes[Out.Node];
+	const Node&   OutNode = *State.Nodes[Out.Node];
 	const Pin&    OutPin  = OutNode.IO.Outputs[Out.Pin];
 
 	// Make sure valid typing
@@ -809,28 +889,28 @@ void ShaderGraph::CreateConnection(const PinPtr& a, const PinPtr& b)
 	if(b.Input) EraseConnections(b);
 
 	// Add New Connections
-	Connections.emplace(a, b);
-	Connections.emplace(b, a);
+	State.Connections.emplace(a, b);
+	State.Connections.emplace(b, a);
 }
 
 void ShaderGraph::EraseConnection(const PinPtr& a, const PinPtr& b)
 {
-	auto range = Connections.equal_range(a);
+	auto range = State.Connections.equal_range(a);
 	for(auto it = range.first; it != range.second; ++it)
 	{
 		if(it->second == b)
 		{
-			Connections.erase(it);
+			State.Connections.erase(it);
 			break;
 		}
 	}
 
-	range = Connections.equal_range(b);
+	range = State.Connections.equal_range(b);
 	for(auto it = range.first; it != range.second; ++it)
 	{
 		if(it->second == a)
 		{
-			Connections.erase(it);
+			State.Connections.erase(it);
 			break;
 		}
 	}
@@ -838,41 +918,41 @@ void ShaderGraph::EraseConnection(const PinPtr& a, const PinPtr& b)
 
 void ShaderGraph::EraseConnections(const PinPtr& a)
 {
-	auto it = Connections.find(a);
-	while(it != Connections.end())
+	auto it = State.Connections.find(a);
+	while(it != State.Connections.end())
 	{
-		auto range = Connections.equal_range(it->second);
+		auto range = State.Connections.equal_range(it->second);
 		for(auto match = range.first; match != range.second; ++match)
 		{
 			if(match->second == a)
 			{
-				Connections.erase(match);
+				State.Connections.erase(match);
 				break;
 			}
 		}
 
-		Connections.erase(it);
-		it = Connections.find(a);
+		State.Connections.erase(it);
+		it = State.Connections.find(a);
 	}
 }
 
 NodeId ShaderGraph::AddNode(Node* node)
 {
-	if(Erased.empty())
+	if(State.Erased.empty())
 	{
-		Nodes.push_back(node);
-		return static_cast<NodeId>(Nodes.size() - 1);
+		State.Nodes.push_back(node);
+		return static_cast<NodeId>(State.Nodes.size() - 1);
 	}
 
-	NodeId id = *Erased.begin();
-	Nodes[id] = node;
-	Erased.erase(id);
+	NodeId id = *State.Erased.begin();
+	State.Nodes[id] = node;
+	State.Erased.erase(id);
 	return id;
 }
 
 void ShaderGraph::RemoveNode(NodeId id)
 {
-	Node* node = Nodes[id];
+	Node* node = State.Nodes[id];
 	if(node->Info.Const) return;
 
 	PinId i = 0;
@@ -881,9 +961,9 @@ void ShaderGraph::RemoveNode(NodeId id)
 	i = 0;
 	for(const auto& pin : node->IO.Outputs) EraseConnections({ id, i++, false });
 
-	Erased.insert(id);
+	State.Erased.insert(id);
 	delete node;
-	Nodes[id] = nullptr;
+	State.Nodes[id] = nullptr;
 }
 
 void ShaderGraph::ClearClipboard()
@@ -899,7 +979,7 @@ void ShaderGraph::Copy()
 
 	// Helper for connections
 	std::unordered_map<NodeId, NodeId> clipboardTransform;
-	ImVec2 min = Nodes[*Mouse.Selected.begin()]->Position;
+	ImVec2 min = State.Nodes[*Mouse.Selected.begin()]->Position;
 
 	// Reset Clipboard
 	ClearClipboard();
@@ -908,7 +988,7 @@ void ShaderGraph::Copy()
 	// Copy nodes
 	for(auto id : Mouse.Selected)
 	{
-		Node* node = Nodes[id];
+		Node* node = State.Nodes[id];
 		clipboardTransform[id] = static_cast<NodeId>(Clipboard.Nodes.size());
 		Clipboard.Nodes.push_back(node->Copy(*this));
 		min = ImMin(node->Position, min);
@@ -921,7 +1001,7 @@ void ShaderGraph::Copy()
 	}
 
 	// Copy connections
-	for(const Connection& connection : Connections)
+	for(const Connection& connection : State.Connections)
 	{
 		if(!(Mouse.Selected.contains(connection.first.Node) && Mouse.Selected.contains(connection.second.Node))) continue;
 
@@ -939,7 +1019,7 @@ void ShaderGraph::Paste(const ImVec2& location)
 	// Helper for connections
 	const float GridSize = (Style.FontSize + Style.Grid.Lines.Padding);
 	std::unordered_map<NodeId, NodeId> clipboardTransform;
-	ImVec2 root = ImFloor(location / GridSize + ImVec2(0.5f, 0.5f)) * GridSize;
+	ImVec2 root = SnapToGrid(location);
 	Mouse.Selected.clear();
 
 	// Paste the nodes
@@ -947,7 +1027,7 @@ void ShaderGraph::Paste(const ImVec2& location)
 	for(Node* node : Clipboard.Nodes)
 	{
 		NodeId index = clipboardTransform[id++] = AddNode(node->Copy(*this));
-		Nodes[index]->Position += root;
+		State.Nodes[index]->Position += root;
 		Mouse.Selected.insert(index);
 	}
 
@@ -968,6 +1048,17 @@ void ShaderGraph::EraseSelection()
 		RemoveNode(node);
 	}
 	Mouse.Selected.clear();
+}
+
+void ShaderGraph::PushState()
+{
+	History.push(State);
+}
+
+void ShaderGraph::PopState()
+{
+	State = History.top();
+	History.pop();
 }
 
 float ShaderGraph::BezierOffset(const ImVec2& out, const ImVec2& in)
@@ -1002,6 +1093,18 @@ ImVec2 ShaderGraph::ScreenToGrid(const ImVec2& position)
 	const ImVec2 CanvasCenter = ImGui::GetWindowPos()
 							  + (ImGui::GetWindowContentRegionMin() + ImGui::GetWindowContentRegionMax()) * 0.5f;
 	return (position - CanvasCenter + Camera.Location) * Camera.Zoom;
+}
+
+ImVec2 ShaderGraph::SnapToGrid(const ImVec2& position)
+{
+	const float GridSize = (Style.FontSize + Style.Grid.Lines.Padding);
+	return ImFloor(position / GridSize) * GridSize;
+}
+
+Pin& ShaderGraph::GetPin(const PinPtr &ptr)
+{
+	Node* node = State.Nodes[ptr.Node];
+	return (ptr.Input ? node->IO.Inputs : node->IO.Outputs)[ptr.Pin];
 }
 
 void ShaderGraph::Register(const std::filesystem::path& path, ConstructorPtr constructor)
@@ -1041,4 +1144,21 @@ void ShaderGraph::Register(const std::filesystem::path& path, ConstructorPtr con
 	}
 
 	ContextMenu.Insert({ name, constructor }, node);
+}
+
+Inspector::Inspector()
+	: EditorWindow("Inspector", 0)
+	, Graph(nullptr)
+{
+}
+
+void Inspector::DrawWindow()
+{
+	if(Graph->Mouse.Selected.size() != 1)
+	{
+		ImGui::Text("Selected %d nodes.", Graph->Mouse.Selected.size());
+		return;
+	}
+
+	Graph->State.Nodes[*Graph->Mouse.Selected.begin()]->Inspect();
 }

@@ -33,6 +33,15 @@ endif()
 include_directories(Include)
 include_directories(External)
 
+# Configure ImGui
+set(IMGUI_BACKEND_SDL2 ON)
+set(IMGUI_BACKEND_OPENGL ON)
+set(IMGUI_STDLIB ON)
+set(IMGUI_FREETYPE ON)
+
+# Add ImGui and any extensions
+add_subdirectory(External/imgui-docking)
+
 add_executable(OpenShaderDesigner
         Source/Entry.cpp
 
@@ -54,20 +63,7 @@ add_executable(OpenShaderDesigner
 
         # Nodes
         Source/Graph/Nodes/Math.cpp
-
-        # ImGui
-        External/imgui-docking/imgui_demo.cpp
-        External/imgui-docking/imgui_draw.cpp
-        External/imgui-docking/imgui_tables.cpp
-        External/imgui-docking/imgui.cpp
-        External/imgui-docking/imgui_widgets.cpp
-        External/imgui-docking/backends/imgui_impl_sdl2.cpp
-        External/imgui-docking/backends/imgui_impl_opengl3.cpp
-        External/imgui-docking/misc/cpp/imgui_stdlib.cpp
-        External/imgui-docking/misc/freetype/imgui_freetype.cpp
-        Include/OpenGL/BufferObject.h
 )
-
 
 target_link_libraries(OpenShaderDesigner PRIVATE
         Freetype::Freetype
@@ -75,3 +71,34 @@ target_link_libraries(OpenShaderDesigner PRIVATE
         OpenGL::GL
         ${SDL2_LIBRARIES}
 )
+
+# DOXYGEN ==============================================================================================================
+# https://vicrucann.github.io/tutorials/quick-cmake-doxygen/
+
+find_package(Doxygen)
+
+if(DOXYGEN_FOUND)
+    set(DOXYGEN_CONFIG_IN ${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile.in)
+    set(DOXYGEN_CONFIG_OUT ${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile)
+
+    configure_file(${DOXYGEN_CONFIG_IN} ${DOXYGEN_CONFIG_OUT} @ONLY)
+    message("Doxygen Build Started.")
+
+    if(WIN32)
+        add_custom_target(doxygen ALL
+                COMMAND ${DOXYGEN_EXECUTABLE} ${DOXYGEN_CONFIG_OUT}
+                COMMAND start firefox "${CMAKE_CURRENT_SOURCE_DIR}/Documentation/html/index.html"
+                WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+                COMMENT "Generating Doxygen Documentation"
+                VERBATIM)
+    else()
+        add_custom_target(doxygen ALL
+                COMMAND ${DOXYGEN_EXECUTABLE} ${DOXYGEN_CONFIG_OUT}
+                COMMAND firefox "${CMAKE_CURRENT_SOURCE_DIR}/Documentation/html/index.html"
+                WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+                COMMENT "Generating Doxygen Documentation"
+                VERBATIM)
+    endif()
+else()
+    message("Doxygen not found.")
+endif()

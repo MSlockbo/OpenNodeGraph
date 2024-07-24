@@ -14,13 +14,74 @@
 // =====================================================================================================================
 
 #include <Graph/Nodes/Math.h>
+#include <imgui-extras/imgui_extras.h>
 
 using namespace OpenShaderDesigner;
+using namespace OpenShaderDesigner::Nodes::Math;
+
+Constant::Constant(ShaderGraph& graph, ImVec2 pos)
+	: Node(
+		graph, pos
+	,	"Constant", HeaderColor
+	,	{ }, false
+	,	{ { "Out", Pin::FLOAT, Pin::OUTPUT } }
+	)
+{
+}
+
+Node* Constant::Copy(ShaderGraph& graph) const
+{
+	return new Constant(graph, Position);
+}
+
+void Constant::Inspect()
+{
+	Pin::PinType& Type = IO.Outputs[0].Type;
+
+	if(ImGui::BeginCombo("Type", Pin::TypeNames[Type].c_str()))
+	{
+		for(int i = 0; i < Pin::ANY; ++i)
+		{
+			Pin::PinType t = static_cast<Pin::PinType>(i);
+
+			if(ImGui::Selectable(Pin::TypeNames[t].c_str(), t == Type))
+			{
+				Type = t;
+			}
+		}
+
+		ImGui::EndCombo();
+	}
+
+	glm::vec4& v = Value;
+
+	switch(Type)
+	{
+	case Pin::INT:
+		ImGui::InputInt("Value", Value);
+		break;
+
+	case Pin::UINT:
+		ImGui::InputUInt("Value", Value);
+		break;
+
+	case Pin::FLOAT:
+		ImGui::InputFloat("Value", Value);
+		break;
+
+	case Pin::VECTOR:
+		ImGui::ColorEdit4("Value", &v.x);
+		break;
+
+	default:
+		break;
+	}
+}
 
 Add::Add(ShaderGraph& graph, ImVec2 pos)
 	: Node(
 		graph, pos
-	,	"Add", ImColor(0x92, 0x16, 0x16)
+	,	"Add", HeaderColor
 	,	{ { "A",   Pin::ANY, Pin::INPUT }, { "B", Pin::ANY, Pin::INPUT } }, true
 	,	{ { "Out", Pin::ANY, Pin::OUTPUT } }
 	)
@@ -29,4 +90,9 @@ Add::Add(ShaderGraph& graph, ImVec2 pos)
 Node* Add::Copy(ShaderGraph& graph) const
 {
 	return new Add(graph, Position);
+}
+
+void Add::Inspect()
+{
+
 }

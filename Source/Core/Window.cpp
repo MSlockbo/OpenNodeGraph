@@ -56,7 +56,11 @@ Window::Window(const Configuration& config)
         SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 16);
         SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 16);
         SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 16);
+        SDL_GL_SetAttribute(SDL_GL_FLOATBUFFERS, 1);
     }
+
+    SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
+    SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 4);
 
     Context = SDL_GL_CreateContext(Handle);
 
