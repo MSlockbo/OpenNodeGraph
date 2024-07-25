@@ -41,6 +41,7 @@ set(IMGUI_FREETYPE ON)
 
 # Add ImGui and any extensions
 add_subdirectory(External/imgui-docking)
+add_subdirectory(External/imgui-extras)
 
 add_executable(OpenShaderDesigner
         Source/Entry.cpp
@@ -70,6 +71,7 @@ target_link_libraries(OpenShaderDesigner PRIVATE
         GLEW::GLEW
         OpenGL::GL
         ${SDL2_LIBRARIES}
+        imgui-extras
 )
 
 # DOXYGEN ==============================================================================================================
