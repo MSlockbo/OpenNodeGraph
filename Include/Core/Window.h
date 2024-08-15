@@ -21,6 +21,10 @@
 #include <string>
 #include <Core/EventSystem.h>
 
+#include "open-cpp-utils/optional.h"
+
+namespace ocu = open_cpp_utils;
+
 namespace OpenShaderDesigner
 {
     BeginEvent(SDLEvent)
@@ -69,10 +73,11 @@ namespace OpenShaderDesigner
 
             struct
             {
-                FullscreenMode Fullscreen;
-                glm::ivec2     Resolution;
-                VSyncMode      VSync;
-                bool           HDR;
+                FullscreenMode     Fullscreen;
+                glm::ivec2         Resolution;
+                VSyncMode          VSync;
+                bool               HDR;
+                ocu::optional<int> Multisamples;
             } Video;
 
             Configuration()

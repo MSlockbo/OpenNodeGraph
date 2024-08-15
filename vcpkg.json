@@ -1,0 +1,42 @@
+{
+  "name" : "openshaderdesigner",
+  "version-string" : "1.0.0",
+  "builtin-baseline" : "b0d9d516272c599145009c4c28b779a678fc97f8",
+  "dependencies" : [ {
+    "name" : "egl-registry",
+    "version>=" : "2024-01-25"
+  }, {
+    "name" : "opengl-registry",
+    "version>=" : "2024-02-10#1"
+  }, {
+    "name" : "opengl",
+    "version>=" : "2022-12-04#3"
+  }, {
+    "name" : "vcpkg-cmake-config",
+    "version>=" : "2022-02-06#1"
+  }, {
+    "name" : "vcpkg-cmake",
+    "version>=" : "2024-04-18"
+  }, {
+    "name" : "pkgconf",
+    "version>=" : "2.2.0"
+  }, {
+    "name" : "glew",
+    "version>=" : "2.2.0#3"
+  }, {
+    "name" : "glm",
+    "version>=" : "1.0.1#2"
+  }, {
+    "name" : "vcpkg-tool-meson",
+    "version>=" : "1.3.2#3"
+  }, {
+    "name" : "freetype",
+    "version>=" : "2.13.2#1"
+  }, {
+    "name" : "rapidjson",
+    "version>=" : "2023-07-17#1"
+  }, {
+    "name" : "sdl2",
+    "version>=" : "2.30.6"
+  } ]
+}

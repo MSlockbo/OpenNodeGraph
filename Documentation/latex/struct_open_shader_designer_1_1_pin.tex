@@ -1,0 +1,82 @@
+\doxysection{Open\+Shader\+Designer\+::Pin Struct Reference}
+\hypertarget{struct_open_shader_designer_1_1_pin}{}\label{struct_open_shader_designer_1_1_pin}\index{OpenShaderDesigner::Pin@{OpenShaderDesigner::Pin}}
+\doxysubsubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{struct_open_shader_designer_1_1_pin_a6ada53e38cf37f516479c3dcabddb284}\label{struct_open_shader_designer_1_1_pin_a6ada53e38cf37f516479c3dcabddb284} 
+enum {\bfseries Pin\+Type} \{ \newline
+{\bfseries INT} = 0
+, {\bfseries UINT}
+, {\bfseries FLOAT}
+, {\bfseries VECTOR}
+, \newline
+{\bfseries ANY}
+, {\bfseries COUNT}
+ \}
+\item 
+\Hypertarget{struct_open_shader_designer_1_1_pin_a8adb1f80b40e1a4c7ad86fdb9e08e594}\label{struct_open_shader_designer_1_1_pin_a8adb1f80b40e1a4c7ad86fdb9e08e594} 
+enum {\bfseries Pin\+Direction} \{ {\bfseries INPUT}
+, {\bfseries OUTPUT}
+ \}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{struct_open_shader_designer_1_1_pin_a8e42a1b60833cb40d71e5ae833cd4673}\label{struct_open_shader_designer_1_1_pin_a8e42a1b60833cb40d71e5ae833cd4673} 
+std\+::string {\bfseries Name}
+\item 
+\Hypertarget{struct_open_shader_designer_1_1_pin_af0d09ac1168526f8f3a77c4ed180ef46}\label{struct_open_shader_designer_1_1_pin_af0d09ac1168526f8f3a77c4ed180ef46} 
+Pin\+Type {\bfseries Type}
+\item 
+\Hypertarget{struct_open_shader_designer_1_1_pin_aa36a624e048b7dddbe797d456b05f649}\label{struct_open_shader_designer_1_1_pin_aa36a624e048b7dddbe797d456b05f649} 
+Pin\+Direction {\bfseries Direction}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+static const Im\+Color \mbox{\hyperlink{struct_open_shader_designer_1_1_pin_ac0bc314af51ae0f04cdeaf7911891c70}{Colors}} \mbox{[}COUNT\mbox{]}
+\item 
+static const std\+::string \mbox{\hyperlink{struct_open_shader_designer_1_1_pin_aafe6dbb5ecd7409ddd19e6acf27c9cb5}{Type\+Names}} \mbox{[}COUNT\mbox{]}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Data Documentation}
+\Hypertarget{struct_open_shader_designer_1_1_pin_ac0bc314af51ae0f04cdeaf7911891c70}\index{OpenShaderDesigner::Pin@{OpenShaderDesigner::Pin}!Colors@{Colors}}
+\index{Colors@{Colors}!OpenShaderDesigner::Pin@{OpenShaderDesigner::Pin}}
+\doxysubsubsection{\texorpdfstring{Colors}{Colors}}
+{\footnotesize\ttfamily \label{struct_open_shader_designer_1_1_pin_ac0bc314af51ae0f04cdeaf7911891c70} 
+const Im\+Color Open\+Shader\+Designer\+::\+Pin\+::\+Colors\mbox{[}COUNT\mbox{]}\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{=\ \{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ ImColor(0xB9,\ 0xF5,\ 0x94)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ ,\ \ \ ImColor(0x8C,\ 0xC0,\ 0x8C)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ ,\ \ \ ImColor(0x37,\ 0x95,\ 0x85)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ ,\ \ \ ImColor(0xE3,\ 0x7D,\ 0xDC)}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ ,\ \ \ ImColor(0xD2,\ 0xD5,\ 0xD3)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \}}
+
+\end{DoxyCode}
+\Hypertarget{struct_open_shader_designer_1_1_pin_aafe6dbb5ecd7409ddd19e6acf27c9cb5}\index{OpenShaderDesigner::Pin@{OpenShaderDesigner::Pin}!TypeNames@{TypeNames}}
+\index{TypeNames@{TypeNames}!OpenShaderDesigner::Pin@{OpenShaderDesigner::Pin}}
+\doxysubsubsection{\texorpdfstring{TypeNames}{TypeNames}}
+{\footnotesize\ttfamily \label{struct_open_shader_designer_1_1_pin_aafe6dbb5ecd7409ddd19e6acf27c9cb5} 
+const std\+::string Open\+Shader\+Designer\+::\+Pin\+::\+Type\+Names\mbox{[}COUNT\mbox{]}\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{=\ \{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}Int"{}}}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ ,\ \ \ \textcolor{stringliteral}{"{}Unsigned\ Int"{}}}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ ,\ \ \ \textcolor{stringliteral}{"{}Float"{}}}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ ,\ \ \ \textcolor{stringliteral}{"{}Vector"{}}}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \}}
+
+\end{DoxyCode}
+
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+Include/\+Graph/Shader\+Graph.\+h\end{DoxyCompactItemize}

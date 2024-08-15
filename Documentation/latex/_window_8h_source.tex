@@ -1,0 +1,120 @@
+\doxysection{Window.\+h}
+\hypertarget{_window_8h_source}{}\label{_window_8h_source}\index{Include/Core/Window.h@{Include/Core/Window.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//\ =====================================================================================================================}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ Copyright\ 2024\ Medusa\ Slockbower}}
+\DoxyCodeLine{00003\ \textcolor{comment}{//\ Licensed\ under\ the\ Apache\ License,\ Version\ 2.0\ (the\ "{}License"{});}}
+\DoxyCodeLine{00004\ \textcolor{comment}{//\ you\ may\ not\ use\ this\ file\ except\ in\ compliance\ with\ the\ License.}}
+\DoxyCodeLine{00005\ \textcolor{comment}{//\ You\ may\ obtain\ a\ copy\ of\ the\ License\ at}}
+\DoxyCodeLine{00006\ \textcolor{comment}{//}}
+\DoxyCodeLine{00007\ \textcolor{comment}{//\ \ http://www.apache.org/licenses/LICENSE-\/2.0}}
+\DoxyCodeLine{00008\ \textcolor{comment}{//}}
+\DoxyCodeLine{00009\ \textcolor{comment}{//\ Unless\ required\ by\ applicable\ law\ or\ agreed\ to\ in\ writing,\ software}}
+\DoxyCodeLine{00010\ \textcolor{comment}{//\ distributed\ under\ the\ License\ is\ distributed\ on\ an\ "{}AS\ IS"{}\ BASIS,}}
+\DoxyCodeLine{00011\ \textcolor{comment}{//\ WITHOUT\ WARRANTIES\ OR\ CONDITIONS\ OF\ ANY\ KIND,\ either\ express\ or\ implied.}}
+\DoxyCodeLine{00012\ \textcolor{comment}{//\ See\ the\ License\ for\ the\ specific\ language\ governing\ permissions\ and}}
+\DoxyCodeLine{00013\ \textcolor{comment}{//\ limitations\ under\ the\ License.}}
+\DoxyCodeLine{00014\ \textcolor{comment}{//\ =====================================================================================================================}}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#ifndef\ WINDOW\_H}}
+\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#define\ WINDOW\_H}}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \textcolor{preprocessor}{\#include\ <SDL2/SDL.h>}}
+\DoxyCodeLine{00020\ \textcolor{preprocessor}{\#include\ <glm/glm.hpp>}}
+\DoxyCodeLine{00021\ \textcolor{preprocessor}{\#include\ <string>}}
+\DoxyCodeLine{00022\ \textcolor{preprocessor}{\#include\ <Core/EventSystem.h>}}
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00024\ \textcolor{keyword}{namespace\ }OpenShaderDesigner}
+\DoxyCodeLine{00025\ \{}
+\DoxyCodeLine{00026\ \ \ \ \ BeginEvent(SDLEvent)}
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ SDL\_Event\ sdl\_event;}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ \ \ \ \ \ \ \ \ SDLEvent()\ :\ sdl\_event()\ \{\}}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ \textcolor{keyword}{explicit}\ SDLEvent(\textcolor{keyword}{const}\ SDL\_Event\ \&event)\ :\ sdl\_event(event)\ \{\}}
+\DoxyCodeLine{00032\ \ \ \ \ EndEvent}
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00035\ \ \ \ \ BeginEvent(BeginFrame)}
+\DoxyCodeLine{00036\ \ \ \ \ EndEvent;}
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00038\ \ \ \ \ BeginEvent(SDLEventsDone)}
+\DoxyCodeLine{00039\ \ \ \ \ EndEvent;}
+\DoxyCodeLine{00040\ }
+\DoxyCodeLine{00041\ \ \ \ \ BeginEvent(EndFrame)}
+\DoxyCodeLine{00042\ \ \ \ \ EndEvent;}
+\DoxyCodeLine{00043\ }
+\DoxyCodeLine{00044\ }
+\DoxyCodeLine{00045\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_open_shader_designer_1_1_window}{Window}}}
+\DoxyCodeLine{00046\ \ \ \ \ \{}
+\DoxyCodeLine{00047\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ \textcolor{keyword}{enum\ class}\ VSyncMode\ :\ \textcolor{keywordtype}{int}}
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ \ \ \ \ DISABLED\ =\ 0,}
+\DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ \ \ \ \ ENABLED\ =\ 1,}
+\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ \ \ \ \ ADAPTIVE\ =\ -\/1,}
+\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ \ \ \ \ DEFAULT\ =\ DISABLED,}
+\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{00055\ }
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ \textcolor{keyword}{enum\ class}\ FullscreenMode\ :\ \textcolor{keywordtype}{int}}
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ \ \ \ \ WINDOWED\ =\ 0,}
+\DoxyCodeLine{00059\ \ \ \ \ \ \ \ \ \ \ \ \ FULLSCREEN\ =\ SDL\_WINDOW\_FULLSCREEN,}
+\DoxyCodeLine{00060\ \ \ \ \ \ \ \ \ \ \ \ \ FULLSCREEN\_WINDOW\ =\ SDL\_WINDOW\_FULLSCREEN\_DESKTOP,}
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{00062\ }
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_open_shader_designer_1_1_window_1_1_configuration}{Configuration}}}
+\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00065\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{struct}}
+\DoxyCodeLine{00066\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00067\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::string\ Title;}
+\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ \ \ \ \ \}\ Application;}
+\DoxyCodeLine{00069\ }
+\DoxyCodeLine{00070\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{struct}}
+\DoxyCodeLine{00071\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00072\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ FullscreenMode\ Fullscreen;}
+\DoxyCodeLine{00073\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ glm::ivec2\ \ \ \ \ Resolution;}
+\DoxyCodeLine{00074\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ VSyncMode\ \ \ \ \ \ VSync;}
+\DoxyCodeLine{00075\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ \ \ \ \ HDR;}
+\DoxyCodeLine{00076\ \ \ \ \ \ \ \ \ \ \ \ \ \}\ Video;}
+\DoxyCodeLine{00077\ }
+\DoxyCodeLine{00078\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_open_shader_designer_1_1_window_1_1_configuration}{Configuration}}()}
+\DoxyCodeLine{00079\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ :\ Application\ \{\ \textcolor{stringliteral}{"{}App"{}}\ \}}
+\DoxyCodeLine{00080\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ,\ Video\ \{\ FullscreenMode::WINDOWED,\ glm::ivec2(1280,\ 720),\ VSyncMode::DISABLED,\ \textcolor{keyword}{false}\ \}}
+\DoxyCodeLine{00081\ \ \ \ \ \ \ \ \ \ \ \ \ \{\ \}}
+\DoxyCodeLine{00082\ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{00083\ }
+\DoxyCodeLine{00084\ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{struct_open_shader_designer_1_1_window_1_1_configuration}{Configuration}}\ DefaultConfiguration;}
+\DoxyCodeLine{00085\ }
+\DoxyCodeLine{00086\ \ \ \ \ \ \ \ \ \textcolor{keyword}{explicit}\ \mbox{\hyperlink{class_open_shader_designer_1_1_window}{Window}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{struct_open_shader_designer_1_1_window_1_1_configuration}{Configuration}}\&\ config);}
+\DoxyCodeLine{00087\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_open_shader_designer_1_1_window}{\string~Window}}();}
+\DoxyCodeLine{00088\ }
+\DoxyCodeLine{00089\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ HandleEvents();}
+\DoxyCodeLine{00090\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ BeginFrame();}
+\DoxyCodeLine{00091\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ EndFrame();}
+\DoxyCodeLine{00092\ }
+\DoxyCodeLine{00093\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ Close()\ \{\ Open\ =\ \textcolor{keyword}{false};\ \}}
+\DoxyCodeLine{00094\ \ \ \ \ \ \ \ \ [[nodiscard]]\ \textcolor{keywordtype}{bool}\ IsOpen()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ Open;\ \}}
+\DoxyCodeLine{00095\ }
+\DoxyCodeLine{00096\ \ \ \ \ \ \ \ \ SDL\_Window*\ GetHandle()\ \{\ \textcolor{keywordflow}{return}\ Handle;\ \}}
+\DoxyCodeLine{00097\ \ \ \ \ \ \ \ \ [[nodiscard]]\ \textcolor{keyword}{const}\ SDL\_Window*\ GetHandle()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ Handle;\ \}}
+\DoxyCodeLine{00098\ }
+\DoxyCodeLine{00099\ \ \ \ \ \ \ \ \ SDL\_GLContext\ GetContext()\ \{\ \textcolor{keywordflow}{return}\ Context;\ \}}
+\DoxyCodeLine{00100\ \ \ \ \ \ \ \ \ [[nodiscard]]\ \textcolor{keyword}{const}\ SDL\_GLContext\ GetContext()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ Context;\ \}}
+\DoxyCodeLine{00101\ }
+\DoxyCodeLine{00102\ \ \ \ \ \ \ \ \ [[nodiscard]]\ glm::ivec2\ Size()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ Config.Video.Resolution;\ \}}
+\DoxyCodeLine{00103\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00104\ \ \ \ \ \ \ \ \ Configuration\ Config;}
+\DoxyCodeLine{00105\ \ \ \ \ \ \ \ \ SDL\_Window*\ \ \ Handle;}
+\DoxyCodeLine{00106\ \ \ \ \ \ \ \ \ SDL\_GLContext\ Context;}
+\DoxyCodeLine{00107\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ \ \ \ Open;}
+\DoxyCodeLine{00108\ \ \ \ \ \};}
+\DoxyCodeLine{00109\ \}}
+\DoxyCodeLine{00110\ }
+\DoxyCodeLine{00111\ }
+\DoxyCodeLine{00112\ }
+\DoxyCodeLine{00113\ }
+\DoxyCodeLine{00114\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//WINDOW\_H}}
+
+\end{DoxyCode}

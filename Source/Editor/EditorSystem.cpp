@@ -22,6 +22,8 @@
 #include <imgui-docking/backends/imgui_impl_opengl3.h>
 #include <imgui-docking/misc/freetype/imgui_freetype.h>
 
+#include <imnode-graph/imnode_graph.h>
+
 using namespace OpenShaderDesigner;
 
 void EditorSystem::Initialize()
@@ -31,7 +33,6 @@ void EditorSystem::Initialize()
 	Console::Log(Console::Severity::ALERT, "Initializing Dear ImGUI");
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
-
 
 	// https://github.com/ocornut/imgui/issues/707#issuecomment-917151020
 	ImVec4* colors = ImGui::GetStyle().Colors;
@@ -118,22 +119,23 @@ void EditorSystem::Initialize()
 
 	ImGuiIO& io = ImGui::GetIO();
 
-	static ImWchar ranges[] = { 0x1, static_cast<ImWchar>(0x1FFFF), 0 };
-	static ImFontConfig cfg;
-	cfg.OversampleH = cfg.OversampleV = 2;
-	cfg.MergeMode = true;
-	cfg.FontBuilderFlags |= ImGuiFreeTypeBuilderFlags_LoadColor;
-	io.Fonts->AddFontFromFileTTF("./Assets/Fonts/FiraMono-Regular.ttf", 20.0f);
+    static ImFontConfig cfg;
+    io.Fonts->AddFontFromFileTTF("./Assets/Fonts/FiraMono-Regular.ttf", 20.0f);
+    static ImWchar ranges[] = { 0x1, static_cast<ImWchar>(0x1FFFF), 0 };
+    cfg.MergeMode = true;
+    cfg.FontBuilderFlags |= ImGuiFreeTypeBuilderFlags_LoadColor;
 	io.Fonts->AddFontFromFileTTF("./Assets/Fonts/remixicon.ttf", 18.0f, &cfg, ranges);
-
 
 	io.ConfigWindowsMoveFromTitleBarOnly = true;
 	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 
+    ImNodeGraph::AddFont("./Assets/Fonts/FiraMono-Regular.ttf", 20.0f);
+    ImNodeGraph::AddFont("./Assets/Fonts/remixicon.ttf", 18.0f, ranges);
+    ImNodeGraph::CreateContext();
+
 	ImGui_ImplSDL2_InitForOpenGL(Window.GetHandle(), Window.GetContext());
 	ImGui_ImplOpenGL3_Init("#version 460 core");
 
-	//ImGui::GetBackgroundDrawList()->AddText(ImVec2(0, 0), ImColor(0, 0, 0), "setup");
 	Console::Log(Console::Severity::ALERT, "Initialized ImGui ({})", IMGUI_VERSION);
 }
 
@@ -166,10 +168,11 @@ void EditorSystem::Draw()
 
 void EditorSystem::Shutdown()
 {
-	ImGui_ImplOpenGL3_Shutdown();
-
 	// Shutdown ImGui
+	ImGui_ImplOpenGL3_Shutdown();
 	ImGui_ImplSDL2_Shutdown();
+
+    ImNodeGraph::DestroyContext();
 	ImGui::DestroyContext();
 }
 

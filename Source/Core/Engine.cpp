@@ -59,6 +59,7 @@ void OpenShaderDesigner::Engine::Initialize()
     EditorSystem::Open<Profiler>();
 
     Console::Log(Console::Severity::MESSAGE, "Opening Shader Graph");
+    EditorSystem::Open<Inspector>();
     EditorSystem::Open<ShaderGraph>();
 }
 

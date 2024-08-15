@@ -18,7 +18,9 @@
 
 #include <glm/vec4.hpp>
 #include <Graph/ShaderGraph.h>
-#include <Utility/Any.h>
+#include <open-cpp-utils/any.h>
+
+namespace ocu = open_cpp_utils;
 
 namespace OpenShaderDesigner::Nodes::Math
 {
@@ -26,7 +28,7 @@ namespace OpenShaderDesigner::Nodes::Math
 
 	struct Constant : public Node
 	{
-		using ValueType = Any<int, unsigned int, float, glm::vec4>;
+		using ValueType = ocu::any<int, unsigned int, float, glm::vec4>;
 
 		Constant(ShaderGraph& graph, ImVec2 pos);
 		virtual ~Constant() = default;

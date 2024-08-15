@@ -1,0 +1,61 @@
+\doxysection{Open\+Shader\+Designer\+::Node Struct Reference}
+\hypertarget{struct_open_shader_designer_1_1_node}{}\label{struct_open_shader_designer_1_1_node}\index{OpenShaderDesigner::Node@{OpenShaderDesigner::Node}}
+Inheritance diagram for Open\+Shader\+Designer\+::Node\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{struct_open_shader_designer_1_1_node}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{struct_open_shader_designer_1_1_node_a045b08fc2e3c7bfb0fb021872060eca1}\label{struct_open_shader_designer_1_1_node_a045b08fc2e3c7bfb0fb021872060eca1} 
+{\bfseries Node} (\mbox{\hyperlink{class_open_shader_designer_1_1_shader_graph}{Shader\+Graph}} \&graph, Im\+Vec2 pos, const std\+::string \&title, Im\+Color color, const std\+::vector$<$ \mbox{\hyperlink{struct_open_shader_designer_1_1_pin}{Pin}} $>$ \&inputs, bool dyn\+\_\+inputs, const std\+::vector$<$ \mbox{\hyperlink{struct_open_shader_designer_1_1_pin}{Pin}} $>$ \&outputs, bool constant=false)
+\item 
+\Hypertarget{struct_open_shader_designer_1_1_node_a70bb11ea1a9c508676a2af05279a29f6}\label{struct_open_shader_designer_1_1_node_a70bb11ea1a9c508676a2af05279a29f6} 
+virtual \mbox{\hyperlink{struct_open_shader_designer_1_1_node}{Node}} \texorpdfstring{$\ast$}{*} {\bfseries Copy} (\mbox{\hyperlink{class_open_shader_designer_1_1_shader_graph}{Shader\+Graph}} \&graph) const =0
+\item 
+\Hypertarget{struct_open_shader_designer_1_1_node_a3f5a0246c1069278857299567ebf4ce4}\label{struct_open_shader_designer_1_1_node_a3f5a0246c1069278857299567ebf4ce4} 
+virtual void {\bfseries Inspect} ()=0
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{struct_open_shader_designer_1_1_node_acf75149be57771e12f60179a284619e3}\label{struct_open_shader_designer_1_1_node_acf75149be57771e12f60179a284619e3} 
+Im\+Vec2 {\bfseries Position} = \{ 0, 0 \}
+\item 
+\Hypertarget{struct_open_shader_designer_1_1_node_a91a75bd71698f33ec205bcb06db9fb3f}\label{struct_open_shader_designer_1_1_node_a91a75bd71698f33ec205bcb06db9fb3f} 
+\begin{tabbing}
+xx\=xx\=xx\=xx\=xx\=xx\=xx\=xx\=xx\=\kill
+struct \{\\
+\>std::string {\bfseries Title} = "{}Node"{}\\
+\>ImColor {\bfseries Color} = Pin::Colors\mbox{[}Pin::VECTOR\mbox{]}\\
+\>bool {\bfseries Enabled} = true\\
+\} {\bfseries Header}\\
+
+\end{tabbing}\item 
+\Hypertarget{struct_open_shader_designer_1_1_node_afe91e26c03e73a1c84eb5bb6e6a155a0}\label{struct_open_shader_designer_1_1_node_afe91e26c03e73a1c84eb5bb6e6a155a0} 
+\begin{tabbing}
+xx\=xx\=xx\=xx\=xx\=xx\=xx\=xx\=xx\=\kill
+struct \{\\
+\>std::vector$<$ \mbox{\hyperlink{struct_open_shader_designer_1_1_pin}{Pin}} $>$ {\bfseries Inputs}\\
+\>std::vector$<$ \mbox{\hyperlink{struct_open_shader_designer_1_1_pin}{Pin}} $>$ {\bfseries Outputs}\\
+\>bool {\bfseries DynamicInputs} = false\\
+\} {\bfseries IO}\\
+
+\end{tabbing}\item 
+\Hypertarget{struct_open_shader_designer_1_1_node_afed7efba8bacb46381d5ad7ca4e5d935}\label{struct_open_shader_designer_1_1_node_afed7efba8bacb46381d5ad7ca4e5d935} 
+\begin{tabbing}
+xx\=xx\=xx\=xx\=xx\=xx\=xx\=xx\=xx\=\kill
+struct \{\\
+\>ImVec2 {\bfseries Size}\\
+\>bool {\bfseries Const}\\
+\} {\bfseries Info}\\
+
+\end{tabbing}\end{DoxyCompactItemize}
+
+
+The documentation for this struct was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+Include/\+Graph/Shader\+Graph.\+h\item 
+Source/\+Graph/Shader\+Graph.\+cpp\end{DoxyCompactItemize}

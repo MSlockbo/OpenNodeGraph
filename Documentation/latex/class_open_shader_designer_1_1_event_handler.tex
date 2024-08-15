@@ -1,0 +1,64 @@
+\doxysection{Open\+Shader\+Designer\+::Event\+Handler\texorpdfstring{$<$}{<} Event\+Type \texorpdfstring{$>$}{>} Class Template Reference}
+\hypertarget{class_open_shader_designer_1_1_event_handler}{}\label{class_open_shader_designer_1_1_event_handler}\index{OpenShaderDesigner::EventHandler$<$ EventType $>$@{OpenShaderDesigner::EventHandler$<$ EventType $>$}}
+
+
+\doxylink{class_open_shader_designer_1_1_event_handler}{Event\+Handler} interface for creating custom Event\+Handlers.  
+
+
+
+
+{\ttfamily \#include $<$Event\+System.\+h$>$}
+
+Inheritance diagram for Open\+Shader\+Designer\+::Event\+Handler\texorpdfstring{$<$}{<} Event\+Type \texorpdfstring{$>$}{>}\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_open_shader_designer_1_1_event_handler}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_open_shader_designer_1_1_event_handler_ac7326c1ee1a04cf764475dc7c74dc021}\label{class_open_shader_designer_1_1_event_handler_ac7326c1ee1a04cf764475dc7c74dc021} 
+using {\bfseries Handled\+Type} = Event\+Type
+\begin{DoxyCompactList}\small\item\em The type handled by the \doxylink{class_open_shader_designer_1_1_event_handler}{Event\+Handler}. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual bool \mbox{\hyperlink{class_open_shader_designer_1_1_event_handler_a3f8d4130cfbb6c7b1f6be52d0d6e1fae}{Handle\+Event}} (const \mbox{\hyperlink{class_open_shader_designer_1_1_event_handler_ac7326c1ee1a04cf764475dc7c74dc021}{Handled\+Type}} \texorpdfstring{$\ast$}{*}event)=0
+\begin{DoxyCompactList}\small\item\em Virtual function for custom \doxylink{class_open_shader_designer_1_1_event_handler}{Event\+Handler} implementations. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$typename Event\+Type$>$\newline
+class Open\+Shader\+Designer\+::\+Event\+Handler$<$ Event\+Type $>$}
+\doxylink{class_open_shader_designer_1_1_event_handler}{Event\+Handler} interface for creating custom Event\+Handlers. 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em Event\+Type} & The Component\+Type of \doxylink{struct_open_shader_designer_1_1_event}{Event} handled by the \doxylink{class_open_shader_designer_1_1_event_handler}{Event\+Handler} \\
+\hline
+\end{DoxyTemplParams}
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_open_shader_designer_1_1_event_handler_a3f8d4130cfbb6c7b1f6be52d0d6e1fae}\index{OpenShaderDesigner::EventHandler$<$ EventType $>$@{OpenShaderDesigner::EventHandler$<$ EventType $>$}!HandleEvent@{HandleEvent}}
+\index{HandleEvent@{HandleEvent}!OpenShaderDesigner::EventHandler$<$ EventType $>$@{OpenShaderDesigner::EventHandler$<$ EventType $>$}}
+\doxysubsubsection{\texorpdfstring{HandleEvent()}{HandleEvent()}}
+{\footnotesize\ttfamily \label{class_open_shader_designer_1_1_event_handler_a3f8d4130cfbb6c7b1f6be52d0d6e1fae} 
+template$<$typename Event\+Type $>$ \\
+virtual bool \mbox{\hyperlink{class_open_shader_designer_1_1_event_handler}{Open\+Shader\+Designer\+::\+Event\+Handler}}$<$ Event\+Type $>$\+::\+Handle\+Event (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_open_shader_designer_1_1_event_handler_ac7326c1ee1a04cf764475dc7c74dc021}{Handled\+Type}} \texorpdfstring{$\ast$}{*}}]{event}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Virtual function for custom \doxylink{class_open_shader_designer_1_1_event_handler}{Event\+Handler} implementations. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em event} & The \doxylink{struct_open_shader_designer_1_1_event}{Event} being handled. \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+Include/\+Core/Event\+System.\+h\end{DoxyCompactItemize}

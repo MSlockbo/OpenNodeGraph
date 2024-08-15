@@ -28,16 +28,6 @@ Window::Window(const Configuration& config)
     flags |= Config.Video.Fullscreen == FullscreenMode::WINDOWED ? SDL_WINDOW_RESIZABLE : 0;
 
     SDL_Init(SDL_INIT_EVERYTHING & ~SDL_INIT_AUDIO);
-    if((Handle = SDL_CreateWindow(
-        Config.Application.Title.c_str(),
-        SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-        Config.Video.Resolution.x, Config.Video.Resolution.y,
-        flags)) == nullptr)
-    {
-        Console::Log(Console::Severity::FATAL, "Failed to create SDL Window: {}", SDL_GetError());
-        assert(false);
-        return;
-    }
 
 #ifdef NDEBUG
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_FORWARD_COMPATIBLE_FLAG);
@@ -56,11 +46,26 @@ Window::Window(const Configuration& config)
         SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 16);
         SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 16);
         SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 16);
-        SDL_GL_SetAttribute(SDL_GL_FLOATBUFFERS, 1);
+        SDL_GL_SetAttribute(SDL_GL_FLOATBUFFERS, SDL_TRUE);
     }
 
-    SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
-    SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 4);
+    if(Config.Video.Multisamples())
+    {
+        SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, SDL_TRUE);
+        SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, Config.Video.Multisamples);
+    }
+
+
+    if((Handle = SDL_CreateWindow(
+        Config.Application.Title.c_str(),
+        SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
+        Config.Video.Resolution.x, Config.Video.Resolution.y,
+        flags)) == nullptr)
+    {
+        Console::Log(Console::Severity::FATAL, "Failed to create SDL Window: {}", SDL_GetError());
+        assert(false);
+        return;
+    }
 
     Context = SDL_GL_CreateContext(Handle);
 
@@ -99,6 +104,7 @@ Window::Window(const Configuration& config)
     }
 
     // Fill in black screen
+    glEnable(GL_MULTISAMPLE);
     glDisable(GL_DEPTH_TEST);
     glClearColor(0, 0, 0, 1);
     glClear(GL_COLOR_BUFFER_BIT);

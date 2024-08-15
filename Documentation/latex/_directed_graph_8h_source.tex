@@ -1,0 +1,276 @@
+\doxysection{Directed\+Graph.\+h}
+\hypertarget{_directed_graph_8h_source}{}\label{_directed_graph_8h_source}\index{Include/Utility/DirectedGraph.h@{Include/Utility/DirectedGraph.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//\ =====================================================================================================================}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ Copyright\ 2024\ Medusa\ Slockbower}}
+\DoxyCodeLine{00003\ \textcolor{comment}{//\ Licensed\ under\ the\ Apache\ License,\ Version\ 2.0\ (the\ "{}License"{});}}
+\DoxyCodeLine{00004\ \textcolor{comment}{//\ you\ may\ not\ use\ this\ file\ except\ in\ compliance\ with\ the\ License.}}
+\DoxyCodeLine{00005\ \textcolor{comment}{//\ You\ may\ obtain\ a\ copy\ of\ the\ License\ at}}
+\DoxyCodeLine{00006\ \textcolor{comment}{//}}
+\DoxyCodeLine{00007\ \textcolor{comment}{//\ \ http://www.apache.org/licenses/LICENSE-\/2.0}}
+\DoxyCodeLine{00008\ \textcolor{comment}{//}}
+\DoxyCodeLine{00009\ \textcolor{comment}{//\ Unless\ required\ by\ applicable\ law\ or\ agreed\ to\ in\ writing,\ software}}
+\DoxyCodeLine{00010\ \textcolor{comment}{//\ distributed\ under\ the\ License\ is\ distributed\ on\ an\ "{}AS\ IS"{}\ BASIS,}}
+\DoxyCodeLine{00011\ \textcolor{comment}{//\ WITHOUT\ WARRANTIES\ OR\ CONDITIONS\ OF\ ANY\ KIND,\ either\ express\ or\ implied.}}
+\DoxyCodeLine{00012\ \textcolor{comment}{//\ See\ the\ License\ for\ the\ specific\ language\ governing\ permissions\ and}}
+\DoxyCodeLine{00013\ \textcolor{comment}{//\ limitations\ under\ the\ License.}}
+\DoxyCodeLine{00014\ \textcolor{comment}{//\ =====================================================================================================================}}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#ifndef\ DIRECTEDGRAPH\_H}}
+\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#define\ DIRECTEDGRAPH\_H}}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \textcolor{preprocessor}{\#include\ <deque>}}
+\DoxyCodeLine{00020\ \textcolor{preprocessor}{\#include\ <vector>}}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T>}
+\DoxyCodeLine{00023\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_directed_graph}{DirectedGraph}}}
+\DoxyCodeLine{00024\ \{}
+\DoxyCodeLine{00025\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00026\ \ \ \ \ \textcolor{comment}{//\ Typedefs\ ========================================================================================================}}
+\DoxyCodeLine{00027\ }
+\DoxyCodeLine{00028\ \ \ \ \ \textcolor{keyword}{using\ }DataType\ =\ T;}
+\DoxyCodeLine{00029\ \ \ \ \ \textcolor{keyword}{using\ }Node\ =\ uint32\_t;}
+\DoxyCodeLine{00030\ \ \ \ \ \textcolor{keyword}{using\ }NodeQueue\ =\ std::deque<Node>;}
+\DoxyCodeLine{00031\ }
+\DoxyCodeLine{00032\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00033\ \ \ \ \ \textcolor{comment}{//\ Data\ Structures\ =================================================================================================}}
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00035\ \ \ \ \ \textcolor{keyword}{struct\ }Director}
+\DoxyCodeLine{00036\ \ \ \ \ \{}
+\DoxyCodeLine{00037\ \ \ \ \ \ \ \ \ \textcolor{keyword}{enum}\ Flags}
+\DoxyCodeLine{00038\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ \ \ \ \ VALID\ =\ 0b00000000000000000000000000000001}
+\DoxyCodeLine{00040\ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ Node\ Parent,\ Child,\ Sibling;}
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ uint32\_t\ Flags;}
+\DoxyCodeLine{00044\ }
+\DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ Director()\ :\ Parent(0),\ Child(0),\ Sibling(0),\ Flags(VALID)\ \{\ \}}
+\DoxyCodeLine{00046\ \ \ \ \ \};}
+\DoxyCodeLine{00047\ }
+\DoxyCodeLine{00048\ \ \ \ \ \textcolor{keyword}{using\ }Hierarchy\ =\ std::vector<Director>;}
+\DoxyCodeLine{00049\ \ \ \ \ \textcolor{keyword}{using\ }Storage\ =\ std::vector<DataType>;}
+\DoxyCodeLine{00050\ }
+\DoxyCodeLine{00051\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00052\ \ \ \ \ \textcolor{comment}{//\ Functions\ =======================================================================================================}}
+\DoxyCodeLine{00053\ }
+\DoxyCodeLine{00054\ \ \ \ \ \mbox{\hyperlink{class_directed_graph}{DirectedGraph}}()\ :\ Graph\{\ Director()\ \},\ Data\{\ DataType()\ \},\ Freed\{\ \}\ \{\ \}}
+\DoxyCodeLine{00055\ }
+\DoxyCodeLine{00056\ \ \ \ \ [[nodiscard]]\ Node\ Parent(Node\ node)\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ Graph[node].Parent;\ \}}
+\DoxyCodeLine{00057\ \ \ \ \ [[nodiscard]]\ Node\ FirstChild(Node\ node)\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ Graph[node].Child;\ \}}
+\DoxyCodeLine{00058\ \ \ \ \ [[nodiscard]]\ Node\ NextSibling(Node\ node)\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ Graph[node].Sibling;\ \}}
+\DoxyCodeLine{00059\ }
+\DoxyCodeLine{00060\ \ \ \ \ [[nodiscard]]\ Node\ LeftMost(Node\ node)\textcolor{keyword}{\ const}}
+\DoxyCodeLine{00061\ \textcolor{keyword}{\ \ \ \ }\{}
+\DoxyCodeLine{00062\ \ \ \ \ \ \ \ \ Node\ current\ =\ node;}
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{while}(node\ =\ FirstChild(current))\ current\ =\ node;}
+\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ current;}
+\DoxyCodeLine{00065\ \ \ \ \ \}}
+\DoxyCodeLine{00066\ }
+\DoxyCodeLine{00067\ \ \ \ \ [[nodiscard]]\ uint32\_t\ Depth(Node\ node)\textcolor{keyword}{\ const}}
+\DoxyCodeLine{00068\ \textcolor{keyword}{\ \ \ \ }\{}
+\DoxyCodeLine{00069\ \ \ \ \ \ \ \ \ uint32\_t\ depth\ =\ 0;}
+\DoxyCodeLine{00070\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{while}\ (node)}
+\DoxyCodeLine{00071\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00072\ \ \ \ \ \ \ \ \ \ \ \ \ node\ =\ Parent(node);}
+\DoxyCodeLine{00073\ \ \ \ \ \ \ \ \ \ \ \ \ ++depth;}
+\DoxyCodeLine{00074\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00075\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ depth;}
+\DoxyCodeLine{00076\ \ \ \ \ \}}
+\DoxyCodeLine{00077\ }
+\DoxyCodeLine{00078\ \ \ \ \ Node\ Insert(\textcolor{keyword}{const}\ DataType\&\ data,\ Node\ parent)}
+\DoxyCodeLine{00079\ \ \ \ \ \{}
+\DoxyCodeLine{00080\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(Freed.empty())}
+\DoxyCodeLine{00081\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00082\ \ \ \ \ \ \ \ \ \ \ \ \ Freed.push\_back(\textcolor{keyword}{static\_cast<}Node\textcolor{keyword}{>}(Graph.size()));}
+\DoxyCodeLine{00083\ \ \ \ \ \ \ \ \ \ \ \ \ Graph.push\_back(Director());\ Data.push\_back(DataType());}
+\DoxyCodeLine{00084\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00085\ }
+\DoxyCodeLine{00086\ \ \ \ \ \ \ \ \ Node\ next\ =\ Freed.front();\ Freed.pop\_front();}
+\DoxyCodeLine{00087\ \ \ \ \ \ \ \ \ Director\&\ pnode\ =\ Graph[parent];}
+\DoxyCodeLine{00088\ \ \ \ \ \ \ \ \ Director\&\ node\ =\ Graph[next];}
+\DoxyCodeLine{00089\ }
+\DoxyCodeLine{00090\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Setup\ Node}}
+\DoxyCodeLine{00091\ \ \ \ \ \ \ \ \ node.Parent\ =\ parent;}
+\DoxyCodeLine{00092\ \ \ \ \ \ \ \ \ node.Sibling\ =\ pnode.Child;}
+\DoxyCodeLine{00093\ \ \ \ \ \ \ \ \ node.Child\ =\ 0;}
+\DoxyCodeLine{00094\ \ \ \ \ \ \ \ \ node.Flags\ =\ Director::VALID;}
+\DoxyCodeLine{00095\ }
+\DoxyCodeLine{00096\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Set\ parent's\ child}}
+\DoxyCodeLine{00097\ \ \ \ \ \ \ \ \ pnode.Child\ =\ next;}
+\DoxyCodeLine{00098\ }
+\DoxyCodeLine{00099\ \ \ \ \ \ \ \ \ Data[next]\ =\ data;}
+\DoxyCodeLine{00100\ }
+\DoxyCodeLine{00101\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ next;}
+\DoxyCodeLine{00102\ \ \ \ \ \}}
+\DoxyCodeLine{00103\ }
+\DoxyCodeLine{00104\ \ \ \ \ \textcolor{keywordtype}{void}\ Erase(Node\ node)}
+\DoxyCodeLine{00105\ \ \ \ \ \{}
+\DoxyCodeLine{00106\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(node\ ==\ 0)\ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00107\ }
+\DoxyCodeLine{00108\ \ \ \ \ \ \ \ \ Director\&\ erased\ =\ Graph[node];}
+\DoxyCodeLine{00109\ \ \ \ \ \ \ \ \ erased.Flags\ \&=\ \string~Director::VALID;}
+\DoxyCodeLine{00110\ \ \ \ \ \ \ \ \ Freed.push\_back(node);}
+\DoxyCodeLine{00111\ }
+\DoxyCodeLine{00112\ \ \ \ \ \ \ \ \ Graph[erased.Parent].Child\ =\ erased.Sibling;}
+\DoxyCodeLine{00113\ }
+\DoxyCodeLine{00114\ \ \ \ \ \ \ \ \ NodeQueue\ stack\{\ erased.Child\ \};}
+\DoxyCodeLine{00115\ }
+\DoxyCodeLine{00116\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{while}(stack.empty()\ ==\ \textcolor{keyword}{false})}
+\DoxyCodeLine{00117\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00118\ \ \ \ \ \ \ \ \ \ \ \ \ Node\ next\ =\ stack.front();\ stack.pop\_front();}
+\DoxyCodeLine{00119\ \ \ \ \ \ \ \ \ \ \ \ \ Director\&\ child\ =\ Graph[next];}
+\DoxyCodeLine{00120\ \ \ \ \ \ \ \ \ \ \ \ \ child.Flags\ \&=\ \string~Director::VALID;}
+\DoxyCodeLine{00121\ \ \ \ \ \ \ \ \ \ \ \ \ Freed.push\_back(next);}
+\DoxyCodeLine{00122\ }
+\DoxyCodeLine{00123\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(child.Sibling)\ stack.push\_front(child.Sibling);}
+\DoxyCodeLine{00124\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(child.Child)\ stack.push\_front(child.Child);}
+\DoxyCodeLine{00125\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00126\ \ \ \ \ \}}
+\DoxyCodeLine{00127\ }
+\DoxyCodeLine{00128\ \ \ \ \ DataType\&\ operator[](Node\ node)\ \{\ \textcolor{keywordflow}{return}\ Data[node];\ \}}
+\DoxyCodeLine{00129\ \ \ \ \ [[nodiscard]]\ \textcolor{keyword}{const}\ DataType\&\ operator[](Node\ node)\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ Data[node];\ \}}
+\DoxyCodeLine{00130\ }
+\DoxyCodeLine{00131\ \ \ \ \ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ V,\ \textcolor{keyword}{typename}\ O>}
+\DoxyCodeLine{00132\ \ \ \ \ \textcolor{keywordtype}{void}\ Traverse(V\&\ visitor)}
+\DoxyCodeLine{00133\ \ \ \ \ \{}
+\DoxyCodeLine{00134\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_directed_graph_1_1_traverser}{Traverser<V,\ O>}}\ traverser(*\textcolor{keyword}{this},\ visitor);}
+\DoxyCodeLine{00135\ \ \ \ \ \ \ \ \ traverser();}
+\DoxyCodeLine{00136\ \ \ \ \ \}}
+\DoxyCodeLine{00137\ }
+\DoxyCodeLine{00138\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00139\ \ \ \ \ \textcolor{comment}{//\ Variables\ =======================================================================================================}}
+\DoxyCodeLine{00140\ }
+\DoxyCodeLine{00141\ \ \ \ \ Hierarchy\ Graph;}
+\DoxyCodeLine{00142\ \ \ \ \ Storage\ \ \ Data;}
+\DoxyCodeLine{00143\ \ \ \ \ NodeQueue\ Freed;}
+\DoxyCodeLine{00144\ }
+\DoxyCodeLine{00145\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00146\ \ \ \ \ \textcolor{comment}{//\ Navigation\ ======================================================================================================}}
+\DoxyCodeLine{00147\ }
+\DoxyCodeLine{00148\ \ \ \ \ \textcolor{keyword}{friend}\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_directed_graph_1_1_breadth_first}{BreadthFirst}};}
+\DoxyCodeLine{00149\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_directed_graph_1_1_breadth_first}{BreadthFirst}}}
+\DoxyCodeLine{00150\ \ \ \ \ \{}
+\DoxyCodeLine{00151\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00152\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_directed_graph_1_1_breadth_first}{BreadthFirst}}(\mbox{\hyperlink{class_directed_graph}{DirectedGraph}}\&\ graph)\ :\ Graph(graph),\ VisitQueue(0)\ \{\ \}}
+\DoxyCodeLine{00153\ }
+\DoxyCodeLine{00154\ \ \ \ \ \ \ \ \ Node\ operator()(Node\ node)}
+\DoxyCodeLine{00155\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00156\ \ \ \ \ \ \ \ \ \ \ \ \ node\ =\ VisitQueue.back();\ VisitQueue.pop\_back();}
+\DoxyCodeLine{00157\ \ \ \ \ \ \ \ \ \ \ \ \ Director\&\ current\ =\ Graph.Graph[node];}
+\DoxyCodeLine{00158\ }
+\DoxyCodeLine{00159\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(current.Sibling)\ VisitQueue.push\_back(current.Sibling);}
+\DoxyCodeLine{00160\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(current.Child)\ VisitQueue.push\_front(current.Child);}
+\DoxyCodeLine{00161\ }
+\DoxyCodeLine{00162\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(VisitQueue.empty())\ \textcolor{keywordflow}{return}\ 0;}
+\DoxyCodeLine{00163\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ node;}
+\DoxyCodeLine{00164\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00165\ }
+\DoxyCodeLine{00166\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00167\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_directed_graph}{DirectedGraph}}\&\ Graph;}
+\DoxyCodeLine{00168\ \ \ \ \ \ \ \ \ NodeQueue\ \ \ \ \ \ VisitQueue;}
+\DoxyCodeLine{00169\ \ \ \ \ \};}
+\DoxyCodeLine{00170\ }
+\DoxyCodeLine{00171\ \ \ \ \ \textcolor{keyword}{friend}\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_directed_graph_1_1_pre_order}{PreOrder}};}
+\DoxyCodeLine{00172\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_directed_graph_1_1_pre_order}{PreOrder}}}
+\DoxyCodeLine{00173\ \ \ \ \ \{}
+\DoxyCodeLine{00174\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00175\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_directed_graph_1_1_pre_order}{PreOrder}}(\mbox{\hyperlink{class_directed_graph}{DirectedGraph}}\&\ graph)\ :\ Graph(graph)\ \{\ \}}
+\DoxyCodeLine{00176\ }
+\DoxyCodeLine{00177\ \ \ \ \ \ \ \ \ Node\ operator()(Node\ node)}
+\DoxyCodeLine{00178\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00179\ \ \ \ \ \ \ \ \ \ \ \ \ Director\&\ current\ =\ Graph.Graph[node];}
+\DoxyCodeLine{00180\ }
+\DoxyCodeLine{00181\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(current.Sibling)\ VisitQueue.push\_front(current.Sibling);}
+\DoxyCodeLine{00182\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(current.Child)\ VisitQueue.push\_front(current.Child);}
+\DoxyCodeLine{00183\ }
+\DoxyCodeLine{00184\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(VisitQueue.empty())\ \textcolor{keywordflow}{return}\ 0;}
+\DoxyCodeLine{00185\ \ \ \ \ \ \ \ \ \ \ \ \ Node\ next\ =\ VisitQueue.front();\ VisitQueue.pop\_front();}
+\DoxyCodeLine{00186\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ next;}
+\DoxyCodeLine{00187\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00188\ }
+\DoxyCodeLine{00189\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00190\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_directed_graph}{DirectedGraph}}\&\ Graph;}
+\DoxyCodeLine{00191\ \ \ \ \ \ \ \ \ NodeQueue\ \ \ \ \ \ VisitQueue;}
+\DoxyCodeLine{00192\ \ \ \ \ \};}
+\DoxyCodeLine{00193\ }
+\DoxyCodeLine{00194\ \ \ \ \ \textcolor{keyword}{friend}\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_directed_graph_1_1_in_order}{InOrder}};}
+\DoxyCodeLine{00195\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_directed_graph_1_1_in_order}{InOrder}}}
+\DoxyCodeLine{00196\ \ \ \ \ \{}
+\DoxyCodeLine{00197\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00198\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_directed_graph_1_1_in_order}{InOrder}}(\mbox{\hyperlink{class_directed_graph}{DirectedGraph}}\&\ graph)\ :\ Graph(graph)\ \{\ \}}
+\DoxyCodeLine{00199\ }
+\DoxyCodeLine{00200\ \ \ \ \ \ \ \ \ Node\ operator()(Node\ node)}
+\DoxyCodeLine{00201\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00202\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(node\ ==\ 0)\ VisitQueue.push\_back(Graph.LeftMost(node));}
+\DoxyCodeLine{00203\ }
+\DoxyCodeLine{00204\ \ \ \ \ \ \ \ \ \ \ \ \ node\ =\ VisitQueue.front();\ VisitQueue.pop\_front();}
+\DoxyCodeLine{00205\ \ \ \ \ \ \ \ \ \ \ \ \ Director\&\ current\ =\ Graph.Graph[node];}
+\DoxyCodeLine{00206\ }
+\DoxyCodeLine{00207\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(current.Sibling)}
+\DoxyCodeLine{00208\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00209\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(Graph.NextSibling(current.Sibling))\ VisitQueue.push\_back(current.Parent);}
+\DoxyCodeLine{00210\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ VisitQueue.push\_back(Graph.LeftMost(current.Sibling));}
+\DoxyCodeLine{00211\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00212\ }
+\DoxyCodeLine{00213\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ node;}
+\DoxyCodeLine{00214\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00215\ }
+\DoxyCodeLine{00216\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00217\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_directed_graph}{DirectedGraph}}\&\ Graph;}
+\DoxyCodeLine{00218\ \ \ \ \ \ \ \ \ NodeQueue\ \ \ \ \ \ VisitQueue;}
+\DoxyCodeLine{00219\ \ \ \ \ \};}
+\DoxyCodeLine{00220\ }
+\DoxyCodeLine{00221\ \ \ \ \ \textcolor{keyword}{friend}\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_directed_graph_1_1_post_order}{PostOrder}};}
+\DoxyCodeLine{00222\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_directed_graph_1_1_post_order}{PostOrder}}}
+\DoxyCodeLine{00223\ \ \ \ \ \{}
+\DoxyCodeLine{00224\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00225\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_directed_graph_1_1_post_order}{PostOrder}}(\mbox{\hyperlink{class_directed_graph}{DirectedGraph}}\&\ graph)\ :\ Graph(graph)\ \{\ \}}
+\DoxyCodeLine{00226\ }
+\DoxyCodeLine{00227\ \ \ \ \ \ \ \ \ Node\ operator()(Node\ node)}
+\DoxyCodeLine{00228\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00229\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(VisitQueue.empty())\ VisitQueue.push\_back(Graph.LeftMost(node));}
+\DoxyCodeLine{00230\ }
+\DoxyCodeLine{00231\ \ \ \ \ \ \ \ \ \ \ \ \ node\ =\ VisitQueue.front();\ VisitQueue.pop\_front();}
+\DoxyCodeLine{00232\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(node\ ==\ 0)\ \textcolor{keywordflow}{return}\ node;}
+\DoxyCodeLine{00233\ \ \ \ \ \ \ \ \ \ \ \ \ Director\&\ current\ =\ Graph.Graph[node];}
+\DoxyCodeLine{00234\ }
+\DoxyCodeLine{00235\ \ \ \ \ \ \ \ \ \ \ \ \ VisitQueue.push\_back(current.Sibling\ ?\ Graph.LeftMost(current.Sibling)\ :\ Graph.Parent(node));}
+\DoxyCodeLine{00236\ }
+\DoxyCodeLine{00237\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ node;}
+\DoxyCodeLine{00238\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00239\ }
+\DoxyCodeLine{00240\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00241\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_directed_graph}{DirectedGraph}}\&\ Graph;}
+\DoxyCodeLine{00242\ \ \ \ \ \ \ \ \ NodeQueue\ \ \ \ \ \ VisitQueue;}
+\DoxyCodeLine{00243\ \ \ \ \ \};}
+\DoxyCodeLine{00244\ }
+\DoxyCodeLine{00245\ \ \ \ \ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ V,\ \textcolor{keyword}{typename}\ O>}
+\DoxyCodeLine{00246\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_directed_graph_1_1_traverser}{Traverser}}}
+\DoxyCodeLine{00247\ \ \ \ \ \{}
+\DoxyCodeLine{00248\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00249\ \ \ \ \ \ \ \ \ \textcolor{keyword}{using\ }VisitorType\ =\ V;}
+\DoxyCodeLine{00250\ \ \ \ \ \ \ \ \ \textcolor{keyword}{using\ }OrderType\ =\ O;}
+\DoxyCodeLine{00251\ }
+\DoxyCodeLine{00252\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_directed_graph_1_1_traverser}{Traverser}}(\mbox{\hyperlink{class_directed_graph}{DirectedGraph}}\&\ graph,\ VisitorType\&\ visitor)\ :\ Graph(graph),\ Visitor(visitor),\ Order(graph)\ \{\ \}}
+\DoxyCodeLine{00253\ }
+\DoxyCodeLine{00254\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ operator()()}
+\DoxyCodeLine{00255\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00256\ \ \ \ \ \ \ \ \ \ \ \ \ Node\ node\ =\ 0;}
+\DoxyCodeLine{00257\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{while}(node\ =\ Order(node))}
+\DoxyCodeLine{00258\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00259\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(Visitor(Graph[node],\ node))\ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00260\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00261\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00262\ }
+\DoxyCodeLine{00263\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00264\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_directed_graph}{DirectedGraph}}\&\ Graph;}
+\DoxyCodeLine{00265\ \ \ \ \ \ \ \ \ VisitorType\&\ \ \ Visitor;}
+\DoxyCodeLine{00266\ \ \ \ \ \ \ \ \ OrderType\ \ \ \ \ \ Order;}
+\DoxyCodeLine{00267\ \ \ \ \ \};}
+\DoxyCodeLine{00268\ \};}
+\DoxyCodeLine{00269\ }
+\DoxyCodeLine{00270\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//DIRECTEDGRAPH\_H}}
+
+\end{DoxyCode}

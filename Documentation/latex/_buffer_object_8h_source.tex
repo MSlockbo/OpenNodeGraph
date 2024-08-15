@@ -1,0 +1,147 @@
+\doxysection{Buffer\+Object.\+h}
+\hypertarget{_buffer_object_8h_source}{}\label{_buffer_object_8h_source}\index{Include/OpenGL/BufferObject.h@{Include/OpenGL/BufferObject.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//\ =====================================================================================================================}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ Copyright\ 2024\ Medusa\ Slockbower}}
+\DoxyCodeLine{00003\ \textcolor{comment}{//\ Licensed\ under\ the\ Apache\ License,\ Version\ 2.0\ (the\ "{}License"{});}}
+\DoxyCodeLine{00004\ \textcolor{comment}{//\ you\ may\ not\ use\ this\ file\ except\ in\ compliance\ with\ the\ License.}}
+\DoxyCodeLine{00005\ \textcolor{comment}{//\ You\ may\ obtain\ a\ copy\ of\ the\ License\ at}}
+\DoxyCodeLine{00006\ \textcolor{comment}{//}}
+\DoxyCodeLine{00007\ \textcolor{comment}{//\ \ http://www.apache.org/licenses/LICENSE-\/2.0}}
+\DoxyCodeLine{00008\ \textcolor{comment}{//}}
+\DoxyCodeLine{00009\ \textcolor{comment}{//\ Unless\ required\ by\ applicable\ law\ or\ agreed\ to\ in\ writing,\ software}}
+\DoxyCodeLine{00010\ \textcolor{comment}{//\ distributed\ under\ the\ License\ is\ distributed\ on\ an\ "{}AS\ IS"{}\ BASIS,}}
+\DoxyCodeLine{00011\ \textcolor{comment}{//\ WITHOUT\ WARRANTIES\ OR\ CONDITIONS\ OF\ ANY\ KIND,\ either\ express\ or\ implied.}}
+\DoxyCodeLine{00012\ \textcolor{comment}{//\ See\ the\ License\ for\ the\ specific\ language\ governing\ permissions\ and}}
+\DoxyCodeLine{00013\ \textcolor{comment}{//\ limitations\ under\ the\ License.}}
+\DoxyCodeLine{00014\ \textcolor{comment}{//\ =====================================================================================================================}}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#ifndef\ BUFFEROBJECT\_H}}
+\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#define\ BUFFEROBJECT\_H}}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \textcolor{preprocessor}{\#ifndef\ NULL}}
+\DoxyCodeLine{00020\ \textcolor{preprocessor}{\#define\ NULL\ 0}}
+\DoxyCodeLine{00021\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ \textcolor{preprocessor}{\#include\ <algorithm>}}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ \textcolor{preprocessor}{\#include\ "{}Enum.h"{}}}
+\DoxyCodeLine{00026\ \textcolor{preprocessor}{\#include\ "{}Type.h"{}}}
+\DoxyCodeLine{00027\ }
+\DoxyCodeLine{00028\ \textcolor{keyword}{namespace\ }GLW}
+\DoxyCodeLine{00029\ \{}
+\DoxyCodeLine{00030\ \textcolor{comment}{//\ Definition\ ==========================================================================================================}}
+\DoxyCodeLine{00031\ }
+\DoxyCodeLine{00032\ \ \ \ \ \textcolor{keyword}{template}<BufferType\ T,\ BufferUsage\ U,\ BufferStorage\ S\ =\ GPU>}
+\DoxyCodeLine{00033\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_g_l_w_1_1_buffer_object}{BufferObject}}}
+\DoxyCodeLine{00034\ \ \ \ \ \{}
+\DoxyCodeLine{00035\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00036\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ BufferType\ \ \ \ Type\ \ \ \ =\ T;}
+\DoxyCodeLine{00037\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ BufferUsage\ \ \ Usage\ \ \ =\ U;}
+\DoxyCodeLine{00038\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ BufferStorage\ Storage\ =\ S;}
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_g_l_w_1_1_buffer_object_a965f2c34ca5291ae351bb32226a1bed8}{BufferObject}}(SizeT\ size,\ \textcolor{keywordtype}{void}*\ data\ =\ \textcolor{keyword}{nullptr});}
+\DoxyCodeLine{00046\ }
+\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_g_l_w_1_1_buffer_object_a965f2c34ca5291ae351bb32226a1bed8}{BufferObject}}(\mbox{\hyperlink{class_g_l_w_1_1_buffer_object}{BufferObject}}\&\&\ other);}
+\DoxyCodeLine{00051\ }
+\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_g_l_w_1_1_buffer_object_a965f2c34ca5291ae351bb32226a1bed8}{BufferObject}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{class_g_l_w_1_1_buffer_object}{BufferObject}}\&\ other);}
+\DoxyCodeLine{00056\ }
+\DoxyCodeLine{00060\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_g_l_w_1_1_buffer_object_aa9eedd875b7ea8f657e58452f61e643d}{\string~BufferObject}}();}
+\DoxyCodeLine{00061\ }
+\DoxyCodeLine{00065\ \ \ \ \ \ \ \ \ [[nodiscard]]\ \textcolor{keyword}{operator}\ bool()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ Handle\ !=\ 0;\ \}}
+\DoxyCodeLine{00066\ }
+\DoxyCodeLine{00070\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_g_l_w_1_1_buffer_object}{BufferObject}}\&\ \mbox{\hyperlink{class_g_l_w_1_1_buffer_object_a837d2b9cf2b2b4eaffa20d5c984ec1b0}{operator=}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{class_g_l_w_1_1_buffer_object}{BufferObject}}\&\ other);}
+\DoxyCodeLine{00071\ }
+\DoxyCodeLine{00075\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_g_l_w_1_1_buffer_object}{BufferObject}}\&\ \mbox{\hyperlink{class_g_l_w_1_1_buffer_object_a837d2b9cf2b2b4eaffa20d5c984ec1b0}{operator=}}(\mbox{\hyperlink{class_g_l_w_1_1_buffer_object}{BufferObject}}\&\&\ other)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00076\ }
+\DoxyCodeLine{00077\ \ \ \ \ \ \ \ \ [[nodiscard]]\ SizeT\ Size()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ Size;\ \}}
+\DoxyCodeLine{00078\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ Resize(SizeT\ size);}
+\DoxyCodeLine{00079\ }
+\DoxyCodeLine{00080\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00081\ \ \ \ \ \ \ \ \ HandleT\ Handle;}
+\DoxyCodeLine{00082\ \ \ \ \ \ \ \ \ SizeT\ \ \ Size;}
+\DoxyCodeLine{00083\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}*\ \ \ Mapping;}
+\DoxyCodeLine{00084\ \ \ \ \ \};}
+\DoxyCodeLine{00085\ }
+\DoxyCodeLine{00086\ \textcolor{comment}{//\ Constructors\ ========================================================================================================}}
+\DoxyCodeLine{00087\ }
+\DoxyCodeLine{00088\ \ \ \ \ \textcolor{keyword}{template}\ <BufferType\ T,\ BufferUsage\ U,\ BufferStorage\ S>}
+\DoxyCodeLine{00089\ \ \ \ \ \mbox{\hyperlink{class_g_l_w_1_1_buffer_object_a965f2c34ca5291ae351bb32226a1bed8}{BufferObject<T,\ U,\ S>::BufferObject}}(SizeT\ size,\ \textcolor{keywordtype}{void}*\ data)}
+\DoxyCodeLine{00090\ \ \ \ \ \ \ \ \ :\ Handle(NULL)}
+\DoxyCodeLine{00091\ \ \ \ \ \ \ \ \ ,\ Size(size)}
+\DoxyCodeLine{00092\ \ \ \ \ \ \ \ \ ,\ Mapping(nullptr)}
+\DoxyCodeLine{00093\ \ \ \ \ \{}
+\DoxyCodeLine{00094\ \ \ \ \ \ \ \ \ glGenBuffers(1,\ \&Handle);}
+\DoxyCodeLine{00095\ }
+\DoxyCodeLine{00096\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(!*\textcolor{keyword}{this})\ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00097\ }
+\DoxyCodeLine{00098\ \ \ \ \ \ \ \ \ glBindBuffer(Type,\ Handle);}
+\DoxyCodeLine{00099\ \ \ \ \ \ \ \ \ glBufferStorage(Type,\ Size,\ data,\ Usage);}
+\DoxyCodeLine{00100\ \ \ \ \ \ \ \ \ glBindBuffer(Type,\ 0);}
+\DoxyCodeLine{00101\ \ \ \ \ \}}
+\DoxyCodeLine{00102\ }
+\DoxyCodeLine{00103\ \ \ \ \ \textcolor{keyword}{template}\ <BufferType\ T,\ BufferUsage\ U,\ BufferStorage\ S>}
+\DoxyCodeLine{00104\ \ \ \ \ \mbox{\hyperlink{class_g_l_w_1_1_buffer_object_a965f2c34ca5291ae351bb32226a1bed8}{BufferObject<T,\ U,\ S>::BufferObject}}(\mbox{\hyperlink{class_g_l_w_1_1_buffer_object}{BufferObject}}\&\&\ other)}
+\DoxyCodeLine{00105\ \ \ \ \ \ \ \ \ :\ Handle(other.Handle)}
+\DoxyCodeLine{00106\ \ \ \ \ \ \ \ \ ,\ Size(other.Size)}
+\DoxyCodeLine{00107\ \ \ \ \ \ \ \ \ ,\ Mapping(other.Size)}
+\DoxyCodeLine{00108\ \ \ \ \ \{}
+\DoxyCodeLine{00109\ \ \ \ \ \ \ \ \ other.Handle\ \ =\ NULL;}
+\DoxyCodeLine{00110\ \ \ \ \ \ \ \ \ other.Size\ \ \ \ =\ 0;}
+\DoxyCodeLine{00111\ \ \ \ \ \ \ \ \ other.Mapping\ =\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{00112\ \ \ \ \ \}}
+\DoxyCodeLine{00113\ }
+\DoxyCodeLine{00114\ \ \ \ \ \textcolor{keyword}{template}\ <BufferType\ T,\ BufferUsage\ U,\ BufferStorage\ S>}
+\DoxyCodeLine{00115\ \ \ \ \ \mbox{\hyperlink{class_g_l_w_1_1_buffer_object_a965f2c34ca5291ae351bb32226a1bed8}{BufferObject<T,\ U,\ S>::BufferObject}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{class_g_l_w_1_1_buffer_object}{BufferObject}}\&\ other)}
+\DoxyCodeLine{00116\ \ \ \ \ \ \ \ \ :\ \mbox{\hyperlink{class_g_l_w_1_1_buffer_object}{BufferObject}}(other.Size)}
+\DoxyCodeLine{00117\ \ \ \ \ \{}
+\DoxyCodeLine{00118\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(Handle\ ==\ NULL)\ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00119\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(other.Handle\ ==\ NULL)\ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00120\ }
+\DoxyCodeLine{00121\ \ \ \ \ \ \ \ \ glCopyNamedBufferSubData(other.Handle,\ Handle,\ 0,\ 0,\ Size);}
+\DoxyCodeLine{00122\ \ \ \ \ \}}
+\DoxyCodeLine{00123\ }
+\DoxyCodeLine{00124\ \ \ \ \ \textcolor{keyword}{template}\ <BufferType\ T,\ BufferUsage\ U,\ BufferStorage\ S>}
+\DoxyCodeLine{00125\ \ \ \ \ \mbox{\hyperlink{class_g_l_w_1_1_buffer_object_aa9eedd875b7ea8f657e58452f61e643d}{BufferObject<T,\ U,\ S>::\string~BufferObject}}()}
+\DoxyCodeLine{00126\ \ \ \ \ \{}
+\DoxyCodeLine{00127\ \ \ \ \ \ \ \ \ glDeleteBuffers(1,\ \&Handle);}
+\DoxyCodeLine{00128\ \ \ \ \ \}}
+\DoxyCodeLine{00129\ }
+\DoxyCodeLine{00130\ \textcolor{comment}{//\ Assignment\ Operators\ ================================================================================================}}
+\DoxyCodeLine{00131\ }
+\DoxyCodeLine{00132\ \ \ \ \ \textcolor{keyword}{template}\ <BufferType\ T,\ BufferUsage\ U,\ BufferStorage\ S>}
+\DoxyCodeLine{00133\ \ \ \ \ \mbox{\hyperlink{class_g_l_w_1_1_buffer_object}{BufferObject<T,\ U,\ S>}}\&\ \mbox{\hyperlink{class_g_l_w_1_1_buffer_object_a837d2b9cf2b2b4eaffa20d5c984ec1b0}{BufferObject<T,\ U,\ S>::operator=}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{class_g_l_w_1_1_buffer_object}{BufferObject}}\&\ other)}
+\DoxyCodeLine{00134\ \ \ \ \ \{}
+\DoxyCodeLine{00135\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_g_l_w_1_1_buffer_object}{BufferObject}}\ temp(other);}
+\DoxyCodeLine{00136\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ (*\textcolor{keyword}{this}\ =\ std::move(temp));\ \textcolor{comment}{//\ NOLINT(*-\/unconventional-\/assign-\/operator)}}
+\DoxyCodeLine{00137\ \ \ \ \ \}}
+\DoxyCodeLine{00138\ }
+\DoxyCodeLine{00139\ \ \ \ \ \textcolor{keyword}{template}\ <BufferType\ T,\ BufferUsage\ U,\ BufferStorage\ S>}
+\DoxyCodeLine{00140\ \ \ \ \ \mbox{\hyperlink{class_g_l_w_1_1_buffer_object}{BufferObject<T,\ U,\ S>}}\&\ \mbox{\hyperlink{class_g_l_w_1_1_buffer_object_a837d2b9cf2b2b4eaffa20d5c984ec1b0}{BufferObject<T,\ U,\ S>::operator=}}(\mbox{\hyperlink{class_g_l_w_1_1_buffer_object}{BufferObject}}\&\&\ other)\ \textcolor{keyword}{noexcept}}
+\DoxyCodeLine{00141\ \ \ \ \ \{}
+\DoxyCodeLine{00142\ \ \ \ \ \ \ \ \ glDeleteBuffers(1,\ \&Handle);}
+\DoxyCodeLine{00143\ }
+\DoxyCodeLine{00144\ \ \ \ \ \ \ \ \ Handle\ \ =\ other.Handle;}
+\DoxyCodeLine{00145\ \ \ \ \ \ \ \ \ Size\ \ \ \ =\ other.Size;}
+\DoxyCodeLine{00146\ \ \ \ \ \ \ \ \ Mapping\ =\ other.Mapping;}
+\DoxyCodeLine{00147\ }
+\DoxyCodeLine{00148\ \ \ \ \ \ \ \ \ other.Handle\ \ =\ NULL;}
+\DoxyCodeLine{00149\ \ \ \ \ \ \ \ \ other.Size\ \ \ \ =\ 0;}
+\DoxyCodeLine{00150\ \ \ \ \ \ \ \ \ other.Mapping\ =\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{00151\ }
+\DoxyCodeLine{00152\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00153\ \ \ \ \ \}}
+\DoxyCodeLine{00154\ }
+\DoxyCodeLine{00155\ \ \ \ \ \textcolor{keyword}{template}\ <BufferType\ T,\ BufferUsage\ U,\ BufferStorage\ S>}
+\DoxyCodeLine{00156\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_g_l_w_1_1_buffer_object}{BufferObject<T,\ U,\ S>::Resize}}(SizeT\ size)}
+\DoxyCodeLine{00157\ \ \ \ \ \{}
+\DoxyCodeLine{00158\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_g_l_w_1_1_buffer_object}{BufferObject}}\ temp(size);}
+\DoxyCodeLine{00159\ \ \ \ \ \ \ \ \ glCopyNamedBufferSubData(Handle,\ temp.Handle,\ 0,\ 0,\ Size);}
+\DoxyCodeLine{00160\ \ \ \ \ \ \ \ \ *\textcolor{keyword}{this}\ =\ std::move(temp);}
+\DoxyCodeLine{00161\ \ \ \ \ \}}
+\DoxyCodeLine{00162\ \}}
+\DoxyCodeLine{00163\ }
+\DoxyCodeLine{00164\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//BUFFEROBJECT\_H}}
+
+\end{DoxyCode}

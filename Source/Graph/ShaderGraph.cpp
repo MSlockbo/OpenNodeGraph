@@ -25,6 +25,8 @@
 #include <Graph/ShaderGraph.h>
 #include <imgui-docking/imgui_internal.h>
 
+#include <imnode-graph/imnode_graph.h>
+
 using namespace OpenShaderDesigner;
 
 ImColor operator*(const ImColor& c, float f)
@@ -141,6 +143,7 @@ Node::Node(
 
 ShaderGraph::ShaderGraph()
 	: EditorWindow("\uED46 Shader Graph", 0)
+    , GrabFocus(false)
 	, State(*this)
 	, Style
 	{
@@ -220,8 +223,74 @@ void ShaderGraph::OnOpen()
 	Camera.Scroll = Camera.Zoom = 1.0f;
 
 	EditorSystem::Open<Inspector>()->Graph = this;
+
+    GrabFocus = true;
 }
 
+
+void ShaderGraph::DrawWindow()
+{
+    static int test_in, test_out;
+    ImNodeGraph::BeginGraph("ShaderGraph");
+    ImNodeGraph::SetPinColors(Pin::Colors);
+
+    if(GrabFocus)
+    {
+        GrabFocus = false;
+        ImGui::SetWindowFocus();
+        ImGui::SetNavWindow(ImGui::GetCurrentWindow());
+    }
+
+    // First Test Node
+    {
+        ImVec2 pos = { 0, 0 };
+
+        ImNodeGraph::BeginNode(0, pos);
+
+        ImNodeGraph::BeginNodeHeader(-1, ImColor(0xA7, 0x62, 0x53), ImColor(0xC5, 0x79, 0x67), ImColor(0x82, 0x4C, 0x40));
+        ImGui::Text("\uf1f5 Hello");
+        ImNodeGraph::EndNodeHeader();
+
+        ImNodeGraph::BeginPin(1, Pin::INT, ImPinDirection_Input);
+        ImGui::PushItemWidth(100 * ImNodeGraph::GetCameraScale());
+        ImGui::InputInt("##In", &test_in, 0);
+        //ImGui::Text("In");
+        ImNodeGraph::EndPin();
+
+        ImNodeGraph::BeginPin(2, Pin::ANY, ImPinDirection_Output);
+        ImGui::Text("Out");
+        ImNodeGraph::EndPin();
+
+        ImNodeGraph::EndNode();
+    }
+
+    // Second Test Node
+    {
+        ImVec2 pos = { 300, 0 };
+
+        ImNodeGraph::BeginNode(3, pos);
+
+        ImNodeGraph::BeginNodeHeader(-1, ImColor(0xA7, 0x62, 0x53), ImColor(0xC5, 0x79, 0x67), ImColor(0x82, 0x4C, 0x40));
+        ImGui::Text("\uf1f5 Hello");
+        ImNodeGraph::EndNodeHeader();
+
+        ImNodeGraph::BeginPin(4, Pin::INT, ImPinDirection_Input);
+        ImGui::PushItemWidth(100 * ImNodeGraph::GetCameraScale());
+        ImGui::InputInt("##In", &test_in, 0);
+        //ImGui::Text("In");
+        ImNodeGraph::EndPin();
+
+        ImNodeGraph::BeginPin(5, Pin::ANY, ImPinDirection_Output);
+        ImGui::Text("Out");
+        ImNodeGraph::EndPin();
+
+        ImNodeGraph::EndNode();
+    }
+
+    ImNodeGraph::EndGraph();
+}
+
+/*
 void ShaderGraph::DrawWindow()
 {
 	HandleInput();
@@ -266,11 +335,13 @@ void ShaderGraph::DrawWindow()
 		}
 
 		Mouse.Locks.clear();
-		Mouse.FocusedNode.Reset();
+		Mouse.FocusedNode.reset();
 		Mouse.DragSelect.clear();
 		Mouse.LocksDragged = false;
 	}
 }
+*/
+
 
 void ShaderGraph::HandleInput()
 {
@@ -696,7 +767,7 @@ void ShaderGraph::DrawContextMenu()
 		{
 			bool operator()(ContextMenuItem& item, ContextID id)
 			{
-				const auto depth = Graph.ContextMenu.Depth(id);
+				const auto depth = Graph.ContextMenu.depth(id);
 				if(depth > Context.size()) return false;
 
 				while(depth < Context.size())
@@ -705,7 +776,7 @@ void ShaderGraph::DrawContextMenu()
 					ImGui::EndMenu();
 				}
 
-				if(Context.top() != Graph.ContextMenu.Parent(id)) return false;
+				if(Context.top() != Graph.ContextMenu.parent(id)) return false;
 				std::string name = std::format("{}##{}", item.Name, id);
 
 				if(item.Constructor)
@@ -740,7 +811,7 @@ void ShaderGraph::DrawContextMenu()
 		,	.Context = context
 		};
 
-		ContextMenu.Traverse<Visitor, ContextMenuHierarchy::PreOrder>(MenuVisitor);
+		ContextMenu.traverse<ContextMenuHierarchy::pre_order>(MenuVisitor);
 
 		context.pop();
 		while(context.empty() == false)
@@ -864,7 +935,7 @@ void ShaderGraph::StartConnection(const PinPtr& ptr)
 
 void ShaderGraph::StopConnection()
 {
-	Mouse.NewConnection.Reset();
+	Mouse.NewConnection.reset();
 }
 
 void ShaderGraph::CreateConnection(const PinPtr& a, const PinPtr& b)
@@ -1066,7 +1137,7 @@ float ShaderGraph::BezierOffset(const ImVec2& out, const ImVec2& in)
 	const float HeaderHeight = Style.FontSize / Camera.Zoom;
 	const float diff_x = out.x - in.x;
 	const float diff_y = out.y - in.y;
-	return abs(diff_x) * (abs(diff_y) / abs(diff_x)) * (1 + glm::max(diff_x, 0.0f) / (HeaderHeight + abs(diff_y)));
+	return abs(diff_y) * (1 + glm::max(diff_x, 0.0f) / (HeaderHeight + abs(diff_y)));
 }
 
 bool ShaderGraph::AABB(const ImVec2& a0, const ImVec2& a1, const ImVec2& b0, const ImVec2& b1)
@@ -1122,7 +1193,7 @@ void ShaderGraph::Register(const std::filesystem::path& path, ConstructorPtr con
 	ContextID node = 0;
 	while(decomp.empty() == false)
 	{
-		ContextID child = ContextMenu.FirstChild(node);
+		ContextID child = ContextMenu.first_child(node);
 
 		while(child)
 		{
@@ -1133,17 +1204,17 @@ void ShaderGraph::Register(const std::filesystem::path& path, ConstructorPtr con
 				break;
 			}
 
-			child = ContextMenu.NextSibling(child);
+			child = ContextMenu.next_sibling(child);
 		}
 
 		if(node == 0 || node != child)
 		{
-			node = ContextMenu.Insert({ decomp.top(), nullptr }, node);
+			node = ContextMenu.insert({ decomp.top(), nullptr }, node);
 			decomp.pop();
 		}
 	}
 
-	ContextMenu.Insert({ name, constructor }, node);
+	ContextMenu.insert({ name, constructor }, node);
 }
 
 Inspector::Inspector()

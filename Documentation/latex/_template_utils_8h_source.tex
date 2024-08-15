@@ -1,0 +1,59 @@
+\doxysection{Template\+Utils.\+h}
+\hypertarget{_template_utils_8h_source}{}\label{_template_utils_8h_source}\index{Include/Utility/TemplateUtils.h@{Include/Utility/TemplateUtils.h}}
+\mbox{\hyperlink{_template_utils_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//\ =====================================================================================================================}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ Copyright\ 2024\ Medusa\ Slockbower}}
+\DoxyCodeLine{00003\ \textcolor{comment}{//\ Licensed\ under\ the\ Apache\ License,\ Version\ 2.0\ (the\ "{}License"{});}}
+\DoxyCodeLine{00004\ \textcolor{comment}{//\ you\ may\ not\ use\ this\ file\ except\ in\ compliance\ with\ the\ License.}}
+\DoxyCodeLine{00005\ \textcolor{comment}{//\ You\ may\ obtain\ a\ copy\ of\ the\ License\ at}}
+\DoxyCodeLine{00006\ \textcolor{comment}{//}}
+\DoxyCodeLine{00007\ \textcolor{comment}{//\ \ http://www.apache.org/licenses/LICENSE-\/2.0}}
+\DoxyCodeLine{00008\ \textcolor{comment}{//}}
+\DoxyCodeLine{00009\ \textcolor{comment}{//\ Unless\ required\ by\ applicable\ law\ or\ agreed\ to\ in\ writing,\ software}}
+\DoxyCodeLine{00010\ \textcolor{comment}{//\ distributed\ under\ the\ License\ is\ distributed\ on\ an\ "{}AS\ IS"{}\ BASIS,}}
+\DoxyCodeLine{00011\ \textcolor{comment}{//\ WITHOUT\ WARRANTIES\ OR\ CONDITIONS\ OF\ ANY\ KIND,\ either\ express\ or\ implied.}}
+\DoxyCodeLine{00012\ \textcolor{comment}{//\ See\ the\ License\ for\ the\ specific\ language\ governing\ permissions\ and}}
+\DoxyCodeLine{00013\ \textcolor{comment}{//\ limitations\ under\ the\ License.}}
+\DoxyCodeLine{00014\ \textcolor{comment}{//\ =====================================================================================================================}}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#ifndef\ TEMPLATEUTILS\_H}}
+\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#define\ TEMPLATEUTILS\_H}}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00029\ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T,\ T\ V>}
+\DoxyCodeLine{00030\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_constant_value}{ConstantValue}}}
+\DoxyCodeLine{00031\ \{}
+\DoxyCodeLine{00032\ \ \ \ \ \textcolor{keyword}{using\ }Type\ =\ T;}
+\DoxyCodeLine{00033\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ Type\ Value\ =\ V;}
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00035\ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keyword}{operator}\ Type()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{\ \textcolor{keywordflow}{return}\ Value;\ \}}
+\DoxyCodeLine{00036\ \ \ \ \ [[nodiscard]]\ \textcolor{keyword}{constexpr}\ Type\ operator()()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ Value;\ \}}
+\DoxyCodeLine{00037\ \};}
+\DoxyCodeLine{00038\ }
+\DoxyCodeLine{00043\ \textcolor{keyword}{template}<\textcolor{keywordtype}{bool}\ V>}
+\DoxyCodeLine{00044\ \textcolor{keyword}{using\ }\mbox{\hyperlink{struct_constant_value}{BoolConstant}}\ =\ \mbox{\hyperlink{struct_constant_value}{ConstantValue<bool,\ V>}};}
+\DoxyCodeLine{00045\ }
+\DoxyCodeLine{00046\ \textcolor{keyword}{using\ }\mbox{\hyperlink{struct_constant_value}{TrueType}}\ =\ \mbox{\hyperlink{struct_constant_value}{BoolConstant<true>}};\ }
+\DoxyCodeLine{00047\ \textcolor{keyword}{using\ }\mbox{\hyperlink{struct_constant_value}{FalseType}}\ =\ \mbox{\hyperlink{struct_constant_value}{BoolConstant<false>}};\ }
+\DoxyCodeLine{00048\ }
+\DoxyCodeLine{00052\ \textcolor{keyword}{template}<\textcolor{keyword}{typename},\ \textcolor{keyword}{typename}>}
+\DoxyCodeLine{00053\ \textcolor{keyword}{inline}\ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ IsSame\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00054\ }
+\DoxyCodeLine{00055\ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T>}
+\DoxyCodeLine{00056\ \textcolor{keyword}{inline}\ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ IsSame<T,\ T>\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00057\ }
+\DoxyCodeLine{00058\ \textcolor{keyword}{template}<\textcolor{keyword}{typename}...>}
+\DoxyCodeLine{00059\ \textcolor{keyword}{inline}\ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ IsUnique\ =\ \mbox{\hyperlink{struct_constant_value}{TrueType}}\{\};}
+\DoxyCodeLine{00060\ }
+\DoxyCodeLine{00066\ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T,\ \textcolor{keyword}{typename}...Ts>}
+\DoxyCodeLine{00067\ \textcolor{keyword}{inline}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ IsUnique<T,\ Ts...>\ =\ \mbox{\hyperlink{struct_constant_value}{BoolConstant}}<(!IsSame<T,\ Ts>\ \&\&\ ...)\ \&\&\ IsUnique<Ts...>>\{\};}
+\DoxyCodeLine{00068\ }
+\DoxyCodeLine{00069\ \textcolor{keyword}{template}<\textcolor{keywordtype}{size\_t}\ I,\ \textcolor{keyword}{typename}\ T,\ \textcolor{keyword}{typename}...Ts>}
+\DoxyCodeLine{00070\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_get_pack_element}{GetPackElement}}}
+\DoxyCodeLine{00071\ \{}
+\DoxyCodeLine{00072\ \ \ \ \ \textcolor{keyword}{using\ }Type\ =\ \textcolor{keyword}{typename}\ \mbox{\hyperlink{struct_get_pack_element}{GetPackElement}}<I\ -\/\ 1,\ T,\ Ts...>::Type;}
+\DoxyCodeLine{00073\ \};}
+\DoxyCodeLine{00074\ }
+\DoxyCodeLine{00075\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//TEMPLATEUTILS\_H}}
+
+\end{DoxyCode}

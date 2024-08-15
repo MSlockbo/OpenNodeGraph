@@ -17,16 +17,19 @@
 #define SHADERGRAPH_H
 
 #include <Editor/EditorWindow.h>
-#include <Utility/Startup.h>
 
 #include <vector>
 #include <unordered_map>
 #include <filesystem>
 #include <unordered_set>
+#include <set>
 #include <stack>
 
-#include <Utility/DirectedGraph.h>
-#include <Utility/Optional.h>
+#include <open-cpp-utils/startup.h>
+#include <open-cpp-utils/directed_tree.h>
+#include <open-cpp-utils/optional.h>
+
+namespace ocu = open_cpp_utils;
 
 #define RegisterNode(Name, Type) \
 	Node* Create##Type(ShaderGraph& graph, ImVec2 pos) { return new Type(graph, pos); } \
@@ -160,7 +163,7 @@ namespace OpenShaderDesigner
 		{
 			ShaderGraph&               Parent;
 			std::vector<Node*>         Nodes;
-			std::unordered_set<PinId>  Erased;
+			std::set<PinId>  Erased;
 			ConnectionMap              Connections;
 
 			GraphState(ShaderGraph& parent);
@@ -170,8 +173,8 @@ namespace OpenShaderDesigner
 			GraphState& operator=(const GraphState& other);
 		};
 
-		using ContextMenuHierarchy = DirectedGraph<ContextMenuItem>;
-		using ContextID = ContextMenuHierarchy::Node;
+		using ContextMenuHierarchy = ocu::directed_tree<ContextMenuItem>;
+		using ContextID = ContextMenuHierarchy::node;
 		inline static ContextMenuHierarchy ContextMenu;
 
 		// Helper functions
@@ -227,6 +230,8 @@ namespace OpenShaderDesigner
 		static void Register(const std::filesystem::path& path, ConstructorPtr constructor);
 
 	private:
+        bool GrabFocus;
+
 		GraphState             State;
 		std::stack<GraphState> History;
 
@@ -286,11 +291,11 @@ namespace OpenShaderDesigner
 			float            Scroll;
 			bool             ClickedSomething;
 
-			Optional<NodeId> FocusedNode;
+			ocu::optional<NodeId> FocusedNode;
 			std::unordered_map<NodeId, ImVec2> Locks;
 			std::unordered_set<NodeId> DragSelect;
 			bool LocksDragged, NodeHovered;
-			Optional<PinPtr> NewConnection;
+			ocu::optional<PinPtr> NewConnection;
 			std::unordered_set<NodeId> Selected;
 		} Mouse;
 

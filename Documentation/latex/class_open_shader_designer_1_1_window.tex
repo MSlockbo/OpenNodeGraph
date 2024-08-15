@@ -1,0 +1,71 @@
+\doxysection{Open\+Shader\+Designer\+::Window Class Reference}
+\hypertarget{class_open_shader_designer_1_1_window}{}\label{class_open_shader_designer_1_1_window}\index{OpenShaderDesigner::Window@{OpenShaderDesigner::Window}}
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{struct_open_shader_designer_1_1_window_1_1_configuration}{Configuration}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_open_shader_designer_1_1_window_a702515ac449f5558f8b9f56453aa697b}\label{class_open_shader_designer_1_1_window_a702515ac449f5558f8b9f56453aa697b} 
+enum class {\bfseries VSync\+Mode} \+: int \{ {\bfseries DISABLED} = 0
+, {\bfseries ENABLED} = 1
+, {\bfseries ADAPTIVE} = -\/1
+, {\bfseries DEFAULT} = DISABLED
+ \}
+\item 
+\Hypertarget{class_open_shader_designer_1_1_window_a6d4afe17ced8640f90f00b82b4489cea}\label{class_open_shader_designer_1_1_window_a6d4afe17ced8640f90f00b82b4489cea} 
+enum class {\bfseries Fullscreen\+Mode} \+: int \{ {\bfseries WINDOWED} = 0
+, {\bfseries FULLSCREEN} = SDL\+\_\+\+WINDOW\+\_\+\+FULLSCREEN
+, {\bfseries FULLSCREEN\+\_\+\+WINDOW} = SDL\+\_\+\+WINDOW\+\_\+\+FULLSCREEN\+\_\+\+DESKTOP
+ \}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_open_shader_designer_1_1_window_a2a782015b95da8a453bdf241b5ccd9e4}\label{class_open_shader_designer_1_1_window_a2a782015b95da8a453bdf241b5ccd9e4} 
+{\bfseries Window} (const \mbox{\hyperlink{struct_open_shader_designer_1_1_window_1_1_configuration}{Configuration}} \&config)
+\item 
+\Hypertarget{class_open_shader_designer_1_1_window_a26bd6809eafdb15ad2bc9ad2097c625f}\label{class_open_shader_designer_1_1_window_a26bd6809eafdb15ad2bc9ad2097c625f} 
+void {\bfseries Handle\+Events} ()
+\item 
+\Hypertarget{class_open_shader_designer_1_1_window_a57d825ad38512ac9a4b79d06be0c3b65}\label{class_open_shader_designer_1_1_window_a57d825ad38512ac9a4b79d06be0c3b65} 
+void {\bfseries Begin\+Frame} ()
+\item 
+\Hypertarget{class_open_shader_designer_1_1_window_a23bf99dc7ae51eacb31f71b1b1d01975}\label{class_open_shader_designer_1_1_window_a23bf99dc7ae51eacb31f71b1b1d01975} 
+void {\bfseries End\+Frame} ()
+\item 
+\Hypertarget{class_open_shader_designer_1_1_window_a415489122dab7f0324d716da57347315}\label{class_open_shader_designer_1_1_window_a415489122dab7f0324d716da57347315} 
+void {\bfseries Close} ()
+\item 
+\Hypertarget{class_open_shader_designer_1_1_window_a6b805b08491bf9b8acc62e408a764690}\label{class_open_shader_designer_1_1_window_a6b805b08491bf9b8acc62e408a764690} 
+bool {\bfseries Is\+Open} () const
+\item 
+\Hypertarget{class_open_shader_designer_1_1_window_a2e3bd3b5f7911c3a2365781d571d5bfd}\label{class_open_shader_designer_1_1_window_a2e3bd3b5f7911c3a2365781d571d5bfd} 
+SDL\+\_\+\+Window \texorpdfstring{$\ast$}{*} {\bfseries Get\+Handle} ()
+\item 
+\Hypertarget{class_open_shader_designer_1_1_window_a0fe610a7bc102d3abed5677d0789ed25}\label{class_open_shader_designer_1_1_window_a0fe610a7bc102d3abed5677d0789ed25} 
+const SDL\+\_\+\+Window \texorpdfstring{$\ast$}{*} {\bfseries Get\+Handle} () const
+\item 
+\Hypertarget{class_open_shader_designer_1_1_window_a00c2aa9fa43cf4e6a321d333f1979fdd}\label{class_open_shader_designer_1_1_window_a00c2aa9fa43cf4e6a321d333f1979fdd} 
+SDL\+\_\+\+GLContext {\bfseries Get\+Context} ()
+\item 
+\Hypertarget{class_open_shader_designer_1_1_window_a002e7873697812ba8c6a1ce3c0c6f6a6}\label{class_open_shader_designer_1_1_window_a002e7873697812ba8c6a1ce3c0c6f6a6} 
+const SDL\+\_\+\+GLContext {\bfseries Get\+Context} () const
+\item 
+\Hypertarget{class_open_shader_designer_1_1_window_a10996328c5ed819d1025250e99b6dca3}\label{class_open_shader_designer_1_1_window_a10996328c5ed819d1025250e99b6dca3} 
+glm\+::ivec2 {\bfseries Size} () const
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_open_shader_designer_1_1_window_a7347365722b46b380e8cc93e36ee8b8e}\label{class_open_shader_designer_1_1_window_a7347365722b46b380e8cc93e36ee8b8e} 
+static const \mbox{\hyperlink{struct_open_shader_designer_1_1_window_1_1_configuration}{Configuration}} {\bfseries Default\+Configuration}
+\end{DoxyCompactItemize}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+Include/\+Core/Window.\+h\item 
+Source/\+Core/Window.\+cpp\end{DoxyCompactItemize}

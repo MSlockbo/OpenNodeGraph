@@ -17,7 +17,7 @@
 #define EDITORSYSTEM_H
 
 #include <SDL_events.h>
-#include <Utility/UniqueID.h>
+#include <open-cpp-utils/unique_id.h>
 #include <unordered_map>
 
 #include <Editor/EditorWindow.h>
@@ -32,7 +32,7 @@ namespace OpenShaderDesigner
         using WindowID = uint64_t;
 
         template<typename T>
-        static WindowID ID() { return OpenShaderDesigner::UniqueID<WindowID, T>(); }
+        static WindowID ID() { return open_cpp_utils::unique_id<WindowID, T>(); }
 
         template<typename T>
         static T* Open() { T* window; (window = Get<T>())->Open(); return window; }

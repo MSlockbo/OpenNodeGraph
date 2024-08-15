@@ -1,0 +1,171 @@
+\doxysection{Open\+Shader\+Designer\+::Console Class Reference}
+\hypertarget{class_open_shader_designer_1_1_console}{}\label{class_open_shader_designer_1_1_console}\index{OpenShaderDesigner::Console@{OpenShaderDesigner::Console}}
+\doxysubsubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_open_shader_designer_1_1_console_a4da63ca14b9e8f7a582df081623b6406}\label{class_open_shader_designer_1_1_console_a4da63ca14b9e8f7a582df081623b6406} 
+enum \mbox{\hyperlink{class_open_shader_designer_1_1_console_a4da63ca14b9e8f7a582df081623b6406}{Setting}} \+: uint8\+\_\+t \{ \newline
+{\bfseries SHOW\+\_\+\+TIMESTAMP} = 0b00000001
+, {\bfseries SHOW\+\_\+\+THREAD} = 0b00000010
+, {\bfseries SHOW\+\_\+\+SEVERITY} = 0b00000100
+, {\bfseries SHOW\+\_\+\+FILE\+\_\+\+INFO} = 0b00001000
+, \newline
+{\bfseries WRAP\+\_\+\+TEXT} = 0b00010000
+, {\bfseries ALL\+\_\+\+SETTINGS} = 0x\+FF
+, {\bfseries DEFAULT\+\_\+\+SETTINGS} = ALL\+\_\+\+SETTINGS \texorpdfstring{$^\wedge$}{\string^} WRAP\+\_\+\+TEXT
+ \}
+\begin{DoxyCompactList}\small\item\em Setting for displaying log entries. \end{DoxyCompactList}\item 
+\Hypertarget{class_open_shader_designer_1_1_console_a880eae5d076afe686248bbb0f6a83771}\label{class_open_shader_designer_1_1_console_a880eae5d076afe686248bbb0f6a83771} 
+enum class \mbox{\hyperlink{class_open_shader_designer_1_1_console_a880eae5d076afe686248bbb0f6a83771}{Severity}} \+: int \{ \newline
+{\bfseries MESSAGE} = 0
+, {\bfseries WARNING}
+, {\bfseries ERROR}
+, {\bfseries FATAL}
+, \newline
+{\bfseries ALERT}
+, {\bfseries COMMAND}
+, {\bfseries COUNT}
+, {\bfseries DEFAULT} = WARNING
+ \}
+\begin{DoxyCompactList}\small\item\em Severity levels for log entries. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static constexpr Im\+Vec4 \mbox{\hyperlink{class_open_shader_designer_1_1_console_abc25e7d9ad33fdcc95fe11df9a9c3fc4}{Im\+Gui\+Color}} (unsigned int RGB)
+\begin{DoxyCompactList}\small\item\em Integer to floating point color. (Im\+Gui APIVersion) \end{DoxyCompactList}\item 
+\Hypertarget{class_open_shader_designer_1_1_console_a41b89c645164fc524c58b5ee5cc1e8fa}\label{class_open_shader_designer_1_1_console_a41b89c645164fc524c58b5ee5cc1e8fa} 
+static std\+::string {\bfseries Thread\+ID} ()
+\item 
+{\footnotesize template$<$typename... Args$>$ }\\static void \mbox{\hyperlink{class_open_shader_designer_1_1_console_a4b0e458b796c898279bcb8fedf960920}{Log}} (const std\+::string \&file, const int line, \mbox{\hyperlink{class_open_shader_designer_1_1_console_a880eae5d076afe686248bbb0f6a83771}{Severity}} severity=Severity\+::\+DEFAULT, const std\+::format\+\_\+string$<$ Args... $>$ \&message="{}"{}, Args \&\&... vargs)
+\begin{DoxyCompactList}\small\item\em Thread-\/\+Safe Log function for debugging. \end{DoxyCompactList}\item 
+\Hypertarget{class_open_shader_designer_1_1_console_ac4e13a7bd1fb502c9864f3c0454203b2}\label{class_open_shader_designer_1_1_console_ac4e13a7bd1fb502c9864f3c0454203b2} 
+static void {\bfseries Draw\+Menu} ()
+\item 
+\Hypertarget{class_open_shader_designer_1_1_console_acff1d4f443320977d132b2f32bc225eb}\label{class_open_shader_designer_1_1_console_acff1d4f443320977d132b2f32bc225eb} 
+static void {\bfseries Draw\+Window} ()
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+static const std\+::string \mbox{\hyperlink{class_open_shader_designer_1_1_console_a858d18576b3e7e542d4723316ae71e21}{Setting\+Names}} \mbox{[}$\,$\mbox{]}
+\begin{DoxyCompactList}\small\item\em String representations of the settings. \end{DoxyCompactList}\item 
+static const std\+::string \mbox{\hyperlink{class_open_shader_designer_1_1_console_abac05fdca9513434894c10df2473d8b9}{Severities}} \mbox{[}$\,$\mbox{]}
+\begin{DoxyCompactList}\small\item\em String representations of the Severity levels. \end{DoxyCompactList}\item 
+static const Im\+Vec4 \mbox{\hyperlink{class_open_shader_designer_1_1_console_a1a476dcb9b07e3ad0d54e08775118b35}{Severity\+Colors}} \mbox{[}$\,$\mbox{]}
+\begin{DoxyCompactList}\small\item\em Color for rendering each Severity level text in editor. \end{DoxyCompactList}\item 
+\Hypertarget{class_open_shader_designer_1_1_console_a58a540e350481dfc6c79b2b7f85242de}\label{class_open_shader_designer_1_1_console_a58a540e350481dfc6c79b2b7f85242de} 
+static bool {\bfseries Open} = true
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_open_shader_designer_1_1_console_abc25e7d9ad33fdcc95fe11df9a9c3fc4}\index{OpenShaderDesigner::Console@{OpenShaderDesigner::Console}!ImGuiColor@{ImGuiColor}}
+\index{ImGuiColor@{ImGuiColor}!OpenShaderDesigner::Console@{OpenShaderDesigner::Console}}
+\doxysubsubsection{\texorpdfstring{ImGuiColor()}{ImGuiColor()}}
+{\footnotesize\ttfamily \label{class_open_shader_designer_1_1_console_abc25e7d9ad33fdcc95fe11df9a9c3fc4} 
+static constexpr Im\+Vec4 Open\+Shader\+Designer\+::\+Console\+::\+Im\+Gui\+Color (\begin{DoxyParamCaption}\item[{unsigned int}]{RGB}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}, {\ttfamily [constexpr]}}
+
+
+
+Integer to floating point color. (Im\+Gui APIVersion) 
+
+
+\begin{DoxyParams}{Parameters}
+{\em RGB} & The Integer color to convert. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The rgba floating point color. 
+\end{DoxyReturn}
+\Hypertarget{class_open_shader_designer_1_1_console_a4b0e458b796c898279bcb8fedf960920}\index{OpenShaderDesigner::Console@{OpenShaderDesigner::Console}!Log@{Log}}
+\index{Log@{Log}!OpenShaderDesigner::Console@{OpenShaderDesigner::Console}}
+\doxysubsubsection{\texorpdfstring{Log()}{Log()}}
+{\footnotesize\ttfamily \label{class_open_shader_designer_1_1_console_a4b0e458b796c898279bcb8fedf960920} 
+template$<$typename... Args$>$ \\
+void Open\+Shader\+Designer\+::\+Console\+::\+Log (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{file}{, }\item[{const int}]{line}{, }\item[{\mbox{\hyperlink{class_open_shader_designer_1_1_console_a880eae5d076afe686248bbb0f6a83771}{Severity}}}]{severity}{ = {\ttfamily Severity\+:\+:DEFAULT}, }\item[{const std\+::format\+\_\+string$<$ Args... $>$ \&}]{message}{ = {\ttfamily "{}"{}}, }\item[{Args \&\&...}]{vargs}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Thread-\/\+Safe Log function for debugging. 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em Args} & Variadic Arguments template for Pixel\+Layout Parameters \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em file} & The name of the file this was called from. \\
+\hline
+{\em line} & The line number this was called from. \\
+\hline
+{\em severity} & The severity level of the log entry. \\
+\hline
+{\em message} & A format string for the entry message. \\
+\hline
+{\em vargs} & Arguments for the format string. \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Data Documentation}
+\Hypertarget{class_open_shader_designer_1_1_console_a858d18576b3e7e542d4723316ae71e21}\index{OpenShaderDesigner::Console@{OpenShaderDesigner::Console}!SettingNames@{SettingNames}}
+\index{SettingNames@{SettingNames}!OpenShaderDesigner::Console@{OpenShaderDesigner::Console}}
+\doxysubsubsection{\texorpdfstring{SettingNames}{SettingNames}}
+{\footnotesize\ttfamily \label{class_open_shader_designer_1_1_console_a858d18576b3e7e542d4723316ae71e21} 
+const std\+::string Open\+Shader\+Designer\+::\+Console\+::\+Setting\+Names\mbox{[}$\,$\mbox{]}\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{=}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}Timestamps"{}},\ \textcolor{stringliteral}{"{}Thread\ IDs"{}},\ \textcolor{stringliteral}{"{}Severity"{}},\ \textcolor{stringliteral}{"{}File\ Info"{}},\ \textcolor{stringliteral}{"{}Wrapping"{}}}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \}}
+
+\end{DoxyCode}
+
+
+String representations of the settings. 
+
+\Hypertarget{class_open_shader_designer_1_1_console_abac05fdca9513434894c10df2473d8b9}\index{OpenShaderDesigner::Console@{OpenShaderDesigner::Console}!Severities@{Severities}}
+\index{Severities@{Severities}!OpenShaderDesigner::Console@{OpenShaderDesigner::Console}}
+\doxysubsubsection{\texorpdfstring{Severities}{Severities}}
+{\footnotesize\ttfamily \label{class_open_shader_designer_1_1_console_abac05fdca9513434894c10df2473d8b9} 
+const std\+::string Open\+Shader\+Designer\+::\+Console\+::\+Severities\mbox{[}$\,$\mbox{]}\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{=}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}Message"{}},\ \textcolor{stringliteral}{"{}Warning"{}},\ \textcolor{stringliteral}{"{}Error"{}},\ \textcolor{stringliteral}{"{}Fatal"{}},\ \textcolor{stringliteral}{"{}Alert"{}},\ \textcolor{stringliteral}{"{}Command"{}}}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \}}
+
+\end{DoxyCode}
+
+
+String representations of the Severity levels. 
+
+\Hypertarget{class_open_shader_designer_1_1_console_a1a476dcb9b07e3ad0d54e08775118b35}\index{OpenShaderDesigner::Console@{OpenShaderDesigner::Console}!SeverityColors@{SeverityColors}}
+\index{SeverityColors@{SeverityColors}!OpenShaderDesigner::Console@{OpenShaderDesigner::Console}}
+\doxysubsubsection{\texorpdfstring{SeverityColors}{SeverityColors}}
+{\footnotesize\ttfamily \label{class_open_shader_designer_1_1_console_a1a476dcb9b07e3ad0d54e08775118b35} 
+const Im\+Vec4 Open\+Shader\+Designer\+::\+Console\+::\+Severity\+Colors\mbox{[}$\,$\mbox{]}\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{=\ \{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_open_shader_designer_1_1_console_abc25e7d9ad33fdcc95fe11df9a9c3fc4}{ImGuiColor}}(0xA4B9C4FF),\ \mbox{\hyperlink{class_open_shader_designer_1_1_console_abc25e7d9ad33fdcc95fe11df9a9c3fc4}{ImGuiColor}}(0xF2C554FF),\ \mbox{\hyperlink{class_open_shader_designer_1_1_console_abc25e7d9ad33fdcc95fe11df9a9c3fc4}{ImGuiColor}}(0xE57327FF),\ \mbox{\hyperlink{class_open_shader_designer_1_1_console_abc25e7d9ad33fdcc95fe11df9a9c3fc4}{ImGuiColor}}(0xCC211EFF),}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_open_shader_designer_1_1_console_abc25e7d9ad33fdcc95fe11df9a9c3fc4}{ImGuiColor}}(0x9CDCFEFF),}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \}}
+
+\end{DoxyCode}
+
+
+Color for rendering each Severity level text in editor. 
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+Include/\+Core/Console.\+h\item 
+Source/\+Core/Console.\+cpp\end{DoxyCompactItemize}
