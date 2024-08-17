@@ -17,15 +17,15 @@
 #include <filesystem>
 #include <stack>
 
-#include <Core/Engine.h>
 #include <Core/Console.h>
 #include <Editor/EditorSystem.h>
 
-#include <glm/common.hpp>
 #include <Graph/ShaderGraph.h>
+
 #include <imgui-docking/imgui_internal.h>
 
-#include <imnode-graph/imnode_graph.h>
+#include "imgui-extras/imgui_extras.h"
+
 
 using namespace OpenShaderDesigner;
 
@@ -41,16 +41,12 @@ ShaderGraph::GraphState::GraphState(ShaderGraph& parent)
 
 ShaderGraph::GraphState::GraphState(const GraphState& other)
 	: Parent(other.Parent)
-	, Nodes(other.Nodes.size(), nullptr)
-	, Connections(other.Connections)
-	, Erased(other.Erased)
+	, Nodes(other.Nodes)
 {
-	NodeId id = 0;
-	for(const Node* node : other.Nodes)
-	{
-		if(node) Nodes[id] = node->Copy(Parent);
-		++id;
-	}
+    for(Node*& node : Nodes)
+    {
+        node = node->Copy(Parent);
+    }
 }
 
 ShaderGraph::GraphState::~GraphState()
@@ -63,153 +59,107 @@ ShaderGraph::GraphState::~GraphState()
 
 ShaderGraph::GraphState& ShaderGraph::GraphState::operator=(const GraphState& other)
 {
-	for(Node* node : Nodes)
-	{
-		if(node) delete node;
-	}
+    Nodes = other.Nodes;
 
-	Nodes.clear();
-	Nodes.resize(other.Nodes.size(), nullptr);
+    for(Node*& node : Nodes) if(node) node = node->Copy(Parent);
 
-	NodeId id = 0;
-	for(const Node* node : other.Nodes)
-	{
-		if(node) Nodes[id] = node->Copy(Parent);
-		++id;
-	}
-
-	Connections = other.Connections;
-	Erased = other.Erased;
-
-	return *this;
-}
-
-float ShaderGraph::CalculateWidth(Node& node)
-{
-	const float GridSize = Style.FontSize + Style.Grid.Lines.Padding;
-	const float HeaderHeight = Style.FontSize;
-	const float HeaderWidth = ImGui::CalcTextSize(node.Header.Title.c_str()).x;
-	float InputWidth = 0.0f, OutputWidth = 0.0f;
-
-	// Longest Input Pin
-	for(const Pin& pin : node.IO.Inputs)
-	{
-		InputWidth = glm::max(InputWidth, HeaderHeight + ImGui::CalcTextSize(pin.Name.c_str()).x);
-	}
-
-	// Longest Output Pin
-	for(const Pin& pin : node.IO.Outputs)
-	{
-		OutputWidth = glm::max(OutputWidth, HeaderHeight + ImGui::CalcTextSize(pin.Name.c_str()).x);
-	}
-
-	float Width = glm::max(InputWidth + OutputWidth, HeaderWidth) + HeaderHeight;
-	Width += GridSize - std::fmod(1.0f + Style.Grid.Lines.Padding + Width, GridSize);
-
-	return Width;
-}
-
-float ShaderGraph::CalculateHeight(Node& node)
-{
-	const float HeaderHeight = Style.FontSize;
-	const float PinHeight = HeaderHeight * static_cast<float>(1 + glm::max(node.IO.Inputs.size(), node.IO.Outputs.size()));
-	return glm::max(HeaderHeight + PinHeight, 2 * HeaderHeight);
+    return *this;
 }
 
 Node::Node(
-	ShaderGraph& graph, ImVec2 pos
-,	const std::string& title, ImColor color
-,	const std::vector<Pin>& inputs, bool dyn_inputs
-,	const std::vector<Pin>& outputs, bool constant)
+	ShaderGraph& graph, ImVec2 pos)
 	: Position(pos)
 	, Header
 	{
-		.Title = title
-	,	.Color = color
-	,	.Enabled = true
+		.Title        = "Node"
+	,	.Color        = ImColor(0xA7, 0x62, 0x53)
+	,   .HoveredColor = ImColor(0xC5, 0x79, 0x67)
+	,   .ActiveColor  = ImColor(0x82, 0x4C, 0x40)
+	,	.Enabled      = true
 	}
 	, IO
 	{
-		.Inputs = inputs
-	,	.Outputs = outputs
-	,	.DynamicInputs = dyn_inputs
+		.DynamicInputs = false
 	}
 	, Info
 	{
-		.Size = ImVec2(graph.CalculateWidth(*this), graph.CalculateHeight(*this))
-	,	.Const = constant
+		.Const = false
 	}
 { }
+
+void Node::DrawPin(ImGuiID id, Pin& pin, ImPinDirection direction)
+{
+    ImPinFlags flags = 0;
+    if(pin.Flags & PinFlags_NoPadding) flags |= ImPinFlags_NoPadding;
+
+    ImNodeGraph::BeginPin(std::format("{}##{}", pin.Name, id).c_str(), pin.Type, direction, flags);
+
+    bool connected = ImNodeGraph::IsPinConnected();
+
+    if((connected || pin.Type == PinType_Any) && !(pin.Flags & PinFlags_NoCollapse))
+    {
+        ImGui::Text(pin.Name.c_str());
+    }
+    else
+    {
+        switch (pin.Type)
+        {
+        case PinType_Int:
+            ImNodeGraph::PushItemWidth(200.0f);
+            ImGui::InputInt(std::format("##in{}{}", pin.Name, id).c_str(), pin.Value); break;
+        case PinType_UInt:
+            ImNodeGraph::PushItemWidth(200.0f);
+            ImGui::InputUInt(std::format("##in{}{}", pin.Name, id).c_str(), pin.Value); break;
+        case PinType_Float:
+            ImNodeGraph::PushItemWidth(100.0f);
+            ImGui::InputFloat(std::format("##in{}{}", pin.Name, id).c_str(), pin.Value); break;
+        case PinType_Vector:
+            ImGui::BeginGroup();
+
+            // Color Picker
+            ImNodeGraph::PushItemWidth(150.0f);
+            ImGui::ColorPicker4(
+                std::format("##in{}{}", pin.Name, id).c_str(), &pin.Value.get<ImVec4>().x
+            ,   ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoSidePreview | ImGuiColorEditFlags_HDR | ImGuiColorEditFlags_Float
+            );
+
+            ImNodeGraph::PushItemWidth(150.0f);
+            ImGui::ColorPreview(
+                std::format("##invec{}{}", pin.Name, id).c_str(), &pin.Value.get<ImVec4>().x
+            ,   ImGuiColorEditFlags_HDR | ImGuiColorEditFlags_Float
+            );
+
+            ImGui::EndGroup();
+            break;
+        }
+    }
+
+    ImNodeGraph::EndPin();
+}
+
+void Node::Draw(ImGuiID id)
+{
+    ImNodeGraph::BeginNode(id, Position);
+
+    if(Header.Enabled)
+    {
+        ImNodeGraph::BeginNodeHeader(id, Header.Color, Header.HoveredColor, Header.ActiveColor);
+
+        ImGui::Text(Header.Title.c_str());
+
+        ImNodeGraph::EndNodeHeader();
+    }
+
+    for(Pin& pin : IO.Inputs)  DrawPin(id, pin, ImPinDirection_Input);
+    for(Pin& pin : IO.Outputs) DrawPin(id, pin, ImPinDirection_Output);
+
+    ImNodeGraph::EndNode();
+}
 
 ShaderGraph::ShaderGraph()
 	: EditorWindow("\uED46 Shader Graph", 0)
     , GrabFocus(false)
 	, State(*this)
-	, Style
-	{
-		.Grid
-		{
-			.BackgroundColor = ImColor(0x11, 0x11, 0x11)
-		,	.Lines
-			{
-				.Thin
-				{
-					.Color = ImColor(0x44, 0x44, 0x44)
-				,	.Thickness = 1.0
-				}
-			,	.Thick
-				{
-					.Color = ImColor(0x88, 0x88, 0x88)
-				,	.Thickness = 2.0
-				}
-			,	.Padding = 2.0f
-			}
-		}
-	,	.Nodes
-		{
-			.Rounding = 5.0f
-		,	.Border = { ImColor(0x33, 0x33, 0x33), 2.0f }
-		,	.SelectedBorder = { ImColor(0xEF, 0xAE, 0x4B), 4.0f }
-		,	.Content = ImColor(0x88, 0x88, 0x88)
-		,	.Title = ImColor(0xCC, 0xCC, 0xCC)
-		,	.Pins
-			{
-				.Padding = 2.0f
-			,	.BorderThickness = 3.0f
-			,	.Background = ImColor(0x22, 0x22, 0x22)
-			,	.Text = ImColor(0x22, 0x22, 0x22)
-			,	.Connections
-				{
-					.Color = ImColor(0x00, 0x00, 0x00)
-				,	.Thickness = 2.0f
-				}
-			}
-		}
-	,	.Selection
-		{
-			.Background = ImColor(0xC9, 0x8E, 0x36, 0x44)
-		,	.Border
-			{
-				.Color = ImColor(0xEF, 0xAE, 0x4B, 0xBB)
-			,	.Thickness = 2.0f
-			}
-		}
-	,	.FontSize = 20.0f
-	}
-	, Settings
-	{
-		.Input
-		{
-			.Scroll
-			{
-				.Rate = 0.2f
-			,	.Smoothing = 8.0f
-			}
-		}
-	}
-	, Mouse({ 0, 0 }, { 0, 0 })
-	, Camera({ 0, 0 }, 1)
-	, Focused(false)
 {
 }
 
@@ -219,9 +169,6 @@ ShaderGraph::~ShaderGraph()
 
 void ShaderGraph::OnOpen()
 {
-	Mouse.Location = ImGui::GetMousePos();
-	Camera.Scroll = Camera.Zoom = 1.0f;
-
 	EditorSystem::Open<Inspector>()->Graph = this;
 
     GrabFocus = true;
@@ -230,7 +177,6 @@ void ShaderGraph::OnOpen()
 
 void ShaderGraph::DrawWindow()
 {
-    static int test_in, test_out;
     ImNodeGraph::BeginGraph("ShaderGraph");
     ImNodeGraph::SetPinColors(Pin::Colors);
 
@@ -241,56 +187,173 @@ void ShaderGraph::DrawWindow()
         ImGui::SetNavWindow(ImGui::GetCurrentWindow());
     }
 
-    // First Test Node
+    for(ImGuiID id = 0; id < State.Nodes.size(); ++id)
     {
-        ImVec2 pos = { 0, 0 };
+        if(State.Nodes(id) == false) continue;
 
-        ImNodeGraph::BeginNode(0, pos);
-
-        ImNodeGraph::BeginNodeHeader(-1, ImColor(0xA7, 0x62, 0x53), ImColor(0xC5, 0x79, 0x67), ImColor(0x82, 0x4C, 0x40));
-        ImGui::Text("\uf1f5 Hello");
-        ImNodeGraph::EndNodeHeader();
-
-        ImNodeGraph::BeginPin(1, Pin::INT, ImPinDirection_Input);
-        ImGui::PushItemWidth(100 * ImNodeGraph::GetCameraScale());
-        ImGui::InputInt("##In", &test_in, 0);
-        //ImGui::Text("In");
-        ImNodeGraph::EndPin();
-
-        ImNodeGraph::BeginPin(2, Pin::ANY, ImPinDirection_Output);
-        ImGui::Text("Out");
-        ImNodeGraph::EndPin();
-
-        ImNodeGraph::EndNode();
+        State.Nodes[id]->Draw(id);
     }
 
-    // Second Test Node
-    {
-        ImVec2 pos = { 300, 0 };
-
-        ImNodeGraph::BeginNode(3, pos);
-
-        ImNodeGraph::BeginNodeHeader(-1, ImColor(0xA7, 0x62, 0x53), ImColor(0xC5, 0x79, 0x67), ImColor(0x82, 0x4C, 0x40));
-        ImGui::Text("\uf1f5 Hello");
-        ImNodeGraph::EndNodeHeader();
-
-        ImNodeGraph::BeginPin(4, Pin::INT, ImPinDirection_Input);
-        ImGui::PushItemWidth(100 * ImNodeGraph::GetCameraScale());
-        ImGui::InputInt("##In", &test_in, 0);
-        //ImGui::Text("In");
-        ImNodeGraph::EndPin();
-
-        ImNodeGraph::BeginPin(5, Pin::ANY, ImPinDirection_Output);
-        ImGui::Text("Out");
-        ImNodeGraph::EndPin();
-
-        ImNodeGraph::EndNode();
-    }
+    DrawContextMenu();
 
     ImNodeGraph::EndGraph();
+
 }
 
-/*
+
+void ShaderGraph::DrawContextMenu()
+{
+    if(ImGui::IsMouseClicked(ImGuiMouseButton_Right))
+    {
+        ContextMenuPosition = ImNodeGraph::ScreenToGrid(ImGui::GetMousePos());
+    }
+
+    if(ImGui::BeginPopupContextWindow())
+    {
+        if(ImGui::MenuItem("Copy", "Ctrl+C", false, false)) Copy();
+        if(ImGui::MenuItem("Cut", "Ctrl+X", false, false))
+        {
+            Copy();
+            Erase();
+        }
+        if(ImGui::MenuItem("Paste", "Ctrl+V", false, false)) Paste(ContextMenuPosition);
+
+        ImGui::Separator();
+
+        ImGui::Text("Create");
+
+        ImGui::Separator();
+
+        // Create Nodes
+        ImVec2 position = ContextMenuPosition;
+
+        std::stack<ContextID> context; context.push(0);
+
+        struct Visitor
+        {
+            bool operator()(ContextMenuItem& item, ContextID id)
+            {
+                const auto depth = Graph.ContextMenu.depth(id);
+                if(depth > Context.size()) return false;
+
+                while(depth < Context.size())
+                {
+                    Context.pop();
+                    ImGui::EndMenu();
+                }
+
+                if(Context.top() != Graph.ContextMenu.parent(id)) return false;
+                std::string name = std::format("{}##{}", item.Name, id);
+
+                if(item.Constructor)
+                {
+                    if(ImGui::MenuItem(item.Name.c_str()))
+                    {
+                        Graph.State.Nodes.insert(item.Constructor(Graph, Location));
+                    }
+                }
+                else
+                {
+                    if(ImGui::BeginMenu(item.Name.c_str()))
+                    {
+                        Context.push(id);
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+
+                return false;
+            }
+
+            ShaderGraph& Graph;
+            const ImVec2 Location;
+            std::stack<ContextID>& Context;
+        } MenuVisitor
+        {
+            .Graph = *this
+        ,	.Location = position
+        ,	.Context = context
+        };
+
+        ContextMenu.traverse<ContextMenuHierarchy::pre_order>(MenuVisitor);
+
+        context.pop();
+        while(context.empty() == false)
+        {
+            ImGui::EndMenu();
+            context.pop();
+        }
+
+        ImGui::EndPopup();
+    }
+}
+
+void ShaderGraph::Copy() {}
+void ShaderGraph::Erase() {}
+void ShaderGraph::Paste(ImVec2) {}
+
+void ShaderGraph::Register(const std::filesystem::path& path, ConstructorPtr constructor)
+{
+	const std::string name = path.filename().string();
+
+	std::stack<std::string> decomp;
+	std::filesystem::path current = path.parent_path();
+	while(current.empty() == false)
+	{
+		decomp.push(current.filename().string());
+		current = current.parent_path();
+	}
+
+	ContextID node = 0;
+	while(decomp.empty() == false)
+	{
+		ContextID child = ContextMenu.first_child(node);
+
+		while(child)
+		{
+			if(ContextMenu[child].Name == decomp.top())
+			{
+				node = child;
+				decomp.pop();
+				break;
+			}
+
+			child = ContextMenu.next_sibling(child);
+		}
+
+		if(node == 0 || node != child)
+		{
+			node = ContextMenu.insert({ decomp.top(), nullptr }, node);
+			decomp.pop();
+		}
+	}
+
+	ContextMenu.insert({ name, constructor }, node);
+}
+
+Inspector::Inspector()
+	: EditorWindow("Inspector", 0)
+	, Graph(nullptr)
+{
+}
+
+void Inspector::DrawWindow()
+{
+    /*
+	if(Graph->Mouse.Selected.size() != 1)
+	{
+		ImGui::Text("Selected %d nodes.", Graph->Mouse.Selected.size());
+		return;
+	}
+
+	Graph->State.Nodes[*Graph->Mouse.Selected.begin()]->Inspect();
+	*/
+}
+
+
+/** DEPRECATED
 void ShaderGraph::DrawWindow()
 {
 	HandleInput();
@@ -340,7 +403,6 @@ void ShaderGraph::DrawWindow()
 		Mouse.LocksDragged = false;
 	}
 }
-*/
 
 
 void ShaderGraph::HandleInput()
@@ -732,98 +794,6 @@ void ShaderGraph::DrawPin(NodeId node_id, Pin& pin, PinId pin_id, ImVec2 locatio
 	}
 }
 
-void ShaderGraph::DrawContextMenu()
-{
-	const float GridSize = (Style.FontSize + Style.Grid.Lines.Padding);
-
-	if(ImGui::IsMouseClicked(ImGuiMouseButton_Right))
-	{
-		ContextMenuPosition = Mouse.Location;
-	}
-
-	if(ImGui::BeginPopupContextWindow())
-	{
-		if(ImGui::MenuItem("Copy", "Ctrl+C", false, !Mouse.Selected.empty())) Copy();
-		if(ImGui::MenuItem("Cut", "Ctrl+X", false, !Mouse.Selected.empty()))
-		{
-			Copy();
-			EraseSelection();
-		}
-		if(ImGui::MenuItem("Paste", "Ctrl+V", false, !Clipboard.Nodes.empty())) Paste(ContextMenuPosition);
-
-		ImGui::Separator();
-
-		ImGui::Text("Create");
-
-		ImGui::Separator();
-
-		// Create Nodes
-		ImVec2 position = ContextMenuPosition;
-		position = SnapToGrid(position);
-
-		std::stack<ContextID> context; context.push(0);
-
-		struct Visitor
-		{
-			bool operator()(ContextMenuItem& item, ContextID id)
-			{
-				const auto depth = Graph.ContextMenu.depth(id);
-				if(depth > Context.size()) return false;
-
-				while(depth < Context.size())
-				{
-					Context.pop();
-					ImGui::EndMenu();
-				}
-
-				if(Context.top() != Graph.ContextMenu.parent(id)) return false;
-				std::string name = std::format("{}##{}", item.Name, id);
-
-				if(item.Constructor)
-				{
-					if(ImGui::MenuItem(item.Name.c_str()))
-					{
-						Graph.AddNode(item.Constructor(Graph, Location));
-					}
-				}
-				else
-				{
-					if(ImGui::BeginMenu(item.Name.c_str()))
-					{
-						Context.push(id);
-					}
-					else
-					{
-						return false;
-					}
-				}
-
-				return false;
-			}
-
-			ShaderGraph& Graph;
-			const ImVec2 Location;
-			std::stack<ContextID>& Context;
-		} MenuVisitor
-		{
-			.Graph = *this
-		,	.Location = position
-		,	.Context = context
-		};
-
-		ContextMenu.traverse<ContextMenuHierarchy::pre_order>(MenuVisitor);
-
-		context.pop();
-		while(context.empty() == false)
-		{
-			ImGui::EndMenu();
-			context.pop();
-		}
-
-		ImGui::EndPopup();
-	}
-}
-
 void ShaderGraph::DrawConnections()
 {
 	// Vars ============================================================================================================
@@ -1177,59 +1147,4 @@ Pin& ShaderGraph::GetPin(const PinPtr &ptr)
 	Node* node = State.Nodes[ptr.Node];
 	return (ptr.Input ? node->IO.Inputs : node->IO.Outputs)[ptr.Pin];
 }
-
-void ShaderGraph::Register(const std::filesystem::path& path, ConstructorPtr constructor)
-{
-	const std::string name = path.filename().string();
-
-	std::stack<std::string> decomp;
-	std::filesystem::path current = path.parent_path();
-	while(current.empty() == false)
-	{
-		decomp.push(current.filename().string());
-		current = current.parent_path();
-	}
-
-	ContextID node = 0;
-	while(decomp.empty() == false)
-	{
-		ContextID child = ContextMenu.first_child(node);
-
-		while(child)
-		{
-			if(ContextMenu[child].Name == decomp.top())
-			{
-				node = child;
-				decomp.pop();
-				break;
-			}
-
-			child = ContextMenu.next_sibling(child);
-		}
-
-		if(node == 0 || node != child)
-		{
-			node = ContextMenu.insert({ decomp.top(), nullptr }, node);
-			decomp.pop();
-		}
-	}
-
-	ContextMenu.insert({ name, constructor }, node);
-}
-
-Inspector::Inspector()
-	: EditorWindow("Inspector", 0)
-	, Graph(nullptr)
-{
-}
-
-void Inspector::DrawWindow()
-{
-	if(Graph->Mouse.Selected.size() != 1)
-	{
-		ImGui::Text("Selected %d nodes.", Graph->Mouse.Selected.size());
-		return;
-	}
-
-	Graph->State.Nodes[*Graph->Mouse.Selected.begin()]->Inspect();
-}
+*/

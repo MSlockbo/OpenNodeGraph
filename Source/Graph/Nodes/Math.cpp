@@ -19,73 +19,131 @@
 using namespace OpenShaderDesigner;
 using namespace OpenShaderDesigner::Nodes::Math;
 
-Constant::Constant(ShaderGraph& graph, ImVec2 pos)
-	: Node(
-		graph, pos
-	,	"Constant", HeaderColor
-	,	{ }, false
-	,	{ { "Out", Pin::FLOAT, Pin::OUTPUT } }
-	)
+
+// =====================================================================================================================
+// Integral
+// =====================================================================================================================
+
+Integral::Integral(ShaderGraph& graph, ImVec2 pos)
+    : Node(graph, pos)
 {
+    Header.Title        = HeaderMarker + "Integral";
+    Header.Color        = HeaderColor;
+    Header.HoveredColor = HeaderHoveredColor;
+    Header.ActiveColor  = HeaderActiveColor;
+
+    IO.Outputs.emplace_back("Out", PinType_Float, PinFlags_NoCollapse | PinFlags_NoPadding);
 }
 
-Node* Constant::Copy(ShaderGraph& graph) const
+Node* Integral::Copy(ShaderGraph& graph) const
 {
-	return new Constant(graph, Position);
+    return new Integral(graph, Position);
 }
 
-void Constant::Inspect()
+void Integral::Inspect()
 {
-	Pin::PinType& Type = IO.Outputs[0].Type;
 
-	if(ImGui::BeginCombo("Type", Pin::TypeNames[Type].c_str()))
-	{
-		for(int i = 0; i < Pin::ANY; ++i)
-		{
-			Pin::PinType t = static_cast<Pin::PinType>(i);
-
-			if(ImGui::Selectable(Pin::TypeNames[t].c_str(), t == Type))
-			{
-				Type = t;
-			}
-		}
-
-		ImGui::EndCombo();
-	}
-
-	glm::vec4& v = Value;
-
-	switch(Type)
-	{
-	case Pin::INT:
-		ImGui::InputInt("Value", Value);
-		break;
-
-	case Pin::UINT:
-		ImGui::InputUInt("Value", Value);
-		break;
-
-	case Pin::FLOAT:
-		ImGui::InputFloat("Value", Value);
-		break;
-
-	case Pin::VECTOR:
-		ImGui::ColorEdit4("Value", &v.x);
-		break;
-
-	default:
-		break;
-	}
 }
+
+
+// =====================================================================================================================
+// Scalar
+// =====================================================================================================================
+
+UnsignedIntegral::UnsignedIntegral(ShaderGraph& graph, ImVec2 pos)
+    : Node(graph, pos)
+{
+    Header.Title        = HeaderMarker + "Unsigned Integral";
+    Header.Color        = HeaderColor;
+    Header.HoveredColor = HeaderHoveredColor;
+    Header.ActiveColor  = HeaderActiveColor;
+
+    IO.Outputs.emplace_back("Out", PinType_Float, PinFlags_NoCollapse | PinFlags_NoPadding);
+}
+
+Node* UnsignedIntegral::Copy(ShaderGraph& graph) const
+{
+    return new UnsignedIntegral(graph, Position);
+}
+
+void UnsignedIntegral::Inspect()
+{
+
+}
+
+
+// =====================================================================================================================
+// Scalar
+// =====================================================================================================================
+
+Scalar::Scalar(ShaderGraph& graph, ImVec2 pos)
+	: Node(graph, pos)
+{
+    Header.Title        = HeaderMarker + "Scalar";
+    Header.Color        = HeaderColor;
+    Header.HoveredColor = HeaderHoveredColor;
+    Header.ActiveColor  = HeaderActiveColor;
+
+    IO.Outputs.emplace_back("Out", PinType_Float, PinFlags_NoCollapse | PinFlags_NoPadding);
+}
+
+Node* Scalar::Copy(ShaderGraph& graph) const
+{
+	return new Scalar(graph, Position);
+}
+
+void Scalar::Inspect()
+{
+
+}
+
+
+// =====================================================================================================================
+// Vector
+// =====================================================================================================================
+
+Vector::Vector(ShaderGraph &graph, ImVec2 pos)
+	: Node(graph, pos)
+{
+    Header.Title        = HeaderMarker + "Vector";
+    Header.Color        = HeaderColor;
+    Header.HoveredColor = HeaderHoveredColor;
+    Header.ActiveColor  = HeaderActiveColor;
+
+    IO.Outputs.emplace_back("Out", PinType_Vector, PinFlags_NoCollapse | PinFlags_NoPadding);
+
+	IO.Outputs[0].Value.get<ImVec4>() = ImVec4(0, 0, 0, 1);
+}
+
+Node* Vector::Copy(ShaderGraph &graph) const
+{
+	return new Vector(graph, Position);
+}
+
+void Vector::Inspect()
+{
+
+}
+
+
+// =====================================================================================================================
+// Add
+// =====================================================================================================================
 
 Add::Add(ShaderGraph& graph, ImVec2 pos)
-	: Node(
-		graph, pos
-	,	"Add", HeaderColor
-	,	{ { "A",   Pin::ANY, Pin::INPUT }, { "B", Pin::ANY, Pin::INPUT } }, true
-	,	{ { "Out", Pin::ANY, Pin::OUTPUT } }
-	)
-{ }
+	: Node(graph, pos)
+{
+    Header.Title        = HeaderMarker + "Add";
+    Header.Color        = HeaderColor;
+    Header.HoveredColor = HeaderHoveredColor;
+    Header.ActiveColor  = HeaderActiveColor;
+
+    IO.Inputs.emplace_back("A", PinType_Any);
+    IO.Inputs.emplace_back("B", PinType_Any);
+    IO.DynamicInputs = true;
+
+    IO.Outputs.emplace_back("B", PinType_Any);
+}
 
 Node* Add::Copy(ShaderGraph& graph) const
 {

@@ -24,33 +24,111 @@ namespace ocu = open_cpp_utils;
 
 namespace OpenShaderDesigner::Nodes::Math
 {
-	inline static constexpr ImColor HeaderColor = ImColor(0x92, 0x16, 0x16);
+// Header Colors =======================================================================================================
 
-	struct Constant : public Node
-	{
-		using ValueType = ocu::any<int, unsigned int, float, glm::vec4>;
+inline static constexpr ImColor HeaderColor        = ImColor(0xA7, 0x62, 0x53);
+inline static constexpr ImColor HeaderHoveredColor = ImColor(0xC5, 0x79, 0x67);
+inline static constexpr ImColor HeaderActiveColor  = ImColor(0x82, 0x4C, 0x40);
 
-		Constant(ShaderGraph& graph, ImVec2 pos);
-		virtual ~Constant() = default;
+inline static const std::string HeaderMarker     = "\uF3B9 ";
 
-		[[nodiscard]] Node* Copy(ShaderGraph& graph) const override;
-		void Inspect() override;
 
-		ValueType    Value;
-	};
+// =====================================================================================================================
+// Integral
+// =====================================================================================================================
 
-	RegisterNode("Math/Constant", Constant);
+struct Integral : public Node
+{
+    using ValueType = ocu::any<int, unsigned int, float, glm::vec4>;
 
-	struct Add : public Node
-	{
-		Add(ShaderGraph& graph, ImVec2 pos);
-		virtual ~Add() = default;
+    Integral(ShaderGraph& graph, ImVec2 pos);
+    virtual ~Integral() = default;
 
-		[[nodiscard]] Node* Copy(ShaderGraph& graph) const override;
-		void Inspect() override;
-	};
+    [[nodiscard]] Node* Copy(ShaderGraph& graph) const override;
+    void Inspect() override;
 
-	RegisterNode("Math/Add", Add);
+    ValueType    Value;
+};
+
+RegisterNode("Math/Constants/Integral", Integral);
+
+
+// =====================================================================================================================
+// Unsigned Integral
+// =====================================================================================================================
+
+struct UnsignedIntegral : public Node
+{
+    using ValueType = ocu::any<int, unsigned int, float, glm::vec4>;
+
+    UnsignedIntegral(ShaderGraph& graph, ImVec2 pos);
+    virtual ~UnsignedIntegral() = default;
+
+    [[nodiscard]] Node* Copy(ShaderGraph& graph) const override;
+    void Inspect() override;
+
+    ValueType    Value;
+};
+
+RegisterNode("Math/Constants/Unsigned Integral", UnsignedIntegral);
+
+
+// =====================================================================================================================
+// Scalar
+// =====================================================================================================================
+
+struct Scalar : public Node
+{
+    using ValueType = ocu::any<int, unsigned int, float, glm::vec4>;
+
+    Scalar(ShaderGraph& graph, ImVec2 pos);
+    virtual ~Scalar() = default;
+
+    [[nodiscard]] Node* Copy(ShaderGraph& graph) const override;
+    void Inspect() override;
+
+    ValueType    Value;
+};
+
+RegisterNode("Math/Constants/Scalar", Scalar);
+
+
+// =====================================================================================================================
+// Vector
+// =====================================================================================================================
+
+struct Vector : public Node
+{
+    using ValueType = ocu::any<int, unsigned int, float, glm::vec4>;
+
+    Vector(ShaderGraph& graph, ImVec2 pos);
+    virtual ~Vector() = default;
+
+    [[nodiscard]] Node* Copy(ShaderGraph& graph) const override;
+    void Inspect() override;
+
+    ValueType    Value;
+};
+
+RegisterNode("Math/Constants/Vector", Vector);
+
+
+// =====================================================================================================================
+// Add
+// =====================================================================================================================
+
+
+struct Add : public Node
+{
+    Add(ShaderGraph& graph, ImVec2 pos);
+    virtual ~Add() = default;
+
+    [[nodiscard]] Node* Copy(ShaderGraph& graph) const override;
+    void Inspect() override;
+};
+
+RegisterNode("Math/Operators/Add", Add);
+
 }
 
 #endif //MATH_H
