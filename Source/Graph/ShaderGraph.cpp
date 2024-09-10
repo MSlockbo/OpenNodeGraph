@@ -29,6 +29,21 @@
 
 using namespace OpenShaderDesigner;
 
+static ShaderGraph* GCurrentGraph = nullptr;
+
+static bool ValidateConnection(ImPinPtr a, ImPinPtr b)
+{
+    ShaderGraph& Graph = *GCurrentGraph;
+
+    bool result = false;
+    result |= Graph.FindNode(a)->CheckConnection(&Graph.FindPin(a), &Graph.FindPin(b));
+    result |= Graph.FindNode(b)->CheckConnection(&Graph.FindPin(b), &Graph.FindPin(a));
+
+    return result;
+}
+
+
+
 ImColor operator*(const ImColor& c, float f)
 {
 	return ImVec4(c.Value.x * f, c.Value.y * f, c.Value.z * f, c.Value.w);
@@ -66,9 +81,9 @@ ShaderGraph::GraphState& ShaderGraph::GraphState::operator=(const GraphState& ot
     return *this;
 }
 
-Node::Node(
-	ShaderGraph& graph, ImVec2 pos)
-	: Position(pos)
+Node::Node(ShaderGraph& graph, ImVec2 pos)
+	: Graph(graph)
+    , Position(pos)
 	, Header
 	{
 		.Title        = "Node"
@@ -87,16 +102,38 @@ Node::Node(
 	}
 { }
 
-void Node::DrawPin(ImGuiID id, Pin& pin, ImPinDirection direction)
+void Node::DrawPin(int id, Pin& pin, ImPinDirection direction)
 {
     ImPinFlags flags = 0;
     if(pin.Flags & PinFlags_NoPadding) flags |= ImPinFlags_NoPadding;
 
-    ImNodeGraph::BeginPin(std::format("{}##{}", pin.Name, id).c_str(), pin.Type, direction, flags);
+    bool res = ImNodeGraph::BeginPin(id, pin.Type, direction, flags);
+    pin.Ptr = ImNodeGraph::GetPinPtr();
+    if(res)
+    {
+        const ImVector<ImGuiID>&  connections  = ImNodeGraph::GetConnections();
+        const ImVector<ImPinPtr>& new_conns    = ImNodeGraph::GetNewConnections();
 
-    bool connected = ImNodeGraph::IsPinConnected();
+        if(pin.Flags & PinFlags_Ambiguous)
+        {
+            if(connections.size() == new_conns.size() && new_conns.size() > 0)
+            {
+                Pin& first = Graph.FindPin(new_conns.front());
+                if(first.Type != PinType_Any) pin.Type = first.Type;
+            }
 
-    if((connected || pin.Type == PinType_Any) && !(pin.Flags & PinFlags_NoCollapse))
+            if(connections.size() == 0) pin.Type = PinType_Any;
+        }
+
+        ValidateConnections();
+    }
+
+    const bool connected      = ImNodeGraph::IsPinConnected();
+    const bool any            = pin.Type == PinType_Any;
+    const bool force_collapse = pin.Flags & PinFlags_AlwaysCollapse;
+    const bool no_collapse    = pin.Flags & PinFlags_NoCollapse;
+
+    if((connected || any || direction || force_collapse) && !no_collapse)
     {
         ImGui::Text(pin.Name.c_str());
     }
@@ -107,25 +144,28 @@ void Node::DrawPin(ImGuiID id, Pin& pin, ImPinDirection direction)
         case PinType_Int:
             ImNodeGraph::PushItemWidth(200.0f);
             ImGui::InputInt(std::format("##in{}{}", pin.Name, id).c_str(), pin.Value); break;
+
         case PinType_UInt:
             ImNodeGraph::PushItemWidth(200.0f);
             ImGui::InputUInt(std::format("##in{}{}", pin.Name, id).c_str(), pin.Value); break;
+
         case PinType_Float:
             ImNodeGraph::PushItemWidth(100.0f);
             ImGui::InputFloat(std::format("##in{}{}", pin.Name, id).c_str(), pin.Value); break;
+
         case PinType_Vector:
             ImGui::BeginGroup();
 
             // Color Picker
             ImNodeGraph::PushItemWidth(150.0f);
-            ImGui::ColorPicker4(
-                std::format("##in{}{}", pin.Name, id).c_str(), &pin.Value.get<ImVec4>().x
+            ImGui::ColorPicker3(
+                std::format("##in{}{}", pin.Name, id).c_str(), &pin.Value.get<glm::vec3>().x
             ,   ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoSidePreview | ImGuiColorEditFlags_HDR | ImGuiColorEditFlags_Float
             );
 
             ImNodeGraph::PushItemWidth(150.0f);
-            ImGui::ColorPreview(
-                std::format("##invec{}{}", pin.Name, id).c_str(), &pin.Value.get<ImVec4>().x
+            ImGui::ColorPreview3(
+                std::format("##invec{}{}", pin.Name, id).c_str(), &pin.Value.get<glm::vec3>().x
             ,   ImGuiColorEditFlags_HDR | ImGuiColorEditFlags_Float
             );
 
@@ -150,8 +190,20 @@ void Node::Draw(ImGuiID id)
         ImNodeGraph::EndNodeHeader();
     }
 
-    for(Pin& pin : IO.Inputs)  DrawPin(id, pin, ImPinDirection_Input);
-    for(Pin& pin : IO.Outputs) DrawPin(id, pin, ImPinDirection_Output);
+    ImGuiID pid = 0;
+    for(Pin& pin : IO.Inputs)  DrawPin(++pid, pin, ImPinDirection_Input);
+
+    ImVec2 cursor = ImGui::GetCursorPos();
+
+    pid = 0;
+    for(Pin& pin : IO.Outputs) DrawPin(--pid, pin, ImPinDirection_Output);
+
+    ImGui::SetCursorPos(cursor);
+
+    //if(IO.DynamicInputs)
+    //{
+    //    ImGui::Text("\uEA11");
+    //}
 
     ImNodeGraph::EndNode();
 }
@@ -177,8 +229,12 @@ void ShaderGraph::OnOpen()
 
 void ShaderGraph::DrawWindow()
 {
+    GCurrentGraph = this;
+
     ImNodeGraph::BeginGraph("ShaderGraph");
     ImNodeGraph::SetPinColors(Pin::Colors);
+
+    ImNodeGraph::SetGraphValidation(ValidateConnection);
 
     if(GrabFocus)
     {
@@ -198,6 +254,20 @@ void ShaderGraph::DrawWindow()
 
     ImNodeGraph::EndGraph();
 
+
+    ImNodeGraph::BeginGraphPostOp("ShaderGraph");
+
+    if(ImGui::IsKeyPressed(ImGuiKey_Delete))
+    {
+        auto& selected = ImNodeGraph::GetSelected();
+        for(ImGuiID node : selected)
+        {
+            State.Nodes.erase(ImNodeGraph::GetUserID(node).Int);
+        }
+        selected.Clear();
+    }
+
+    ImNodeGraph::EndGraphPostOp();
 }
 
 
@@ -208,7 +278,7 @@ void ShaderGraph::DrawContextMenu()
         ContextMenuPosition = ImNodeGraph::ScreenToGrid(ImGui::GetMousePos());
     }
 
-    if(ImGui::BeginPopupContextWindow())
+    if(ImGui::BeginPopupContextWindow("graph_context"))
     {
         if(ImGui::MenuItem("Copy", "Ctrl+C", false, false)) Copy();
         if(ImGui::MenuItem("Cut", "Ctrl+X", false, false))
@@ -293,6 +363,21 @@ void ShaderGraph::DrawContextMenu()
 void ShaderGraph::Copy() {}
 void ShaderGraph::Erase() {}
 void ShaderGraph::Paste(ImVec2) {}
+
+Node* ShaderGraph::FindNode(ImPinPtr ptr)
+{
+    return State.Nodes[ImNodeGraph::GetUserID(ptr.Node).Int];
+}
+
+Pin& ShaderGraph::FindPin(ImPinPtr ptr)
+{
+    Node* node = State.Nodes[ImNodeGraph::GetUserID(ptr.Node).Int];
+    auto& pins = ptr.Direction ? node->IO.Outputs : node->IO.Inputs;
+    int idx = ImNodeGraph::GetUserID(ptr).Int;
+    if(ptr.Direction) idx *= -1;
+    idx -= 1;
+    return pins[idx];
+}
 
 void ShaderGraph::Register(const std::filesystem::path& path, ConstructorPtr constructor)
 {

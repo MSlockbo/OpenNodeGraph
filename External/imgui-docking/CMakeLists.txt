@@ -1,6 +1,11 @@
 cmake_minimum_required(VERSION 3.5)
 
-project(imgui-docking)
+set(VERSION_MAJOR 0)
+set(VERSION_MINOR 0)
+set(VERSION_PATCH 1)
+set(PROJECT_VERSION "${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}")
+
+project(imgui-docking VERSION ${PROJECT_VERSION})
 
 
 # Required Source Files

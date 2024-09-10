@@ -25,6 +25,8 @@
 #include <set>
 #include <stack>
 
+#include <glm/glm.hpp>
+
 #include <open-cpp-utils/startup.h>
 #include <open-cpp-utils/directed_tree.h>
 #include <open-cpp-utils/optional.h>
@@ -47,8 +49,8 @@ namespace OpenShaderDesigner
     using PinType = int;
     enum PinType_
     {
-        PinType_Int = 0
-    ,	PinType_UInt
+        PinType_UInt = 0
+    ,	PinType_Int
     ,	PinType_Float
     ,	PinType_Vector
 
@@ -59,35 +61,46 @@ namespace OpenShaderDesigner
     using PinFlags = unsigned int;
     enum PinFlags_
     {
-        PinFlags_None       = 0
-    ,   PinFlags_NoCollapse = 1 << 0
-    ,   PinFlags_NoPadding  = 1 << 1
+        PinFlags_None           = 0
+    ,   PinFlags_NoCollapse     = 1 << 0
+    ,   PinFlags_AlwaysCollapse = 1 << 1
+    ,   PinFlags_NoPadding      = 1 << 2
+    ,   PinFlags_Ambiguous      = 1 << 3
     };
 
 	struct Pin
 	{
 		inline const static ImColor Colors[PinType_COUNT] = {
-			ImColor(0x64, 0x94, 0xAA) // Int
-		,	ImColor(0x7A, 0x9F, 0x82) // Unsigned Int
+			ImColor(0x7A, 0x9F, 0x82) // Unsigned Int
+		,	ImColor(0x64, 0x94, 0xAA) // Int
 		,	ImColor(0xA6, 0x3D, 0x40) // Float
 		,	ImColor(0xE9, 0xB8, 0x72) // Vector
-		,	ImColor(0xD2, 0xD5, 0xD3) // Any
+		,	ImColor(0xFF, 0xFF, 0xFF) // Any
 		};
 
 		inline const static std::string TypeNames[PinType_COUNT] = {
-			"Int"
-		,	"Unsigned Int"
+			"Unsigned Int"
+		,	"Int"
 		,	"Float"
 		,	"Vector"
 		,   "Any"
 		};
 
-	    using Ambiguous = ocu::any<int, unsigned int, float, ImVec4>;
+	    inline const static int TypeWidths[PinType_COUNT] = {
+	         1 // Unsigned Int
+        ,	 1 // Int
+        ,	 1 // Float
+        ,	 3 // Vector
+        ,   -1 // Any
+	    };
+
+	    using Ambiguous = ocu::any<int, unsigned int, float, glm::vec3>;
 
 		std::string Name;
 		PinType     Type;
         PinFlags    Flags;
         Ambiguous   Value;
+	    ImPinPtr    Ptr;
 
 	    Pin(const std::string& name, PinType type, PinFlags flags = PinFlags_None)
 	        : Name(name)
@@ -99,7 +112,8 @@ namespace OpenShaderDesigner
 	struct Node
 	{
 	public:
-		ImVec2 Position = { 0, 0 };
+	    ShaderGraph& Graph;
+		ImVec2       Position = { 0, 0 };
 
 		struct
 		{
@@ -122,9 +136,11 @@ namespace OpenShaderDesigner
 		Node(ShaderGraph& graph, ImVec2 pos);
 		~Node() = default;
 
-	    void DrawPin(ImGuiID id, Pin& pin, ImPinDirection direction);
+	    void DrawPin(int id, Pin& pin, ImPinDirection direction);
 	    void Draw(ImGuiID id);
 
+	    virtual bool CheckConnection(Pin*, Pin*) { return false; }
+	    virtual void ValidateConnections() { }
 		virtual Node* Copy(ShaderGraph& graph) const = 0;
 		virtual void Inspect() = 0;
 	};
@@ -132,6 +148,19 @@ namespace OpenShaderDesigner
 	class ShaderGraph
 		: public EditorWindow
 	{
+	public:
+	    struct GraphState
+	    {
+	        ShaderGraph&            Parent;
+	        ocu::object_list<Node*> Nodes;
+
+	        GraphState(ShaderGraph& parent);
+	        GraphState(const GraphState& other);
+	        ~GraphState();
+
+	        GraphState& operator=(const GraphState& other);
+	    };
+
 	private:
 		friend Node;
 
@@ -142,25 +171,10 @@ namespace OpenShaderDesigner
 			ConstructorPtr    Constructor;
 		};
 
-		struct GraphState
-		{
-			ShaderGraph&            Parent;
-		    ocu::object_list<Node*> Nodes;
-
-			GraphState(ShaderGraph& parent);
-			GraphState(const GraphState& other);
-			~GraphState();
-
-			GraphState& operator=(const GraphState& other);
-		};
-
 		using ContextMenuHierarchy = ocu::directed_tree<ContextMenuItem>;
 		using ContextID = ContextMenuHierarchy::node;
 		inline static ContextMenuHierarchy ContextMenu;
 
-		// History Functionality
-		void PushState();
-		void PopState();
 
 	public:
 		ShaderGraph();
@@ -175,7 +189,15 @@ namespace OpenShaderDesigner
 	    void Erase();
 	    void Paste(ImVec2 pos);
 
-		static void Register(const std::filesystem::path& path, ConstructorPtr constructor);
+	    Node* FindNode(ImPinPtr ptr);
+	    Pin&  FindPin(ImPinPtr ptr);
+
+	    static void Register(const std::filesystem::path& path, ConstructorPtr constructor);
+
+	    // History Functionality
+	    void        PushState();
+	    void        PopState();
+	    GraphState& GetState() { return State; }
 
 	private:
         bool GrabFocus;

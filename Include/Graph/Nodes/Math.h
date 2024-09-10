@@ -33,16 +33,20 @@ inline static constexpr ImColor HeaderActiveColor  = ImColor(0x82, 0x4C, 0x40);
 inline static const std::string HeaderMarker     = "\uF3B9 ";
 
 
+
 // =====================================================================================================================
-// Integral
+// Constants
 // =====================================================================================================================
 
-struct Integral : public Node
+
+// Integer -------------------------------------------------------------------------------------------------------------
+
+struct Integer : public Node
 {
     using ValueType = ocu::any<int, unsigned int, float, glm::vec4>;
 
-    Integral(ShaderGraph& graph, ImVec2 pos);
-    virtual ~Integral() = default;
+    Integer(ShaderGraph& graph, ImVec2 pos);
+    virtual ~Integer() = default;
 
     [[nodiscard]] Node* Copy(ShaderGraph& graph) const override;
     void Inspect() override;
@@ -50,19 +54,17 @@ struct Integral : public Node
     ValueType    Value;
 };
 
-RegisterNode("Math/Constants/Integral", Integral);
+RegisterNode("Math/Constants/Integer", Integer);
 
 
-// =====================================================================================================================
-// Unsigned Integral
-// =====================================================================================================================
+// Unsigned Integer ----------------------------------------------------------------------------------------------------
 
-struct UnsignedIntegral : public Node
+struct UnsignedInteger : public Node
 {
     using ValueType = ocu::any<int, unsigned int, float, glm::vec4>;
 
-    UnsignedIntegral(ShaderGraph& graph, ImVec2 pos);
-    virtual ~UnsignedIntegral() = default;
+    UnsignedInteger(ShaderGraph& graph, ImVec2 pos);
+    virtual ~UnsignedInteger() = default;
 
     [[nodiscard]] Node* Copy(ShaderGraph& graph) const override;
     void Inspect() override;
@@ -70,12 +72,10 @@ struct UnsignedIntegral : public Node
     ValueType    Value;
 };
 
-RegisterNode("Math/Constants/Unsigned Integral", UnsignedIntegral);
+RegisterNode("Math/Constants/Unsigned Integer", UnsignedInteger);
 
 
-// =====================================================================================================================
-// Scalar
-// =====================================================================================================================
+// Scalar --------------------------------------------------------------------------------------------------------------
 
 struct Scalar : public Node
 {
@@ -93,9 +93,7 @@ struct Scalar : public Node
 RegisterNode("Math/Constants/Scalar", Scalar);
 
 
-// =====================================================================================================================
-// Vector
-// =====================================================================================================================
+// Vector --------------------------------------------------------------------------------------------------------------
 
 struct Vector : public Node
 {
@@ -113,12 +111,29 @@ struct Vector : public Node
 RegisterNode("Math/Constants/Vector", Vector);
 
 
+
 // =====================================================================================================================
-// Add
+// Operations
 // =====================================================================================================================
 
 
-struct Add : public Node
+// Math Op Prototype ---------------------------------------------------------------------------------------------------
+
+struct MathOp : public Node
+{
+    MathOp(ShaderGraph& graph, ImVec2 pos);
+    virtual ~MathOp() = default;
+
+    virtual bool CheckConnection(Pin *, Pin *) override;
+    virtual void ValidateConnections() override;
+
+    bool AllowMultiWidthInputs;
+};
+
+
+// Add -----------------------------------------------------------------------------------------------------------------
+
+struct Add : public MathOp
 {
     Add(ShaderGraph& graph, ImVec2 pos);
     virtual ~Add() = default;
@@ -128,6 +143,82 @@ struct Add : public Node
 };
 
 RegisterNode("Math/Operators/Add", Add);
+
+
+// Subtract ------------------------------------------------------------------------------------------------------------
+
+struct Subtract : public MathOp
+{
+    Subtract(ShaderGraph& graph, ImVec2 pos);
+    virtual ~Subtract() = default;
+
+    [[nodiscard]] Node* Copy(ShaderGraph& graph) const override;
+    void Inspect() override;
+};
+
+RegisterNode("Math/Operators/Subtract", Subtract);
+
+
+// Multiply ------------------------------------------------------------------------------------------------------------
+
+struct Multiply : public MathOp
+{
+    Multiply(ShaderGraph& graph, ImVec2 pos);
+    virtual ~Multiply() = default;
+
+    [[nodiscard]] Node* Copy(ShaderGraph& graph) const override;
+    void Inspect() override;
+};
+
+RegisterNode("Math/Operators/Multiply", Multiply);
+
+
+// Divide --------------------------------------------------------------------------------------------------------------
+
+struct Divide : public MathOp
+{
+    Divide(ShaderGraph& graph, ImVec2 pos);
+    virtual ~Divide() = default;
+
+    [[nodiscard]] Node* Copy(ShaderGraph& graph) const override;
+    void Inspect() override;
+};
+
+RegisterNode("Math/Operators/Divide", Divide);
+
+
+
+// =====================================================================================================================
+// Utilities
+// =====================================================================================================================
+
+
+// Make Vector ---------------------------------------------------------------------------------------------------------
+
+struct MakeVector : public Node
+{
+    MakeVector(ShaderGraph& graph, ImVec2 pos);
+    virtual ~MakeVector() = default;
+
+    [[nodiscard]] Node* Copy(ShaderGraph& graph) const override;
+    void Inspect() override;
+};
+
+    RegisterNode("Math/Utilities/Make Vector", MakeVector);
+
+
+// Break Vector ---------------------------------------------------------------------------------------------------------
+
+struct BreakVector : public Node
+{
+    BreakVector(ShaderGraph& graph, ImVec2 pos);
+    virtual ~BreakVector() = default;
+
+    [[nodiscard]] Node* Copy(ShaderGraph& graph) const override;
+    void Inspect() override;
+};
+
+RegisterNode("Math/Utilities/Break Vector", BreakVector);
 
 }
 

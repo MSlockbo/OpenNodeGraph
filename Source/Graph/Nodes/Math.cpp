@@ -16,65 +16,65 @@
 #include <Graph/Nodes/Math.h>
 #include <imgui-extras/imgui_extras.h>
 
+#include <queue>
+
 using namespace OpenShaderDesigner;
 using namespace OpenShaderDesigner::Nodes::Math;
 
-
 // =====================================================================================================================
-// Integral
+// Constants
 // =====================================================================================================================
 
-Integral::Integral(ShaderGraph& graph, ImVec2 pos)
+
+// Integer -------------------------------------------------------------------------------------------------------------
+
+Integer::Integer(ShaderGraph& graph, ImVec2 pos)
     : Node(graph, pos)
 {
-    Header.Title        = HeaderMarker + "Integral";
+    Header.Title        = HeaderMarker + "Integer";
     Header.Color        = HeaderColor;
     Header.HoveredColor = HeaderHoveredColor;
     Header.ActiveColor  = HeaderActiveColor;
 
-    IO.Outputs.emplace_back("Out", PinType_Float, PinFlags_NoCollapse | PinFlags_NoPadding);
+    IO.Outputs.emplace_back("Out", PinType_Int, PinFlags_NoCollapse | PinFlags_NoPadding);
 }
 
-Node* Integral::Copy(ShaderGraph& graph) const
+Node* Integer::Copy(ShaderGraph& graph) const
 {
-    return new Integral(graph, Position);
+    return new Integer(graph, Position);
 }
 
-void Integral::Inspect()
+void Integer::Inspect()
 {
 
 }
 
 
-// =====================================================================================================================
-// Scalar
-// =====================================================================================================================
+// Unsigned Integer ----------------------------------------------------------------------------------------------------
 
-UnsignedIntegral::UnsignedIntegral(ShaderGraph& graph, ImVec2 pos)
+UnsignedInteger::UnsignedInteger(ShaderGraph& graph, ImVec2 pos)
     : Node(graph, pos)
 {
-    Header.Title        = HeaderMarker + "Unsigned Integral";
+    Header.Title        = HeaderMarker + "Unsigned Integer";
     Header.Color        = HeaderColor;
     Header.HoveredColor = HeaderHoveredColor;
     Header.ActiveColor  = HeaderActiveColor;
 
-    IO.Outputs.emplace_back("Out", PinType_Float, PinFlags_NoCollapse | PinFlags_NoPadding);
+    IO.Outputs.emplace_back("Out", PinType_UInt, PinFlags_NoCollapse | PinFlags_NoPadding);
 }
 
-Node* UnsignedIntegral::Copy(ShaderGraph& graph) const
+Node* UnsignedInteger::Copy(ShaderGraph& graph) const
 {
-    return new UnsignedIntegral(graph, Position);
+    return new UnsignedInteger(graph, Position);
 }
 
-void UnsignedIntegral::Inspect()
+void UnsignedInteger::Inspect()
 {
 
 }
 
 
-// =====================================================================================================================
-// Scalar
-// =====================================================================================================================
+// Scalar --------------------------------------------------------------------------------------------------------------
 
 Scalar::Scalar(ShaderGraph& graph, ImVec2 pos)
 	: Node(graph, pos)
@@ -98,9 +98,7 @@ void Scalar::Inspect()
 }
 
 
-// =====================================================================================================================
-// Vector
-// =====================================================================================================================
+// Vector --------------------------------------------------------------------------------------------------------------
 
 Vector::Vector(ShaderGraph &graph, ImVec2 pos)
 	: Node(graph, pos)
@@ -112,7 +110,7 @@ Vector::Vector(ShaderGraph &graph, ImVec2 pos)
 
     IO.Outputs.emplace_back("Out", PinType_Vector, PinFlags_NoCollapse | PinFlags_NoPadding);
 
-	IO.Outputs[0].Value.get<ImVec4>() = ImVec4(0, 0, 0, 1);
+	IO.Outputs[0].Value.get<glm::vec3>() = glm::vec3(0);
 }
 
 Node* Vector::Copy(ShaderGraph &graph) const
@@ -127,22 +125,84 @@ void Vector::Inspect()
 
 
 // =====================================================================================================================
-// Add
+// Math Operations
 // =====================================================================================================================
 
+
+// Math Operation Interface --------------------------------------------------------------------------------------------
+
+MathOp::MathOp(ShaderGraph &graph, ImVec2 pos)
+    : Node(graph, pos)
+    , AllowMultiWidthInputs(false)
+{
+
+}
+
+bool MathOp::CheckConnection(Pin* a, Pin* b)
+{
+    if(AllowMultiWidthInputs) return false;
+
+    for(Pin& pin : IO.Inputs)
+    {
+        if(&pin == a)                                     continue;
+        if((pin.Flags & PinFlags_Ambiguous) == false)     continue;
+        if(ImNodeGraph::IsPinConnected(pin.Ptr) == false) continue;
+        if(pin.Type == PinType_Any)                       continue;
+
+        if(Pin::TypeWidths[pin.Type] != Pin::TypeWidths[b->Type]) return true;
+    }
+
+    return false;
+}
+
+void MathOp::ValidateConnections()
+{
+    std::set<PinType> present;
+
+    for(Pin& pin : IO.Inputs)
+    {
+        if((pin.Flags & PinFlags_Ambiguous) == false)     continue;
+        if(ImNodeGraph::IsPinConnected(pin.Ptr) == false) continue;
+        if(pin.Type == PinType_Any)                       continue;
+
+        present.insert(pin.Type);
+    }
+
+    PinType type = present.empty() ? PinType_Any : *present.rbegin();
+
+    for(Pin& pin : IO.Inputs)
+    {
+        if((pin.Flags & PinFlags_Ambiguous) == false) continue;
+        if(ImNodeGraph::IsPinConnected(pin.Ptr))      continue;
+
+        pin.Type = type;
+    }
+
+    for(Pin& pin : IO.Outputs)
+    {
+        if((pin.Flags & PinFlags_Ambiguous) == false) continue;
+        if(ImNodeGraph::IsPinConnected(pin.Ptr))      continue;
+
+        pin.Type = type;
+    }
+}
+
+
+// Add -----------------------------------------------------------------------------------------------------------------
+
 Add::Add(ShaderGraph& graph, ImVec2 pos)
-	: Node(graph, pos)
+	: MathOp(graph, pos)
 {
     Header.Title        = HeaderMarker + "Add";
     Header.Color        = HeaderColor;
     Header.HoveredColor = HeaderHoveredColor;
     Header.ActiveColor  = HeaderActiveColor;
 
-    IO.Inputs.emplace_back("A", PinType_Any);
-    IO.Inputs.emplace_back("B", PinType_Any);
+    IO.Inputs.emplace_back("A", PinType_Any, PinFlags_Ambiguous);
+    IO.Inputs.emplace_back("B", PinType_Any, PinFlags_Ambiguous);
     IO.DynamicInputs = true;
 
-    IO.Outputs.emplace_back("B", PinType_Any);
+    IO.Outputs.emplace_back("Out", PinType_Any, PinFlags_Ambiguous);
 }
 
 Node* Add::Copy(ShaderGraph& graph) const
@@ -151,6 +211,156 @@ Node* Add::Copy(ShaderGraph& graph) const
 }
 
 void Add::Inspect()
+{
+
+}
+
+
+// Subtract ------------------------------------------------------------------------------------------------------------
+
+Subtract::Subtract(ShaderGraph& graph, ImVec2 pos)
+    : MathOp(graph, pos)
+{
+    Header.Title        = HeaderMarker + "Subtract";
+    Header.Color        = HeaderColor;
+    Header.HoveredColor = HeaderHoveredColor;
+    Header.ActiveColor  = HeaderActiveColor;
+
+    IO.Inputs.emplace_back("A", PinType_Any, PinFlags_Ambiguous);
+    IO.Inputs.emplace_back("B", PinType_Any, PinFlags_Ambiguous);
+    IO.DynamicInputs = true;
+
+    IO.Outputs.emplace_back("Out", PinType_Any, PinFlags_Ambiguous);
+}
+
+Node* Subtract::Copy(ShaderGraph& graph) const
+{
+    return new Subtract(graph, Position);
+}
+
+void Subtract::Inspect()
+{
+
+}
+
+
+// Multiply ------------------------------------------------------------------------------------------------------------
+
+Multiply::Multiply(ShaderGraph& graph, ImVec2 pos)
+    : MathOp(graph, pos)
+{
+    Header.Title        = HeaderMarker + "Multiply";
+    Header.Color        = HeaderColor;
+    Header.HoveredColor = HeaderHoveredColor;
+    Header.ActiveColor  = HeaderActiveColor;
+
+    IO.Inputs.emplace_back("A", PinType_Any, PinFlags_Ambiguous);
+    IO.Inputs.emplace_back("B", PinType_Any, PinFlags_Ambiguous);
+    IO.DynamicInputs = true;
+
+    IO.Outputs.emplace_back("Out", PinType_Any, PinFlags_Ambiguous);
+
+    AllowMultiWidthInputs = true;
+}
+
+Node* Multiply::Copy(ShaderGraph& graph) const
+{
+    return new Multiply(graph, Position);
+}
+
+void Multiply::Inspect()
+{
+
+}
+
+
+// Divide --------------------------------------------------------------------------------------------------------------
+
+Divide::Divide(ShaderGraph& graph, ImVec2 pos)
+    : MathOp(graph, pos)
+{
+    Header.Title        = HeaderMarker + "Divide";
+    Header.Color        = HeaderColor;
+    Header.HoveredColor = HeaderHoveredColor;
+    Header.ActiveColor  = HeaderActiveColor;
+
+    IO.Inputs.emplace_back("A", PinType_Any, PinFlags_Ambiguous);
+    IO.Inputs.emplace_back("B", PinType_Any, PinFlags_Ambiguous);
+    IO.DynamicInputs = true;
+
+    IO.Outputs.emplace_back("Out", PinType_Any, PinFlags_Ambiguous);
+
+    AllowMultiWidthInputs = true;
+}
+
+Node* Divide::Copy(ShaderGraph& graph) const
+{
+    return new Divide(graph, Position);
+}
+
+void Divide::Inspect()
+{
+
+}
+
+
+
+// =====================================================================================================================
+// Utilities
+// =====================================================================================================================
+
+
+// Make Vector ---------------------------------------------------------------------------------------------------------
+
+MakeVector::MakeVector(ShaderGraph& graph, ImVec2 pos)
+    : Node(graph, pos)
+{
+    Header.Title        = HeaderMarker + "Make Vector";
+    Header.Color        = HeaderColor;
+    Header.HoveredColor = HeaderHoveredColor;
+    Header.ActiveColor  = HeaderActiveColor;
+
+    IO.Inputs.emplace_back("X", PinType_Float, PinFlags_AlwaysCollapse);
+    IO.Inputs.emplace_back("Y", PinType_Float, PinFlags_AlwaysCollapse);
+    IO.Inputs.emplace_back("Z", PinType_Float, PinFlags_AlwaysCollapse);
+
+    IO.Outputs.emplace_back("Out", PinType_Vector);
+}
+
+Node* MakeVector::Copy(ShaderGraph& graph) const
+{
+    return new MakeVector(graph, Position);
+}
+
+void MakeVector::Inspect()
+{
+
+}
+
+
+// Break Vector ---------------------------------------------------------------------------------------------------------
+
+BreakVector::BreakVector(ShaderGraph& graph, ImVec2 pos)
+    : Node(graph, pos)
+{
+    Header.Title        = HeaderMarker + "Make Vector";
+    Header.Color        = HeaderColor;
+    Header.HoveredColor = HeaderHoveredColor;
+    Header.ActiveColor  = HeaderActiveColor;
+
+    IO.Inputs.emplace_back("In", PinType_Vector, PinFlags_AlwaysCollapse);
+
+    IO.Outputs.emplace_back("X", PinType_Float);
+    IO.Outputs.emplace_back("Y", PinType_Float);
+    IO.Outputs.emplace_back("Z", PinType_Float);
+}
+
+Node* BreakVector::Copy(ShaderGraph& graph) const
+{
+    return new MakeVector(graph, Position);
+}
+
+void BreakVector::Inspect()
 {
 
 }

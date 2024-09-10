@@ -34,6 +34,7 @@ include_directories(External)
 
 # Add External Libraries
 add_subdirectory(External/open-cpp-utils)
+add_subdirectory(External/glw)
 
 # Configure ImGui
 set(IMGUI_BACKEND_SDL2 ON)
@@ -77,6 +78,7 @@ target_link_libraries(OpenShaderDesigner PRIVATE
         imgui-docking
         imgui-extras
         imnode-graph
+        glw
 )
 
 # DOXYGEN ==============================================================================================================

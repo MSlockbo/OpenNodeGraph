@@ -1,6 +1,11 @@
 cmake_minimum_required(VERSION 3.5)
 
-project(open-cpp-utils)
+set(VERSION_MAJOR 0)
+set(VERSION_MINOR 0)
+set(VERSION_PATCH 1)
+set(PROJECT_VERSION "${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}")
+
+project(open-cpp-utils VERSION ${PROJECT_VERSION})
 
 set(OPENCPPUTILS_HEADERS
         any.h
@@ -32,12 +37,11 @@ find_package(GTest)
 
 add_executable(open-cpp-utils-test
         Test/Test.cpp
-
-        ${OPENCPPUTILS_HEADERS}
 )
 
 target_link_libraries(open-cpp-utils-test PRIVATE
         GTest::gtest
+        open-cpp-utils
 )
 
 endif ()
