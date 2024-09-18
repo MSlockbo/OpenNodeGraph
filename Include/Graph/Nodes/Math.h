@@ -50,8 +50,6 @@ struct Integer : public Node
 
     [[nodiscard]] Node* Copy(ShaderGraph& graph) const override;
     void Inspect() override;
-
-    ValueType    Value;
 };
 
 RegisterNode("Math/Constants/Integer", Integer);
@@ -68,8 +66,6 @@ struct UnsignedInteger : public Node
 
     [[nodiscard]] Node* Copy(ShaderGraph& graph) const override;
     void Inspect() override;
-
-    ValueType    Value;
 };
 
 RegisterNode("Math/Constants/Unsigned Integer", UnsignedInteger);
@@ -86,8 +82,6 @@ struct Scalar : public Node
 
     [[nodiscard]] Node* Copy(ShaderGraph& graph) const override;
     void Inspect() override;
-
-    ValueType    Value;
 };
 
 RegisterNode("Math/Constants/Scalar", Scalar);
@@ -104,8 +98,6 @@ struct Vector : public Node
 
     [[nodiscard]] Node* Copy(ShaderGraph& graph) const override;
     void Inspect() override;
-
-    ValueType    Value;
 };
 
 RegisterNode("Math/Constants/Vector", Vector);

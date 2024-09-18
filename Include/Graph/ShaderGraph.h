@@ -197,15 +197,16 @@ namespace OpenShaderDesigner
 	    // History Functionality
 	    void        PushState();
 	    void        PopState();
-	    GraphState& GetState() { return State; }
+	    GraphState& GetState() { return State_; }
 
 	private:
-        bool GrabFocus;
+        bool GrabFocus_;
 
-		GraphState             State;
-	    std::stack<GraphState> History;
+		GraphState             State_;
+	    std::stack<GraphState> History_;
 
-	    ImVec2 ContextMenuPosition;
+	    ImVec2 ContextMenuPosition_;
+	    
 
 		friend class Inspector;
 	};

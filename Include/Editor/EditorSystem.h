@@ -21,41 +21,51 @@
 #include <unordered_map>
 
 #include <Editor/EditorWindow.h>
+#include <Editor/MainMenuBar.h>
 
 #define MAX_EDITORS 256
 
 namespace OpenShaderDesigner
 {
-    class EditorSystem
+
+class EditorSystem
+{
+public:
+    using WindowID = uint64_t;
+
+    template<typename T>
+    static WindowID ID() { return open_cpp_utils::unique_id<WindowID, T>(); }
+
+    template<typename T>
+    static T* Open() { T* window; (window = Get<T>())->Open(); return window; }
+
+    template<typename T>
+    static T* Close() { T* window; (window = Get<T>())->Close(); return window; }
+
+    template<typename T>
+    static T* Get()
     {
-    public:
-        using WindowID = uint64_t;
+        T* window = reinterpret_cast<T*>(Windows_[ID<T>()]);
+        if(window == nullptr) Windows_[ID<T>()] = window = new T();
+        return window;
+    }
 
-        template<typename T>
-        static WindowID ID() { return open_cpp_utils::unique_id<WindowID, T>(); }
+    template<typename T>
+    static T* SetMainMenuBar() { delete MainMenuBar_; T* bar = new T(); MainMenuBar_ = bar; return bar; }
 
-        template<typename T>
-        static T* Open() { T* window; (window = Get<T>())->Open(); return window; }
+    template<typename T>
+    static T* GetMainMenuBar() { return static_cast<T*>(MainMenuBar_); }
 
-        template<typename T>
-        static T* Close() { T* window; (window = Get<T>())->Close(); return window; }
+    static void Initialize();
+    static void Draw();
+    static void Shutdown();
+    static void HandleEvents(SDL_Event* event);
 
-        template<typename T>
-        static T* Get()
-        {
-            T* window = reinterpret_cast<T*>(Windows[ID<T>()]);
-            if(window == nullptr) Windows[ID<T>()] = window = new T();
-            return window;
-        }
+private:
+    inline static EditorWindow* Windows_[MAX_EDITORS] { nullptr };
+    inline static MainMenuBar*  MainMenuBar_ = nullptr;
+};
 
-        static void Initialize();
-        static void Draw();
-        static void Shutdown();
-        static void HandleEvents(SDL_Event* event);
-
-    private:
-        inline static EditorWindow* Windows[MAX_EDITORS] { nullptr };
-    };
 }
 
 

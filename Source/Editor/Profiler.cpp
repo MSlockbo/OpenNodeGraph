@@ -19,8 +19,8 @@ using namespace OpenShaderDesigner;
 
 Profiler::Profiler()
 	: EditorWindow("\uf214 Profiler", 0)
-	, Frame(0), Deltas{ 0 }
-	, Timer()
+	, Frame_(0), Deltas_{ 0 }
+	, Timer_()
 {
 	EventSystem::RegisterHandler<BeginFrame>(this);
 	EventSystem::RegisterHandler<EndFrame>(this);
@@ -34,19 +34,19 @@ Profiler::~Profiler()
 
 void Profiler::DrawWindow()
 {
-	ImGui::Text("Frame #%d", Frame);
-	ImGui::Text("FPS: %07.02f (%06.02f ms)", 1.0 / Deltas[LAST], 1000.0 * Deltas[LAST]);
+	ImGui::Text("Frame #%d", Frame_);
+	ImGui::Text("FPS: %07.02f (%06.02f ms)", 1.0 / Deltas_[LAST], 1000.0 * Deltas_[LAST]);
 }
 
 bool Profiler::HandleEvent(const EventHandler<BeginFrame>::HandledType* event)
 {
-	++Frame;
-	Timer.Reset();
+	++Frame_;
+	Timer_.Reset();
 	return false;
 }
 
 bool Profiler::HandleEvent(const EventHandler<EndFrame>::HandledType* event)
 {
-	Deltas[END] = Timer.Poll();
+	Deltas_[END] = Timer_.Poll();
 	return false;
 }

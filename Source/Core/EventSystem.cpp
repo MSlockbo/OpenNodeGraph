@@ -23,11 +23,11 @@ using namespace OpenShaderDesigner;
 void EventSystem::PostEvent(const Event* event)
 {
     // Thread safe
-    std::lock_guard guard(Lock);
+    std::lock_guard guard(Lock_);
 
     // Alert Handlers
     const int index = event->GetID();
-    for(_ImplEventHandler* handler : HandlerMap[index])
+    for(_ImplEventHandler* handler : HandlerMap_[index])
     {
         if(handler->_HandleEvent(event)) break;
     }

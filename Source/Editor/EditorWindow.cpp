@@ -19,15 +19,15 @@ using namespace OpenShaderDesigner;
 
 void EditorWindow::Open()
 {
-	if(bOpen) return;
-	bOpen = true;
+	if(bOpen_) return;
+	bOpen_ = true;
 	OnOpen();
 }
 
 void EditorWindow::Draw()
 {
-	const bool prev = bOpen;
-	if(ImGui::Begin(Title.c_str(), &bOpen, Flags))
+	const bool prev = bOpen_;
+	if(ImGui::Begin(Title.c_str(), &bOpen_, Flags_))
 	{
 		if(HasMenuBar())
 		{
@@ -43,24 +43,24 @@ void EditorWindow::Draw()
 	}
 	ImGui::End();
 
-	if(bOpen != prev)
+	if(bOpen_ != prev)
 	{
-		bOpen ? OnOpen() : OnClose();
+		bOpen_ ? OnOpen() : OnClose();
 	}
 }
 
 void EditorWindow::Close()
 {
-	if(!bOpen) return;
-	bOpen = false;
+	if(!bOpen_) return;
+	bOpen_ = false;
 
 	OnClose();
 }
 
 EditorWindow::EditorWindow(const std::string &title, ImGuiWindowFlags flags)
 	: Title(title)
-	, Flags(flags)
-	, bOpen(false)
+	, Flags_(flags)
+	, bOpen_(false)
 {
 
 }

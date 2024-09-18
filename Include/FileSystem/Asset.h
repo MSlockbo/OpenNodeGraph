@@ -13,5 +13,34 @@
 // limitations under the License.
 // =====================================================================================================================
 
+#ifndef ASSET_H
+#define ASSET_H
 
-#include <Core/Renderer.h>
+#include <open-cpp-utils/filesystem.h>
+
+namespace ocu = open_cpp_utils;
+
+namespace OpenShaderDesigner
+{
+
+class Asset
+{
+public:
+    Asset() : Dirty_(false) { }
+    
+    bool Dirty() const { return Dirty_; }
+
+    virtual void Open() = 0;
+    virtual void Load(const std::filesystem::path& path) = 0;
+    virtual void Save(const std::filesystem::path& path) { Dirty_ = false; };
+
+protected:
+    void MakeDirty() { Dirty_ = true; }
+
+private:
+    bool Dirty_;
+};
+    
+}
+
+#endif //ASSET_H

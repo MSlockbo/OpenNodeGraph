@@ -21,16 +21,16 @@
 namespace OpenShaderDesigner
 {
 
-	class ConsoleWindow : public EditorWindow
-	{
-	public:
-		ConsoleWindow();
+class ConsoleWindow : public EditorWindow
+{
+public:
+	ConsoleWindow();
 
-		void DrawMenu() override;
-		void DrawWindow() override;
+	void DrawMenu() override;
+	void DrawWindow() override;
 
-	private:
-	};
+private:
+};
 
 } // OpenShaderDesigner
 

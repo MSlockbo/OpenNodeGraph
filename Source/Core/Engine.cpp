@@ -20,18 +20,22 @@
 #include <Editor/ConsoleWindow.h>
 #include <Editor/Profiler.h>
 
+#include <FileSystem/FileManager.h>
+
 #include <Graph/ShaderGraph.h>
+
+#include "Project/Project.h"
 
 void OpenShaderDesigner::Engine::Start(const Window::Configuration& config)
 {
-    Console::Log(Console::Severity::ALERT, "Starting {}", config.Application.Title);
+    Console::Log(Console::Severity::Alert, "Starting {}", config.Application.Title);
 
-    Console::Log(Console::Severity::MESSAGE, "Creating Main Window");
+    Console::Log(Console::Message, "Creating Main Window");
     MainWindow = new Window(config);
 
     Initialize();
 
-    Console::Log(Console::Severity::MESSAGE, "Starting Main Loop");
+    Console::Log(Console::Message, "Starting Main Loop");
     while(MainWindow->IsOpen())
     {
         Update();
@@ -47,20 +51,26 @@ void OpenShaderDesigner::Engine::Stop()
 
 void OpenShaderDesigner::Engine::Initialize()
 {
-    Console::Log(Console::Severity::MESSAGE, "Initializing Engine");
+    Console::Log(Console::Message, "Initializing Engine");
 
-    Console::Log(Console::Severity::MESSAGE, "Initializing Editor");
+    Console::Log(Console::Message, "Initializing Editor");
     EditorSystem::Initialize();
 
-    Console::Log(Console::Severity::MESSAGE, "Opening Console");
+    Console::Log(Console::Message, "Opening Console");
     EditorSystem::Open<ConsoleWindow>();
 
-    Console::Log(Console::Severity::MESSAGE, "Opening Profiler");
+    Console::Log(Console::Message, "Opening Profiler");
     EditorSystem::Open<Profiler>();
 
-    Console::Log(Console::Severity::MESSAGE, "Opening Shader Graph");
+    Console::Log(Console::Message, "Opening File Manager");
+    EditorSystem::Open<FileManager>();
+
+    Console::Log(Console::Message, "Opening Shader Graph");
     EditorSystem::Open<Inspector>();
     EditorSystem::Open<ShaderGraph>();
+
+    Console::Log(Console::Message, "Setting up Project");
+    EditorSystem::SetMainMenuBar<Project>();
 }
 
 void OpenShaderDesigner::Engine::Shutdown()

@@ -15,6 +15,7 @@
 
 #include <iostream>
 #include <Core/Engine.h>
+#include <Editor/EditorSystem.h>
 
 int main(int, char**)
 {

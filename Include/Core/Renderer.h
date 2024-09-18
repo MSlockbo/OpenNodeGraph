@@ -21,10 +21,12 @@
 
 namespace OpenShaderDesigner
 {
-	class Renderer
-	{
 
-	};
+class Renderer
+{
+
+};
+	
 }
 
 

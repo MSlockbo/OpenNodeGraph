@@ -30,7 +30,7 @@ void EditorSystem::Initialize()
 {
 	Window& Window = Engine::GetMainWindow();
 
-	Console::Log(Console::Severity::ALERT, "Initializing Dear ImGUI");
+	Console::Log(Console::Severity::Alert, "Initializing Dear ImGUI");
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
 
@@ -136,7 +136,7 @@ void EditorSystem::Initialize()
 	ImGui_ImplSDL2_InitForOpenGL(Window.GetHandle(), Window.GetContext());
 	ImGui_ImplOpenGL3_Init("#version 460 core");
 
-	Console::Log(Console::Severity::ALERT, "Initialized ImGui ({})", IMGUI_VERSION);
+	Console::Log(Console::Severity::Alert, "Initialized ImGui ({})", IMGUI_VERSION);
 }
 
 void EditorSystem::Draw()
@@ -152,11 +152,16 @@ void EditorSystem::Draw()
 		ImGui::ResetMouseDragDelta();
 	}
 
+    if(MainMenuBar_)
+    {
+        MainMenuBar_->Draw();
+    }
+
 	ImGui::ShowDemoWindow();
 
 	for (int i = 0; i < MAX_EDITORS; ++i)
 	{
-		EditorWindow* editor = Windows[i];
+		EditorWindow* editor = Windows_[i];
 		if(editor == nullptr || !editor->IsOpen()) continue;
 		editor->Draw();
 	}
@@ -168,6 +173,9 @@ void EditorSystem::Draw()
 
 void EditorSystem::Shutdown()
 {
+    delete MainMenuBar_;
+    for(auto it : Windows_) delete it;
+    
 	// Shutdown ImGui
 	ImGui_ImplOpenGL3_Shutdown();
 	ImGui_ImplSDL2_Shutdown();

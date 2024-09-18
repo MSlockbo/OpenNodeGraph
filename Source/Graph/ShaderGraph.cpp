@@ -210,8 +210,8 @@ void Node::Draw(ImGuiID id)
 
 ShaderGraph::ShaderGraph()
 	: EditorWindow("\uED46 Shader Graph", 0)
-    , GrabFocus(false)
-	, State(*this)
+    , GrabFocus_(false)
+	, State_(*this)
 {
 }
 
@@ -223,7 +223,7 @@ void ShaderGraph::OnOpen()
 {
 	EditorSystem::Open<Inspector>()->Graph = this;
 
-    GrabFocus = true;
+    GrabFocus_ = true;
 }
 
 
@@ -236,18 +236,18 @@ void ShaderGraph::DrawWindow()
 
     ImNodeGraph::SetGraphValidation(ValidateConnection);
 
-    if(GrabFocus)
+    if(GrabFocus_)
     {
-        GrabFocus = false;
+        GrabFocus_ = false;
         ImGui::SetWindowFocus();
         ImGui::SetNavWindow(ImGui::GetCurrentWindow());
     }
 
-    for(ImGuiID id = 0; id < State.Nodes.size(); ++id)
+    for(ImGuiID id = 0; id < State_.Nodes.size(); ++id)
     {
-        if(State.Nodes(id) == false) continue;
+        if(State_.Nodes(id) == false) continue;
 
-        State.Nodes[id]->Draw(id);
+        State_.Nodes[id]->Draw(id);
     }
 
     DrawContextMenu();
@@ -257,14 +257,15 @@ void ShaderGraph::DrawWindow()
 
     ImNodeGraph::BeginGraphPostOp("ShaderGraph");
 
-    if(ImGui::IsKeyPressed(ImGuiKey_Delete))
+    if(ImGui::IsKeyPressed(ImGuiKey_Delete)) Erase();
+
+    ImGuiIO& io = ImGui::GetIO();
+
+    if(!(io.KeyMods & ~ImGuiMod_Ctrl))
     {
-        auto& selected = ImNodeGraph::GetSelected();
-        for(ImGuiID node : selected)
-        {
-            State.Nodes.erase(ImNodeGraph::GetUserID(node).Int);
-        }
-        selected.Clear();
+        if(ImGui::IsKeyPressed(ImGuiKey_C)) Copy();
+        if(ImGui::IsKeyPressed(ImGuiKey_P)) Paste(ImGui::GetMousePos());
+        if(ImGui::IsKeyPressed(ImGuiKey_X)) { Copy(); Erase(); }
     }
 
     ImNodeGraph::EndGraphPostOp();
@@ -275,7 +276,7 @@ void ShaderGraph::DrawContextMenu()
 {
     if(ImGui::IsMouseClicked(ImGuiMouseButton_Right))
     {
-        ContextMenuPosition = ImNodeGraph::ScreenToGrid(ImGui::GetMousePos());
+        ContextMenuPosition_ = ImNodeGraph::ScreenToGrid(ImGui::GetMousePos());
     }
 
     if(ImGui::BeginPopupContextWindow("graph_context"))
@@ -286,7 +287,7 @@ void ShaderGraph::DrawContextMenu()
             Copy();
             Erase();
         }
-        if(ImGui::MenuItem("Paste", "Ctrl+V", false, false)) Paste(ContextMenuPosition);
+        if(ImGui::MenuItem("Paste", "Ctrl+V", false, false)) Paste(ContextMenuPosition_);
 
         ImGui::Separator();
 
@@ -295,7 +296,7 @@ void ShaderGraph::DrawContextMenu()
         ImGui::Separator();
 
         // Create Nodes
-        ImVec2 position = ContextMenuPosition;
+        ImVec2 position = ContextMenuPosition_;
 
         std::stack<ContextID> context; context.push(0);
 
@@ -319,7 +320,7 @@ void ShaderGraph::DrawContextMenu()
                 {
                     if(ImGui::MenuItem(item.Name.c_str()))
                     {
-                        Graph.State.Nodes.insert(item.Constructor(Graph, Location));
+                        Graph.State_.Nodes.insert(item.Constructor(Graph, Location));
                     }
                 }
                 else
@@ -360,18 +361,31 @@ void ShaderGraph::DrawContextMenu()
     }
 }
 
-void ShaderGraph::Copy() {}
-void ShaderGraph::Erase() {}
+void ShaderGraph::Copy()
+{
+    
+}
+
+void ShaderGraph::Erase()
+{
+    auto& selected = ImNodeGraph::GetSelected();
+    for(ImGuiID node : selected)
+    {
+        State_.Nodes.erase(ImNodeGraph::GetUserID(node).Int);
+    }
+    selected.Clear();
+}
+
 void ShaderGraph::Paste(ImVec2) {}
 
 Node* ShaderGraph::FindNode(ImPinPtr ptr)
 {
-    return State.Nodes[ImNodeGraph::GetUserID(ptr.Node).Int];
+    return State_.Nodes[ImNodeGraph::GetUserID(ptr.Node).Int];
 }
 
 Pin& ShaderGraph::FindPin(ImPinPtr ptr)
 {
-    Node* node = State.Nodes[ImNodeGraph::GetUserID(ptr.Node).Int];
+    Node* node = State_.Nodes[ImNodeGraph::GetUserID(ptr.Node).Int];
     auto& pins = ptr.Direction ? node->IO.Outputs : node->IO.Inputs;
     int idx = ImNodeGraph::GetUserID(ptr).Int;
     if(ptr.Direction) idx *= -1;
@@ -410,12 +424,12 @@ void ShaderGraph::Register(const std::filesystem::path& path, ConstructorPtr con
 
 		if(node == 0 || node != child)
 		{
-			node = ContextMenu.insert({ decomp.top(), nullptr }, node);
+			node = ContextMenu.insert({ decomp.top(), nullptr }, node, -1);
 			decomp.pop();
 		}
 	}
 
-	ContextMenu.insert({ name, constructor }, node);
+	ContextMenu.insert({ name, constructor }, node, -1);
 }
 
 Inspector::Inspector()

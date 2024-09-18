@@ -20,16 +20,16 @@ using namespace OpenShaderDesigner;
 
 void Console::DrawMenu()
 {
-    std::lock_guard guard(Lock);
+    std::lock_guard guard(Lock_);
 
     if(ImGui::BeginMenu("\uf0e5 Settings"))
     {
         for(uint8_t setting = 0; setting < sizeof(SettingNames) / sizeof(std::string); ++setting)
         {
             int flag = 0x1 << setting;
-            if(ImGui::MenuItem(SettingNames[setting].c_str(), nullptr, Settings & flag))
+            if(ImGui::MenuItem(SettingNames[setting].c_str(), nullptr, Settings_ & flag))
             {
-                Settings = static_cast<Setting>(Settings ^ flag);
+                Settings_ = Settings_ ^ flag;
             }
         }
 
@@ -41,9 +41,9 @@ void Console::DrawMenu()
         for(int severity = 0; severity < static_cast<int>(Severity::COUNT); ++severity)
         {
             int flag = 0x1 << severity;
-            if(ImGui::MenuItem(Severities[severity].c_str(), NULL, Filter & flag))
+            if(ImGui::MenuItem(Severities[severity].c_str(), NULL, Filter_ & flag))
             {
-                Filter = Filter ^ flag;
+                Filter_ = Filter_ ^ flag;
             }
         }
 
@@ -53,23 +53,23 @@ void Console::DrawMenu()
 
 void Console::DrawWindow()
 {
-    std::lock_guard guard(Lock);
+    std::lock_guard guard(Lock_);
 
-    const auto& Log = EntryLog;
+    const auto& Log = EntryLog_;
 
     const float padding = ImGui::GetStyle().ItemSpacing.y + ImGui::GetFrameHeightWithSpacing();
     if(ImGui::BeginChild("##scrolling", ImVec2(0, -padding),
                          ImGuiChildFlags_AlwaysAutoResize | ImGuiChildFlags_AlwaysUseWindowPadding | ImGuiChildFlags_AutoResizeY
-                       , ImGuiWindowFlags_AlwaysVerticalScrollbar | (Settings & WRAP_TEXT ? ImGuiWindowFlags_None : ImGuiWindowFlags_AlwaysHorizontalScrollbar)))
+                       , ImGuiWindowFlags_AlwaysVerticalScrollbar | (Settings_ & Settings_WrapText ? ImGuiWindowFlags_None : ImGuiWindowFlags_AlwaysHorizontalScrollbar)))
     {
         for(const LogEntry& entry : Log)
         {
             int flag = 0x1 << static_cast<int>(entry.Severity);
-            if((flag & Filter) == 0) continue;
+            if((flag & Filter_) == 0) continue;
 
             ImGui::PushStyleColor(ImGuiCol_Text, SeverityColors[static_cast<int>(entry.Severity)]);
-            if(Settings & WRAP_TEXT) ImGui::TextWrapped("%s", Format(entry, Settings).c_str());
-            else ImGui::Text("%s", Format(entry, Settings).c_str());
+            if(Settings_ & Settings_WrapText) ImGui::TextWrapped("%s", Format(entry, Settings_).c_str());
+            else ImGui::Text("%s", Format(entry, Settings_).c_str());
             ImGui::PopStyleColor();
         }
 
@@ -80,23 +80,23 @@ void Console::DrawWindow()
 
     ImGui::Text(">"); ImGui::SameLine();
     ImGui::SetNextItemWidth(ImGui::GetWindowWidth() - ImGui::GetCursorPosX() - ImGui::GetStyle().WindowPadding.x);
-    if(ImGui::InputText("##commandline", &Command, ImGuiInputTextFlags_EnterReturnsTrue))
+    if(ImGui::InputText("##commandline", &CommandBuffer_, ImGuiInputTextFlags_EnterReturnsTrue))
     {
-        ProcessCommand(Command);
-        Command.clear();
+        ProcessCommand(CommandBuffer_);
+        CommandBuffer_.clear();
         ImGui::SetKeyboardFocusHere(-1);
     }
 }
 
-std::string Console::Format(const LogEntry& entry, Setting settings)
+std::string Console::Format(const LogEntry& entry, uint8_t settings)
 {
     std::string severity = std::format("<{}>", Severities[static_cast<int>(entry.Severity)]);
 
     std::string message;
 
     // Get Timestamp and Thread bits.
-    const bool showTimestamp = (settings & SHOW_TIMESTAMP);
-    const bool showThreadID = (settings & SHOW_THREAD) && entry.Severity != Severity::COMMAND;
+    const bool showTimestamp = (settings & Settings_ShowTimeStamp);
+    const bool showThreadID = (settings & Settings_ShowThread) && entry.Severity != Severity::Command;
     const bool check1 = showTimestamp || showThreadID;
 
     // Print Timestamp and/or Thread if enabled.
@@ -104,8 +104,8 @@ std::string Console::Format(const LogEntry& entry, Setting settings)
     if(showThreadID) message += std::format("Thread #{:0>3} | ", entry.Thread);
 
     // Get Severity and File bits.
-    const bool showSeverity = (settings & SHOW_SEVERITY) && entry.Severity != Severity::COMMAND;
-    const bool showFile = (settings & SHOW_FILE_INFO) && entry.Severity != Severity::COMMAND;
+    const bool showSeverity = (settings & Settings_Severity) && entry.Severity != Severity::Command;
+    const bool showFile = (settings & Settings_ShowFileInfo) && entry.Severity != Severity::Command;
     const bool check2 = showSeverity || showFile;
 
     // Print Severity and/or File if enabled.
@@ -113,7 +113,7 @@ std::string Console::Format(const LogEntry& entry, Setting settings)
     if(showFile) message += std::format("{}({})", entry.File, entry.Line);
 
     // Print separator if any are enabled
-    if(check1 || check2) message += entry.Severity == Severity::COMMAND ? "> " : ": ";
+    if(check1 || check2) message += entry.Severity == Severity::Command ? "> " : ": ";
 
     // Add message.
     message += entry.Message;

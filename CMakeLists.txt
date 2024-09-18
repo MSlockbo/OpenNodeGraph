@@ -23,6 +23,7 @@ find_package(GLEW REQUIRED)
 find_package(glm REQUIRED)
 find_package(OpenGL REQUIRED COMPONENTS OpenGL)
 find_package(SDL2 REQUIRED)
+find_package(RapidJSON REQUIRED)
 
 if(MSVC)
     add_compile_options("$<$<C_COMPILER_ID:MSVC>:/utf-8>")
@@ -33,6 +34,7 @@ include_directories(Include)
 include_directories(External)
 
 # Add External Libraries
+add_subdirectory(External/portable-file-dialogs)
 add_subdirectory(External/open-cpp-utils)
 add_subdirectory(External/glw)
 
@@ -55,7 +57,6 @@ add_executable(OpenShaderDesigner
         Source/Core/Console.cpp
         Source/Core/EventSystem.cpp
         Source/Core/Engine.cpp
-        Source/Core/Renderer.cpp
 
         # Editor
         Source/Editor/EditorSystem.cpp
@@ -68,6 +69,14 @@ add_executable(OpenShaderDesigner
 
         # Nodes
         Source/Graph/Nodes/Math.cpp
+        Include/Graph/Compiler.h
+        Source/Graph/Compiler.cpp
+        Source/FileSystem/FileManager.cpp
+        Include/FileSystem/FileManager.h
+        Include/FileSystem/Asset.h
+        Source/Project/Project.cpp
+        Include/Project/Project.h
+        Include/Editor/MainMenuBar.h
 )
 
 target_link_libraries(OpenShaderDesigner PRIVATE
@@ -75,6 +84,8 @@ target_link_libraries(OpenShaderDesigner PRIVATE
         GLEW::GLEW
         OpenGL::GL
         ${SDL2_LIBRARIES}
+        rapidjson
+        open-cpp-utils
         imgui-docking
         imgui-extras
         imnode-graph
