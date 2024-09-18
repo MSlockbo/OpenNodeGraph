@@ -21,6 +21,7 @@ set(OPENCPPUTILS_HEADERS
         math.h
         set.h
         map.h
+        filesystem.h
 )
 
 add_library(open-cpp-utils INTERFACE
