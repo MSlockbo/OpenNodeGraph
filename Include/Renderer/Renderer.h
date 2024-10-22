@@ -17,14 +17,40 @@
 #ifndef RENDERER_H
 #define RENDERER_H
 
+#include <Editor/EditorWindow.h>
 
+#include <Renderer/Assets/Texture.h>
+
+#include "glw/shader.h"
 
 namespace OpenShaderDesigner
 {
 
-class Renderer
+class Renderer : public EditorWindow
 {
+public:
+    enum mode : glw::enum_t
+    {
+        none = 0
+    ,   view_texture
+    ,   function
+    };
+    
+    Renderer();
+    virtual ~Renderer();
 
+    void DrawMenu() override;
+    void DrawWindow() override;
+
+    void OpenTexture(Texture* texture);
+    
+private:
+    void DrawTexture();
+    void DrawFunction();
+
+    glw::enum_t  Mode_;
+    Texture* ViewTexture_;
+    glw::shader* Shader_;
 };
 	
 }

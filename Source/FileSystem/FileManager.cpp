@@ -17,54 +17,80 @@
 #include <FileSystem/FileManager.h>
 #include <Core/Console.h>
 
+
 #include <imgui-docking/misc/cpp/imgui_stdlib.h>
 
-#include "Project/Project.h"
+using namespace OpenShaderDesigner;
 
-OpenShaderDesigner::Asset * OpenShaderDesigner::FileManager::load(const Path& path)
+FileManager::Asset* FileManager::load(const Path& path, FileID id)
 {
     Console::Log(Console::Message, "Loading File {}", path.string());
-    FileType type = ExtensionMap[path.extension().string()];
 
-    switch (type)
+    // Create Folder dummy Asset for Folders
+    if(is_directory(path))
     {
-    case FileType_Project:
-    {
-        Project* project = EditorSystem::GetMainMenuBar<Project>();
-        project->Load(path);
-        return project;
+        Asset* asset = new Folder(path);
+        asset->Manager_ = EditorSystem::Get<FileManager>();
+        asset->File_ = id;
+        return asset;
     }
 
-    default:
-        return nullptr;
+    // Get the type and load the asset
+    AssetType type = ExtensionMap()[path.extension().string()];
+    Asset* asset = AssetMenu()[type].Load(path);
+    
+    // Set the ID and Manager of the file
+    if(asset)
+    {
+        asset->Manager_ = EditorSystem::Get<FileManager>();
+        asset->File_ = id;
     }
+    return asset;
 }
 
-OpenShaderDesigner::Asset * OpenShaderDesigner::FileManager::import(const Path &src, const Path &dst)
+FileManager::Asset* FileManager::import(const Path &src, const Path &dst, FileID id)
 {
-    return nullptr;
+    Console::Log(Console::Message, "Importing File {} to {}", src.string(), dst.string());
+    
+    // Get the type and load the asset
+    AssetType type = ExtensionMap()[src.extension().string()];
+    Asset* asset = AssetMenu()[type].Import(src, dst);
+    
+    if(asset)
+    {
+        asset->Manager_ = EditorSystem::Get<FileManager>();
+        asset->File_ = id;
+    }
+    
+    return asset;
 }
 
-OpenShaderDesigner::Asset * OpenShaderDesigner::FileManager::create(const Path &path)
+FileManager::Asset* FileManager::create(const Path &path, FileID id)
 {
     Console::Log(Console::Message, "Creating File {}", path.string());
-    FileType type = ExtensionMap[path.extension().string()];
 
-    switch (type)
+    // Create Folder dummy Asset for Folders
+    if(is_directory(path))
     {
-        case FileType_Project:
-        {
-            Project* project = EditorSystem::GetMainMenuBar<Project>();
-            project->Create(path);
-            return project;
-        }
-
-        default:
-            return nullptr;
+        Asset* asset = new Folder(path);
+        asset->Manager_ = EditorSystem::Get<FileManager>();
+        return asset;
     }
+    
+    // Get the type and load the asset
+    AssetType type = ExtensionMap()[path.extension().string()];
+    Asset* asset = AssetMenu()[type].Create(path);
+    
+    if(asset)
+    {
+        asset->Manager_ = EditorSystem::Get<FileManager>();
+        asset->File_ = id;
+    }
+    
+    return asset;
 }
 
-OpenShaderDesigner::FileManager::FileManager()
+FileManager::FileManager()
 	: EditorWindow("File Manager", ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoScrollbar)
     , CurrentDirectory_(FileSystem::root), Selected_(FileSystem::root)
     , Rename_(false), FocusRename_(false)
@@ -72,12 +98,78 @@ OpenShaderDesigner::FileManager::FileManager()
 	//CurrentDirectory_ = Filesystem_.load_directory(std::filesystem::current_path());
 }
 
-void OpenShaderDesigner::FileManager::DrawMenu()
+void FileManager::DrawMenu()
 {
-	
+	if(ImGui::BeginMenu("File"))
+	{
+        if(ImGui::BeginMenu("Create"))
+        {
+            struct Visitor
+            {
+                bool operator()(AssetDetail& item, AssetType id)
+                {
+                    AssetMenuHierarchy& AssetMenu = FileManager::AssetMenu();
+                    const auto depth = AssetMenu.depth(id);
+                    if(depth > Context.size()) return false;
+                    if(item.Name == "##") return false;
+
+                    while(depth < Context.size())
+                    {
+                        Context.pop();
+                        ImGui::EndMenu();
+                    }
+
+                    if(Context.top() != AssetMenu.parent(id)) return false;
+                    std::string name = std::format("{}##{}", item.Name, id);
+
+                    if(item.Create != nullptr)
+                    {
+                        if(ImGui::MenuItem(name.c_str()))
+                        {
+                            Manager.Create(std::format("{}{}", item.Name, item.Extensions[0]));
+                        }
+                    }
+                    else
+                    {
+                        if(ImGui::BeginMenu(name.c_str()))
+                        {
+                            Context.push(id);
+                        }
+                        else
+                        {
+                            return false;
+                        }
+                    }
+
+                    return false;
+                }
+
+                FileManager& Manager;
+                std::stack<AssetType> Context;
+            } MenuVisitor
+            {
+                .Manager = *this
+            };
+
+            MenuVisitor.Context.push(0);
+
+            AssetMenu().traverse<AssetMenuHierarchy::pre_order>(MenuVisitor);
+
+            MenuVisitor.Context.pop();
+            while(MenuVisitor.Context.empty() == false)
+            {
+                ImGui::EndMenu();
+                MenuVisitor.Context.pop();
+            }
+
+            ImGui::EndPopup();
+        }
+	    
+	    ImGui::EndMenu();
+	}
 }
 
-void OpenShaderDesigner::FileManager::DrawWindow()
+void FileManager::DrawWindow()
 {
     // Directory Hierarchy
 	ImGui::BeginGroup();
@@ -90,9 +182,9 @@ void OpenShaderDesigner::FileManager::DrawWindow()
 			{
 			    const FileSystem& tree = file.system();
 				uint32_t depth = tree.depth(id);
-
-			    // Skip root
-			    if(id == FileSystem::root) return false;
+			    
+			    if(id == FileSystem::root) return false; // Skip root
+			    if(*file == nullptr) return false; // Skip files without assets
 
 			    // Skip if we are in a closed directory
 			    if(depth > stack.size()) return false;
@@ -190,6 +282,13 @@ void OpenShaderDesigner::FileManager::DrawWindow()
             {
                 Selected_ = Rename_ ? Selected_ : it;
             }
+            
+            if(ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left) && selected)
+            {
+                File& file = Filesystem_[Selected_];
+                Asset* asset = *file;
+                asset->Open();
+            }
 
             // Renaming
             if(selected && Rename_)
@@ -225,14 +324,15 @@ void OpenShaderDesigner::FileManager::DrawWindow()
     }
 }
 
-bool OpenShaderDesigner::FileManager::AnyDirty()
+bool FileManager::AnyDirty()
 {
     bool res = false;
     struct Visitor
     {
         bool operator()(File& file, FileID id)
         {
-            if(id == FileSystem::root) return false;
+            if(id == FileSystem::root) return false; // Continue if root node
+            if(*file == nullptr) return false; // Continue if no asset associated with file
             
             res |= file->Dirty();
             return false;
@@ -244,12 +344,12 @@ bool OpenShaderDesigner::FileManager::AnyDirty()
     return res;
 }
 
-void OpenShaderDesigner::FileManager::SaveAll()
+void FileManager::SaveAll()
 {
     
 }
 
-OpenShaderDesigner::FileManager::Path OpenShaderDesigner::FileManager::GetHomeDirectory()
+FileManager::Path FileManager::GetHomeDirectory()
 {
 #ifdef WIN32
     return Path(getenv("HOMEDRIVE")) / getenv("HOMEPATH");
@@ -257,3 +357,108 @@ OpenShaderDesigner::FileManager::Path OpenShaderDesigner::FileManager::GetHomeDi
     return getenv("HOME");
 #endif
 }
+
+void FileManager::Register(const std::filesystem::path& path,
+                           const std::vector<std::string>& extensions,
+                           CreateFunc create, LoadFunc load, ImportFunc import)
+{
+    const std::string name = path.filename().string();
+    AssetMenuHierarchy&  AssetMenu = FileManager::AssetMenu();
+    ExtensionMapping& ExtensionMap = FileManager::ExtensionMap();
+
+    AssetType node = 0;
+    for(auto it = path.begin(); it != path.end();)
+    {
+        AssetType child = AssetMenu.first_child(node);
+
+        while(child)
+        {
+            if(AssetMenu[child].Name == it->filename())
+            {
+                node = child;
+                ++it;
+                break;
+            }
+
+            child = AssetMenu.next_sibling(child);
+        }
+
+        if(node == 0 || node != child)
+        {
+            node = AssetMenu.insert({ it->string(), {}, nullptr, nullptr, nullptr }, node);
+            ++it;
+        }
+    }
+
+    AssetMenu[node].Create = create;
+    AssetMenu[node].Import = import;
+    AssetMenu[node].Load   = load;
+    AssetMenu[node].Extensions = extensions;
+    
+    for(const auto& ext : extensions)
+    {
+        ExtensionMap[ext] = node;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

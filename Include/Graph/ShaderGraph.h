@@ -13,33 +13,33 @@
 // limitations under the License.
 // =====================================================================================================================
 
-#ifndef SHADERGRAPH_H
-#define SHADERGRAPH_H
+#ifndef OSD_SHADERGRAPH_H
+#define OSD_SHADERGRAPH_H
 
 #include <Editor/EditorWindow.h>
 
 #include <vector>
-#include <unordered_map>
 #include <filesystem>
 #include <unordered_set>
-#include <set>
 #include <stack>
 
 #include <glm/glm.hpp>
+#include <glw/common.h>
 
 #include <open-cpp-utils/startup.h>
 #include <open-cpp-utils/directed_tree.h>
-#include <open-cpp-utils/optional.h>
+#include <open-cpp-utils/any.h>
+#include <open-cpp-utils/object_pool.h>
 
 #include <imnode-graph/imnode_graph.h>
 
-#include "open-cpp-utils/any.h"
-#include "open-cpp-utils/object_pool.h"
+#include "FileSystem/FileManager.h"
+
 
 namespace ocu = open_cpp_utils;
 
 #define RegisterNode(Name, Type) \
-	Node* Create##Type(ShaderGraph& graph, ImVec2 pos) { return new Type(graph, pos); } \
+	inline Node* Create##Type(ShaderGraph& graph, ImVec2 pos) { return new Type(graph, pos); } \
 	STARTUP(_Register##Type) { ShaderGraph::Register(Name, Create##Type); }
 
 namespace OpenShaderDesigner
@@ -67,6 +67,13 @@ namespace OpenShaderDesigner
     ,   PinFlags_NoPadding      = 1 << 2
     ,   PinFlags_Ambiguous      = 1 << 3
     };
+    
+    enum InterpolationType_ : glw::enum_t
+    {
+        InterpolationType_Flat = 0
+    ,   InterpolationType_Screen
+    ,   InterpolationType_Smooth
+    };
 
 	struct Pin
 	{
@@ -85,6 +92,14 @@ namespace OpenShaderDesigner
 		,	"Vector"
 		,   "Any"
 		};
+
+	    inline const static std::string TypeKeywords[PinType_COUNT] = {
+	        "uint"
+	    ,   "int"
+	    ,   "float"
+	    ,   "vec3"
+	    ,   "vec3"
+	    };
 
 	    inline const static int TypeWidths[PinType_COUNT] = {
 	         1 // Unsigned Int
@@ -130,57 +145,115 @@ namespace OpenShaderDesigner
 
 		struct
 		{
+		    std::string Alias;
 			bool   Const;
 		} Info;
 
 		Node(ShaderGraph& graph, ImVec2 pos);
-		~Node() = default;
+		virtual ~Node() = default;
 
 	    void DrawPin(int id, Pin& pin, ImPinDirection direction);
 	    void Draw(ImGuiID id);
 
-	    virtual bool CheckConnection(Pin*, Pin*) { return false; }
+	    inline virtual bool CheckConnection(Pin*, Pin*) { return false; }
 	    virtual void ValidateConnections() { }
+	    
 		virtual Node* Copy(ShaderGraph& graph) const = 0;
 		virtual void Inspect() = 0;
+	    virtual std::string GetCode() const = 0;
 	};
+    
+    using NodeList = ocu::object_list<Node*>;
+    using NodeId = NodeList::uuid_type;
+
+    struct Attribute
+    {
+        std::string Name;
+        glw::enum_t Type;
+        glw::enum_t Interpolation;
+        glw::size_t Count;
+    };
+
+    struct Parameter
+    {
+        std::string Name;
+        glw::enum_t Type;
+        glw::size_t Count; // For arrays
+    };
+    
+    struct GraphState
+    {
+        
+        ShaderGraph& Parent;
+        NodeList     Nodes;
+
+        GraphState(ShaderGraph& parent);
+        GraphState(const GraphState& other);
+        ~GraphState();
+
+        NodeId AddNode(Node* node) { return Nodes.insert(node); }
+        void RemoveNode(NodeId node) { if(Nodes[node]->Info.Const) return; Nodes.erase(node); }
+
+        GraphState& operator=(const GraphState& other);
+    };
+
+    class ShaderAsset : public FileManager::Asset
+    {
+    public:
+        inline static const std::string VersionString = "#version 430 core";
+        
+        ShaderAsset(const FileManager::Path& path, ShaderGraph& graph)
+            : Asset(path)
+            , State_(graph)
+        { }
+
+        void        PushState()            { History_.push(State_); }
+        void        PopState()             { State_ = History_.top(); History_.pop();}
+        
+        GraphState& GetState()             { return State_; }
+        const GraphState& GetState() const { return State_; }
+
+        ShaderGraph& GetGraph() { return State_.Parent; }
+        const ShaderGraph& GetGraph() const { return State_.Parent; }
+
+        virtual void Compile() = 0;
+
+        std::string GetCode() const { return Code; }
+
+    protected:
+        std::string Code;
+        
+
+    private:
+        GraphState             State_;
+        std::stack<GraphState> History_;
+    };
 
 	class ShaderGraph
 		: public EditorWindow
 	{
-	public:
-	    struct GraphState
-	    {
-	        ShaderGraph&            Parent;
-	        ocu::object_list<Node*> Nodes;
-
-	        GraphState(ShaderGraph& parent);
-	        GraphState(const GraphState& other);
-	        ~GraphState();
-
-	        GraphState& operator=(const GraphState& other);
-	    };
-
 	private:
 		friend Node;
 
 		using ConstructorPtr = Node*(*)(ShaderGraph&, ImVec2);
 		struct ContextMenuItem
 		{
-			std::string Name;
-			ConstructorPtr    Constructor;
+			std::string    Name;
+			ConstructorPtr Constructor;
 		};
 
 		using ContextMenuHierarchy = ocu::directed_tree<ContextMenuItem>;
 		using ContextID = ContextMenuHierarchy::node;
-		inline static ContextMenuHierarchy ContextMenu;
+	    
+		static ContextMenuHierarchy& ContextMenu() { static ContextMenuHierarchy Menu {{ "", nullptr }}; return Menu; }
 
 
 	public:
 		ShaderGraph();
-		~ShaderGraph();
+		virtual ~ShaderGraph();
 
 		void OnOpen() override;
+	    void DrawMenu() override;
 	    void DrawWindow() override;
 
 	    void DrawContextMenu();
@@ -188,23 +261,21 @@ namespace OpenShaderDesigner
 	    void Copy();
 	    void Erase();
 	    void Paste(ImVec2 pos);
+	    void Clear();
 
 	    Node* FindNode(ImPinPtr ptr);
 	    Pin&  FindPin(ImPinPtr ptr);
 
+	    std::string GetValue(ImPinPtr ptr);
+
+	    void OpenShader(ShaderAsset* asset) { Shader_ = asset; }
+
 	    static void Register(const std::filesystem::path& path, ConstructorPtr constructor);
 
-	    // History Functionality
-	    void        PushState();
-	    void        PopState();
-	    GraphState& GetState() { return State_; }
-
 	private:
+	    // TODO: Make bitfield
         bool GrabFocus_;
-
-		GraphState             State_;
-	    std::stack<GraphState> History_;
-
+	    ShaderAsset* Shader_;
 	    ImVec2 ContextMenuPosition_;
 	    
 
@@ -226,4 +297,4 @@ namespace OpenShaderDesigner
 	};
 }
 
-#endif //SHADERGRAPH_H
+#endif // OSD_SHADERGRAPH_H

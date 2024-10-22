@@ -1,6 +1,17 @@
+// =====================================================================================================================
+// Copyright 2024 Medusa Slockbower
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
 //
-// Created by Maddie on 9/14/2024.
+// 	http://www.apache.org/licenses/LICENSE-2.0
 //
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+// =====================================================================================================================
 
 #include <Core/Engine.h>
 #include <Editor/EditorSystem.h>
@@ -16,23 +27,28 @@
 #include <rapidjson/ostreamwrapper.h>
 #include <rapidjson/prettywriter.h>
 
-OpenShaderDesigner::Project::Project()
-    : ProjectFile_(NULL)
+using namespace OpenShaderDesigner;
+
+RegisterAsset("##/Project", Project, ".sgp");
+
+Project::Project()
+    : Asset("")
+    , ProjectFile_(NULL)
+{
+}
+
+Project::~Project()
 {
     
 }
 
-OpenShaderDesigner::Project::~Project()
-{
-    
-}
-
-void OpenShaderDesigner::Project::DrawMenuBar()
+void Project::DrawMenuBar()
 {
     FileManager* filesystem = EditorSystem::Get<FileManager>();
     
     if(ImGui::BeginMenu("File"))
     {
+        Console::Log(Console::Message, "BeginMenu File");
         if(ImGui::MenuItem("\uecc9 New..."))
         {
             Console::Log(Console::Message, "Creating Project");
@@ -112,32 +128,30 @@ void OpenShaderDesigner::Project::DrawMenuBar()
                     Console::Log(Console::Message, "Closing Old Project");
                     filesystem->CloseDirectory(filesystem->Parent(ProjectFile_));
                     
-                    Console::Log(Console::Message, "Closing New Project");
+                    Console::Log(Console::Message, "Opening New Project");
                     FileManager::Path   res = FileManager::Path(project.result().front());
                     FileManager::FileID root = filesystem->LoadDirectory(res.parent_path());
                     filesystem->CurrentDirectory(root);
                     
-                    Console::Log(Console::Message, "Retrieving Project File");
+                    Console::Log(Console::Message, "Retrieving Project File {}", res.string());
                     ProjectFile_ = filesystem->Get(res);
+
+                    Console::Log(Console::Message, "Loaded Project");
                 }
             }
         }
 
         ImGui::EndMenu();
+        Console::Log(Console::Message, "EndMenu File");
     }
 }
 
-void OpenShaderDesigner::Project::Open()
+void Project::Open()
 {
     
 }
 
-void OpenShaderDesigner::Project::Load(const FileManager::Path& path)
-{
-    Console::Log(Console::Message, "Loading Project {}", path.string());
-}
-
-void OpenShaderDesigner::Project::Save(const FileManager::Path& path)
+void Project::Save(const FileManager::Path& path)
 {
     // Setup
     rapidjson::Document document;
@@ -156,14 +170,30 @@ void OpenShaderDesigner::Project::Save(const FileManager::Path& path)
     Console::Log(Console::Alert, "Saved Project {} to {}", path.filename().string(), path.parent_path().string());
 }
 
-void OpenShaderDesigner::Project::Create(const FileManager::Path &path)
+FileManager::Asset* Project::Load(const FileManager::Path& path)
 {
-    Console::Log(Console::Message, "Setting Up New Project");
-    Reset();
-    Save(path);
+    Project* project = EditorSystem::GetMainMenuBar<Project>();
+    Console::Log(Console::Message, "Loading Project {}", path.string());
+    return project;
 }
 
-void OpenShaderDesigner::Project::Reset()
+FileManager::Asset* Project::Import(const FileManager::Path &src,
+    const FileManager::Path &dst)
+{
+    return nullptr;
+}
+
+FileManager::Asset* Project::Create(const FileManager::Path &path)
+{
+    Project* project = EditorSystem::GetMainMenuBar<Project>();
+    Console::Log(Console::Message, "Loading Project {}", path.string());
+
+    project->Reset();
+
+    return project;
+}
+
+void Project::Reset()
 {
     
 }

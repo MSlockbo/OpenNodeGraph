@@ -29,6 +29,11 @@ public:
     static void Start(const Window::Configuration& config);
     static void Stop();
 
+    static inline const char* VersionString() { return PROJECT_VERSION; }
+    static inline int VersionMajor() { return PROJECT_VERSION_MAJOR; }
+    static inline int VersionMinor() { return PROJECT_VERSION_MINOR; }
+    static inline int VersionPatch() { return PROJECT_VERSION_PATCH; }
+
     static Window& GetMainWindow() { return *MainWindow; }
 private:
     static void Initialize();

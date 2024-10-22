@@ -13,13 +13,23 @@
 // limitations under the License.
 // =====================================================================================================================
 
-#include <Graph/Nodes/Math.h>
-#include <imgui-extras/imgui_extras.h>
+#include <Graph/Nodes/Maths.h>
 
 #include <queue>
 
 using namespace OpenShaderDesigner;
 using namespace OpenShaderDesigner::Nodes::Math;
+
+RegisterNode("Math/Constants/Integer", Integer);
+RegisterNode("Math/Constants/Unsigned Integer", UnsignedInteger);
+RegisterNode("Math/Constants/Scalar", Scalar);
+RegisterNode("Math/Constants/Vector", Vector);
+RegisterNode("Math/Operators/Add", Add);
+RegisterNode("Math/Operators/Subtract", Subtract);
+RegisterNode("Math/Operators/Multiply", Multiply);
+RegisterNode("Math/Operators/Divide", Divide);
+RegisterNode("Math/Utilities/Make Vector", MakeVector);
+RegisterNode("Math/Utilities/Break Vector", BreakVector);
 
 // =====================================================================================================================
 // Constants
@@ -31,6 +41,7 @@ using namespace OpenShaderDesigner::Nodes::Math;
 Integer::Integer(ShaderGraph& graph, ImVec2 pos)
     : Node(graph, pos)
 {
+    Info.Alias          = "Integer";
     Header.Title        = HeaderMarker + "Integer";
     Header.Color        = HeaderColor;
     Header.HoveredColor = HeaderHoveredColor;
@@ -49,12 +60,21 @@ void Integer::Inspect()
 
 }
 
+std::string Integer::GetCode() const
+{
+    return std::format("const int {} = {};",
+        Graph.GetValue(IO.Outputs[0].Ptr)
+    ,   IO.Outputs[0].Value.get<int>()
+    );
+}
+
 
 // Unsigned Integer ----------------------------------------------------------------------------------------------------
 
 UnsignedInteger::UnsignedInteger(ShaderGraph& graph, ImVec2 pos)
     : Node(graph, pos)
 {
+    Info.Alias          = "UnsignedInteger";
     Header.Title        = HeaderMarker + "Unsigned Integer";
     Header.Color        = HeaderColor;
     Header.HoveredColor = HeaderHoveredColor;
@@ -73,12 +93,21 @@ void UnsignedInteger::Inspect()
 
 }
 
+std::string UnsignedInteger::GetCode() const
+{
+    return std::format("const unsigned int {} = {};",
+        Graph.GetValue(IO.Outputs[0].Ptr)
+    ,   IO.Outputs[0].Value.get<unsigned int>()
+    );
+}
+
 
 // Scalar --------------------------------------------------------------------------------------------------------------
 
 Scalar::Scalar(ShaderGraph& graph, ImVec2 pos)
 	: Node(graph, pos)
 {
+    Info.Alias          = "Scalar";
     Header.Title        = HeaderMarker + "Scalar";
     Header.Color        = HeaderColor;
     Header.HoveredColor = HeaderHoveredColor;
@@ -97,12 +126,21 @@ void Scalar::Inspect()
 
 }
 
+std::string Scalar::GetCode() const
+{
+    return std::format("const float {} = {};",
+        Graph.GetValue(IO.Outputs[0].Ptr)
+    ,   IO.Outputs[0].Value.get<float>()
+    );
+}
+
 
 // Vector --------------------------------------------------------------------------------------------------------------
 
 Vector::Vector(ShaderGraph &graph, ImVec2 pos)
 	: Node(graph, pos)
 {
+    Info.Alias          = "Vector";
     Header.Title        = HeaderMarker + "Vector";
     Header.Color        = HeaderColor;
     Header.HoveredColor = HeaderHoveredColor;
@@ -121,6 +159,15 @@ Node* Vector::Copy(ShaderGraph &graph) const
 void Vector::Inspect()
 {
 
+}
+
+std::string Vector::GetCode() const
+{
+    const glm::vec3& val = IO.Outputs[0].Value.get<glm::vec3>();
+    return std::format("const int {} = vec3({},{},{});",
+        Graph.GetValue(IO.Outputs[0].Ptr)
+    ,   val.x, val.y, val.z
+    );
 }
 
 
@@ -193,6 +240,7 @@ void MathOp::ValidateConnections()
 Add::Add(ShaderGraph& graph, ImVec2 pos)
 	: MathOp(graph, pos)
 {
+    Info.Alias          = "Add";
     Header.Title        = HeaderMarker + "Add";
     Header.Color        = HeaderColor;
     Header.HoveredColor = HeaderHoveredColor;
@@ -215,12 +263,24 @@ void Add::Inspect()
 
 }
 
+std::string Add::GetCode() const
+{
+    // TODO: Support more than 2 inputs
+    return std::format("const {} {} = {} + {};",
+        Pin::TypeKeywords[IO.Outputs[0].Type]
+    ,   Graph.GetValue(IO.Outputs[0].Ptr)
+    ,   Graph.GetValue(IO.Inputs[0].Ptr)
+    ,   Graph.GetValue(IO.Inputs[1].Ptr)
+    );
+}
+
 
 // Subtract ------------------------------------------------------------------------------------------------------------
 
 Subtract::Subtract(ShaderGraph& graph, ImVec2 pos)
     : MathOp(graph, pos)
 {
+    Info.Alias          = "Subtract";
     Header.Title        = HeaderMarker + "Subtract";
     Header.Color        = HeaderColor;
     Header.HoveredColor = HeaderHoveredColor;
@@ -243,12 +303,24 @@ void Subtract::Inspect()
 
 }
 
+std::string Subtract::GetCode() const
+{
+    // TODO: Support more than 2 inputs
+    return std::format("const {} {} = {} - {};",
+        Pin::TypeKeywords[IO.Outputs[0].Type]
+    ,   Graph.GetValue(IO.Outputs[0].Ptr)
+    ,   Graph.GetValue(IO.Inputs[0].Ptr)
+    ,   Graph.GetValue(IO.Inputs[1].Ptr)
+    );
+}
+
 
 // Multiply ------------------------------------------------------------------------------------------------------------
 
 Multiply::Multiply(ShaderGraph& graph, ImVec2 pos)
     : MathOp(graph, pos)
 {
+    Info.Alias          = "Multiply";
     Header.Title        = HeaderMarker + "Multiply";
     Header.Color        = HeaderColor;
     Header.HoveredColor = HeaderHoveredColor;
@@ -273,12 +345,24 @@ void Multiply::Inspect()
 
 }
 
+std::string Multiply::GetCode() const
+{
+    // TODO: Support more than 2 inputs
+    return std::format("const {} {} = {} * {};",
+        Pin::TypeKeywords[IO.Outputs[0].Type]
+    ,   Graph.GetValue(IO.Outputs[0].Ptr)
+    ,   Graph.GetValue(IO.Inputs[0].Ptr)
+    ,   Graph.GetValue(IO.Inputs[1].Ptr)
+    );
+}
+
 
 // Divide --------------------------------------------------------------------------------------------------------------
 
 Divide::Divide(ShaderGraph& graph, ImVec2 pos)
     : MathOp(graph, pos)
 {
+    Info.Alias          = "Divide";
     Header.Title        = HeaderMarker + "Divide";
     Header.Color        = HeaderColor;
     Header.HoveredColor = HeaderHoveredColor;
@@ -303,6 +387,17 @@ void Divide::Inspect()
 
 }
 
+std::string Divide::GetCode() const
+{
+    // TODO: Support more than 2 inputs
+    return std::format("const {} {} = {} / {};",
+        Pin::TypeKeywords[IO.Outputs[0].Type]
+    ,   Graph.GetValue(IO.Outputs[0].Ptr)
+    ,   Graph.GetValue(IO.Inputs[0].Ptr)
+    ,   Graph.GetValue(IO.Inputs[1].Ptr)
+    );
+}
+
 
 
 // =====================================================================================================================
@@ -315,6 +410,7 @@ void Divide::Inspect()
 MakeVector::MakeVector(ShaderGraph& graph, ImVec2 pos)
     : Node(graph, pos)
 {
+    Info.Alias          = "MakeVector";
     Header.Title        = HeaderMarker + "Make Vector";
     Header.Color        = HeaderColor;
     Header.HoveredColor = HeaderHoveredColor;
@@ -337,13 +433,25 @@ void MakeVector::Inspect()
 
 }
 
+std::string MakeVector::GetCode() const
+{
+    // TODO: Support more than 2 inputs
+    return std::format("const vec3 {} = vec3({}, {}, {});",
+        Graph.GetValue(IO.Outputs[0].Ptr)
+    ,   Graph.GetValue(IO.Inputs[0].Ptr)
+    ,   Graph.GetValue(IO.Inputs[1].Ptr)
+    ,   Graph.GetValue(IO.Inputs[2].Ptr)
+    );
+}
+
 
 // Break Vector ---------------------------------------------------------------------------------------------------------
 
 BreakVector::BreakVector(ShaderGraph& graph, ImVec2 pos)
     : Node(graph, pos)
 {
-    Header.Title        = HeaderMarker + "Make Vector";
+    Info.Alias          = "BreakVector";
+    Header.Title        = HeaderMarker + "Break Vector";
     Header.Color        = HeaderColor;
     Header.HoveredColor = HeaderHoveredColor;
     Header.ActiveColor  = HeaderActiveColor;
@@ -363,4 +471,22 @@ Node* BreakVector::Copy(ShaderGraph& graph) const
 void BreakVector::Inspect()
 {
 
+}
+
+std::string BreakVector::GetCode() const
+{
+    // TODO: Support more than 2 inputs
+    return std::format(
+        "const float {} = {}.x;\n"
+        "const float {} = {}.y;\n"
+        "const float {} = {}.z;"
+    ,   Graph.GetValue(IO.Outputs[0].Ptr)
+    ,   Graph.GetValue(IO.Inputs[0].Ptr)
+    
+    ,   Graph.GetValue(IO.Outputs[1].Ptr)
+    ,   Graph.GetValue(IO.Inputs[0].Ptr)
+    
+    ,   Graph.GetValue(IO.Outputs[2].Ptr)
+    ,   Graph.GetValue(IO.Inputs[0].Ptr)
+    );
 }

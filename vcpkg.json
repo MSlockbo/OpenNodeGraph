@@ -36,7 +36,13 @@
     "name" : "rapidjson",
     "version>=" : "2023-07-17#1"
   }, {
+    "name" : "assimp",
+    "version>=" : "5.4.3"
+  }, {
+    "name" : "stb",
+    "version>=" : "2024-07-29#1"
+  }, {
     "name" : "sdl2",
-    "version>=" : "2.30.6"
+    "version>=" : "2.30.8"
   } ]
 }

@@ -1,6 +1,17 @@
+// =====================================================================================================================
+// Copyright 2024 Medusa Slockbower
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
 //
-// Created by Maddie on 9/14/2024.
+// 	http://www.apache.org/licenses/LICENSE-2.0
 //
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+// =====================================================================================================================
 
 #ifndef PROJECT_H
 #define PROJECT_H
@@ -11,7 +22,7 @@
 namespace OpenShaderDesigner
 {
     
-class Project : public MainMenuBar, public Asset
+class Project : public MainMenuBar, public FileManager::Asset
 {
 public:
     Project();
@@ -20,9 +31,11 @@ public:
     void DrawMenuBar() override;
 
     void Open() override;
-    void Load(const FileManager::Path& path) override;
     void Save(const FileManager::Path& path) override;
-    void Create(const FileManager::Path& path);
+
+    static Asset* Create(const FileManager::Path& path);
+    static Asset* Load(const FileManager::Path& path);
+    static Asset* Import(const FileManager::Path& src, const FileManager::Path& dst);
 
 private:
     void Reset();

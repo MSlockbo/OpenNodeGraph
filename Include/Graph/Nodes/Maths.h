@@ -13,24 +13,24 @@
 // limitations under the License.
 // =====================================================================================================================
 
-#ifndef MATH_H
-#define MATH_H
+#ifndef OSD_MATH_H
+#define OSD_MATH_H
 
 #include <glm/vec4.hpp>
 #include <Graph/ShaderGraph.h>
-#include <open-cpp-utils/any.h>
 
 namespace ocu = open_cpp_utils;
 
 namespace OpenShaderDesigner::Nodes::Math
 {
+    
 // Header Colors =======================================================================================================
 
 inline static constexpr ImColor HeaderColor        = ImColor(0xA7, 0x62, 0x53);
 inline static constexpr ImColor HeaderHoveredColor = ImColor(0xC5, 0x79, 0x67);
 inline static constexpr ImColor HeaderActiveColor  = ImColor(0x82, 0x4C, 0x40);
 
-inline static const std::string HeaderMarker     = "\uF3B9 ";
+inline static const std::string HeaderMarker       = "\uF3B9 ";
 
 
 
@@ -43,16 +43,14 @@ inline static const std::string HeaderMarker     = "\uF3B9 ";
 
 struct Integer : public Node
 {
-    using ValueType = ocu::any<int, unsigned int, float, glm::vec4>;
-
     Integer(ShaderGraph& graph, ImVec2 pos);
-    virtual ~Integer() = default;
+    ~Integer() override = default;
 
     [[nodiscard]] Node* Copy(ShaderGraph& graph) const override;
     void Inspect() override;
-};
 
-RegisterNode("Math/Constants/Integer", Integer);
+    std::string GetCode() const override;
+};
 
 
 // Unsigned Integer ----------------------------------------------------------------------------------------------------
@@ -62,13 +60,13 @@ struct UnsignedInteger : public Node
     using ValueType = ocu::any<int, unsigned int, float, glm::vec4>;
 
     UnsignedInteger(ShaderGraph& graph, ImVec2 pos);
-    virtual ~UnsignedInteger() = default;
+    ~UnsignedInteger() override = default;
 
     [[nodiscard]] Node* Copy(ShaderGraph& graph) const override;
     void Inspect() override;
-};
 
-RegisterNode("Math/Constants/Unsigned Integer", UnsignedInteger);
+    std::string GetCode() const override;
+};
 
 
 // Scalar --------------------------------------------------------------------------------------------------------------
@@ -78,13 +76,13 @@ struct Scalar : public Node
     using ValueType = ocu::any<int, unsigned int, float, glm::vec4>;
 
     Scalar(ShaderGraph& graph, ImVec2 pos);
-    virtual ~Scalar() = default;
+    ~Scalar() override = default;
 
     [[nodiscard]] Node* Copy(ShaderGraph& graph) const override;
     void Inspect() override;
-};
 
-RegisterNode("Math/Constants/Scalar", Scalar);
+    std::string GetCode() const override;
+};
 
 
 // Vector --------------------------------------------------------------------------------------------------------------
@@ -94,13 +92,13 @@ struct Vector : public Node
     using ValueType = ocu::any<int, unsigned int, float, glm::vec4>;
 
     Vector(ShaderGraph& graph, ImVec2 pos);
-    virtual ~Vector() = default;
+    ~Vector() override = default;
 
     [[nodiscard]] Node* Copy(ShaderGraph& graph) const override;
     void Inspect() override;
-};
 
-RegisterNode("Math/Constants/Vector", Vector);
+    std::string GetCode() const override;
+};
 
 
 
@@ -114,7 +112,7 @@ RegisterNode("Math/Constants/Vector", Vector);
 struct MathOp : public Node
 {
     MathOp(ShaderGraph& graph, ImVec2 pos);
-    virtual ~MathOp() = default;
+    ~MathOp() override = default;
 
     virtual bool CheckConnection(Pin *, Pin *) override;
     virtual void ValidateConnections() override;
@@ -128,13 +126,13 @@ struct MathOp : public Node
 struct Add : public MathOp
 {
     Add(ShaderGraph& graph, ImVec2 pos);
-    virtual ~Add() = default;
+    ~Add() override = default;
 
     [[nodiscard]] Node* Copy(ShaderGraph& graph) const override;
     void Inspect() override;
-};
 
-RegisterNode("Math/Operators/Add", Add);
+    std::string GetCode() const override;
+};
 
 
 // Subtract ------------------------------------------------------------------------------------------------------------
@@ -142,27 +140,26 @@ RegisterNode("Math/Operators/Add", Add);
 struct Subtract : public MathOp
 {
     Subtract(ShaderGraph& graph, ImVec2 pos);
-    virtual ~Subtract() = default;
+    ~Subtract() override = default;
 
     [[nodiscard]] Node* Copy(ShaderGraph& graph) const override;
     void Inspect() override;
+
+    std::string GetCode() const override;
 };
-
-RegisterNode("Math/Operators/Subtract", Subtract);
-
 
 // Multiply ------------------------------------------------------------------------------------------------------------
 
 struct Multiply : public MathOp
 {
     Multiply(ShaderGraph& graph, ImVec2 pos);
-    virtual ~Multiply() = default;
+    ~Multiply() override = default;
 
     [[nodiscard]] Node* Copy(ShaderGraph& graph) const override;
     void Inspect() override;
-};
 
-RegisterNode("Math/Operators/Multiply", Multiply);
+    std::string GetCode() const override;
+};
 
 
 // Divide --------------------------------------------------------------------------------------------------------------
@@ -170,16 +167,15 @@ RegisterNode("Math/Operators/Multiply", Multiply);
 struct Divide : public MathOp
 {
     Divide(ShaderGraph& graph, ImVec2 pos);
-    virtual ~Divide() = default;
+    ~Divide() override = default;
 
     [[nodiscard]] Node* Copy(ShaderGraph& graph) const override;
     void Inspect() override;
+
+    std::string GetCode() const override;
 };
 
-RegisterNode("Math/Operators/Divide", Divide);
-
-
-
+    
 // =====================================================================================================================
 // Utilities
 // =====================================================================================================================
@@ -190,13 +186,13 @@ RegisterNode("Math/Operators/Divide", Divide);
 struct MakeVector : public Node
 {
     MakeVector(ShaderGraph& graph, ImVec2 pos);
-    virtual ~MakeVector() = default;
+    ~MakeVector() override = default;
 
     [[nodiscard]] Node* Copy(ShaderGraph& graph) const override;
     void Inspect() override;
-};
 
-    RegisterNode("Math/Utilities/Make Vector", MakeVector);
+    std::string GetCode() const override;
+};
 
 
 // Break Vector ---------------------------------------------------------------------------------------------------------
@@ -204,14 +200,14 @@ struct MakeVector : public Node
 struct BreakVector : public Node
 {
     BreakVector(ShaderGraph& graph, ImVec2 pos);
-    virtual ~BreakVector() = default;
+    ~BreakVector() override = default;
 
     [[nodiscard]] Node* Copy(ShaderGraph& graph) const override;
     void Inspect() override;
-};
 
-RegisterNode("Math/Utilities/Break Vector", BreakVector);
+    std::string GetCode() const override;
+};
 
 }
 
-#endif //MATH_H
+#endif // OPEN_SHADER_DESIGNER_MATH_H

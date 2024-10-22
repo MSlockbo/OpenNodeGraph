@@ -20,15 +20,20 @@
 #include <Editor/ConsoleWindow.h>
 #include <Editor/Profiler.h>
 
+#include <Renderer/Renderer.h>
+
 #include <FileSystem/FileManager.h>
 
 #include <Graph/ShaderGraph.h>
 
 #include "Project/Project.h"
 
-void OpenShaderDesigner::Engine::Start(const Window::Configuration& config)
+using namespace OpenShaderDesigner;
+
+void Engine::Start(const Window::Configuration& config)
 {
-    Console::Log(Console::Severity::Alert, "Starting {}", config.Application.Title);
+    std::string version = VersionString();
+    Console::Log(Console::Severity::Alert, "Starting {} ({})", config.Application.Title, version);
 
     Console::Log(Console::Message, "Creating Main Window");
     MainWindow = new Window(config);
@@ -44,12 +49,12 @@ void OpenShaderDesigner::Engine::Start(const Window::Configuration& config)
     Shutdown();
 }
 
-void OpenShaderDesigner::Engine::Stop()
+void Engine::Stop()
 {
     MainWindow->Close();
 }
 
-void OpenShaderDesigner::Engine::Initialize()
+void Engine::Initialize()
 {
     Console::Log(Console::Message, "Initializing Engine");
 
@@ -69,16 +74,23 @@ void OpenShaderDesigner::Engine::Initialize()
     EditorSystem::Open<Inspector>();
     EditorSystem::Open<ShaderGraph>();
 
+    Console::Log(Console::Message, "Opening Renderer");
+    EditorSystem::Open<Renderer>();
+
     Console::Log(Console::Message, "Setting up Project");
     EditorSystem::SetMainMenuBar<Project>();
+
+    
+    FileManager* filesystem = EditorSystem::Get<FileManager>();
+    filesystem->LoadDirectory("./Test/");
 }
 
-void OpenShaderDesigner::Engine::Shutdown()
+void Engine::Shutdown()
 {
     EditorSystem::Shutdown();
 }
 
-void OpenShaderDesigner::Engine::Update()
+void Engine::Update()
 {
     _Delta = Frame.Poll();
     Frame.Reset();

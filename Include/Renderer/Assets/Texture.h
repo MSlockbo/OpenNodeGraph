@@ -13,34 +13,37 @@
 // limitations under the License.
 // =====================================================================================================================
 
-#ifndef ASSET_H
-#define ASSET_H
+#ifndef TEXTURE_H
+#define TEXTURE_H
 
-#include <open-cpp-utils/filesystem.h>
+#include <glw/texture.h>
 
-namespace ocu = open_cpp_utils;
+#include "FileSystem/FileManager.h"
 
 namespace OpenShaderDesigner
 {
 
-class Asset
+class Texture : public FileManager::Asset
 {
 public:
-    Asset() : Dirty_(false) { }
+    using HandleType = glw::texture<glw::texture2D, glw::rgba8>;
     
-    bool Dirty() const { return Dirty_; }
+    Texture(const FileManager::Path& path);
+    Texture(const FileManager::Path& src, const FileManager::Path& dst);
+    ~Texture() override;
 
-    virtual void Open() = 0;
-    virtual void Load(const std::filesystem::path& path) = 0;
-    virtual void Save(const std::filesystem::path& path) { Dirty_ = false; };
+    void Open() override;
 
-protected:
-    void MakeDirty() { Dirty_ = true; }
+    static Asset* Create(const FileManager::Path& path);
+    static Asset* Load(const FileManager::Path& path);
+    static Asset* Import(const FileManager::Path& src, const FileManager::Path& dst);
 
+    HandleType* operator->() { return Handle_; }
+    const HandleType* operator->() const { return Handle_; }
 private:
-    bool Dirty_;
+    HandleType* Handle_;
 };
     
 }
 
-#endif //ASSET_H
+#endif //TEXTURE_H

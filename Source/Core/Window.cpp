@@ -28,7 +28,7 @@ Window::Window(const Configuration& config)
     flags |= Config_.Video.Fullscreen == FullscreenMode::WINDOWED ? SDL_WINDOW_RESIZABLE : 0;
 
     SDL_Init(SDL_INIT_EVERYTHING & ~SDL_INIT_AUDIO);
-
+    
 #ifdef NDEBUG
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_FORWARD_COMPATIBLE_FLAG);
 #else
@@ -49,12 +49,11 @@ Window::Window(const Configuration& config)
         SDL_GL_SetAttribute(SDL_GL_FLOATBUFFERS, SDL_TRUE);
     }
 
-    if(Config_.Video.Multisamples())
+    if(Config_.Video.Multisamples() && Config_.Video.Multisamples > 1)
     {
         SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, SDL_TRUE);
         SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, Config_.Video.Multisamples);
     }
-
 
     if((Handle_ = SDL_CreateWindow(
         Config_.Application.Title.c_str(),

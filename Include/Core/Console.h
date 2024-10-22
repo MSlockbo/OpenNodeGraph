@@ -18,6 +18,7 @@
 #define CONSOLE_H
 
 #include <imgui-docking/imgui.h>
+#include <filesystem>
 #include <format>
 #include <iostream>
 #include <sstream>
@@ -170,10 +171,11 @@ void Console::Log(
 #pragma warning(disable:4996)
 #endif
 	auto tm = *std::localtime(&t);
+    const auto rel = std::filesystem::relative(file, PROJECT_DIR).string();
 
 	std::lock_guard guard(Lock_);
 	LogEntry entry{
-		std::vformat(fmt.get(), std::make_format_args(vargs...)), severity, file, std::format(
+		std::vformat(fmt.get(), std::make_format_args(vargs...)), severity, rel, std::format(
 			"{:0>2}:{:0>2}:{:0>2}", tm.tm_hour, tm.tm_min, tm.tm_sec),
 		ThreadID(), line
 	};
