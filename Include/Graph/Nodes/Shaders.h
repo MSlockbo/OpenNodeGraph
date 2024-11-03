@@ -1,16 +1,19 @@
 // =====================================================================================================================
-// Copyright 2024 Medusa Slockbower
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
+//  OpenShaderDesigner, an open source software utility to create materials and shaders.
+//  Copyright (C) 2024  Medusa Slockbower
 //
-// 	http://www.apache.org/licenses/LICENSE-2.0
+//  This program is free software: you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License as published by
+//  the Free Software Foundation, either version 3 of the License, or
+//  (at your option) any later version.
 //
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+//  This program is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  GNU General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public License
+//  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 // =====================================================================================================================
 
 #ifndef OSD_SHADERS_H
@@ -18,6 +21,8 @@
 
 #include <glm/vec4.hpp>
 #include <Graph/ShaderGraph.h>
+
+#include "glw/shader.h"
 
 namespace OpenShaderDesigner::Nodes::Shaders
 {
@@ -35,13 +40,34 @@ inline static const std::string HeaderMarker = "\uF42E ";
 // =====================================================================================================================
 
 
+// Function Inputs -----------------------------------------------------------------------------------------------------
+
+class FunctionInputs : public Node
+{
+public:
+    FunctionInputs(ShaderGraph& graph, ImVec2 pos);
+    ~FunctionInputs() override = default;
+
+    [[nodiscard]] Node* Copy(ShaderGraph& graph) const override;
+    void Inspect() override;
+
+    std::string GetCode() const override;
+};
+
+
 // Function ------------------------------------------------------------------------------------------------------------
 
+/**
+ * \brief Functions are a Shader function that takes inputs and outputs.
+ *
+ * Functions are not analagous to Material Functions in UnrealEngine. Functions work strictly on their inputs
+ * and outputs without a specified domain.
+ */
 class Function : public Node, public ShaderAsset
 {
 public:
     Function(const FileManager::Path& path, ShaderGraph& graph);
-    ~Function() override = default;
+    ~Function() override;
 
     [[nodiscard]] Node* Copy(ShaderGraph& graph) const override;
     void Inspect() override;
@@ -54,9 +80,74 @@ public:
     static Asset* Import(const FileManager::Path& src, const FileManager::Path& dst);
 
     std::string GetCode() const override;
+    void View(HDRTexture::HandleType* Target) override;
 
 private:
-    NodeId ID_;
+    using InputMap = ocu::map<int, glw::enum_t>;
+
+    enum FuncInput_ : glw::enum_t
+    {
+		FuncInput_Custom = 0
+    	
+    ,   FuncInput_X
+    ,   FuncInput_Y
+    ,   FuncInput_XY
+
+    ,   FuncInput_U
+    ,   FuncInput_V
+    ,   FuncInput_UV
+
+    ,   FuncInput_Time
+    ,   FuncInput_DeltaTime
+    };
+
+    inline static const std::vector<glw::enum_t> InputTypes[] = {
+        /* PinType_UInt */   { FuncInput_Custom, FuncInput_X, FuncInput_Y }
+    ,   /* PinType_Int */    { FuncInput_Custom, FuncInput_X, FuncInput_Y }
+    ,	/* PinType_Float */  { FuncInput_Custom, FuncInput_X, FuncInput_Y, FuncInput_U, FuncInput_V, FuncInput_Time, FuncInput_DeltaTime }
+    ,	/* PinType_Vector */ { FuncInput_Custom, FuncInput_XY, FuncInput_UV }
+    };
+
+    inline static const std::string InputNames[] = {
+    	"Custom..."
+    	
+    ,   "X"
+    ,   "Y"
+    ,   "XY"
+
+    ,   "U"
+    ,   "V"
+    ,   "UV"
+
+    ,   "Time"
+    ,   "Delta Time"
+    };
+
+    inline static const std::string InputVars[] = {
+    	""
+    ,   "x"
+    ,   "y"
+    ,   "xy"
+        
+    ,   "u"
+    ,   "v"
+    ,   "uv"
+
+    ,	"t"
+    ,	"dt"
+    };
+    
+    void DrawImage_(HDRTexture::HandleType* Target);
+    void DrawInputs_();
+    void Render_(HDRTexture::HandleType* Target);
+    void CompileDisplayShader_();
+
+    glw::shader*     Shader_;
+    std::string DisplayCode_;
+    FunctionInputs   Inputs_;
+    NodeId    ID_, InputsID_;
+    InputMap    InputValues_;
+    uint32_t     DisplayVar_;
 };
 
     

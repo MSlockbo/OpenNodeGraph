@@ -1,16 +1,19 @@
 // =====================================================================================================================
-// Copyright 2024 Medusa Slockbower
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
+//  open-cpp-utils, an open-source cpp library with data structures that extend the STL.
+//  Copyright (C) 2024  Medusa Slockbower
 //
-// 	http://www.apache.org/licenses/LICENSE-2.0
+//  This program is free software: you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License as published by
+//  the Free Software Foundation, either version 3 of the License, or
+//  (at your option) any later version.
 //
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+//  This program is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  GNU General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public License
+//  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 // =====================================================================================================================
 
 #ifndef OPEN_CPP_UTILS_MAP_H
@@ -23,7 +26,7 @@
 namespace open_cpp_utils
 {
 
-template<typename Key, typename Value, class Alloc = std::allocator<std::pair<Key, Value>>>
+template<typename Key, typename Value, class Alloc = std::allocator<struct map_pair>>
 class map
 {
 // Typedefs ============================================================================================================
@@ -31,7 +34,7 @@ class map
 public:
     using key_type   = Key;
     using value_type = Value;
-    using pair_type  = std::pair<key_type, value_type>;
+    using pair_type  = struct map_pair;
 
     using key_pointer         = key_type*;
     using const_key_pointer   = const key_type*;
@@ -44,10 +47,42 @@ public:
     using const_value_reference = const value_type&;
     
     
-    struct hash { size_t operator()(const pair_type& pair) const { return std::hash<key_type>{}(pair.first); } };
+    struct hash { size_t operator()(const pair_type& pair) const { return std::hash<key_type>{}(pair.key); } };
     
     using table_type = set<pair_type, hash, Alloc>;
     using iterator = typename table_type::iterator;
+    using const_iterator = typename table_type::const_iterator;
+
+    struct map_pair
+    {
+        key_type   key;
+        value_type value;
+
+        bool operator==(const map_pair& other) const { return key == other.key; }
+
+        map_pair() : key(), value() { }
+        map_pair(const_key_reference k) : key(k), value() { }
+        map_pair(const_key_reference k, const_value_reference v) : key(k), value(v) { }
+        map_pair(const map_pair& v) : key(v.key), value(v.value) { }
+        map_pair(map_pair&& v) noexcept : key(std::move(v.key)), value(std::move(v.value)) { }
+        ~map_pair() = default;
+
+        map_pair& operator=(const map_pair& v)
+        {
+            key = v.key;
+            value = v.value;
+            return *this;
+        }
+        
+        map_pair& operator=(map_pair&& v) noexcept
+        {
+            if(&v == this) return *this;
+            
+            key = std::move(v.key);
+            value = std::move(v.value);
+            return *this;
+        }
+    };
 
 
 // Functions ===========================================================================================================
@@ -65,17 +100,28 @@ public:
 
     void insert(const_key_reference key, const_value_reference value);
     void erase(const_key_reference key);
+    
     value_reference& operator[](const_key_reference key);
-    iterator find() { return table_->find(); }
+    
+    const_value_reference& get(const_key_reference key, const_value_reference& def = value_type()) const;
+    
+    iterator find(const_key_reference key) { return table_.find({ key, value_type() }); }
+    const_iterator find(const_key_reference key) const { return table_.find({ key, value_type() }); }
+    
     bool contains(const_key_reference key) { return table_.contains({ key, value_type() }); }
 
     iterator begin() { return table_.begin(); }
     iterator end()   { return table_.end(); }
+    
+    const_iterator begin() const { return table_.begin(); }
+    const_iterator end()   const { return table_.end(); }
+
+    size_t size() const { return table_.size(); }
 
 // Variables ===========================================================================================================
 
 private:
-    set<pair_type, hash, Alloc> table_;
+    table_type table_;
 };
 
 template<typename Key, typename Value, class Alloc>
@@ -97,11 +143,21 @@ typename map<Key, Value, Alloc>::value_reference map<Key, Value, Alloc>::operato
     iterator it = table_.find({ key, value_type() });
     if(it == table_.end())
     {
-        table_.insert({ key, value_type() });
+        table_.insert(key);
         it = table_.find({ key, value_type() });
     }
-    return it->second;
+    return it->value;
 }
+
+template<typename Key, typename Value, class Alloc>
+typename map<Key, Value, Alloc>::const_value_reference map<Key, Value, Alloc>::get(const_key_reference key,
+    const_value_reference def) const
+{
+    auto it = find(key);
+    if(it == end()) return def;
+    return it->value;
+}
+    
 }
 
 #endif // OPEN_CPP_UTILS_MAP_H

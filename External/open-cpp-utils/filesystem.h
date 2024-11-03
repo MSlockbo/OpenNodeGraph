@@ -1,16 +1,19 @@
 // =====================================================================================================================
-// Copyright 2024 Medusa Slockbower
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
+//  open-cpp-utils, an open-source cpp library with data structures that extend the STL.
+//  Copyright (C) 2024  Medusa Slockbower
 //
-// 	http://www.apache.org/licenses/LICENSE-2.0
+//  This program is free software: you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License as published by
+//  the Free Software Foundation, either version 3 of the License, or
+//  (at your option) any later version.
 //
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+//  This program is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  GNU General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public License
+//  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 // =====================================================================================================================
 
 #ifndef OPEN_CPP_UTILS_FILESYSTEM_H
@@ -104,7 +107,8 @@ private:
     { return std::mismatch(path.begin(), path.end(), base.begin(), base.end()).second == base.end(); }
     
     file_id find_(path_t path) const;
-    int get_index_(file_id parent, const path_t& path);
+
+file_id get_index_(file_id parent, const path_t &path);
     
 
 // Constructors & Destructor -------------------------------------------------------------------------------------------
@@ -126,6 +130,7 @@ public:
 
     void rename(file_id id, const std::string& name);
 
+    void clear() { tree_.clear(); }
     void erase(file_id id);
     void erase(const path_t& path);
 
@@ -187,27 +192,27 @@ typename filesystem<T_, L_>::file_id filesystem<T_, L_>::find_(path_t path) cons
 }
 
 template<typename T_, typename L_>
-int filesystem<T_, L_>::get_index_(file_id parent, const path_t &path)
+typename filesystem<T_, L_>::file_id filesystem<T_, L_>::get_index_(file_id parent, const path_t &path)
 {
     file_id dir = tree_.first_child(parent);
 
     // Get the insertion index
-    int i = 0;
     while(dir != file_tree::root)
     {
         if(tree_[dir].path().filename().compare(path.filename()) > 0) break;
 
-        ++i; dir = tree_.next_sibling(dir);
+        dir = tree_.next_sibling(dir);
     }
 
-    return i;
+    return dir;
 }
 
 template<typename T_, typename L_>
-typename filesystem<T_, L_>::file_id filesystem<T_, L_>::load_directory(const path_t &directory)
+typename filesystem<T_, L_>::file_id filesystem<T_, L_>::load_directory(const path_t& path)
 {
-    if(not exists(directory)) return root;
+    if(not exists(path)) return root;
     
+    const path_t directory = canonical(absolute(path));
     file_id dir = tree_.first_child(file_tree::root);
 
     // Validate this isn't a subdirectory
@@ -218,8 +223,8 @@ typename filesystem<T_, L_>::file_id filesystem<T_, L_>::load_directory(const pa
     }
 
     dir = get_index_(file_tree::root, directory);
-    data_t* data = loader::load(directory);
-    dir = tree_.insert(file(this, tree_.next_id(), directory, data), file_tree::root, dir);
+    dir = tree_.insert(file(this, tree_.next_id(), directory, nullptr), file_tree::root, dir);
+    tree_[dir].value_ = loader::load(directory, dir);
     file_id res = dir;
 
     using iter_t = std::filesystem::directory_iterator;
@@ -239,9 +244,9 @@ typename filesystem<T_, L_>::file_id filesystem<T_, L_>::load_directory(const pa
         }
         
         const path_t  path  = *it;
-        data = loader::load(path);
 
-        file_id created = tree_.insert(file(this, tree_.next_id(), path, data), p_dir, -1);
+        file_id created = tree_.insert(file(this, tree_.next_id(), path, nullptr), p_dir);
+        tree_[created].value_ = loader::load(path, created);
 
         if(is_directory(path))
         {
@@ -261,9 +266,9 @@ typename filesystem<T_, L_>::file_id filesystem<T_, L_>::import(const path_t& pa
 
     file& prnt = tree_[parent];
     path_t nloc = prnt.path() / path.filename();
-    data_t* data = loader::import(path, nloc);
-
-    return tree_.insert(file(this, tree_.next_id(), nloc, data), parent, get_index_(parent, nloc));
+    const file_id node = tree_.insert(file(this, tree_.next_id(), nloc, nullptr), parent, get_index_(parent, nloc));
+    tree_[node].value_ = loader::import(path, nloc, node);
+    return node;
 }
 
 template<typename T_, typename L_>
@@ -272,10 +277,9 @@ typename filesystem<T_, L_>::file_id filesystem<T_, L_>::create(const std::strin
     file& prnt = tree_[parent];
     const file_id p_dir = prnt.get_id();
     const path_t path  = prnt.path() / name;
-    data_t* data = loader::create(path);
     
-    const file_id node  = tree_.insert(file(this, tree_.next_id(), path, data), parent, get_index_(parent, path));
-    
+    const file_id node = tree_.insert(file(this, tree_.next_id(), path, nullptr), parent, get_index_(parent, path));
+    tree_[node].value_ = loader::create(path, node);
     return node;
 }
 

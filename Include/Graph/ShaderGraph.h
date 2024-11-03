@@ -1,16 +1,19 @@
 // =====================================================================================================================
-// Copyright 2024 Medusa Slockbower
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
+//  OpenShaderDesigner, an open source software utility to create materials and shaders.
+//  Copyright (C) 2024  Medusa Slockbower
 //
-// 	http://www.apache.org/licenses/LICENSE-2.0
+//  This program is free software: you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License as published by
+//  the Free Software Foundation, either version 3 of the License, or
+//  (at your option) any later version.
 //
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+//  This program is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  GNU General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public License
+//  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 // =====================================================================================================================
 
 #ifndef OSD_SHADERGRAPH_H
@@ -34,6 +37,7 @@
 #include <imnode-graph/imnode_graph.h>
 
 #include "FileSystem/FileManager.h"
+#include <Renderer/Assets/Texture.h>
 
 
 namespace ocu = open_cpp_utils;
@@ -58,7 +62,7 @@ namespace OpenShaderDesigner
     ,	PinType_COUNT
     };
 
-    using PinFlags = unsigned int;
+    using FlagT = unsigned int;
     enum PinFlags_
     {
         PinFlags_None           = 0
@@ -66,6 +70,7 @@ namespace OpenShaderDesigner
     ,   PinFlags_AlwaysCollapse = 1 << 1
     ,   PinFlags_NoPadding      = 1 << 2
     ,   PinFlags_Ambiguous      = 1 << 3
+    ,	PinFlags_Literal        = 1 << 4
     };
     
     enum InterpolationType_ : glw::enum_t
@@ -85,7 +90,7 @@ namespace OpenShaderDesigner
 		,	ImColor(0xFF, 0xFF, 0xFF) // Any
 		};
 
-		inline const static std::string TypeNames[PinType_COUNT] = {
+		inline static constexpr const char* TypeNames[PinType_COUNT] = {
 			"Unsigned Int"
 		,	"Int"
 		,	"Float"
@@ -109,19 +114,29 @@ namespace OpenShaderDesigner
         ,   -1 // Any
 	    };
 
-	    using Ambiguous = ocu::any<int, unsigned int, float, glm::vec3>;
+	    using Ambiguous = ocu::any<glm::int32, glm::uint32, glm::float32, glm::vec3>;
 
 		std::string Name;
 		PinType     Type;
-        PinFlags    Flags;
+        FlagT       Flags;
         Ambiguous   Value;
 	    ImPinPtr    Ptr;
 
-	    Pin(const std::string& name, PinType type, PinFlags flags = PinFlags_None)
+	    Pin(const std::string& name, PinType type, FlagT flags = PinFlags_None)
 	        : Name(name)
 	        , Type(type)
 	        , Flags(flags)
 	    { }
+
+	    std::string GetVarName() const { return std::format("{}_{}", Name, Ptr.Node); }
+    };
+
+    enum NodeFlags_
+    {
+        NodeFlags_None           = 0
+    ,   NodeFlags_Const          = 0x0000'0001
+    ,   NodeFlags_DynamicInputs  = 0x0000'0002
+    ,   NodeFlags_DynamicOutputs = 0x0000'0004
     };
 
 	struct Node
@@ -140,13 +155,12 @@ namespace OpenShaderDesigner
 		struct
 		{
 			std::vector<Pin> Inputs, Outputs;
-			bool             DynamicInputs;
 		} IO;
 
 		struct
 		{
 		    std::string Alias;
-			bool   Const;
+		    FlagT       Flags;
 		} Info;
 
 		Node(ShaderGraph& graph, ImVec2 pos);
@@ -155,7 +169,7 @@ namespace OpenShaderDesigner
 	    void DrawPin(int id, Pin& pin, ImPinDirection direction);
 	    void Draw(ImGuiID id);
 
-	    inline virtual bool CheckConnection(Pin*, Pin*) { return false; }
+	    inline virtual bool CheckConnection(Pin*, Pin*) { return true; }
 	    virtual void ValidateConnections() { }
 	    
 		virtual Node* Copy(ShaderGraph& graph) const = 0;
@@ -192,7 +206,7 @@ namespace OpenShaderDesigner
         ~GraphState();
 
         NodeId AddNode(Node* node) { return Nodes.insert(node); }
-        void RemoveNode(NodeId node) { if(Nodes[node]->Info.Const) return; Nodes.erase(node); }
+        void RemoveNode(NodeId node) { if(Nodes[node]->Info.Flags & NodeFlags_Const) return; Nodes.erase(node); }
 
         GraphState& operator=(const GraphState& other);
     };
@@ -217,8 +231,7 @@ namespace OpenShaderDesigner
         const ShaderGraph& GetGraph() const { return State_.Parent; }
 
         virtual void Compile() = 0;
-
-        std::string GetCode() const { return Code; }
+        virtual void View(HDRTexture::HandleType* Target) = 0;
 
     protected:
         std::string Code;
@@ -264,6 +277,7 @@ namespace OpenShaderDesigner
 	    void Clear();
 
 	    Node* FindNode(ImPinPtr ptr);
+	    Node* FindNode(ImGuiID id);
 	    Pin&  FindPin(ImPinPtr ptr);
 
 	    std::string GetValue(ImPinPtr ptr);
@@ -277,6 +291,8 @@ namespace OpenShaderDesigner
         bool GrabFocus_;
 	    ShaderAsset* Shader_;
 	    ImVec2 ContextMenuPosition_;
+	    ocu::optional<NodeId> Selected_;
+	    
 	    
 
 		friend class Inspector;
@@ -286,7 +302,8 @@ namespace OpenShaderDesigner
 		: public EditorWindow
 	{
 	public:
-		Inspector();
+        Inspector();
+        virtual ~Inspector() = default;
 
 		void DrawWindow() override;
 

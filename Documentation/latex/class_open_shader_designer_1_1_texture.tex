@@ -1,0 +1,83 @@
+\doxysection{Open\+Shader\+Designer\+::Texture Class Reference}
+\hypertarget{class_open_shader_designer_1_1_texture}{}\label{class_open_shader_designer_1_1_texture}\index{OpenShaderDesigner::Texture@{OpenShaderDesigner::Texture}}
+Inheritance diagram for Open\+Shader\+Designer\+::Texture\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_open_shader_designer_1_1_texture}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_open_shader_designer_1_1_texture_a39088678e13539098cd3619efd4d1293}\label{class_open_shader_designer_1_1_texture_a39088678e13539098cd3619efd4d1293} 
+using {\bfseries Handle\+Type} = glw\+::texture$<$glw\+::texture2D, glw\+::rgba8$>$
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_open_shader_designer_1_1_texture_ae688f41a649dfff1be48be59d7188878}\label{class_open_shader_designer_1_1_texture_ae688f41a649dfff1be48be59d7188878} 
+{\bfseries Texture} (const File\+Manager\+::\+Path \&path)
+\item 
+\Hypertarget{class_open_shader_designer_1_1_texture_ab818611d5a4ff090e84b968763a9d929}\label{class_open_shader_designer_1_1_texture_ab818611d5a4ff090e84b968763a9d929} 
+{\bfseries Texture} (const File\+Manager\+::\+Path \&src, const File\+Manager\+::\+Path \&dst)
+\item 
+void \mbox{\hyperlink{class_open_shader_designer_1_1_texture_a6856b973cce94b29f04dfe2bb09b3242}{Open}} () override
+\item 
+\Hypertarget{class_open_shader_designer_1_1_texture_a3d41c335b00dc279739a52f152bcf084}\label{class_open_shader_designer_1_1_texture_a3d41c335b00dc279739a52f152bcf084} 
+Handle\+Type \texorpdfstring{$\ast$}{*} {\bfseries operator-\/$>$} ()
+\item 
+\Hypertarget{class_open_shader_designer_1_1_texture_a36f30be56cd17b3d2d7b0854dcea53b9}\label{class_open_shader_designer_1_1_texture_a36f30be56cd17b3d2d7b0854dcea53b9} 
+const Handle\+Type \texorpdfstring{$\ast$}{*} {\bfseries operator-\/$>$} () const
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{class_open_shader_designer_1_1_file_manager_1_1_asset}{Open\+Shader\+Designer\+::\+File\+Manager\+::\+Asset}}}
+\begin{DoxyCompactItemize}
+\item 
+{\bfseries Asset} (const Path \&path)
+\item 
+bool {\bfseries Dirty} () const
+\item 
+virtual void {\bfseries Save} (const Path \&path)
+\item 
+File \& {\bfseries Get\+File} ()
+\item 
+File\+ID {\bfseries Get\+ID} () const
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_open_shader_designer_1_1_texture_ab97a7b00e982ff64706fc8288252eb3a}\label{class_open_shader_designer_1_1_texture_ab97a7b00e982ff64706fc8288252eb3a} 
+static Asset \texorpdfstring{$\ast$}{*} {\bfseries Create} (const File\+Manager\+::\+Path \&path)
+\item 
+\Hypertarget{class_open_shader_designer_1_1_texture_a3d008a4687fa4bae3bac560a95814dcc}\label{class_open_shader_designer_1_1_texture_a3d008a4687fa4bae3bac560a95814dcc} 
+static Asset \texorpdfstring{$\ast$}{*} {\bfseries Load} (const File\+Manager\+::\+Path \&path)
+\item 
+\Hypertarget{class_open_shader_designer_1_1_texture_a805b2777ea7eaa9efeeddb55c9f53874}\label{class_open_shader_designer_1_1_texture_a805b2777ea7eaa9efeeddb55c9f53874} 
+static Asset \texorpdfstring{$\ast$}{*} {\bfseries Import} (const File\+Manager\+::\+Path \&src, const File\+Manager\+::\+Path \&dst)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Protected Member Functions inherited from \mbox{\hyperlink{class_open_shader_designer_1_1_file_manager_1_1_asset}{Open\+Shader\+Designer\+::\+File\+Manager\+::\+Asset}}}
+\begin{DoxyCompactItemize}
+\item 
+void {\bfseries Make\+Dirty} ()
+\item 
+\mbox{\hyperlink{class_open_shader_designer_1_1_file_manager}{File\+Manager}} \texorpdfstring{$\ast$}{*} {\bfseries Parent} () const
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_open_shader_designer_1_1_texture_a6856b973cce94b29f04dfe2bb09b3242}\index{OpenShaderDesigner::Texture@{OpenShaderDesigner::Texture}!Open@{Open}}
+\index{Open@{Open}!OpenShaderDesigner::Texture@{OpenShaderDesigner::Texture}}
+\doxysubsubsection{\texorpdfstring{Open()}{Open()}}
+{\footnotesize\ttfamily \label{class_open_shader_designer_1_1_texture_a6856b973cce94b29f04dfe2bb09b3242} 
+void Texture\+::\+Open (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Reimplemented from \mbox{\hyperlink{class_open_shader_designer_1_1_file_manager_1_1_asset}{Open\+Shader\+Designer\+::\+File\+Manager\+::\+Asset}}.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+Include/\+Renderer/\+Assets/Texture.\+h\item 
+Source/\+Renderer/\+Assets/Texture.\+cpp\end{DoxyCompactItemize}

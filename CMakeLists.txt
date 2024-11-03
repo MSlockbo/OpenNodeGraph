@@ -73,19 +73,24 @@ add_executable(OpenShaderDesigner
         Source/FileSystem/FileManager.cpp Include/FileSystem/FileManager.h
 
         # Assets
-        Source/Project/Project.cpp Include/Project/Project.h
+        Source/Project/Project.cpp         Include/Project/Project.h
+        Source/Renderer/Assets/Texture.cpp Include/Renderer/Assets/Texture.h
 
         # Graph
         Source/Graph/ShaderGraph.cpp Include/Graph/ShaderGraph.h
 
         # Nodes
-        Source/Graph/Nodes/Maths.cpp Include/Graph/Nodes/Maths.h
-        Source/Graph/Nodes/Shaders.cpp Include/Graph/Nodes/Shaders.h
+        Source/Graph/Nodes/Shaders.cpp           Include/Graph/Nodes/Shaders.h
+        Source/Graph/Nodes/Math/Constants.cpp    Include/Graph/Nodes/Math/Constants.h
+        Source/Graph/Nodes/Math/Functions.cpp    Include/Graph/Nodes/Math/Functions.h
+        Source/Graph/Nodes/Math/Comparison.cpp   Include/Graph/Nodes/Math/Comparison.h
+        Source/Graph/Nodes/Math/Trigonometry.cpp Include/Graph/Nodes/Math/Trigonometry.h
+        Source/Graph/Nodes/Math/Vector.cpp       Include/Graph/Nodes/Math/Vector.h
         
         # Utilities
         Include/Utility/Timer.h
-        Include/Renderer/Assets/Texture.h
-        Source/Renderer/Assets/Texture.cpp
+        Include/Graph/Nodes/Math/Common.h
+        Source/Graph/Nodes/Math/Common.cpp
 )
 
 # Preprocessor Definitions

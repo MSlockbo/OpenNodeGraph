@@ -11,8 +11,40 @@ Inheritance diagram for Open\+Shader\+Designer\+::Shader\+Graph\+:\begin{figure}
 \item 
 void \mbox{\hyperlink{class_open_shader_designer_1_1_shader_graph_ab165317b9a0b95648df1e7009c220a04}{On\+Open}} () override
 \begin{DoxyCompactList}\small\item\em On\+Open callback for when the \doxylink{class_open_shader_designer_1_1_editor_window}{Editor\+Window} is opened. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_open_shader_designer_1_1_shader_graph_aca7fbcf7c2f9b05c0f69c8d4b58eee27}{Draw\+Menu}} () override
+\begin{DoxyCompactList}\small\item\em Draw\+Menu function for when the \doxylink{class_open_shader_designer_1_1_editor_window}{Editor\+Window} Menu is being drawn. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{class_open_shader_designer_1_1_shader_graph_af028ed8ea55d12a1bb2bcf51c817398b}{Draw\+Window}} () override
-\begin{DoxyCompactList}\small\item\em Draw\+Window function for when the \doxylink{class_open_shader_designer_1_1_editor_window}{Editor\+Window} is being drawn. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Draw\+Window function for when the \doxylink{class_open_shader_designer_1_1_editor_window}{Editor\+Window} is being drawn. \end{DoxyCompactList}\item 
+\Hypertarget{class_open_shader_designer_1_1_shader_graph_a63211deca4b532a533e91fd88979871d}\label{class_open_shader_designer_1_1_shader_graph_a63211deca4b532a533e91fd88979871d} 
+void {\bfseries Draw\+Context\+Menu} ()
+\item 
+\Hypertarget{class_open_shader_designer_1_1_shader_graph_a9b6af3ba288ae15585872c1973f2c3ac}\label{class_open_shader_designer_1_1_shader_graph_a9b6af3ba288ae15585872c1973f2c3ac} 
+void {\bfseries Copy} ()
+\item 
+\Hypertarget{class_open_shader_designer_1_1_shader_graph_ae209dcb60ab1bc1c02c3c22ae0e76fd6}\label{class_open_shader_designer_1_1_shader_graph_ae209dcb60ab1bc1c02c3c22ae0e76fd6} 
+void {\bfseries Erase} ()
+\item 
+\Hypertarget{class_open_shader_designer_1_1_shader_graph_ab86bbf454a43181b078e227bba4fa5c6}\label{class_open_shader_designer_1_1_shader_graph_ab86bbf454a43181b078e227bba4fa5c6} 
+void {\bfseries Paste} (Im\+Vec2 pos)
+\item 
+\Hypertarget{class_open_shader_designer_1_1_shader_graph_a28f3c0f027f227e58288ec0fdbcda2c8}\label{class_open_shader_designer_1_1_shader_graph_a28f3c0f027f227e58288ec0fdbcda2c8} 
+void {\bfseries Clear} ()
+\item 
+\Hypertarget{class_open_shader_designer_1_1_shader_graph_ab8dc45220eaa95d5a168ba4d890de7a4}\label{class_open_shader_designer_1_1_shader_graph_ab8dc45220eaa95d5a168ba4d890de7a4} 
+\mbox{\hyperlink{struct_open_shader_designer_1_1_node}{Node}} \texorpdfstring{$\ast$}{*} {\bfseries Find\+Node} (Im\+Pin\+Ptr ptr)
+\item 
+\Hypertarget{class_open_shader_designer_1_1_shader_graph_a02edd5a1dda1c20cb63fbc8fee83dd03}\label{class_open_shader_designer_1_1_shader_graph_a02edd5a1dda1c20cb63fbc8fee83dd03} 
+\mbox{\hyperlink{struct_open_shader_designer_1_1_node}{Node}} \texorpdfstring{$\ast$}{*} {\bfseries Find\+Node} (Im\+Gui\+ID id)
+\item 
+\Hypertarget{class_open_shader_designer_1_1_shader_graph_aed332b8a8d1a161da2603c1a7db7eba3}\label{class_open_shader_designer_1_1_shader_graph_aed332b8a8d1a161da2603c1a7db7eba3} 
+\mbox{\hyperlink{struct_open_shader_designer_1_1_pin}{Pin}} \& {\bfseries Find\+Pin} (Im\+Pin\+Ptr ptr)
+\item 
+\Hypertarget{class_open_shader_designer_1_1_shader_graph_a712b1fc2bfcceb6c82ee01e8ea145c6b}\label{class_open_shader_designer_1_1_shader_graph_a712b1fc2bfcceb6c82ee01e8ea145c6b} 
+std\+::string {\bfseries Get\+Value} (Im\+Pin\+Ptr ptr)
+\item 
+\Hypertarget{class_open_shader_designer_1_1_shader_graph_a968d3816f7f67aa6cf1c69dea3324b41}\label{class_open_shader_designer_1_1_shader_graph_a968d3816f7f67aa6cf1c69dea3324b41} 
+void {\bfseries Open\+Shader} (\mbox{\hyperlink{class_open_shader_designer_1_1_shader_asset}{Shader\+Asset}} \texorpdfstring{$\ast$}{*}asset)
+\end{DoxyCompactItemize}
 \doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{class_open_shader_designer_1_1_editor_window}{Open\+Shader\+Designer\+::\+Editor\+Window}}}
 \begin{DoxyCompactItemize}
 \item 
@@ -57,13 +89,25 @@ const std\+::string {\bfseries Title}
 \item 
 {\bfseries Editor\+Window} (const std\+::string \&title, Im\+Gui\+Window\+Flags flags)
 \item 
-virtual void \mbox{\hyperlink{class_open_shader_designer_1_1_editor_window_a6c229ca70221f672315f9a4f0c7be0c0}{Draw\+Menu}} ()
-\begin{DoxyCompactList}\small\item\em Draw\+Menu function for when the \doxylink{class_open_shader_designer_1_1_editor_window}{Editor\+Window} Menu is being drawn. \end{DoxyCompactList}\item 
 virtual void {\bfseries On\+Close} ()
 \begin{DoxyCompactList}\small\item\em On\+Close callback for when the \doxylink{class_open_shader_designer_1_1_editor_window}{Editor\+Window} is closed. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
 \doxysubsection{Member Function Documentation}
+\Hypertarget{class_open_shader_designer_1_1_shader_graph_aca7fbcf7c2f9b05c0f69c8d4b58eee27}\index{OpenShaderDesigner::ShaderGraph@{OpenShaderDesigner::ShaderGraph}!DrawMenu@{DrawMenu}}
+\index{DrawMenu@{DrawMenu}!OpenShaderDesigner::ShaderGraph@{OpenShaderDesigner::ShaderGraph}}
+\doxysubsubsection{\texorpdfstring{DrawMenu()}{DrawMenu()}}
+{\footnotesize\ttfamily \label{class_open_shader_designer_1_1_shader_graph_aca7fbcf7c2f9b05c0f69c8d4b58eee27} 
+void Shader\+Graph\+::\+Draw\+Menu (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Draw\+Menu function for when the \doxylink{class_open_shader_designer_1_1_editor_window}{Editor\+Window} Menu is being drawn. 
+
+
+
+Reimplemented from \mbox{\hyperlink{class_open_shader_designer_1_1_editor_window_a6c229ca70221f672315f9a4f0c7be0c0}{Open\+Shader\+Designer\+::\+Editor\+Window}}.
+
 \Hypertarget{class_open_shader_designer_1_1_shader_graph_af028ed8ea55d12a1bb2bcf51c817398b}\index{OpenShaderDesigner::ShaderGraph@{OpenShaderDesigner::ShaderGraph}!DrawWindow@{DrawWindow}}
 \index{DrawWindow@{DrawWindow}!OpenShaderDesigner::ShaderGraph@{OpenShaderDesigner::ShaderGraph}}
 \doxysubsubsection{\texorpdfstring{DrawWindow()}{DrawWindow()}}

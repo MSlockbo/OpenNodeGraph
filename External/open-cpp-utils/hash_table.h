@@ -1,16 +1,19 @@
 // =====================================================================================================================
-// Copyright 2024 Medusa Slockbower
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
+//  open-cpp-utils, an open-source cpp library with data structures that extend the STL.
+//  Copyright (C) 2024  Medusa Slockbower
 //
-// 	http://www.apache.org/licenses/LICENSE-2.0
+//  This program is free software: you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License as published by
+//  the Free Software Foundation, either version 3 of the License, or
+//  (at your option) any later version.
 //
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+//  This program is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  GNU General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public License
+//  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 // =====================================================================================================================
 
 #ifndef OPEN_CPP_UTILS_HASH_TABLE_H
@@ -49,7 +52,7 @@ public:
     using allocator_type  = typename std::allocator_traits<Alloc>::template rebind_alloc<_Node>;
 
     using size_type       = size_t;
-    using iterator_type   = iterator;
+    using iterator_type   = class iterator;
 
 private:
     using table_type = _Node*;
@@ -66,6 +69,8 @@ private:
         int         psl;
 
         _Node() : value(), psl(0) { }
+        _Node(const_reference v) : value(v), psl(0) { }
+        _Node(const_reference v, int psl) : value(v), psl(psl) { }
 
         bool operator==(const _Node& b) const
         {
@@ -94,8 +99,11 @@ public:
         bool operator==(const iterator& o) const = default;
         bool operator!=(const iterator& o) const = default;
 
-        reference operator*()  const { return table_->table_[idx_].value; }
-        pointer   operator->() const { return &*table_->table_[idx_].value; }
+        reference operator*()  { return table_->table_[idx_].value; }
+        pointer   operator->() { return &*table_->table_[idx_].value; }
+        
+        const_reference operator*()  const { return table_->table_[idx_].value; }
+        const_pointer   operator->() const { return &*table_->table_[idx_].value; }
 
     private:
         void _next_index()
@@ -176,7 +184,7 @@ public:
         return const_iterator(this, res);
     }
 
-// Modifiers -----------------------------------------------------------------------------------------------------------
+// Size ----------------------------------------------------------------------------------------------------------------
 
     [[nodiscard]] size_type capacity()  const { return capacity_; }
     [[nodiscard]] size_type size()      const { return size_; }
@@ -248,6 +256,7 @@ void hash_table<T, Hash, Alloc>::clear()
 {
     alloc_.deallocate(table_, capacity_);
     capacity_ = size_ = 0;
+    table_ = nullptr;
 }
 
 template<typename T, class Hash, class Alloc>
@@ -263,20 +272,19 @@ void hash_table<T, Hash, Alloc>::insert(const_reference x)
     {
         _Node& node = table_[idx];
 
-        if(node.value == x) return;
+        if(*node.value == x) return;
         if(psl > node.psl)
         {
             // std::swap(psl, node.psl); std::swap(value, node.value);
             int temp_psl = psl;        psl = node.psl;   node.psl = temp_psl;
-            T   temp_val = node.value; node.value = val; val = temp_val;
+            T   temp_val = std::move(node.value); node.value = std::move(val); val = std::move(temp_val);
         }
 
         idx = _next(idx);
         ++psl;
     }
 
-    table_[idx].value = val;
-    table_[idx].psl   = psl;
+    std::construct_at(table_ + idx, val, psl);
     ++size_;
 }
 
@@ -326,7 +334,7 @@ void hash_table<T, Hash, Alloc>::_increase_capacity()
 template<typename T, class Hash, class Alloc>
 typename hash_table<T, Hash, Alloc>::node hash_table<T, Hash, Alloc>::_hash(const_reference v) const
 {
-    node x = hash_(v);
+    node x = static_cast<node>(hash_(v));
 
     x ^= x >> 33U;
     x *= UINT64_C(0xff51afd7ed558ccd);
@@ -349,7 +357,7 @@ typename hash_table<T, Hash, Alloc>::node hash_table<T, Hash, Alloc>::_find(cons
         _Node& node = table_[idx];
 
         if(node.psl > psl)  return nullnode;
-        if(node.value == x) return idx;
+        if(*node.value == x) return idx;
 
         idx = _next(idx); ++psl;
     }

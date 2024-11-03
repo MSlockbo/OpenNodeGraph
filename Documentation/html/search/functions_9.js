@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['registerhandler_0',['RegisterHandler',['../class_open_shader_designer_1_1_event_system.html#ad7aaf19637c81922d02dafe92ff1982d',1,'OpenShaderDesigner::EventSystem']]]
+  ['unregisterhandler_0',['UnregisterHandler',['../class_open_shader_designer_1_1_event_system.html#a46be97970de801727824e3ac8cc93872',1,'OpenShaderDesigner::EventSystem']]]
 ];

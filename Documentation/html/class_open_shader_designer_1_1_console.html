@@ -99,29 +99,29 @@ $(function(){ initResizable(false); });
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-types" name="pub-types"></a>
 Public Types</h2></td></tr>
-<tr class="memitem:a4da63ca14b9e8f7a582df081623b6406" id="r_a4da63ca14b9e8f7a582df081623b6406"><td class="memItemLeft" align="right" valign="top"><a id="a4da63ca14b9e8f7a582df081623b6406" name="a4da63ca14b9e8f7a582df081623b6406"></a>enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4da63ca14b9e8f7a582df081623b6406">Setting</a> : uint8_t { <br />
-&#160;&#160;<b>SHOW_TIMESTAMP</b> = 0b00000001
-, <b>SHOW_THREAD</b> = 0b00000010
-, <b>SHOW_SEVERITY</b> = 0b00000100
-, <b>SHOW_FILE_INFO</b> = 0b00001000
+<tr class="memitem:afddf06383dd93a079794251e747978fd" id="r_afddf06383dd93a079794251e747978fd"><td class="memItemLeft" align="right" valign="top"><a id="afddf06383dd93a079794251e747978fd" name="afddf06383dd93a079794251e747978fd"></a>enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afddf06383dd93a079794251e747978fd">Settings</a> : uint8_t { <br />
+&#160;&#160;<b>Settings_ShowTimeStamp</b> = 0b00000001
+, <b>Settings_ShowThread</b> = 0b00000010
+, <b>Settings_Severity</b> = 0b00000100
+, <b>Settings_ShowFileInfo</b> = 0b00001000
 , <br />
-&#160;&#160;<b>WRAP_TEXT</b> = 0b00010000
-, <b>ALL_SETTINGS</b> = 0xFF
-, <b>DEFAULT_SETTINGS</b> = ALL_SETTINGS ^ WRAP_TEXT
+&#160;&#160;<b>Settings_WrapText</b> = 0b00010000
+, <b>Settings_ALL</b> = 0xFF
+, <b>Settings_Default</b> = Settings_ALL ^ Settings_WrapText
 <br />
  }</td></tr>
-<tr class="memdesc:a4da63ca14b9e8f7a582df081623b6406"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setting for displaying log entries. <br /></td></tr>
-<tr class="separator:a4da63ca14b9e8f7a582df081623b6406"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a880eae5d076afe686248bbb0f6a83771" id="r_a880eae5d076afe686248bbb0f6a83771"><td class="memItemLeft" align="right" valign="top"><a id="a880eae5d076afe686248bbb0f6a83771" name="a880eae5d076afe686248bbb0f6a83771"></a>enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a880eae5d076afe686248bbb0f6a83771">Severity</a> : int { <br />
-&#160;&#160;<b>MESSAGE</b> = 0
-, <b>WARNING</b>
-, <b>ERROR</b>
-, <b>FATAL</b>
+<tr class="memdesc:afddf06383dd93a079794251e747978fd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setting for displaying log entries. <br /></td></tr>
+<tr class="separator:afddf06383dd93a079794251e747978fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a880eae5d076afe686248bbb0f6a83771" id="r_a880eae5d076afe686248bbb0f6a83771"><td class="memItemLeft" align="right" valign="top"><a id="a880eae5d076afe686248bbb0f6a83771" name="a880eae5d076afe686248bbb0f6a83771"></a>enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a880eae5d076afe686248bbb0f6a83771">Severity</a> : int { <br />
+&#160;&#160;<b>Message</b> = 0
+, <b>Warning</b>
+, <b>Error</b>
+, <b>Fatal</b>
 , <br />
-&#160;&#160;<b>ALERT</b>
-, <b>COMMAND</b>
+&#160;&#160;<b>Alert</b>
+, <b>Command</b>
 , <b>COUNT</b>
-, <b>DEFAULT</b> = WARNING
+, <b>DEFAULT</b> = Warning
 <br />
  }</td></tr>
 <tr class="memdesc:a880eae5d076afe686248bbb0f6a83771"><td class="mdescLeft">&#160;</td><td class="mdescRight">Severity levels for log entries. <br /></td></tr>
@@ -281,9 +281,9 @@ template&lt;typename... Args&gt; </div>
 </table>
 </div><div class="memdoc">
 <b>Initial value:</b><div class="fragment"><div class="line">=</div>
-<div class="line">        {</div>
-<div class="line">            <span class="stringliteral">&quot;Timestamps&quot;</span>, <span class="stringliteral">&quot;Thread IDs&quot;</span>, <span class="stringliteral">&quot;Severity&quot;</span>, <span class="stringliteral">&quot;File Info&quot;</span>, <span class="stringliteral">&quot;Wrapping&quot;</span></div>
-<div class="line">        }</div>
+<div class="line">    {</div>
+<div class="line">        <span class="stringliteral">&quot;Timestamps&quot;</span>, <span class="stringliteral">&quot;Thread IDs&quot;</span>, <span class="stringliteral">&quot;Severity&quot;</span>, <span class="stringliteral">&quot;File Info&quot;</span>, <span class="stringliteral">&quot;Wrapping&quot;</span></div>
+<div class="line">    }</div>
 </div><!-- fragment -->
 <p>String representations of the settings. </p>
 
@@ -309,9 +309,9 @@ template&lt;typename... Args&gt; </div>
 </table>
 </div><div class="memdoc">
 <b>Initial value:</b><div class="fragment"><div class="line">=</div>
-<div class="line">        {</div>
-<div class="line">            <span class="stringliteral">&quot;Message&quot;</span>, <span class="stringliteral">&quot;Warning&quot;</span>, <span class="stringliteral">&quot;Error&quot;</span>, <span class="stringliteral">&quot;Fatal&quot;</span>, <span class="stringliteral">&quot;Alert&quot;</span>, <span class="stringliteral">&quot;Command&quot;</span></div>
-<div class="line">        }</div>
+<div class="line">    {</div>
+<div class="line">        <span class="stringliteral">&quot;Message&quot;</span>, <span class="stringliteral">&quot;Warning&quot;</span>, <span class="stringliteral">&quot;Error&quot;</span>, <span class="stringliteral">&quot;Fatal&quot;</span>, <span class="stringliteral">&quot;Alert&quot;</span>, <span class="stringliteral">&quot;Command&quot;</span></div>
+<div class="line">    }</div>
 </div><!-- fragment -->
 <p>String representations of the Severity levels. </p>
 
@@ -337,10 +337,10 @@ template&lt;typename... Args&gt; </div>
 </table>
 </div><div class="memdoc">
 <b>Initial value:</b><div class="fragment"><div class="line">= {</div>
-<div class="line">            <a class="code hl_function" href="#abc25e7d9ad33fdcc95fe11df9a9c3fc4">ImGuiColor</a>(0xA4B9C4FF), <a class="code hl_function" href="#abc25e7d9ad33fdcc95fe11df9a9c3fc4">ImGuiColor</a>(0xF2C554FF), <a class="code hl_function" href="#abc25e7d9ad33fdcc95fe11df9a9c3fc4">ImGuiColor</a>(0xE57327FF), <a class="code hl_function" href="#abc25e7d9ad33fdcc95fe11df9a9c3fc4">ImGuiColor</a>(0xCC211EFF),</div>
-<div class="line">            <a class="code hl_function" href="#abc25e7d9ad33fdcc95fe11df9a9c3fc4">ImGuiColor</a>(0x9CDCFEFF),</div>
-<div class="line">        }</div>
-<div class="ttc" id="aclass_open_shader_designer_1_1_console_html_abc25e7d9ad33fdcc95fe11df9a9c3fc4"><div class="ttname"><a href="#abc25e7d9ad33fdcc95fe11df9a9c3fc4">OpenShaderDesigner::Console::ImGuiColor</a></div><div class="ttdeci">static constexpr ImVec4 ImGuiColor(unsigned int RGB)</div><div class="ttdoc">Integer to floating point color. (ImGui APIVersion)</div><div class="ttdef"><b>Definition</b> Console.h:86</div></div>
+<div class="line">        <a class="code hl_function" href="#abc25e7d9ad33fdcc95fe11df9a9c3fc4">ImGuiColor</a>(0xA4B9C4FF), <a class="code hl_function" href="#abc25e7d9ad33fdcc95fe11df9a9c3fc4">ImGuiColor</a>(0xF2C554FF), <a class="code hl_function" href="#abc25e7d9ad33fdcc95fe11df9a9c3fc4">ImGuiColor</a>(0xE57327FF), <a class="code hl_function" href="#abc25e7d9ad33fdcc95fe11df9a9c3fc4">ImGuiColor</a>(0xCC211EFF),</div>
+<div class="line">        <a class="code hl_function" href="#abc25e7d9ad33fdcc95fe11df9a9c3fc4">ImGuiColor</a>(0x9CDCFEFF),</div>
+<div class="line">    }</div>
+<div class="ttc" id="aclass_open_shader_designer_1_1_console_html_abc25e7d9ad33fdcc95fe11df9a9c3fc4"><div class="ttname"><a href="#abc25e7d9ad33fdcc95fe11df9a9c3fc4">OpenShaderDesigner::Console::ImGuiColor</a></div><div class="ttdeci">static constexpr ImVec4 ImGuiColor(unsigned int RGB)</div><div class="ttdoc">Integer to floating point color. (ImGui APIVersion)</div><div class="ttdef"><b>Definition</b> Console.h:90</div></div>
 </div><!-- fragment -->
 <p>Color for rendering each Severity level text in editor. </p>
 

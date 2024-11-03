@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['node_0',['Node',['../struct_open_shader_designer_1_1_node.html',1,'OpenShaderDesigner']]]
+  ['log_0',['Log',['../class_open_shader_designer_1_1_console.html#a4b0e458b796c898279bcb8fedf960920',1,'OpenShaderDesigner::Console']]]
 ];

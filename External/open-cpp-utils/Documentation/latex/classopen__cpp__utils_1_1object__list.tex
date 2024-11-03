@@ -1,0 +1,87 @@
+\doxysection{open\+\_\+cpp\+\_\+utils\+::object\+\_\+list\texorpdfstring{$<$}{<} T \texorpdfstring{$>$}{>} Class Template Reference}
+\hypertarget{classopen__cpp__utils_1_1object__list}{}\label{classopen__cpp__utils_1_1object__list}\index{open\_cpp\_utils::object\_list$<$ T $>$@{open\_cpp\_utils::object\_list$<$ T $>$}}
+
+
+{\ttfamily \#include $<$object\+\_\+pool.\+h$>$}
+
+\doxysubsubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classopen__cpp__utils_1_1object__list_a60a89f4b9f8e38e51e42e4d50ac04779}\label{classopen__cpp__utils_1_1object__list_a60a89f4b9f8e38e51e42e4d50ac04779} 
+using {\bfseries value\+\_\+type} = T
+\item 
+\Hypertarget{classopen__cpp__utils_1_1object__list_a7e66b4c0a0acd8e118738be1979939ba}\label{classopen__cpp__utils_1_1object__list_a7e66b4c0a0acd8e118738be1979939ba} 
+using {\bfseries pointer} = T\texorpdfstring{$\ast$}{*}
+\item 
+\Hypertarget{classopen__cpp__utils_1_1object__list_a99a1e69ceab5fc7de59a4728d1209591}\label{classopen__cpp__utils_1_1object__list_a99a1e69ceab5fc7de59a4728d1209591} 
+using {\bfseries const\+\_\+pointer} = const T\texorpdfstring{$\ast$}{*}
+\item 
+\Hypertarget{classopen__cpp__utils_1_1object__list_a0826fab16f26a2100b1e1f8595a5ba1b}\label{classopen__cpp__utils_1_1object__list_a0826fab16f26a2100b1e1f8595a5ba1b} 
+using {\bfseries reference} = T\&
+\item 
+\Hypertarget{classopen__cpp__utils_1_1object__list_a2935f10a9c9f97a2800ee18cfe82e413}\label{classopen__cpp__utils_1_1object__list_a2935f10a9c9f97a2800ee18cfe82e413} 
+using {\bfseries const\+\_\+reference} = const T\&
+\item 
+\Hypertarget{classopen__cpp__utils_1_1object__list_a813022e0860876fe72c630b5156b0a22}\label{classopen__cpp__utils_1_1object__list_a813022e0860876fe72c630b5156b0a22} 
+using {\bfseries uuid\+\_\+type} = uint64\+\_\+t
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classopen__cpp__utils_1_1object__list_a2eb3c91ad1e1bc0c100e7445d0a69706}\label{classopen__cpp__utils_1_1object__list_a2eb3c91ad1e1bc0c100e7445d0a69706} 
+{\bfseries object\+\_\+list} (const \mbox{\hyperlink{classopen__cpp__utils_1_1object__list}{object\+\_\+list}} \&other)=default
+\item 
+\Hypertarget{classopen__cpp__utils_1_1object__list_a045f712176d35dae6865ae3de2fac089}\label{classopen__cpp__utils_1_1object__list_a045f712176d35dae6865ae3de2fac089} 
+{\bfseries object\+\_\+list} (\mbox{\hyperlink{classopen__cpp__utils_1_1object__list}{object\+\_\+list}} \&\&other)=default
+\item 
+\Hypertarget{classopen__cpp__utils_1_1object__list_aa56b849aed247f2e8fbc780bdd092613}\label{classopen__cpp__utils_1_1object__list_aa56b849aed247f2e8fbc780bdd092613} 
+size\+\_\+t {\bfseries size} () const
+\item 
+\Hypertarget{classopen__cpp__utils_1_1object__list_a325fc56f9b5f3a98dcb95b7c8a689fa1}\label{classopen__cpp__utils_1_1object__list_a325fc56f9b5f3a98dcb95b7c8a689fa1} 
+size\+\_\+t {\bfseries capacity} () const
+\item 
+\Hypertarget{classopen__cpp__utils_1_1object__list_a3d38a24f8df6ed46639f4347c9e80a15}\label{classopen__cpp__utils_1_1object__list_a3d38a24f8df6ed46639f4347c9e80a15} 
+void {\bfseries clear} ()
+\item 
+\Hypertarget{classopen__cpp__utils_1_1object__list_a4b9abbe0495bbd1a08d7cec67f252a88}\label{classopen__cpp__utils_1_1object__list_a4b9abbe0495bbd1a08d7cec67f252a88} 
+uuid\+\_\+type {\bfseries insert} (const\+\_\+reference \&value)
+\item 
+\Hypertarget{classopen__cpp__utils_1_1object__list_a579d267ea515d2cf99d83e2dce628197}\label{classopen__cpp__utils_1_1object__list_a579d267ea515d2cf99d83e2dce628197} 
+void {\bfseries erase} (uuid\+\_\+type id)
+\item 
+\Hypertarget{classopen__cpp__utils_1_1object__list_ad818130c8f9612371e4a5e0d191eb8a8}\label{classopen__cpp__utils_1_1object__list_ad818130c8f9612371e4a5e0d191eb8a8} 
+\mbox{\hyperlink{classopen__cpp__utils_1_1object__list}{object\+\_\+list}} \& {\bfseries operator=} (const \mbox{\hyperlink{classopen__cpp__utils_1_1object__list}{object\+\_\+list}} \&)=default
+\item 
+\Hypertarget{classopen__cpp__utils_1_1object__list_afe009f8e8ce5d812ce4af9deaeaad626}\label{classopen__cpp__utils_1_1object__list_afe009f8e8ce5d812ce4af9deaeaad626} 
+\mbox{\hyperlink{classopen__cpp__utils_1_1object__list}{object\+\_\+list}} \& {\bfseries operator=} (\mbox{\hyperlink{classopen__cpp__utils_1_1object__list}{object\+\_\+list}} \&\&)=default
+\item 
+\Hypertarget{classopen__cpp__utils_1_1object__list_a59c5f0c6b036dda4bd1cd39f69dabcc2}\label{classopen__cpp__utils_1_1object__list_a59c5f0c6b036dda4bd1cd39f69dabcc2} 
+reference {\bfseries operator\mbox{[}$\,$\mbox{]}} (uuid\+\_\+type id)
+\item 
+\Hypertarget{classopen__cpp__utils_1_1object__list_a133595df468c27cd19a1bb26fea416fc}\label{classopen__cpp__utils_1_1object__list_a133595df468c27cd19a1bb26fea416fc} 
+const\+\_\+reference {\bfseries operator\mbox{[}$\,$\mbox{]}} (uuid\+\_\+type id) const
+\item 
+\Hypertarget{classopen__cpp__utils_1_1object__list_ab8fd241ea78818a8d016ee1577c921b3}\label{classopen__cpp__utils_1_1object__list_ab8fd241ea78818a8d016ee1577c921b3} 
+bool {\bfseries operator()} (uuid\+\_\+type id) const
+\item 
+\Hypertarget{classopen__cpp__utils_1_1object__list_aa0fe9e66733ac6a69ead60e297757250}\label{classopen__cpp__utils_1_1object__list_aa0fe9e66733ac6a69ead60e297757250} 
+dynarray$<$ \mbox{\hyperlink{classopen__cpp__utils_1_1optional}{node}} $>$\+::iterator {\bfseries begin} ()
+\item 
+\Hypertarget{classopen__cpp__utils_1_1object__list_a31e5b57581f3072d5aec88e4344824c8}\label{classopen__cpp__utils_1_1object__list_a31e5b57581f3072d5aec88e4344824c8} 
+dynarray$<$ \mbox{\hyperlink{classopen__cpp__utils_1_1optional}{node}} $>$\+::iterator {\bfseries end} ()
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$typename T$>$\newline
+class open\+\_\+cpp\+\_\+utils\+::object\+\_\+list$<$ T $>$}
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em T} & \\
+\hline
+\end{DoxyTemplParams}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+object\+\_\+pool.\+h\end{DoxyCompactItemize}

@@ -1,0 +1,405 @@
+\doxysection{hash\+\_\+table.\+h}
+\hypertarget{hash__table_8h_source}{}\label{hash__table_8h_source}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//\ =====================================================================================================================}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ \ open-\/cpp-\/utils,\ an\ open-\/source\ cpp\ library\ with\ data\ structures\ that\ extend\ the\ STL.}}
+\DoxyCodeLine{00003\ \textcolor{comment}{//\ \ Copyright\ (C)\ 2024\ \ Medusa\ Slockbower}}
+\DoxyCodeLine{00004\ \textcolor{comment}{//}}
+\DoxyCodeLine{00005\ \textcolor{comment}{//\ \ This\ program\ is\ free\ software:\ you\ can\ redistribute\ it\ and/or\ modify}}
+\DoxyCodeLine{00006\ \textcolor{comment}{//\ \ it\ under\ the\ terms\ of\ the\ GNU\ General\ Public\ License\ as\ published\ by}}
+\DoxyCodeLine{00007\ \textcolor{comment}{//\ \ the\ Free\ Software\ Foundation,\ either\ version\ 3\ of\ the\ License,\ or}}
+\DoxyCodeLine{00008\ \textcolor{comment}{//\ \ (at\ your\ option)\ any\ later\ version.}}
+\DoxyCodeLine{00009\ \textcolor{comment}{//}}
+\DoxyCodeLine{00010\ \textcolor{comment}{//\ \ This\ program\ is\ distributed\ in\ the\ hope\ that\ it\ will\ be\ useful,}}
+\DoxyCodeLine{00011\ \textcolor{comment}{//\ \ but\ WITHOUT\ ANY\ WARRANTY;\ without\ even\ the\ implied\ warranty\ of}}
+\DoxyCodeLine{00012\ \textcolor{comment}{//\ \ MERCHANTABILITY\ or\ FITNESS\ FOR\ A\ PARTICULAR\ PURPOSE.\ \ See\ the}}
+\DoxyCodeLine{00013\ \textcolor{comment}{//\ \ GNU\ General\ Public\ License\ for\ more\ details.}}
+\DoxyCodeLine{00014\ \textcolor{comment}{//}}
+\DoxyCodeLine{00015\ \textcolor{comment}{//\ \ You\ should\ have\ received\ a\ copy\ of\ the\ GNU\ General\ Public\ License}}
+\DoxyCodeLine{00016\ \textcolor{comment}{//\ \ along\ with\ this\ program.\ \ If\ not,\ see\ <https://www.gnu.org/licenses/>.}}
+\DoxyCodeLine{00017\ \textcolor{comment}{//\ =====================================================================================================================}}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \textcolor{preprocessor}{\#ifndef\ OPEN\_CPP\_UTILS\_HASH\_TABLE\_H}}
+\DoxyCodeLine{00020\ \textcolor{preprocessor}{\#define\ OPEN\_CPP\_UTILS\_HASH\_TABLE\_H}}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ \textcolor{preprocessor}{\#include\ <memory>}}
+\DoxyCodeLine{00023\ \textcolor{preprocessor}{\#include\ <type\_traits>}}
+\DoxyCodeLine{00024\ \textcolor{preprocessor}{\#include\ <cstdarg>}}
+\DoxyCodeLine{00025\ \textcolor{preprocessor}{\#include\ <utility>}}
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00027\ \textcolor{preprocessor}{\#include\ "{}math.h"{}}}
+\DoxyCodeLine{00028\ \textcolor{preprocessor}{\#include\ "{}optional.h"{}}}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ \textcolor{keyword}{namespace\ }open\_cpp\_utils}
+\DoxyCodeLine{00031\ \{}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00033\ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T,\ \textcolor{keyword}{class}\ Hash\ =\ std::hash<T>,\ \textcolor{keyword}{class}\ Alloc\ =\ std::allocator<T>>}
+\DoxyCodeLine{00034\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classopen__cpp__utils_1_1hash__table}{hash\_table}}}
+\DoxyCodeLine{00035\ \{}
+\DoxyCodeLine{00036\ \textcolor{comment}{//\ Typedefs\ ============================================================================================================}}
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00038\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00039\ \ \ \ \ \textcolor{keyword}{friend}\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classopen__cpp__utils_1_1hash__table_1_1iterator}{iterator}};}
+\DoxyCodeLine{00040\ }
+\DoxyCodeLine{00041\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00042\ \ \ \ \ \textcolor{keyword}{struct\ }\_Node;}
+\DoxyCodeLine{00043\ }
+\DoxyCodeLine{00044\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00045\ \ \ \ \ \textcolor{keyword}{using\ }value\_type\ \ \ \ \ \ =\ T;}
+\DoxyCodeLine{00046\ \ \ \ \ \textcolor{keyword}{using\ }pointer\ \ \ \ \ \ \ \ \ =\ T*;}
+\DoxyCodeLine{00047\ \ \ \ \ \textcolor{keyword}{using\ }const\_pointer\ \ \ =\ \textcolor{keyword}{const}\ T*;}
+\DoxyCodeLine{00048\ \ \ \ \ \textcolor{keyword}{using\ }reference\ \ \ \ \ \ \ =\ T\&;}
+\DoxyCodeLine{00049\ \ \ \ \ \textcolor{keyword}{using\ }const\_reference\ =\ \textcolor{keyword}{const}\ T\&;}
+\DoxyCodeLine{00050\ }
+\DoxyCodeLine{00051\ \ \ \ \ \textcolor{keyword}{using\ }hash\_type\ \ \ \ \ \ \ =\ Hash;}
+\DoxyCodeLine{00052\ \ \ \ \ \textcolor{keyword}{using\ }allocator\_type\ \ =\ \textcolor{keyword}{typename}\ std::allocator\_traits<Alloc>::template\ rebind\_alloc<\_Node>;}
+\DoxyCodeLine{00053\ }
+\DoxyCodeLine{00054\ \ \ \ \ \textcolor{keyword}{using\ }size\_type\ \ \ \ \ \ \ =\ size\_t;}
+\DoxyCodeLine{00055\ \ \ \ \ \textcolor{keyword}{using\ }iterator\_type\ \ \ =\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classopen__cpp__utils_1_1hash__table_1_1iterator}{iterator}};}
+\DoxyCodeLine{00056\ }
+\DoxyCodeLine{00057\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00058\ \ \ \ \ \textcolor{keyword}{using\ }table\_type\ =\ \_Node*;}
+\DoxyCodeLine{00059\ \ \ \ \ \textcolor{keyword}{using\ }node\ \ \ \ \ \ \ =\ int64\_t;}
+\DoxyCodeLine{00060\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ node\ nullnode\ =\ std::integral\_constant<node,\ -\/1>\{\};}
+\DoxyCodeLine{00061\ }
+\DoxyCodeLine{00062\ }
+\DoxyCodeLine{00063\ \textcolor{comment}{//\ Structs\ =============================================================================================================}}
+\DoxyCodeLine{00064\ }
+\DoxyCodeLine{00065\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00066\ \ \ \ \ \textcolor{keyword}{struct\ }\_Node}
+\DoxyCodeLine{00067\ \ \ \ \ \{}
+\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classopen__cpp__utils_1_1optional}{optional<T>}}\ value;}
+\DoxyCodeLine{00069\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ \ \ \ \ \ \ \ \ psl;}
+\DoxyCodeLine{00070\ }
+\DoxyCodeLine{00071\ \ \ \ \ \ \ \ \ \_Node()\ :\ value(),\ psl(0)\ \{\ \}}
+\DoxyCodeLine{00072\ \ \ \ \ \ \ \ \ \_Node(const\_reference\ v)\ :\ value(v),\ psl(0)\ \{\ \}}
+\DoxyCodeLine{00073\ \ \ \ \ \ \ \ \ \_Node(const\_reference\ v,\ \textcolor{keywordtype}{int}\ psl)\ :\ value(v),\ psl(psl)\ \{\ \}}
+\DoxyCodeLine{00074\ }
+\DoxyCodeLine{00075\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ operator==(\textcolor{keyword}{const}\ \_Node\&\ b)\textcolor{keyword}{\ const}}
+\DoxyCodeLine{00076\ \textcolor{keyword}{\ \ \ \ \ \ \ \ }\{}
+\DoxyCodeLine{00077\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ value\ ==\ b.value\ \&\&\ psl\ ==\ b.psl;}
+\DoxyCodeLine{00078\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00079\ \ \ \ \ \};}
+\DoxyCodeLine{00080\ }
+\DoxyCodeLine{00081\ }
+\DoxyCodeLine{00082\ \ \ \ \ \textcolor{comment}{//\ Iterators\ ===========================================================================================================}}
+\DoxyCodeLine{00083\ }
+\DoxyCodeLine{00084\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00085\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{classopen__cpp__utils_1_1hash__table_1_1iterator}{iterator}}}
+\DoxyCodeLine{00086\ \ \ \ \ \{}
+\DoxyCodeLine{00087\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00088\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classopen__cpp__utils_1_1hash__table_1_1iterator}{iterator}}(\mbox{\hyperlink{classopen__cpp__utils_1_1hash__table}{hash\_table}}*\ table,\ size\_type\ idx)\ :\ table\_(table),\ idx\_(idx)\ \{\ \_next\_index();\ \}}
+\DoxyCodeLine{00089\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classopen__cpp__utils_1_1hash__table_1_1iterator}{iterator}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classopen__cpp__utils_1_1hash__table_1_1iterator}{iterator}}\&\ b)\ :\ table\_(b.table\_),\ idx\_(b.idx\_)\ \{\ \}}
+\DoxyCodeLine{00090\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classopen__cpp__utils_1_1hash__table_1_1iterator}{iterator}}(\mbox{\hyperlink{classopen__cpp__utils_1_1hash__table_1_1iterator}{iterator}}\&\&\ b)\ noexcept\ :\ table\_(b.table\_),\ idx\_(b.idx\_)\ \{\ \}}
+\DoxyCodeLine{00091\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classopen__cpp__utils_1_1hash__table_1_1iterator}{\string~iterator}}()\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00092\ }
+\DoxyCodeLine{00093\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classopen__cpp__utils_1_1hash__table_1_1iterator}{iterator}}\&\ operator=(\textcolor{keyword}{const}\ \mbox{\hyperlink{classopen__cpp__utils_1_1hash__table_1_1iterator}{iterator}}\&\ b)\ \ \ \ \ \{\ \textcolor{keywordflow}{if}(\&b\ ==\ \textcolor{keyword}{this})\ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};\ table\_\ =\ b.table\_;\ idx\_\ =\ b.idx\_;\ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};\ \}}
+\DoxyCodeLine{00094\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classopen__cpp__utils_1_1hash__table_1_1iterator}{iterator}}\&\ operator=(\mbox{\hyperlink{classopen__cpp__utils_1_1hash__table_1_1iterator}{iterator}}\&\&\ b)\ \textcolor{keyword}{noexcept}\ \{\ \textcolor{keywordflow}{if}(\&b\ ==\ \textcolor{keyword}{this})\ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};\ table\_\ =\ b.table\_;\ idx\_\ =\ b.idx\_;\ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};\ \};}
+\DoxyCodeLine{00095\ }
+\DoxyCodeLine{00096\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classopen__cpp__utils_1_1hash__table_1_1iterator}{iterator}}\&\ operator++()\ \{\ ++idx\_;\ \_next\_index();\ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};\ \}}
+\DoxyCodeLine{00097\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classopen__cpp__utils_1_1hash__table_1_1iterator}{iterator}}\ \ operator++(\textcolor{keywordtype}{int})\ \{\ \mbox{\hyperlink{classopen__cpp__utils_1_1hash__table_1_1iterator}{iterator}}\ ret\ =\ *\textcolor{keyword}{this};\ ++idx\_;\ \_next\_index();\ \textcolor{keywordflow}{return}\ ret;\ \}}
+\DoxyCodeLine{00098\ }
+\DoxyCodeLine{00099\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ operator==(\textcolor{keyword}{const}\ \mbox{\hyperlink{classopen__cpp__utils_1_1hash__table_1_1iterator}{iterator}}\&\ o)\ \textcolor{keyword}{const}\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00100\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ operator!=(\textcolor{keyword}{const}\ \mbox{\hyperlink{classopen__cpp__utils_1_1hash__table_1_1iterator}{iterator}}\&\ o)\ \textcolor{keyword}{const}\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00101\ }
+\DoxyCodeLine{00102\ \ \ \ \ \ \ \ \ reference\ operator*()\ \ \{\ \textcolor{keywordflow}{return}\ table\_-\/>table\_[idx\_].value;\ \}}
+\DoxyCodeLine{00103\ \ \ \ \ \ \ \ \ pointer\ \ \ operator-\/>()\ \{\ \textcolor{keywordflow}{return}\ \&*table\_-\/>table\_[idx\_].value;\ \}}
+\DoxyCodeLine{00104\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00105\ \ \ \ \ \ \ \ \ const\_reference\ operator*()\textcolor{keyword}{\ \ const\ }\{\ \textcolor{keywordflow}{return}\ table\_-\/>table\_[idx\_].value;\ \}}
+\DoxyCodeLine{00106\ \ \ \ \ \ \ \ \ const\_pointer\ \ \ operator-\/>()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ \&*table\_-\/>table\_[idx\_].value;\ \}}
+\DoxyCodeLine{00107\ }
+\DoxyCodeLine{00108\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00109\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \_next\_index()}
+\DoxyCodeLine{00110\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00111\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{while}(idx\_\ <\ table\_-\/>capacity\_\ \&\&\ not\ table\_-\/>table\_[idx\_].value())}
+\DoxyCodeLine{00112\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ++idx\_;}
+\DoxyCodeLine{00113\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00114\ }
+\DoxyCodeLine{00115\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classopen__cpp__utils_1_1hash__table}{hash\_table}}*\ table\_;}
+\DoxyCodeLine{00116\ \ \ \ \ \ \ \ \ size\_type\ \ \ idx\_;}
+\DoxyCodeLine{00117\ \ \ \ \ \};}
+\DoxyCodeLine{00118\ \ \ \ \ }
+\DoxyCodeLine{00119\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{classopen__cpp__utils_1_1hash__table_1_1const__iterator}{const\_iterator}}}
+\DoxyCodeLine{00120\ \ \ \ \ \{}
+\DoxyCodeLine{00121\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00122\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classopen__cpp__utils_1_1hash__table_1_1const__iterator}{const\_iterator}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classopen__cpp__utils_1_1hash__table}{hash\_table}}*\ table,\ node\ idx)\ :\ table\_(table),\ idx\_(idx)\ \{\ \_next\_index();\ \}}
+\DoxyCodeLine{00123\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classopen__cpp__utils_1_1hash__table_1_1const__iterator}{const\_iterator}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classopen__cpp__utils_1_1hash__table_1_1const__iterator}{const\_iterator}}\&\ b)\ :\ table\_(b.table\_),\ idx\_(b.idx\_)\ \{\ \}}
+\DoxyCodeLine{00124\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classopen__cpp__utils_1_1hash__table_1_1const__iterator}{const\_iterator}}(\mbox{\hyperlink{classopen__cpp__utils_1_1hash__table_1_1const__iterator}{const\_iterator}}\&\&\ b)\ noexcept\ :\ table\_(b.table\_),\ idx\_(b.idx\_)\ \{\ \}}
+\DoxyCodeLine{00125\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classopen__cpp__utils_1_1hash__table_1_1const__iterator}{\string~const\_iterator}}()\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00126\ }
+\DoxyCodeLine{00127\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classopen__cpp__utils_1_1hash__table_1_1const__iterator}{const\_iterator}}\&\ operator=(\textcolor{keyword}{const}\ \mbox{\hyperlink{classopen__cpp__utils_1_1hash__table_1_1const__iterator}{const\_iterator}}\&\ b)\ \ \ \ \ \{\ \textcolor{keywordflow}{if}(\&b\ ==\ \textcolor{keyword}{this})\ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};\ table\_\ =\ b.table\_;\ idx\_\ =\ b.idx\_;\ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};\ \}}
+\DoxyCodeLine{00128\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classopen__cpp__utils_1_1hash__table_1_1const__iterator}{const\_iterator}}\&\ operator=(\mbox{\hyperlink{classopen__cpp__utils_1_1hash__table_1_1const__iterator}{const\_iterator}}\&\&\ b)\ \textcolor{keyword}{noexcept}\ \{\ \textcolor{keywordflow}{if}(\&b\ ==\ \textcolor{keyword}{this})\ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};\ table\_\ =\ b.table\_;\ idx\_\ =\ b.idx\_;\ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};\ \};}
+\DoxyCodeLine{00129\ }
+\DoxyCodeLine{00130\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classopen__cpp__utils_1_1hash__table_1_1const__iterator}{const\_iterator}}\&\ operator++()\ \{\ ++idx\_;\ \_next\_index();\ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};\ \}}
+\DoxyCodeLine{00131\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classopen__cpp__utils_1_1hash__table_1_1const__iterator}{const\_iterator}}\ \ operator++(\textcolor{keywordtype}{int})\ \{\ \mbox{\hyperlink{classopen__cpp__utils_1_1hash__table_1_1const__iterator}{const\_iterator}}\ ret\ =\ *\textcolor{keyword}{this};\ ++idx\_;\ \_next\_index();\ \textcolor{keywordflow}{return}\ ret;\ \}}
+\DoxyCodeLine{00132\ }
+\DoxyCodeLine{00133\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ operator==(\textcolor{keyword}{const}\ \mbox{\hyperlink{classopen__cpp__utils_1_1hash__table_1_1const__iterator}{const\_iterator}}\&\ o)\ \textcolor{keyword}{const}\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00134\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ operator!=(\textcolor{keyword}{const}\ \mbox{\hyperlink{classopen__cpp__utils_1_1hash__table_1_1const__iterator}{const\_iterator}}\&\ o)\ \textcolor{keyword}{const}\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00135\ }
+\DoxyCodeLine{00136\ \ \ \ \ \ \ \ \ reference\ operator*()\textcolor{keyword}{\ \ const\ }\{\ \textcolor{keywordflow}{return}\ \ table\_-\/>table\_[idx\_].value;\ \}}
+\DoxyCodeLine{00137\ \ \ \ \ \ \ \ \ pointer\ \ \ operator-\/>()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ \&*table\_-\/>table\_[idx\_].value;\ \}}
+\DoxyCodeLine{00138\ }
+\DoxyCodeLine{00139\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00140\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \_next\_index()\ \{\ \textcolor{keywordflow}{while}(idx\_\ <\ table\_-\/>capacity\_\ \&\&\ not\ table\_-\/>table\_[idx\_].value())\ ++idx\_;\ \}}
+\DoxyCodeLine{00141\ }
+\DoxyCodeLine{00142\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classopen__cpp__utils_1_1hash__table}{hash\_table}}*\ table\_;}
+\DoxyCodeLine{00143\ \ \ \ \ \ \ \ \ node\ \ \ \ \ \ \ \ idx\_;}
+\DoxyCodeLine{00144\ \ \ \ \ \};}
+\DoxyCodeLine{00145\ }
+\DoxyCodeLine{00146\ \ \ \ \ \mbox{\hyperlink{classopen__cpp__utils_1_1hash__table_1_1iterator}{iterator}}\ begin()\ \{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classopen__cpp__utils_1_1hash__table_1_1iterator}{iterator}}(\textcolor{keyword}{this},\ 0);\ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00147\ \ \ \ \ iterator\ end()\ \ \ \{\ \textcolor{keywordflow}{return}\ iterator(\textcolor{keyword}{this},\ capacity\_);\ \}}
+\DoxyCodeLine{00148\ }
+\DoxyCodeLine{00149\ \ \ \ \ const\_iterator\ begin()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ const\_iterator(\textcolor{keyword}{this},\ 0);\ \}}
+\DoxyCodeLine{00150\ \ \ \ \ const\_iterator\ end()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ const\_iterator(\textcolor{keyword}{this},\ capacity\_);\ \}}
+\DoxyCodeLine{00151\ }
+\DoxyCodeLine{00152\ }
+\DoxyCodeLine{00153\ \textcolor{comment}{//\ Functions\ ===========================================================================================================}}
+\DoxyCodeLine{00154\ }
+\DoxyCodeLine{00155\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00156\ }
+\DoxyCodeLine{00157\ \textcolor{comment}{//\ Constructors\ \&\ Destructor\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00158\ }
+\DoxyCodeLine{00159\ \ \ \ \ hash\_table()\ :\ table\_(nullptr),\ capacity\_(0),\ size\_(0),\ load\_factor\_(0.8),\ hash\_(),\ alloc\_()\ \{\ \}}
+\DoxyCodeLine{00160\ \ \ \ \ hash\_table(std::initializer\_list<value\_type>\ data);}
+\DoxyCodeLine{00161\ \ \ \ \ hash\_table(\textcolor{keyword}{const}\ hash\_table\&);}
+\DoxyCodeLine{00162\ \ \ \ \ hash\_table(hash\_table\&\&)\ =\ \textcolor{keywordflow}{default};\ \textcolor{comment}{//\ Default\ Move\ Constructor\ should\ suffice}}
+\DoxyCodeLine{00163\ \ \ \ \ \string~hash\_table()\ \{\ clear();\ \}}
+\DoxyCodeLine{00164\ }
+\DoxyCodeLine{00165\ \textcolor{comment}{//\ Modifiers\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00166\ }
+\DoxyCodeLine{00167\ \ \ \ \ \textcolor{keywordtype}{void}\ reserve(\textcolor{keywordtype}{size\_t}\ size);}
+\DoxyCodeLine{00168\ \ \ \ \ \textcolor{keywordtype}{void}\ clear();}
+\DoxyCodeLine{00169\ \ \ \ \ \textcolor{keywordtype}{void}\ insert(const\_reference\ x);}
+\DoxyCodeLine{00170\ \ \ \ \ \textcolor{keywordtype}{void}\ erase(const\_reference\ x);}
+\DoxyCodeLine{00171\ \ \ \ \ \textcolor{keywordtype}{bool}\ contains(const\_reference\ x);}
+\DoxyCodeLine{00172\ \ \ \ \ }
+\DoxyCodeLine{00173\ \ \ \ \ iterator\ find(const\_reference\ x)}
+\DoxyCodeLine{00174\ \ \ \ \ \{}
+\DoxyCodeLine{00175\ \ \ \ \ \ \ \ \ node\ res\ =\ \_find(x);}
+\DoxyCodeLine{00176\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(res\ ==\ nullnode)\ res\ =\ capacity\_;}
+\DoxyCodeLine{00177\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ iterator(\textcolor{keyword}{this},\ res);}
+\DoxyCodeLine{00178\ \ \ \ \ \}}
+\DoxyCodeLine{00179\ \ \ \ \ }
+\DoxyCodeLine{00180\ \ \ \ \ const\_iterator\ find(const\_reference\ x)\textcolor{keyword}{\ const}}
+\DoxyCodeLine{00181\ \textcolor{keyword}{\ \ \ \ }\{}
+\DoxyCodeLine{00182\ \ \ \ \ \ \ \ \ node\ res\ =\ \_find(x);}
+\DoxyCodeLine{00183\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(res\ ==\ nullnode)\ res\ =\ capacity\_;}
+\DoxyCodeLine{00184\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ const\_iterator(\textcolor{keyword}{this},\ res);}
+\DoxyCodeLine{00185\ \ \ \ \ \}}
+\DoxyCodeLine{00186\ }
+\DoxyCodeLine{00187\ \textcolor{comment}{//\ Size\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00188\ }
+\DoxyCodeLine{00189\ \ \ \ \ [[nodiscard]]\ size\_type\ capacity()\textcolor{keyword}{\ \ const\ }\{\ \textcolor{keywordflow}{return}\ capacity\_;\ \}}
+\DoxyCodeLine{00190\ \ \ \ \ [[nodiscard]]\ size\_type\ size()\textcolor{keyword}{\ \ \ \ \ \ const\ }\{\ \textcolor{keywordflow}{return}\ size\_;\ \}}
+\DoxyCodeLine{00191\ \ \ \ \ [[nodiscard]]\ \textcolor{keywordtype}{bool}\ \ \ \ \ \ empty()\textcolor{keyword}{\ \ \ \ \ const\ }\{\ \textcolor{keywordflow}{return}\ size\_\ ==\ 0;\ \}}
+\DoxyCodeLine{00192\ \ \ \ \ [[nodiscard]]\ \textcolor{keywordtype}{double}\ \ \ \ occupancy()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ size\_\ /\ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{double}\textcolor{keyword}{>}(capacity\_);\ \}}
+\DoxyCodeLine{00193\ }
+\DoxyCodeLine{00194\ \textcolor{comment}{//\ Helpers\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00195\ }
+\DoxyCodeLine{00196\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00197\ \ \ \ \ \textcolor{keywordtype}{void}\ \_increase\_capacity();}
+\DoxyCodeLine{00198\ }
+\DoxyCodeLine{00199\ \ \ \ \ [[nodiscard]]\ node\ \_hash(const\_reference\ v)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00200\ \ \ \ \ [[nodiscard]]\ node\ \_find(const\_reference\ x)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00201\ \ \ \ \ [[nodiscard]]\ node\ \_next(node\ n)\textcolor{keyword}{\ \ \ \ \ \ \ \ \ \ \ \ const\ }\{\ \textcolor{keywordflow}{return}\ (n\ +\ 1)\ \ \ \ \ \ \ \ \ \ \ \ \ \%\ capacity\_;\ \}}
+\DoxyCodeLine{00202\ \ \ \ \ [[nodiscard]]\ node\ \_prev(node\ n)\textcolor{keyword}{\ \ \ \ \ \ \ \ \ \ \ \ const\ }\{\ \textcolor{keywordflow}{return}\ (n\ -\/\ 1\ +\ capacity\_)\ \%\ capacity\_;\ \}}
+\DoxyCodeLine{00203\ }
+\DoxyCodeLine{00204\ \ \ \ \ \textcolor{keyword}{static}\ size\_type\ \_next\_prime(size\_type\ x);}
+\DoxyCodeLine{00205\ \ \ \ \ \textcolor{keyword}{static}\ size\_type\ \_prev\_prime(size\_type\ x);}
+\DoxyCodeLine{00206\ }
+\DoxyCodeLine{00207\ }
+\DoxyCodeLine{00208\ \textcolor{comment}{//\ Variables\ ===========================================================================================================}}
+\DoxyCodeLine{00209\ }
+\DoxyCodeLine{00210\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00211\ \ \ \ \ table\_type\ \ \ \ \ table\_;}
+\DoxyCodeLine{00212\ \ \ \ \ size\_type\ \ \ \ \ \ capacity\_,\ size\_;}
+\DoxyCodeLine{00213\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ load\_factor\_;}
+\DoxyCodeLine{00214\ \ \ \ \ hash\_type\ \ \ \ \ \ hash\_;}
+\DoxyCodeLine{00215\ \ \ \ \ allocator\_type\ alloc\_;}
+\DoxyCodeLine{00216\ \};}
+\DoxyCodeLine{00217\ }
+\DoxyCodeLine{00218\ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T,\ \textcolor{keyword}{class}\ Hash,\ \textcolor{keyword}{class}\ Alloc>}
+\DoxyCodeLine{00219\ hash\_table<T,\ Hash,\ Alloc>::hash\_table(std::initializer\_list<value\_type>\ data)}
+\DoxyCodeLine{00220\ \ \ \ \ :\ hash\_table()}
+\DoxyCodeLine{00221\ \{}
+\DoxyCodeLine{00222\ \ \ \ \ reserve(data.size());}
+\DoxyCodeLine{00223\ \ \ \ \ \textcolor{keywordflow}{for}(value\_type\ val\ :\ data)\ \{\ insert(val);\ \}}
+\DoxyCodeLine{00224\ \}}
+\DoxyCodeLine{00225\ }
+\DoxyCodeLine{00226\ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T,\ \textcolor{keyword}{class}\ Hash,\ \textcolor{keyword}{class}\ Alloc>}
+\DoxyCodeLine{00227\ hash\_table<T,\ Hash,\ Alloc>::hash\_table(\textcolor{keyword}{const}\ hash\_table\&\ other)}
+\DoxyCodeLine{00228\ \ \ \ \ :\ table\_(nullptr)}
+\DoxyCodeLine{00229\ \ \ \ \ ,\ capacity\_(other.capacity\_)}
+\DoxyCodeLine{00230\ \ \ \ \ ,\ size\_(other.size\_)}
+\DoxyCodeLine{00231\ \ \ \ \ ,\ load\_factor\_(0.8)}
+\DoxyCodeLine{00232\ \{}
+\DoxyCodeLine{00233\ }
+\DoxyCodeLine{00234\ \}}
+\DoxyCodeLine{00235\ }
+\DoxyCodeLine{00236\ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T,\ \textcolor{keyword}{class}\ Hash,\ \textcolor{keyword}{class}\ Alloc>}
+\DoxyCodeLine{00237\ \textcolor{keywordtype}{void}\ hash\_table<T,\ Hash,\ Alloc>::reserve(\textcolor{keywordtype}{size\_t}\ size)}
+\DoxyCodeLine{00238\ \{}
+\DoxyCodeLine{00239\ \ \ \ \ table\_type\ old\ =\ table\_;}
+\DoxyCodeLine{00240\ \ \ \ \ size\_type\ \ old\_capacity\ =\ capacity\_;}
+\DoxyCodeLine{00241\ \ \ \ \ capacity\_\ =\ \_next\_prime(size);}
+\DoxyCodeLine{00242\ \ \ \ \ table\_\ \ \ \ =\ alloc\_.allocate(capacity\_);}
+\DoxyCodeLine{00243\ \ \ \ \ memset(table\_,\ 0,\ capacity\_\ *\ \textcolor{keyword}{sizeof}(\_Node));}
+\DoxyCodeLine{00244\ \ \ \ \ size\_\ =\ 0;}
+\DoxyCodeLine{00245\ }
+\DoxyCodeLine{00246\ \ \ \ \ \textcolor{keywordflow}{for}(size\_type\ i\ =\ 0;\ i\ <\ old\_capacity;\ ++i)}
+\DoxyCodeLine{00247\ \ \ \ \ \{}
+\DoxyCodeLine{00248\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(old[i].value())\ insert(old[i].value);}
+\DoxyCodeLine{00249\ \ \ \ \ \}}
+\DoxyCodeLine{00250\ }
+\DoxyCodeLine{00251\ \ \ \ \ alloc\_.deallocate(old,\ old\_capacity);}
+\DoxyCodeLine{00252\ \}}
+\DoxyCodeLine{00253\ }
+\DoxyCodeLine{00254\ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T,\ \textcolor{keyword}{class}\ Hash,\ \textcolor{keyword}{class}\ Alloc>}
+\DoxyCodeLine{00255\ \textcolor{keywordtype}{void}\ hash\_table<T,\ Hash,\ Alloc>::clear()}
+\DoxyCodeLine{00256\ \{}
+\DoxyCodeLine{00257\ \ \ \ \ alloc\_.deallocate(table\_,\ capacity\_);}
+\DoxyCodeLine{00258\ \ \ \ \ capacity\_\ =\ size\_\ =\ 0;}
+\DoxyCodeLine{00259\ \ \ \ \ table\_\ =\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{00260\ \}}
+\DoxyCodeLine{00261\ }
+\DoxyCodeLine{00262\ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T,\ \textcolor{keyword}{class}\ Hash,\ \textcolor{keyword}{class}\ Alloc>}
+\DoxyCodeLine{00263\ \textcolor{keywordtype}{void}\ hash\_table<T,\ Hash,\ Alloc>::insert(const\_reference\ x)}
+\DoxyCodeLine{00264\ \{}
+\DoxyCodeLine{00265\ \ \ \ \ \textcolor{keywordflow}{if}(occupancy()\ >\ load\_factor\_\ ||\ capacity\_\ ==\ 0)\ \_increase\_capacity();}
+\DoxyCodeLine{00266\ }
+\DoxyCodeLine{00267\ \ \ \ \ node\ idx\ =\ \_hash(x);}
+\DoxyCodeLine{00268\ \ \ \ \ \textcolor{keywordtype}{int}\ \ psl\ =\ 0;}
+\DoxyCodeLine{00269\ \ \ \ \ T\ \ \ \ val\ =\ x;}
+\DoxyCodeLine{00270\ }
+\DoxyCodeLine{00271\ \ \ \ \ \textcolor{keywordflow}{while}(table\_[idx].value())}
+\DoxyCodeLine{00272\ \ \ \ \ \{}
+\DoxyCodeLine{00273\ \ \ \ \ \ \ \ \ \_Node\&\ node\ =\ table\_[idx];}
+\DoxyCodeLine{00274\ }
+\DoxyCodeLine{00275\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(*node.value\ ==\ x)\ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00276\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(psl\ >\ node.psl)}
+\DoxyCodeLine{00277\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00278\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ std::swap(psl,\ node.psl);\ std::swap(value,\ node.value);}}
+\DoxyCodeLine{00279\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ temp\_psl\ =\ psl;\ \ \ \ \ \ \ \ psl\ =\ node.psl;\ \ \ node.psl\ =\ temp\_psl;}
+\DoxyCodeLine{00280\ \ \ \ \ \ \ \ \ \ \ \ \ T\ \ \ temp\_val\ =\ std::move(node.value);\ node.value\ =\ std::move(val);\ val\ =\ std::move(temp\_val);}
+\DoxyCodeLine{00281\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00282\ }
+\DoxyCodeLine{00283\ \ \ \ \ \ \ \ \ idx\ =\ \_next(idx);}
+\DoxyCodeLine{00284\ \ \ \ \ \ \ \ \ ++psl;}
+\DoxyCodeLine{00285\ \ \ \ \ \}}
+\DoxyCodeLine{00286\ }
+\DoxyCodeLine{00287\ \ \ \ \ std::construct\_at(table\_\ +\ idx,\ val,\ psl);}
+\DoxyCodeLine{00288\ \ \ \ \ ++size\_;}
+\DoxyCodeLine{00289\ \}}
+\DoxyCodeLine{00290\ }
+\DoxyCodeLine{00291\ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T,\ \textcolor{keyword}{class}\ Hash,\ \textcolor{keyword}{class}\ Alloc>}
+\DoxyCodeLine{00292\ \textcolor{keywordtype}{void}\ hash\_table<T,\ Hash,\ Alloc>::erase(const\_reference\ x)}
+\DoxyCodeLine{00293\ \{}
+\DoxyCodeLine{00294\ \ \ \ \ node\ idx\ =\ \_find(x);}
+\DoxyCodeLine{00295\ \ \ \ \ \textcolor{keywordflow}{if}(idx\ ==\ nullnode)\ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00296\ }
+\DoxyCodeLine{00297\ \ \ \ \ table\_[idx].value.reset();}
+\DoxyCodeLine{00298\ \ \ \ \ -\/-\/size\_;}
+\DoxyCodeLine{00299\ }
+\DoxyCodeLine{00300\ \ \ \ \ node\ prev\ =\ idx;\ idx\ =\ \_next(idx);}
+\DoxyCodeLine{00301\ \ \ \ \ \textcolor{keywordflow}{while}(table\_[idx].value()\ \&\&\ table\_[idx].psl\ >\ 0)}
+\DoxyCodeLine{00302\ \ \ \ \ \{}
+\DoxyCodeLine{00303\ \ \ \ \ \ \ \ \ \_Node\ \&a\ =\ table\_[prev],\ \&b\ =\ table\_[idx];}
+\DoxyCodeLine{00304\ \ \ \ \ \ \ \ \ std::swap(a,\ b);}
+\DoxyCodeLine{00305\ \ \ \ \ \ \ \ \ -\/-\/a.psl;\ prev\ =\ idx;\ idx\ =\ \_next(idx);}
+\DoxyCodeLine{00306\ \ \ \ \ \}}
+\DoxyCodeLine{00307\ \}}
+\DoxyCodeLine{00308\ }
+\DoxyCodeLine{00309\ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T,\ \textcolor{keyword}{class}\ Hash,\ \textcolor{keyword}{class}\ Alloc>}
+\DoxyCodeLine{00310\ \textcolor{keywordtype}{bool}\ hash\_table<T,\ Hash,\ Alloc>::contains(const\_reference\ x)}
+\DoxyCodeLine{00311\ \{}
+\DoxyCodeLine{00312\ \ \ \ \ \textcolor{keywordflow}{return}\ \_find(x)\ !=\ nullnode;}
+\DoxyCodeLine{00313\ \}}
+\DoxyCodeLine{00314\ }
+\DoxyCodeLine{00315\ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T,\ \textcolor{keyword}{class}\ Hash,\ \textcolor{keyword}{class}\ Alloc>}
+\DoxyCodeLine{00316\ \textcolor{keywordtype}{void}\ hash\_table<T,\ Hash,\ Alloc>::\_increase\_capacity()}
+\DoxyCodeLine{00317\ \{}
+\DoxyCodeLine{00318\ \ \ \ \ table\_type\ old\ =\ table\_;}
+\DoxyCodeLine{00319\ \ \ \ \ size\_type\ \ old\_capacity\ =\ capacity\_;}
+\DoxyCodeLine{00320\ \ \ \ \ alloc\_.deallocate(table\_,\ capacity\_);}
+\DoxyCodeLine{00321\ \ \ \ \ capacity\_\ =\ \_next\_prime(capacity\_);}
+\DoxyCodeLine{00322\ \ \ \ \ table\_\ \ \ \ =\ alloc\_.allocate(capacity\_);}
+\DoxyCodeLine{00323\ \ \ \ \ memset(table\_,\ 0,\ capacity\_\ *\ \textcolor{keyword}{sizeof}(\_Node));}
+\DoxyCodeLine{00324\ \ \ \ \ size\_\ =\ 0;}
+\DoxyCodeLine{00325\ }
+\DoxyCodeLine{00326\ \ \ \ \ \textcolor{keywordflow}{for}(size\_type\ i\ =\ 0;\ i\ <\ old\_capacity;\ ++i)}
+\DoxyCodeLine{00327\ \ \ \ \ \{}
+\DoxyCodeLine{00328\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(old[i].value())\ insert(old[i].value);}
+\DoxyCodeLine{00329\ \ \ \ \ \}}
+\DoxyCodeLine{00330\ }
+\DoxyCodeLine{00331\ \ \ \ \ alloc\_.deallocate(old,\ old\_capacity);}
+\DoxyCodeLine{00332\ \}}
+\DoxyCodeLine{00333\ }
+\DoxyCodeLine{00334\ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T,\ \textcolor{keyword}{class}\ Hash,\ \textcolor{keyword}{class}\ Alloc>}
+\DoxyCodeLine{00335\ \textcolor{keyword}{typename}\ hash\_table<T,\ Hash,\ Alloc>::node\ hash\_table<T,\ Hash,\ Alloc>::\_hash(const\_reference\ v)\textcolor{keyword}{\ const}}
+\DoxyCodeLine{00336\ \textcolor{keyword}{}\{}
+\DoxyCodeLine{00337\ \ \ \ \ node\ x\ =\ \textcolor{keyword}{static\_cast<}node\textcolor{keyword}{>}(hash\_(v));}
+\DoxyCodeLine{00338\ }
+\DoxyCodeLine{00339\ \ \ \ \ x\ \string^=\ x\ >>\ 33U;}
+\DoxyCodeLine{00340\ \ \ \ \ x\ *=\ UINT64\_C(0xff51afd7ed558ccd);}
+\DoxyCodeLine{00341\ \ \ \ \ x\ \string^=\ x\ >>\ 33U;}
+\DoxyCodeLine{00342\ \ \ \ \ x\ *=\ UINT64\_C(0xc4ceb9fe1a85ec53);}
+\DoxyCodeLine{00343\ \ \ \ \ x\ \string^=\ x\ >>\ 33U;}
+\DoxyCodeLine{00344\ }
+\DoxyCodeLine{00345\ \ \ \ \ \textcolor{keywordflow}{return}\ x\ \%\ capacity\_;}
+\DoxyCodeLine{00346\ \}}
+\DoxyCodeLine{00347\ }
+\DoxyCodeLine{00348\ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T,\ \textcolor{keyword}{class}\ Hash,\ \textcolor{keyword}{class}\ Alloc>}
+\DoxyCodeLine{00349\ \textcolor{keyword}{typename}\ hash\_table<T,\ Hash,\ Alloc>::node\ hash\_table<T,\ Hash,\ Alloc>::\_find(const\_reference\ x)\textcolor{keyword}{\ const}}
+\DoxyCodeLine{00350\ \textcolor{keyword}{}\{}
+\DoxyCodeLine{00351\ \ \ \ \ \textcolor{keywordflow}{if}(capacity\_\ ==\ 0)\ \textcolor{keywordflow}{return}\ nullnode;}
+\DoxyCodeLine{00352\ \ \ \ \ node\ idx\ =\ \_hash(x);}
+\DoxyCodeLine{00353\ \ \ \ \ \textcolor{keywordtype}{int}\ psl\ =\ 0;}
+\DoxyCodeLine{00354\ }
+\DoxyCodeLine{00355\ \ \ \ \ \textcolor{keywordflow}{while}(table\_[idx].value())}
+\DoxyCodeLine{00356\ \ \ \ \ \{}
+\DoxyCodeLine{00357\ \ \ \ \ \ \ \ \ \_Node\&\ node\ =\ table\_[idx];}
+\DoxyCodeLine{00358\ }
+\DoxyCodeLine{00359\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(node.psl\ >\ psl)\ \ \textcolor{keywordflow}{return}\ nullnode;}
+\DoxyCodeLine{00360\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(*node.value\ ==\ x)\ \textcolor{keywordflow}{return}\ idx;}
+\DoxyCodeLine{00361\ }
+\DoxyCodeLine{00362\ \ \ \ \ \ \ \ \ idx\ =\ \_next(idx);\ ++psl;}
+\DoxyCodeLine{00363\ \ \ \ \ \}}
+\DoxyCodeLine{00364\ }
+\DoxyCodeLine{00365\ \ \ \ \ \textcolor{keywordflow}{return}\ nullnode;}
+\DoxyCodeLine{00366\ \}}
+\DoxyCodeLine{00367\ }
+\DoxyCodeLine{00368\ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T,\ \textcolor{keyword}{class}\ Hash,\ \textcolor{keyword}{class}\ Alloc>}
+\DoxyCodeLine{00369\ \textcolor{keyword}{typename}\ hash\_table<T,\ Hash,\ Alloc>::size\_type\ hash\_table<T,\ Hash,\ Alloc>::\_next\_prime(size\_type\ x)}
+\DoxyCodeLine{00370\ \{}
+\DoxyCodeLine{00371\ \ \ \ \ size\_type\ n\ =\ (x\ +\ 1)\ /\ 6;}
+\DoxyCodeLine{00372\ \ \ \ \ n\ *=\ 2;}
+\DoxyCodeLine{00373\ }
+\DoxyCodeLine{00374\ \ \ \ \ \textcolor{keywordflow}{while}(\textcolor{keyword}{true})}
+\DoxyCodeLine{00375\ \ \ \ \ \{}
+\DoxyCodeLine{00376\ \ \ \ \ \ \ \ \ x\ =\ (n\ *\ 6)\ -\/\ 1;}
+\DoxyCodeLine{00377\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(!is\_prime(x))\ x\ =\ (n\ *\ 6)\ +\ 1;}
+\DoxyCodeLine{00378\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(!is\_prime(x))\ \{\ ++n;\ \textcolor{keywordflow}{continue};\ \}}
+\DoxyCodeLine{00379\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ std::max(x,\ 7ull);}
+\DoxyCodeLine{00380\ \ \ \ \ \}}
+\DoxyCodeLine{00381\ \}}
+\DoxyCodeLine{00382\ }
+\DoxyCodeLine{00383\ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T,\ \textcolor{keyword}{class}\ Hash,\ \textcolor{keyword}{class}\ Alloc>}
+\DoxyCodeLine{00384\ \textcolor{keyword}{typename}\ hash\_table<T,\ Hash,\ Alloc>::size\_type\ hash\_table<T,\ Hash,\ Alloc>::\_prev\_prime(size\_type\ x)}
+\DoxyCodeLine{00385\ \{}
+\DoxyCodeLine{00386\ \ \ \ \ size\_type\ n\ =\ (x\ +\ 1)\ /\ 6;}
+\DoxyCodeLine{00387\ \ \ \ \ n\ *=\ 2;}
+\DoxyCodeLine{00388\ }
+\DoxyCodeLine{00389\ \ \ \ \ \textcolor{keywordflow}{while}(\textcolor{keyword}{true})}
+\DoxyCodeLine{00390\ \ \ \ \ \{}
+\DoxyCodeLine{00391\ \ \ \ \ \ \ \ \ x\ =\ (n\ *\ 6)\ -\/\ 1;}
+\DoxyCodeLine{00392\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(!is\_prime(x))\ x\ =\ (n\ *\ 6)\ +\ 1;}
+\DoxyCodeLine{00393\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(!is\_prime(x))\ \{\ -\/-\/n;\ \textcolor{keywordflow}{continue};\ \}}
+\DoxyCodeLine{00394\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ std::max(x,\ 7ull);}
+\DoxyCodeLine{00395\ \ \ \ \ \}}
+\DoxyCodeLine{00396\ \}}
+\DoxyCodeLine{00397\ }
+\DoxyCodeLine{00398\ \}}
+\DoxyCodeLine{00399\ }
+\DoxyCodeLine{00400\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//\ OPEN\_CPP\_UTILS\_HASH\_TABLE\_H}}
+
+\end{DoxyCode}

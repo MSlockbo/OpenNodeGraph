@@ -3,21 +3,17 @@
 \doxysubsubsection*{Public Types}
 \begin{DoxyCompactItemize}
 \item 
-\Hypertarget{struct_open_shader_designer_1_1_pin_a6ada53e38cf37f516479c3dcabddb284}\label{struct_open_shader_designer_1_1_pin_a6ada53e38cf37f516479c3dcabddb284} 
-enum {\bfseries Pin\+Type} \{ \newline
-{\bfseries INT} = 0
-, {\bfseries UINT}
-, {\bfseries FLOAT}
-, {\bfseries VECTOR}
-, \newline
-{\bfseries ANY}
-, {\bfseries COUNT}
- \}
+\Hypertarget{struct_open_shader_designer_1_1_pin_a28a00315bb89ff12a3d58850554b8cbe}\label{struct_open_shader_designer_1_1_pin_a28a00315bb89ff12a3d58850554b8cbe} 
+using {\bfseries Ambiguous} = ocu\+::any$<$glm\+::int32, glm\+::uint32, glm\+::float32, glm\+::vec3$>$
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
 \item 
-\Hypertarget{struct_open_shader_designer_1_1_pin_a8adb1f80b40e1a4c7ad86fdb9e08e594}\label{struct_open_shader_designer_1_1_pin_a8adb1f80b40e1a4c7ad86fdb9e08e594} 
-enum {\bfseries Pin\+Direction} \{ {\bfseries INPUT}
-, {\bfseries OUTPUT}
- \}
+\Hypertarget{struct_open_shader_designer_1_1_pin_a62cef8615821611c0c329887a1ba1540}\label{struct_open_shader_designer_1_1_pin_a62cef8615821611c0c329887a1ba1540} 
+{\bfseries Pin} (const std\+::string \&name, Pin\+Type type, FlagT flags=Pin\+Flags\+\_\+\+None)
+\item 
+\Hypertarget{struct_open_shader_designer_1_1_pin_a005a73845429eb5251a0d5df6710d415}\label{struct_open_shader_designer_1_1_pin_a005a73845429eb5251a0d5df6710d415} 
+std\+::string {\bfseries Get\+Var\+Name} () const
 \end{DoxyCompactItemize}
 \doxysubsubsection*{Public Attributes}
 \begin{DoxyCompactItemize}
@@ -28,50 +24,94 @@ std\+::string {\bfseries Name}
 \Hypertarget{struct_open_shader_designer_1_1_pin_af0d09ac1168526f8f3a77c4ed180ef46}\label{struct_open_shader_designer_1_1_pin_af0d09ac1168526f8f3a77c4ed180ef46} 
 Pin\+Type {\bfseries Type}
 \item 
-\Hypertarget{struct_open_shader_designer_1_1_pin_aa36a624e048b7dddbe797d456b05f649}\label{struct_open_shader_designer_1_1_pin_aa36a624e048b7dddbe797d456b05f649} 
-Pin\+Direction {\bfseries Direction}
+\Hypertarget{struct_open_shader_designer_1_1_pin_a44ada8d63ee802839f61178ddefd8846}\label{struct_open_shader_designer_1_1_pin_a44ada8d63ee802839f61178ddefd8846} 
+FlagT {\bfseries Flags}
+\item 
+\Hypertarget{struct_open_shader_designer_1_1_pin_a1ee8f91d4602bdc1a2c0a66def8a6cd3}\label{struct_open_shader_designer_1_1_pin_a1ee8f91d4602bdc1a2c0a66def8a6cd3} 
+Ambiguous {\bfseries Value}
+\item 
+\Hypertarget{struct_open_shader_designer_1_1_pin_a6c7420afe120f244c26a15c04f46ce6b}\label{struct_open_shader_designer_1_1_pin_a6c7420afe120f244c26a15c04f46ce6b} 
+Im\+Pin\+Ptr {\bfseries Ptr}
 \end{DoxyCompactItemize}
 \doxysubsubsection*{Static Public Attributes}
 \begin{DoxyCompactItemize}
 \item 
-static const Im\+Color \mbox{\hyperlink{struct_open_shader_designer_1_1_pin_ac0bc314af51ae0f04cdeaf7911891c70}{Colors}} \mbox{[}COUNT\mbox{]}
+static const Im\+Color \mbox{\hyperlink{struct_open_shader_designer_1_1_pin_a25812619637a35ac0b1f388eda45ea07}{Colors}} \mbox{[}Pin\+Type\+\_\+\+COUNT\mbox{]}
 \item 
-static const std\+::string \mbox{\hyperlink{struct_open_shader_designer_1_1_pin_aafe6dbb5ecd7409ddd19e6acf27c9cb5}{Type\+Names}} \mbox{[}COUNT\mbox{]}
+static constexpr const char \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{struct_open_shader_designer_1_1_pin_a5c95358bb98465ab9d5a0afefe5d06be}{Type\+Names}} \mbox{[}Pin\+Type\+\_\+\+COUNT\mbox{]}
+\item 
+static const std\+::string \mbox{\hyperlink{struct_open_shader_designer_1_1_pin_a2a2728ad0f1a62d01a9322701c63ec95}{Type\+Keywords}} \mbox{[}Pin\+Type\+\_\+\+COUNT\mbox{]}
+\item 
+static const int \mbox{\hyperlink{struct_open_shader_designer_1_1_pin_a0c43cd506f74e269cedec662f97bc430}{Type\+Widths}} \mbox{[}Pin\+Type\+\_\+\+COUNT\mbox{]}
 \end{DoxyCompactItemize}
 
 
 \doxysubsection{Member Data Documentation}
-\Hypertarget{struct_open_shader_designer_1_1_pin_ac0bc314af51ae0f04cdeaf7911891c70}\index{OpenShaderDesigner::Pin@{OpenShaderDesigner::Pin}!Colors@{Colors}}
+\Hypertarget{struct_open_shader_designer_1_1_pin_a25812619637a35ac0b1f388eda45ea07}\index{OpenShaderDesigner::Pin@{OpenShaderDesigner::Pin}!Colors@{Colors}}
 \index{Colors@{Colors}!OpenShaderDesigner::Pin@{OpenShaderDesigner::Pin}}
 \doxysubsubsection{\texorpdfstring{Colors}{Colors}}
-{\footnotesize\ttfamily \label{struct_open_shader_designer_1_1_pin_ac0bc314af51ae0f04cdeaf7911891c70} 
-const Im\+Color Open\+Shader\+Designer\+::\+Pin\+::\+Colors\mbox{[}COUNT\mbox{]}\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+{\footnotesize\ttfamily \label{struct_open_shader_designer_1_1_pin_a25812619637a35ac0b1f388eda45ea07} 
+const Im\+Color Open\+Shader\+Designer\+::\+Pin\+::\+Colors\mbox{[}Pin\+Type\+\_\+\+COUNT\mbox{]}\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
 
 {\bfseries Initial value\+:}
 \begin{DoxyCode}{0}
 \DoxyCodeLine{=\ \{}
-\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ ImColor(0xB9,\ 0xF5,\ 0x94)}
-\DoxyCodeLine{\ \ \ \ \ \ \ \ ,\ \ \ ImColor(0x8C,\ 0xC0,\ 0x8C)}
-\DoxyCodeLine{\ \ \ \ \ \ \ \ ,\ \ \ ImColor(0x37,\ 0x95,\ 0x85)}
-\DoxyCodeLine{\ \ \ \ \ \ \ \ ,\ \ \ ImColor(0xE3,\ 0x7D,\ 0xDC)}
-\DoxyCodeLine{}
-\DoxyCodeLine{\ \ \ \ \ \ \ \ ,\ \ \ ImColor(0xD2,\ 0xD5,\ 0xD3)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ ImColor(0x7A,\ 0x9F,\ 0x82)\ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ ,\ \ \ ImColor(0x64,\ 0x94,\ 0xAA)\ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ ,\ \ \ ImColor(0xA6,\ 0x3D,\ 0x40)\ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ ,\ \ \ ImColor(0xE9,\ 0xB8,\ 0x72)\ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ ,\ \ \ ImColor(0xFF,\ 0xFF,\ 0xFF)\ }
 \DoxyCodeLine{\ \ \ \ \ \ \ \ \}}
 
 \end{DoxyCode}
-\Hypertarget{struct_open_shader_designer_1_1_pin_aafe6dbb5ecd7409ddd19e6acf27c9cb5}\index{OpenShaderDesigner::Pin@{OpenShaderDesigner::Pin}!TypeNames@{TypeNames}}
-\index{TypeNames@{TypeNames}!OpenShaderDesigner::Pin@{OpenShaderDesigner::Pin}}
-\doxysubsubsection{\texorpdfstring{TypeNames}{TypeNames}}
-{\footnotesize\ttfamily \label{struct_open_shader_designer_1_1_pin_aafe6dbb5ecd7409ddd19e6acf27c9cb5} 
-const std\+::string Open\+Shader\+Designer\+::\+Pin\+::\+Type\+Names\mbox{[}COUNT\mbox{]}\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+\Hypertarget{struct_open_shader_designer_1_1_pin_a2a2728ad0f1a62d01a9322701c63ec95}\index{OpenShaderDesigner::Pin@{OpenShaderDesigner::Pin}!TypeKeywords@{TypeKeywords}}
+\index{TypeKeywords@{TypeKeywords}!OpenShaderDesigner::Pin@{OpenShaderDesigner::Pin}}
+\doxysubsubsection{\texorpdfstring{TypeKeywords}{TypeKeywords}}
+{\footnotesize\ttfamily \label{struct_open_shader_designer_1_1_pin_a2a2728ad0f1a62d01a9322701c63ec95} 
+const std\+::string Open\+Shader\+Designer\+::\+Pin\+::\+Type\+Keywords\mbox{[}Pin\+Type\+\_\+\+COUNT\mbox{]}\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
 
 {\bfseries Initial value\+:}
 \begin{DoxyCode}{0}
 \DoxyCodeLine{=\ \{}
-\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}Int"{}}}
-\DoxyCodeLine{\ \ \ \ \ \ \ \ ,\ \ \ \textcolor{stringliteral}{"{}Unsigned\ Int"{}}}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}uint"{}}}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ ,\ \ \ \textcolor{stringliteral}{"{}int"{}}}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ ,\ \ \ \textcolor{stringliteral}{"{}float"{}}}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ ,\ \ \ \textcolor{stringliteral}{"{}vec3"{}}}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ ,\ \ \ \textcolor{stringliteral}{"{}vec3"{}}}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \}}
+
+\end{DoxyCode}
+\Hypertarget{struct_open_shader_designer_1_1_pin_a5c95358bb98465ab9d5a0afefe5d06be}\index{OpenShaderDesigner::Pin@{OpenShaderDesigner::Pin}!TypeNames@{TypeNames}}
+\index{TypeNames@{TypeNames}!OpenShaderDesigner::Pin@{OpenShaderDesigner::Pin}}
+\doxysubsubsection{\texorpdfstring{TypeNames}{TypeNames}}
+{\footnotesize\ttfamily \label{struct_open_shader_designer_1_1_pin_a5c95358bb98465ab9d5a0afefe5d06be} 
+const char\texorpdfstring{$\ast$}{*} Open\+Shader\+Designer\+::\+Pin\+::\+Type\+Names\mbox{[}Pin\+Type\+\_\+\+COUNT\mbox{]}\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}, {\ttfamily [constexpr]}}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{=\ \{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}Unsigned\ Int"{}}}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ ,\ \ \ \textcolor{stringliteral}{"{}Int"{}}}
 \DoxyCodeLine{\ \ \ \ \ \ \ \ ,\ \ \ \textcolor{stringliteral}{"{}Float"{}}}
 \DoxyCodeLine{\ \ \ \ \ \ \ \ ,\ \ \ \textcolor{stringliteral}{"{}Vector"{}}}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ ,\ \ \ \textcolor{stringliteral}{"{}Any"{}}}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \}}
+
+\end{DoxyCode}
+\Hypertarget{struct_open_shader_designer_1_1_pin_a0c43cd506f74e269cedec662f97bc430}\index{OpenShaderDesigner::Pin@{OpenShaderDesigner::Pin}!TypeWidths@{TypeWidths}}
+\index{TypeWidths@{TypeWidths}!OpenShaderDesigner::Pin@{OpenShaderDesigner::Pin}}
+\doxysubsubsection{\texorpdfstring{TypeWidths}{TypeWidths}}
+{\footnotesize\ttfamily \label{struct_open_shader_designer_1_1_pin_a0c43cd506f74e269cedec662f97bc430} 
+const int Open\+Shader\+Designer\+::\+Pin\+::\+Type\+Widths\mbox{[}Pin\+Type\+\_\+\+COUNT\mbox{]}\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{=\ \{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ 1\ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ ,\ \ \ \ 1\ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ ,\ \ \ \ 1\ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ ,\ \ \ \ 3\ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ ,\ \ \ -\/1\ }
 \DoxyCodeLine{\ \ \ \ \ \ \ \ \}}
 
 \end{DoxyCode}

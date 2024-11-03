@@ -1,0 +1,170 @@
+\doxysection{Open\+Shader\+Designer\+::File\+Manager Class Reference}
+\hypertarget{class_open_shader_designer_1_1_file_manager}{}\label{class_open_shader_designer_1_1_file_manager}\index{OpenShaderDesigner::FileManager@{OpenShaderDesigner::FileManager}}
+Inheritance diagram for Open\+Shader\+Designer\+::File\+Manager\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_open_shader_designer_1_1_file_manager}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{class_open_shader_designer_1_1_file_manager_1_1_asset}{Asset}}
+\item 
+struct \mbox{\hyperlink{struct_open_shader_designer_1_1_file_manager_1_1_folder}{Folder}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_open_shader_designer_1_1_file_manager_a8883f663f3dae705f13421bfc1c003cf}\label{class_open_shader_designer_1_1_file_manager_a8883f663f3dae705f13421bfc1c003cf} 
+using {\bfseries File\+System} = ocu\+::filesystem$<$\mbox{\hyperlink{class_open_shader_designer_1_1_file_manager_1_1_asset}{Asset}}, \mbox{\hyperlink{class_open_shader_designer_1_1_file_manager}{File\+Manager}}$>$
+\item 
+\Hypertarget{class_open_shader_designer_1_1_file_manager_a6c2ea600a21bf085b8a7a91f1e4e4e46}\label{class_open_shader_designer_1_1_file_manager_a6c2ea600a21bf085b8a7a91f1e4e4e46} 
+using {\bfseries File} = File\+System\+::file
+\item 
+\Hypertarget{class_open_shader_designer_1_1_file_manager_a9c1d5209fe05068410af084287c8d3a2}\label{class_open_shader_designer_1_1_file_manager_a9c1d5209fe05068410af084287c8d3a2} 
+using {\bfseries Path} = std\+::filesystem\+::path
+\item 
+\Hypertarget{class_open_shader_designer_1_1_file_manager_a45a3029a13de7b706df369f2c5da2b18}\label{class_open_shader_designer_1_1_file_manager_a45a3029a13de7b706df369f2c5da2b18} 
+using {\bfseries File\+ID} = File\+System\+::file\+\_\+id
+\item 
+\Hypertarget{class_open_shader_designer_1_1_file_manager_a402c6a09e0be0f09e8a5784d360beec2}\label{class_open_shader_designer_1_1_file_manager_a402c6a09e0be0f09e8a5784d360beec2} 
+using {\bfseries Create\+Func} = \mbox{\hyperlink{class_open_shader_designer_1_1_file_manager_1_1_asset}{Asset}}\texorpdfstring{$\ast$}{*} (\texorpdfstring{$\ast$}{*})(const Path\&)
+\item 
+\Hypertarget{class_open_shader_designer_1_1_file_manager_ab6a8a8121e05a249cf9b45c65dfdd8b2}\label{class_open_shader_designer_1_1_file_manager_ab6a8a8121e05a249cf9b45c65dfdd8b2} 
+using {\bfseries Load\+Func} = \mbox{\hyperlink{class_open_shader_designer_1_1_file_manager_1_1_asset}{Asset}}\texorpdfstring{$\ast$}{*} (\texorpdfstring{$\ast$}{*})(const Path\&)
+\item 
+\Hypertarget{class_open_shader_designer_1_1_file_manager_a2f509bd5d46c1a3117843b48b3dd7c78}\label{class_open_shader_designer_1_1_file_manager_a2f509bd5d46c1a3117843b48b3dd7c78} 
+using {\bfseries Import\+Func} = \mbox{\hyperlink{class_open_shader_designer_1_1_file_manager_1_1_asset}{Asset}}\texorpdfstring{$\ast$}{*} (\texorpdfstring{$\ast$}{*})(const Path\&, const Path\&)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{class_open_shader_designer_1_1_file_manager_a260bfcf96b5daf480aa30dc990ab796d}{Draw\+Menu}} () override
+\begin{DoxyCompactList}\small\item\em Draw\+Menu function for when the \doxylink{class_open_shader_designer_1_1_editor_window}{Editor\+Window} Menu is being drawn. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_open_shader_designer_1_1_file_manager_a3093fe988eb2d678943945d1d383cb38}{Draw\+Window}} () override
+\begin{DoxyCompactList}\small\item\em Draw\+Window function for when the \doxylink{class_open_shader_designer_1_1_editor_window}{Editor\+Window} is being drawn. \end{DoxyCompactList}\item 
+\Hypertarget{class_open_shader_designer_1_1_file_manager_a940b4f1b37329b378b485fb9d1138b0d}\label{class_open_shader_designer_1_1_file_manager_a940b4f1b37329b378b485fb9d1138b0d} 
+File\+ID {\bfseries Current\+Directory} () const
+\item 
+\Hypertarget{class_open_shader_designer_1_1_file_manager_a19cd885de353b8a031e8d9c7fb077897}\label{class_open_shader_designer_1_1_file_manager_a19cd885de353b8a031e8d9c7fb077897} 
+void {\bfseries Current\+Directory} (File\+ID id)
+\item 
+\Hypertarget{class_open_shader_designer_1_1_file_manager_a942843b26dc7ca6943ee343f0ba55881}\label{class_open_shader_designer_1_1_file_manager_a942843b26dc7ca6943ee343f0ba55881} 
+File\+ID {\bfseries Create} (const std\+::string \&name)
+\item 
+\Hypertarget{class_open_shader_designer_1_1_file_manager_ae3849fce380725225f075137ea8042f1}\label{class_open_shader_designer_1_1_file_manager_ae3849fce380725225f075137ea8042f1} 
+File\+ID {\bfseries Import} (const Path \&path)
+\item 
+\Hypertarget{class_open_shader_designer_1_1_file_manager_a7d3a3f10bb7a833bddc21c61be19d84c}\label{class_open_shader_designer_1_1_file_manager_a7d3a3f10bb7a833bddc21c61be19d84c} 
+File\+ID {\bfseries Load\+Directory} (const Path \&path)
+\item 
+\Hypertarget{class_open_shader_designer_1_1_file_manager_a7ba98217aa6090ce7e0728f4adff958a}\label{class_open_shader_designer_1_1_file_manager_a7ba98217aa6090ce7e0728f4adff958a} 
+void {\bfseries Close\+Directory} (File\+ID dir)
+\item 
+\Hypertarget{class_open_shader_designer_1_1_file_manager_abec2eae60dc6dda706d5c318a64fc8fc}\label{class_open_shader_designer_1_1_file_manager_abec2eae60dc6dda706d5c318a64fc8fc} 
+File\+ID {\bfseries Get} (const Path \&path) const
+\item 
+\Hypertarget{class_open_shader_designer_1_1_file_manager_a9e2c02717fc20106095d34b69fecdbbc}\label{class_open_shader_designer_1_1_file_manager_a9e2c02717fc20106095d34b69fecdbbc} 
+File \& {\bfseries Get} (File\+ID id)
+\item 
+\Hypertarget{class_open_shader_designer_1_1_file_manager_a5a0267c53ed820f3681bbe632a8ba8e3}\label{class_open_shader_designer_1_1_file_manager_a5a0267c53ed820f3681bbe632a8ba8e3} 
+const File \& {\bfseries Get} (File\+ID id) const
+\item 
+\Hypertarget{class_open_shader_designer_1_1_file_manager_a1e26b7ba43c9a2095eeda0b3dcba2698}\label{class_open_shader_designer_1_1_file_manager_a1e26b7ba43c9a2095eeda0b3dcba2698} 
+File\+ID {\bfseries Parent} (File\+ID id) const
+\item 
+\Hypertarget{class_open_shader_designer_1_1_file_manager_a6545b0eed2d2ba45d17bbaf771f282f5}\label{class_open_shader_designer_1_1_file_manager_a6545b0eed2d2ba45d17bbaf771f282f5} 
+bool {\bfseries Any\+Dirty} ()
+\item 
+\Hypertarget{class_open_shader_designer_1_1_file_manager_ae466620dcd5dced51856d89ddada9564}\label{class_open_shader_designer_1_1_file_manager_ae466620dcd5dced51856d89ddada9564} 
+void {\bfseries Save\+All} ()
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{class_open_shader_designer_1_1_editor_window}{Open\+Shader\+Designer\+::\+Editor\+Window}}}
+\begin{DoxyCompactItemize}
+\item 
+void {\bfseries Open} ()
+\begin{DoxyCompactList}\small\item\em Open the \doxylink{class_open_shader_designer_1_1_editor_window}{Editor\+Window}. \end{DoxyCompactList}\item 
+void {\bfseries Draw} ()
+\begin{DoxyCompactList}\small\item\em Draw the \doxylink{class_open_shader_designer_1_1_editor_window}{Editor\+Window}. \end{DoxyCompactList}\item 
+void {\bfseries Close} ()
+\begin{DoxyCompactList}\small\item\em Close the \doxylink{class_open_shader_designer_1_1_editor_window}{Editor\+Window}. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{class_open_shader_designer_1_1_editor_window_af3ea05326684e2f58d54805ce10570a6}{Is\+Open}} () const
+\begin{DoxyCompactList}\small\item\em Check if the \doxylink{class_open_shader_designer_1_1_editor_window}{Editor\+Window} is open. \end{DoxyCompactList}\item 
+void {\bfseries Set\+Flags} (Im\+Gui\+Window\+Flags flags)
+\item 
+void {\bfseries Clear\+Flags} (Im\+Gui\+Window\+Flags flags)
+\item 
+void {\bfseries Toggle\+Flags} (Im\+Gui\+Window\+Flags flags)
+\item 
+bool {\bfseries Check\+Flag} (Im\+Gui\+Window\+Flags flag) const
+\item 
+bool {\bfseries Has\+Menu\+Bar} () const
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_open_shader_designer_1_1_file_manager_afa9134743bb76f45c6a23a080c615b61}\label{class_open_shader_designer_1_1_file_manager_afa9134743bb76f45c6a23a080c615b61} 
+static Path {\bfseries Get\+Home\+Directory} ()
+\item 
+\Hypertarget{class_open_shader_designer_1_1_file_manager_a3885c9a8092426196f43f4dd5ab617f6}\label{class_open_shader_designer_1_1_file_manager_a3885c9a8092426196f43f4dd5ab617f6} 
+static void {\bfseries Register} (const std\+::filesystem\+::path \&path, const std\+::vector$<$ std\+::string $>$ \&extension, Create\+Func create, Load\+Func load, Import\+Func import)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_open_shader_designer_1_1_file_manager_af393c553ae6f3cec46c4ddb952a9d0de}\label{class_open_shader_designer_1_1_file_manager_af393c553ae6f3cec46c4ddb952a9d0de} 
+friend {\bfseries File\+System}
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes inherited from \mbox{\hyperlink{class_open_shader_designer_1_1_editor_window}{Open\+Shader\+Designer\+::\+Editor\+Window}}}
+\begin{DoxyCompactItemize}
+\item 
+const std\+::string {\bfseries Title}
+\begin{DoxyCompactList}\small\item\em Title for the \doxylink{class_open_shader_designer_1_1_editor_window}{Editor\+Window}. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Protected Member Functions inherited from \mbox{\hyperlink{class_open_shader_designer_1_1_editor_window}{Open\+Shader\+Designer\+::\+Editor\+Window}}}
+\begin{DoxyCompactItemize}
+\item 
+{\bfseries Editor\+Window} (const std\+::string \&title, Im\+Gui\+Window\+Flags flags)
+\item 
+virtual void \mbox{\hyperlink{class_open_shader_designer_1_1_editor_window_a2e68f7186c2ceb3ea3dd5618045c6ab7}{On\+Open}} ()
+\begin{DoxyCompactList}\small\item\em On\+Open callback for when the \doxylink{class_open_shader_designer_1_1_editor_window}{Editor\+Window} is opened. \end{DoxyCompactList}\item 
+virtual void {\bfseries On\+Close} ()
+\begin{DoxyCompactList}\small\item\em On\+Close callback for when the \doxylink{class_open_shader_designer_1_1_editor_window}{Editor\+Window} is closed. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_open_shader_designer_1_1_file_manager_a260bfcf96b5daf480aa30dc990ab796d}\index{OpenShaderDesigner::FileManager@{OpenShaderDesigner::FileManager}!DrawMenu@{DrawMenu}}
+\index{DrawMenu@{DrawMenu}!OpenShaderDesigner::FileManager@{OpenShaderDesigner::FileManager}}
+\doxysubsubsection{\texorpdfstring{DrawMenu()}{DrawMenu()}}
+{\footnotesize\ttfamily \label{class_open_shader_designer_1_1_file_manager_a260bfcf96b5daf480aa30dc990ab796d} 
+void File\+Manager\+::\+Draw\+Menu (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Draw\+Menu function for when the \doxylink{class_open_shader_designer_1_1_editor_window}{Editor\+Window} Menu is being drawn. 
+
+
+
+Reimplemented from \mbox{\hyperlink{class_open_shader_designer_1_1_editor_window_a6c229ca70221f672315f9a4f0c7be0c0}{Open\+Shader\+Designer\+::\+Editor\+Window}}.
+
+\Hypertarget{class_open_shader_designer_1_1_file_manager_a3093fe988eb2d678943945d1d383cb38}\index{OpenShaderDesigner::FileManager@{OpenShaderDesigner::FileManager}!DrawWindow@{DrawWindow}}
+\index{DrawWindow@{DrawWindow}!OpenShaderDesigner::FileManager@{OpenShaderDesigner::FileManager}}
+\doxysubsubsection{\texorpdfstring{DrawWindow()}{DrawWindow()}}
+{\footnotesize\ttfamily \label{class_open_shader_designer_1_1_file_manager_a3093fe988eb2d678943945d1d383cb38} 
+void File\+Manager\+::\+Draw\+Window (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Draw\+Window function for when the \doxylink{class_open_shader_designer_1_1_editor_window}{Editor\+Window} is being drawn. 
+
+
+
+Reimplemented from \mbox{\hyperlink{class_open_shader_designer_1_1_editor_window_a058742ce762d782440f595497e5bfbff}{Open\+Shader\+Designer\+::\+Editor\+Window}}.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+Include/\+File\+System/File\+Manager.\+h\item 
+Source/\+File\+System/File\+Manager.\+cpp\end{DoxyCompactItemize}

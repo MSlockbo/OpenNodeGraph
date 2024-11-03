@@ -14,6 +14,18 @@ using {\bfseries base\+\_\+type} = \mbox{\hyperlink{classopen__cpp__utils_1_1any
 \item 
 \Hypertarget{classopen__cpp__utils_1_1any_3_01_t_00_01_rest_8_8_8_01_4_a2325f3bf3a6b86f2fc6a2c2b74d110f0}\label{classopen__cpp__utils_1_1any_3_01_t_00_01_rest_8_8_8_01_4_a2325f3bf3a6b86f2fc6a2c2b74d110f0} 
 using {\bfseries this\+\_\+type} = T
+\item 
+\Hypertarget{classopen__cpp__utils_1_1any_3_01_t_00_01_rest_8_8_8_01_4_a1905a203823030059e306ffa9c56c342}\label{classopen__cpp__utils_1_1any_3_01_t_00_01_rest_8_8_8_01_4_a1905a203823030059e306ffa9c56c342} 
+using {\bfseries reference} = T\&
+\item 
+\Hypertarget{classopen__cpp__utils_1_1any_3_01_t_00_01_rest_8_8_8_01_4_a7c6a03a44d35d15de5329f049da463af}\label{classopen__cpp__utils_1_1any_3_01_t_00_01_rest_8_8_8_01_4_a7c6a03a44d35d15de5329f049da463af} 
+using {\bfseries const\+\_\+reference} = const T\&
+\item 
+\Hypertarget{classopen__cpp__utils_1_1any_3_01_t_00_01_rest_8_8_8_01_4_a0f1566e582b5b9e169b30b82f4f98407}\label{classopen__cpp__utils_1_1any_3_01_t_00_01_rest_8_8_8_01_4_a0f1566e582b5b9e169b30b82f4f98407} 
+using {\bfseries pointer} = T\texorpdfstring{$\ast$}{*}
+\item 
+\Hypertarget{classopen__cpp__utils_1_1any_3_01_t_00_01_rest_8_8_8_01_4_aac1959e4f517bae05092e8205edf569d}\label{classopen__cpp__utils_1_1any_3_01_t_00_01_rest_8_8_8_01_4_aac1959e4f517bae05092e8205edf569d} 
+using {\bfseries const\+\_\+pointer} = const T\texorpdfstring{$\ast$}{*}
 \end{DoxyCompactItemize}
 \doxysubsubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
@@ -36,23 +48,23 @@ using {\bfseries this\+\_\+type} = T
 \Hypertarget{classopen__cpp__utils_1_1any_3_01_t_00_01_rest_8_8_8_01_4_a26e3cd88a419d055869b35af4c63ab9d}\label{classopen__cpp__utils_1_1any_3_01_t_00_01_rest_8_8_8_01_4_a26e3cd88a419d055869b35af4c63ab9d} 
 \mbox{\hyperlink{classopen__cpp__utils_1_1any}{any}} \& {\bfseries operator=} (\mbox{\hyperlink{classopen__cpp__utils_1_1any}{any}} \&\&)=default
 \item 
-\Hypertarget{classopen__cpp__utils_1_1any_3_01_t_00_01_rest_8_8_8_01_4_a15e4e9872f896cb56c85d78318ebf75f}\label{classopen__cpp__utils_1_1any_3_01_t_00_01_rest_8_8_8_01_4_a15e4e9872f896cb56c85d78318ebf75f} 
-{\bfseries operator this\+\_\+type} () const
+\Hypertarget{classopen__cpp__utils_1_1any_3_01_t_00_01_rest_8_8_8_01_4_a81e5a8797fc10d438e070fe8deaad439}\label{classopen__cpp__utils_1_1any_3_01_t_00_01_rest_8_8_8_01_4_a81e5a8797fc10d438e070fe8deaad439} 
+{\footnotesize template$<$typename V $>$ }\\V \& {\bfseries get} ()
 \item 
-\Hypertarget{classopen__cpp__utils_1_1any_3_01_t_00_01_rest_8_8_8_01_4_af03eca4d28a56934cde05a2c74aba647}\label{classopen__cpp__utils_1_1any_3_01_t_00_01_rest_8_8_8_01_4_af03eca4d28a56934cde05a2c74aba647} 
-{\bfseries operator this\+\_\+type \&} ()
+\Hypertarget{classopen__cpp__utils_1_1any_3_01_t_00_01_rest_8_8_8_01_4_afeb42d0aaeca9b8a05b2eea585d4cebb}\label{classopen__cpp__utils_1_1any_3_01_t_00_01_rest_8_8_8_01_4_afeb42d0aaeca9b8a05b2eea585d4cebb} 
+{\footnotesize template$<$typename V $>$ }\\const V \& {\bfseries get} () const
 \item 
-\Hypertarget{classopen__cpp__utils_1_1any_3_01_t_00_01_rest_8_8_8_01_4_a123f2fb3fd1f0815847fcf2e5dfcc95d}\label{classopen__cpp__utils_1_1any_3_01_t_00_01_rest_8_8_8_01_4_a123f2fb3fd1f0815847fcf2e5dfcc95d} 
-{\bfseries operator const this\+\_\+type \&} () const
+\Hypertarget{classopen__cpp__utils_1_1any_3_01_t_00_01_rest_8_8_8_01_4_a506ad8fda67a1494e9235b145df1daac}\label{classopen__cpp__utils_1_1any_3_01_t_00_01_rest_8_8_8_01_4_a506ad8fda67a1494e9235b145df1daac} 
+{\bfseries operator reference} ()
 \item 
-\Hypertarget{classopen__cpp__utils_1_1any_3_01_t_00_01_rest_8_8_8_01_4_a9688dc07187df689ee116ef3e81eda24}\label{classopen__cpp__utils_1_1any_3_01_t_00_01_rest_8_8_8_01_4_a9688dc07187df689ee116ef3e81eda24} 
-{\bfseries operator this\+\_\+type \&\&} ()
+\Hypertarget{classopen__cpp__utils_1_1any_3_01_t_00_01_rest_8_8_8_01_4_ac7d6a509f40444be3a68a472c2f76819}\label{classopen__cpp__utils_1_1any_3_01_t_00_01_rest_8_8_8_01_4_ac7d6a509f40444be3a68a472c2f76819} 
+{\bfseries operator const\+\_\+reference} () const
 \item 
-\Hypertarget{classopen__cpp__utils_1_1any_3_01_t_00_01_rest_8_8_8_01_4_a98cc6a4916e3453682eef1e35780b26f}\label{classopen__cpp__utils_1_1any_3_01_t_00_01_rest_8_8_8_01_4_a98cc6a4916e3453682eef1e35780b26f} 
-{\bfseries operator this\+\_\+type \texorpdfstring{$\ast$}{*}} ()
+\Hypertarget{classopen__cpp__utils_1_1any_3_01_t_00_01_rest_8_8_8_01_4_ac5970b55efe5131e378dfb942f72365c}\label{classopen__cpp__utils_1_1any_3_01_t_00_01_rest_8_8_8_01_4_ac5970b55efe5131e378dfb942f72365c} 
+{\bfseries operator pointer} ()
 \item 
-\Hypertarget{classopen__cpp__utils_1_1any_3_01_t_00_01_rest_8_8_8_01_4_aae3b435aedb2efcc5f6b76e6ca1366f3}\label{classopen__cpp__utils_1_1any_3_01_t_00_01_rest_8_8_8_01_4_aae3b435aedb2efcc5f6b76e6ca1366f3} 
-{\bfseries operator const this\+\_\+type \texorpdfstring{$\ast$}{*}} () const
+\Hypertarget{classopen__cpp__utils_1_1any_3_01_t_00_01_rest_8_8_8_01_4_ad4cda034820943ea0d39c453c7ac9331}\label{classopen__cpp__utils_1_1any_3_01_t_00_01_rest_8_8_8_01_4_ad4cda034820943ea0d39c453c7ac9331} 
+{\bfseries operator const\+\_\+pointer} () const
 \end{DoxyCompactItemize}
 
 

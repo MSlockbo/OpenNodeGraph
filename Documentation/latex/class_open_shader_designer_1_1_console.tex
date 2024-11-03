@@ -3,29 +3,29 @@
 \doxysubsubsection*{Public Types}
 \begin{DoxyCompactItemize}
 \item 
-\Hypertarget{class_open_shader_designer_1_1_console_a4da63ca14b9e8f7a582df081623b6406}\label{class_open_shader_designer_1_1_console_a4da63ca14b9e8f7a582df081623b6406} 
-enum \mbox{\hyperlink{class_open_shader_designer_1_1_console_a4da63ca14b9e8f7a582df081623b6406}{Setting}} \+: uint8\+\_\+t \{ \newline
-{\bfseries SHOW\+\_\+\+TIMESTAMP} = 0b00000001
-, {\bfseries SHOW\+\_\+\+THREAD} = 0b00000010
-, {\bfseries SHOW\+\_\+\+SEVERITY} = 0b00000100
-, {\bfseries SHOW\+\_\+\+FILE\+\_\+\+INFO} = 0b00001000
+\Hypertarget{class_open_shader_designer_1_1_console_afddf06383dd93a079794251e747978fd}\label{class_open_shader_designer_1_1_console_afddf06383dd93a079794251e747978fd} 
+enum \mbox{\hyperlink{class_open_shader_designer_1_1_console_afddf06383dd93a079794251e747978fd}{Settings}} \+: uint8\+\_\+t \{ \newline
+{\bfseries Settings\+\_\+\+Show\+Time\+Stamp} = 0b00000001
+, {\bfseries Settings\+\_\+\+Show\+Thread} = 0b00000010
+, {\bfseries Settings\+\_\+\+Severity} = 0b00000100
+, {\bfseries Settings\+\_\+\+Show\+File\+Info} = 0b00001000
 , \newline
-{\bfseries WRAP\+\_\+\+TEXT} = 0b00010000
-, {\bfseries ALL\+\_\+\+SETTINGS} = 0x\+FF
-, {\bfseries DEFAULT\+\_\+\+SETTINGS} = ALL\+\_\+\+SETTINGS \texorpdfstring{$^\wedge$}{\string^} WRAP\+\_\+\+TEXT
+{\bfseries Settings\+\_\+\+Wrap\+Text} = 0b00010000
+, {\bfseries Settings\+\_\+\+ALL} = 0x\+FF
+, {\bfseries Settings\+\_\+\+Default} = Settings\+\_\+\+ALL \texorpdfstring{$^\wedge$}{\string^} Settings\+\_\+\+Wrap\+Text
  \}
 \begin{DoxyCompactList}\small\item\em Setting for displaying log entries. \end{DoxyCompactList}\item 
 \Hypertarget{class_open_shader_designer_1_1_console_a880eae5d076afe686248bbb0f6a83771}\label{class_open_shader_designer_1_1_console_a880eae5d076afe686248bbb0f6a83771} 
-enum class \mbox{\hyperlink{class_open_shader_designer_1_1_console_a880eae5d076afe686248bbb0f6a83771}{Severity}} \+: int \{ \newline
-{\bfseries MESSAGE} = 0
-, {\bfseries WARNING}
-, {\bfseries ERROR}
-, {\bfseries FATAL}
+enum \mbox{\hyperlink{class_open_shader_designer_1_1_console_a880eae5d076afe686248bbb0f6a83771}{Severity}} \+: int \{ \newline
+{\bfseries Message} = 0
+, {\bfseries Warning}
+, {\bfseries Error}
+, {\bfseries Fatal}
 , \newline
-{\bfseries ALERT}
-, {\bfseries COMMAND}
+{\bfseries Alert}
+, {\bfseries Command}
 , {\bfseries COUNT}
-, {\bfseries DEFAULT} = WARNING
+, {\bfseries DEFAULT} = Warning
  \}
 \begin{DoxyCompactList}\small\item\em Severity levels for log entries. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsubsection*{Static Public Member Functions}
@@ -118,9 +118,9 @@ const std\+::string Open\+Shader\+Designer\+::\+Console\+::\+Setting\+Names\mbox
 {\bfseries Initial value\+:}
 \begin{DoxyCode}{0}
 \DoxyCodeLine{=}
-\DoxyCodeLine{\ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}Timestamps"{}},\ \textcolor{stringliteral}{"{}Thread\ IDs"{}},\ \textcolor{stringliteral}{"{}Severity"{}},\ \textcolor{stringliteral}{"{}File\ Info"{}},\ \textcolor{stringliteral}{"{}Wrapping"{}}}
-\DoxyCodeLine{\ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\ \ \ \ \{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}Timestamps"{}},\ \textcolor{stringliteral}{"{}Thread\ IDs"{}},\ \textcolor{stringliteral}{"{}Severity"{}},\ \textcolor{stringliteral}{"{}File\ Info"{}},\ \textcolor{stringliteral}{"{}Wrapping"{}}}
+\DoxyCodeLine{\ \ \ \ \}}
 
 \end{DoxyCode}
 
@@ -136,9 +136,9 @@ const std\+::string Open\+Shader\+Designer\+::\+Console\+::\+Severities\mbox{[}$
 {\bfseries Initial value\+:}
 \begin{DoxyCode}{0}
 \DoxyCodeLine{=}
-\DoxyCodeLine{\ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}Message"{}},\ \textcolor{stringliteral}{"{}Warning"{}},\ \textcolor{stringliteral}{"{}Error"{}},\ \textcolor{stringliteral}{"{}Fatal"{}},\ \textcolor{stringliteral}{"{}Alert"{}},\ \textcolor{stringliteral}{"{}Command"{}}}
-\DoxyCodeLine{\ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\ \ \ \ \{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}Message"{}},\ \textcolor{stringliteral}{"{}Warning"{}},\ \textcolor{stringliteral}{"{}Error"{}},\ \textcolor{stringliteral}{"{}Fatal"{}},\ \textcolor{stringliteral}{"{}Alert"{}},\ \textcolor{stringliteral}{"{}Command"{}}}
+\DoxyCodeLine{\ \ \ \ \}}
 
 \end{DoxyCode}
 
@@ -154,9 +154,9 @@ const Im\+Vec4 Open\+Shader\+Designer\+::\+Console\+::\+Severity\+Colors\mbox{[}
 {\bfseries Initial value\+:}
 \begin{DoxyCode}{0}
 \DoxyCodeLine{=\ \{}
-\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_open_shader_designer_1_1_console_abc25e7d9ad33fdcc95fe11df9a9c3fc4}{ImGuiColor}}(0xA4B9C4FF),\ \mbox{\hyperlink{class_open_shader_designer_1_1_console_abc25e7d9ad33fdcc95fe11df9a9c3fc4}{ImGuiColor}}(0xF2C554FF),\ \mbox{\hyperlink{class_open_shader_designer_1_1_console_abc25e7d9ad33fdcc95fe11df9a9c3fc4}{ImGuiColor}}(0xE57327FF),\ \mbox{\hyperlink{class_open_shader_designer_1_1_console_abc25e7d9ad33fdcc95fe11df9a9c3fc4}{ImGuiColor}}(0xCC211EFF),}
-\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_open_shader_designer_1_1_console_abc25e7d9ad33fdcc95fe11df9a9c3fc4}{ImGuiColor}}(0x9CDCFEFF),}
-\DoxyCodeLine{\ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \mbox{\hyperlink{class_open_shader_designer_1_1_console_abc25e7d9ad33fdcc95fe11df9a9c3fc4}{ImGuiColor}}(0xA4B9C4FF),\ \mbox{\hyperlink{class_open_shader_designer_1_1_console_abc25e7d9ad33fdcc95fe11df9a9c3fc4}{ImGuiColor}}(0xF2C554FF),\ \mbox{\hyperlink{class_open_shader_designer_1_1_console_abc25e7d9ad33fdcc95fe11df9a9c3fc4}{ImGuiColor}}(0xE57327FF),\ \mbox{\hyperlink{class_open_shader_designer_1_1_console_abc25e7d9ad33fdcc95fe11df9a9c3fc4}{ImGuiColor}}(0xCC211EFF),}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \mbox{\hyperlink{class_open_shader_designer_1_1_console_abc25e7d9ad33fdcc95fe11df9a9c3fc4}{ImGuiColor}}(0x9CDCFEFF),}
+\DoxyCodeLine{\ \ \ \ \}}
 
 \end{DoxyCode}
 

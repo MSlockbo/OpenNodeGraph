@@ -1,0 +1,168 @@
+\doxysection{map.\+h}
+\hypertarget{map_8h_source}{}\label{map_8h_source}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//\ =====================================================================================================================}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ \ open-\/cpp-\/utils,\ an\ open-\/source\ cpp\ library\ with\ data\ structures\ that\ extend\ the\ STL.}}
+\DoxyCodeLine{00003\ \textcolor{comment}{//\ \ Copyright\ (C)\ 2024\ \ Medusa\ Slockbower}}
+\DoxyCodeLine{00004\ \textcolor{comment}{//}}
+\DoxyCodeLine{00005\ \textcolor{comment}{//\ \ This\ program\ is\ free\ software:\ you\ can\ redistribute\ it\ and/or\ modify}}
+\DoxyCodeLine{00006\ \textcolor{comment}{//\ \ it\ under\ the\ terms\ of\ the\ GNU\ General\ Public\ License\ as\ published\ by}}
+\DoxyCodeLine{00007\ \textcolor{comment}{//\ \ the\ Free\ Software\ Foundation,\ either\ version\ 3\ of\ the\ License,\ or}}
+\DoxyCodeLine{00008\ \textcolor{comment}{//\ \ (at\ your\ option)\ any\ later\ version.}}
+\DoxyCodeLine{00009\ \textcolor{comment}{//}}
+\DoxyCodeLine{00010\ \textcolor{comment}{//\ \ This\ program\ is\ distributed\ in\ the\ hope\ that\ it\ will\ be\ useful,}}
+\DoxyCodeLine{00011\ \textcolor{comment}{//\ \ but\ WITHOUT\ ANY\ WARRANTY;\ without\ even\ the\ implied\ warranty\ of}}
+\DoxyCodeLine{00012\ \textcolor{comment}{//\ \ MERCHANTABILITY\ or\ FITNESS\ FOR\ A\ PARTICULAR\ PURPOSE.\ \ See\ the}}
+\DoxyCodeLine{00013\ \textcolor{comment}{//\ \ GNU\ General\ Public\ License\ for\ more\ details.}}
+\DoxyCodeLine{00014\ \textcolor{comment}{//}}
+\DoxyCodeLine{00015\ \textcolor{comment}{//\ \ You\ should\ have\ received\ a\ copy\ of\ the\ GNU\ General\ Public\ License}}
+\DoxyCodeLine{00016\ \textcolor{comment}{//\ \ along\ with\ this\ program.\ \ If\ not,\ see\ <https://www.gnu.org/licenses/>.}}
+\DoxyCodeLine{00017\ \textcolor{comment}{//\ =====================================================================================================================}}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \textcolor{preprocessor}{\#ifndef\ OPEN\_CPP\_UTILS\_MAP\_H}}
+\DoxyCodeLine{00020\ \textcolor{preprocessor}{\#define\ OPEN\_CPP\_UTILS\_MAP\_H}}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ \textcolor{preprocessor}{\#include\ <utility>}}
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00024\ \textcolor{preprocessor}{\#include\ "{}set.h"{}}}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ \textcolor{keyword}{namespace\ }open\_cpp\_utils}
+\DoxyCodeLine{00027\ \{}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ Key,\ \textcolor{keyword}{typename}\ Value,\ \textcolor{keyword}{class}\ Alloc\ =\ std::allocator<struct\ map\_pair>>}
+\DoxyCodeLine{00030\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classopen__cpp__utils_1_1map}{map}}}
+\DoxyCodeLine{00031\ \{}
+\DoxyCodeLine{00032\ \textcolor{comment}{//\ Typedefs\ ============================================================================================================}}
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00034\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00035\ \ \ \ \ \textcolor{keyword}{using\ }key\_type\ \ \ =\ Key;}
+\DoxyCodeLine{00036\ \ \ \ \ \textcolor{keyword}{using\ }value\_type\ =\ Value;}
+\DoxyCodeLine{00037\ \ \ \ \ \textcolor{keyword}{using\ }\mbox{\hyperlink{structopen__cpp__utils_1_1map_1_1map__pair}{pair\_type}}\ \ =\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structopen__cpp__utils_1_1map_1_1map__pair}{map\_pair}};}
+\DoxyCodeLine{00038\ }
+\DoxyCodeLine{00039\ \ \ \ \ \textcolor{keyword}{using\ }key\_pointer\ \ \ \ \ \ \ \ \ =\ key\_type*;}
+\DoxyCodeLine{00040\ \ \ \ \ \textcolor{keyword}{using\ }const\_key\_pointer\ \ \ =\ \textcolor{keyword}{const}\ key\_type*;}
+\DoxyCodeLine{00041\ \ \ \ \ \textcolor{keyword}{using\ }key\_reference\ \ \ \ \ \ \ =\ key\_type\&;}
+\DoxyCodeLine{00042\ \ \ \ \ \textcolor{keyword}{using\ }const\_key\_reference\ =\ \textcolor{keyword}{const}\ key\_type\&;}
+\DoxyCodeLine{00043\ }
+\DoxyCodeLine{00044\ \ \ \ \ \textcolor{keyword}{using\ }value\_pointer\ \ \ \ \ \ \ \ \ =\ value\_type*;}
+\DoxyCodeLine{00045\ \ \ \ \ \textcolor{keyword}{using\ }const\_value\_pointer\ \ \ =\ \textcolor{keyword}{const}\ value\_type*;}
+\DoxyCodeLine{00046\ \ \ \ \ \textcolor{keyword}{using\ }value\_reference\ \ \ \ \ \ \ =\ value\_type\&;}
+\DoxyCodeLine{00047\ \ \ \ \ \textcolor{keyword}{using\ }const\_value\_reference\ =\ \textcolor{keyword}{const}\ value\_type\&;}
+\DoxyCodeLine{00048\ \ \ \ \ }
+\DoxyCodeLine{00049\ \ \ \ \ }
+\DoxyCodeLine{00050\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structopen__cpp__utils_1_1map_1_1hash}{hash}}\ \{\ \textcolor{keywordtype}{size\_t}\ operator()(\textcolor{keyword}{const}\ \mbox{\hyperlink{structopen__cpp__utils_1_1map_1_1map__pair}{pair\_type}}\&\ pair)\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ std::hash<key\_type>\{\}(pair.key);\ \}\ \};}
+\DoxyCodeLine{00051\ \ \ \ \ }
+\DoxyCodeLine{00052\ \ \ \ \ \textcolor{keyword}{using\ }\mbox{\hyperlink{classopen__cpp__utils_1_1hash__table}{table\_type}}\ =\ \mbox{\hyperlink{classopen__cpp__utils_1_1hash__table}{set<pair\_type,\ hash,\ Alloc>}};}
+\DoxyCodeLine{00053\ \ \ \ \ \textcolor{keyword}{using\ }iterator\ =\ \textcolor{keyword}{typename}\ \mbox{\hyperlink{classopen__cpp__utils_1_1hash__table_1_1iterator}{table\_type::iterator}};}
+\DoxyCodeLine{00054\ \ \ \ \ \textcolor{keyword}{using\ }const\_iterator\ =\ \textcolor{keyword}{typename}\ \mbox{\hyperlink{classopen__cpp__utils_1_1hash__table_1_1const__iterator}{table\_type::const\_iterator}};}
+\DoxyCodeLine{00055\ }
+\DoxyCodeLine{00056\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structopen__cpp__utils_1_1map_1_1map__pair}{map\_pair}}}
+\DoxyCodeLine{00057\ \ \ \ \ \{}
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ key\_type\ \ \ key;}
+\DoxyCodeLine{00059\ \ \ \ \ \ \ \ \ value\_type\ value;}
+\DoxyCodeLine{00060\ }
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ operator==(\textcolor{keyword}{const}\ \mbox{\hyperlink{structopen__cpp__utils_1_1map_1_1map__pair}{map\_pair}}\&\ other)\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ key\ ==\ other.key;\ \}}
+\DoxyCodeLine{00062\ }
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structopen__cpp__utils_1_1map_1_1map__pair}{map\_pair}}()\ :\ key(),\ value()\ \{\ \}}
+\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structopen__cpp__utils_1_1map_1_1map__pair}{map\_pair}}(const\_key\_reference\ k)\ :\ key(k),\ value()\ \{\ \}}
+\DoxyCodeLine{00065\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structopen__cpp__utils_1_1map_1_1map__pair}{map\_pair}}(const\_key\_reference\ k,\ const\_value\_reference\ v)\ :\ key(k),\ value(v)\ \{\ \}}
+\DoxyCodeLine{00066\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structopen__cpp__utils_1_1map_1_1map__pair}{map\_pair}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{structopen__cpp__utils_1_1map_1_1map__pair}{map\_pair}}\&\ v)\ :\ key(v.key),\ value(v.value)\ \{\ \}}
+\DoxyCodeLine{00067\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structopen__cpp__utils_1_1map_1_1map__pair}{map\_pair}}(\mbox{\hyperlink{structopen__cpp__utils_1_1map_1_1map__pair}{map\_pair}}\&\&\ v)\ noexcept\ :\ key(std::move(v.key)),\ value(std::move(v.value))\ \{\ \}}
+\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structopen__cpp__utils_1_1map_1_1map__pair}{\string~map\_pair}}()\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00069\ }
+\DoxyCodeLine{00070\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structopen__cpp__utils_1_1map_1_1map__pair}{map\_pair}}\&\ operator=(\textcolor{keyword}{const}\ \mbox{\hyperlink{structopen__cpp__utils_1_1map_1_1map__pair}{map\_pair}}\&\ v)}
+\DoxyCodeLine{00071\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00072\ \ \ \ \ \ \ \ \ \ \ \ \ key\ =\ v.key;}
+\DoxyCodeLine{00073\ \ \ \ \ \ \ \ \ \ \ \ \ value\ =\ v.value;}
+\DoxyCodeLine{00074\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00075\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00076\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00077\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structopen__cpp__utils_1_1map_1_1map__pair}{map\_pair}}\&\ operator=(\mbox{\hyperlink{structopen__cpp__utils_1_1map_1_1map__pair}{map\_pair}}\&\&\ v)\ \textcolor{keyword}{noexcept}}
+\DoxyCodeLine{00078\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00079\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(\&v\ ==\ \textcolor{keyword}{this})\ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00080\ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00081\ \ \ \ \ \ \ \ \ \ \ \ \ key\ =\ std::move(v.key);}
+\DoxyCodeLine{00082\ \ \ \ \ \ \ \ \ \ \ \ \ value\ =\ std::move(v.value);}
+\DoxyCodeLine{00083\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00084\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00085\ \ \ \ \ \};}
+\DoxyCodeLine{00086\ }
+\DoxyCodeLine{00087\ }
+\DoxyCodeLine{00088\ \textcolor{comment}{//\ Functions\ ===========================================================================================================}}
+\DoxyCodeLine{00089\ }
+\DoxyCodeLine{00090\ \textcolor{comment}{//\ Constructors\ \&\ Destructor\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00091\ }
+\DoxyCodeLine{00092\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00093\ \ \ \ \ \mbox{\hyperlink{classopen__cpp__utils_1_1map}{map}}()\ \ \ \ \ \ \ \ \ \ \ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00094\ \ \ \ \ \mbox{\hyperlink{classopen__cpp__utils_1_1map}{map}}(std::initializer\_list<pair\_type>\ data)\ :\ table\_(data)\ \{\ \}}
+\DoxyCodeLine{00095\ \ \ \ \ \mbox{\hyperlink{classopen__cpp__utils_1_1map}{map}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classopen__cpp__utils_1_1map}{map}}\&)\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00096\ \ \ \ \ \mbox{\hyperlink{classopen__cpp__utils_1_1map}{map}}(\mbox{\hyperlink{classopen__cpp__utils_1_1map}{map}}\&\&)\ \ \ \ \ \ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00097\ \ \ \ \ \mbox{\hyperlink{classopen__cpp__utils_1_1map}{\string~map}}()\ \ \ \ \ \ \ \ \ \ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00098\ }
+\DoxyCodeLine{00099\ \ \ \ \ \textcolor{keywordtype}{void}\ reserve(\textcolor{keywordtype}{size\_t}\ size)\ \{\ table\_.reserve(size);\ \}}
+\DoxyCodeLine{00100\ }
+\DoxyCodeLine{00101\ \ \ \ \ \textcolor{keywordtype}{void}\ insert(const\_key\_reference\ key,\ const\_value\_reference\ value);}
+\DoxyCodeLine{00102\ \ \ \ \ \textcolor{keywordtype}{void}\ erase(const\_key\_reference\ key);}
+\DoxyCodeLine{00103\ \ \ \ \ }
+\DoxyCodeLine{00104\ \ \ \ \ value\_reference\&\ operator[](const\_key\_reference\ key);}
+\DoxyCodeLine{00105\ \ \ \ \ }
+\DoxyCodeLine{00106\ \ \ \ \ const\_value\_reference\&\ get(const\_key\_reference\ key,\ const\_value\_reference\&\ def\ =\ value\_type())\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00107\ \ \ \ \ }
+\DoxyCodeLine{00108\ \ \ \ \ iterator\ find(const\_key\_reference\ key)\ \{\ \textcolor{keywordflow}{return}\ table\_.find(\{\ key,\ value\_type()\ \});\ \}}
+\DoxyCodeLine{00109\ \ \ \ \ const\_iterator\ find(const\_key\_reference\ key)\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ table\_.find(\{\ key,\ value\_type()\ \});\ \}}
+\DoxyCodeLine{00110\ \ \ \ \ }
+\DoxyCodeLine{00111\ \ \ \ \ \textcolor{keywordtype}{bool}\ contains(const\_key\_reference\ key)\ \{\ \textcolor{keywordflow}{return}\ table\_.contains(\{\ key,\ value\_type()\ \});\ \}}
+\DoxyCodeLine{00112\ }
+\DoxyCodeLine{00113\ \ \ \ \ iterator\ begin()\ \{\ \textcolor{keywordflow}{return}\ table\_.begin();\ \}}
+\DoxyCodeLine{00114\ \ \ \ \ iterator\ end()\ \ \ \{\ \textcolor{keywordflow}{return}\ table\_.end();\ \}}
+\DoxyCodeLine{00115\ \ \ \ \ }
+\DoxyCodeLine{00116\ \ \ \ \ const\_iterator\ begin()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ table\_.begin();\ \}}
+\DoxyCodeLine{00117\ \ \ \ \ const\_iterator\ end()\textcolor{keyword}{\ \ \ const\ }\{\ \textcolor{keywordflow}{return}\ table\_.end();\ \}}
+\DoxyCodeLine{00118\ }
+\DoxyCodeLine{00119\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ size()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ table\_.size();\ \}}
+\DoxyCodeLine{00120\ }
+\DoxyCodeLine{00121\ \textcolor{comment}{//\ Variables\ ===========================================================================================================}}
+\DoxyCodeLine{00122\ }
+\DoxyCodeLine{00123\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00124\ \ \ \ \ table\_type\ table\_;}
+\DoxyCodeLine{00125\ \};}
+\DoxyCodeLine{00126\ }
+\DoxyCodeLine{00127\ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ Key,\ \textcolor{keyword}{typename}\ Value,\ \textcolor{keyword}{class}\ Alloc>}
+\DoxyCodeLine{00128\ \textcolor{keywordtype}{void}\ map<Key,\ Value,\ Alloc>::insert(const\_key\_reference\ key,\ const\_value\_reference\ value)}
+\DoxyCodeLine{00129\ \{}
+\DoxyCodeLine{00130\ \ \ \ \ iterator\ it\ =\ find(\{\ key,\ value\ \});}
+\DoxyCodeLine{00131\ \ \ \ \ \textcolor{keywordflow}{if}(it\ !=\ end())\ table\_.insert(\{\ key,\ value\ \});}
+\DoxyCodeLine{00132\ \}}
+\DoxyCodeLine{00133\ }
+\DoxyCodeLine{00134\ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ Key,\ \textcolor{keyword}{typename}\ Value,\ \textcolor{keyword}{class}\ Alloc>}
+\DoxyCodeLine{00135\ \textcolor{keywordtype}{void}\ map<Key,\ Value,\ Alloc>::erase(const\_key\_reference\ key)}
+\DoxyCodeLine{00136\ \{}
+\DoxyCodeLine{00137\ \ \ \ \ table\_.erase(\{\ key,\ value\_type()\ \});}
+\DoxyCodeLine{00138\ \}}
+\DoxyCodeLine{00139\ }
+\DoxyCodeLine{00140\ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ Key,\ \textcolor{keyword}{typename}\ Value,\ \textcolor{keyword}{class}\ Alloc>}
+\DoxyCodeLine{00141\ \textcolor{keyword}{typename}\ map<Key,\ Value,\ Alloc>::value\_reference\ map<Key,\ Value,\ Alloc>::operator[](const\_key\_reference\ key)}
+\DoxyCodeLine{00142\ \{}
+\DoxyCodeLine{00143\ \ \ \ \ iterator\ it\ =\ table\_.find(\{\ key,\ value\_type()\ \});}
+\DoxyCodeLine{00144\ \ \ \ \ \textcolor{keywordflow}{if}(it\ ==\ table\_.end())}
+\DoxyCodeLine{00145\ \ \ \ \ \{}
+\DoxyCodeLine{00146\ \ \ \ \ \ \ \ \ table\_.insert(key);}
+\DoxyCodeLine{00147\ \ \ \ \ \ \ \ \ it\ =\ table\_.find(\{\ key,\ value\_type()\ \});}
+\DoxyCodeLine{00148\ \ \ \ \ \}}
+\DoxyCodeLine{00149\ \ \ \ \ \textcolor{keywordflow}{return}\ it-\/>value;}
+\DoxyCodeLine{00150\ \}}
+\DoxyCodeLine{00151\ }
+\DoxyCodeLine{00152\ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ Key,\ \textcolor{keyword}{typename}\ Value,\ \textcolor{keyword}{class}\ Alloc>}
+\DoxyCodeLine{00153\ \textcolor{keyword}{typename}\ map<Key,\ Value,\ Alloc>::const\_value\_reference\ map<Key,\ Value,\ Alloc>::get(const\_key\_reference\ key,}
+\DoxyCodeLine{00154\ \ \ \ \ const\_value\_reference\ def)\textcolor{keyword}{\ const}}
+\DoxyCodeLine{00155\ \textcolor{keyword}{}\{}
+\DoxyCodeLine{00156\ \ \ \ \ \textcolor{keyword}{auto}\ it\ =\ find(key);}
+\DoxyCodeLine{00157\ \ \ \ \ \textcolor{keywordflow}{if}(it\ ==\ end())\ \textcolor{keywordflow}{return}\ def;}
+\DoxyCodeLine{00158\ \ \ \ \ \textcolor{keywordflow}{return}\ it-\/>value;}
+\DoxyCodeLine{00159\ \}}
+\DoxyCodeLine{00160\ \ \ \ \ }
+\DoxyCodeLine{00161\ \}}
+\DoxyCodeLine{00162\ }
+\DoxyCodeLine{00163\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//\ OPEN\_CPP\_UTILS\_MAP\_H}}
+
+\end{DoxyCode}

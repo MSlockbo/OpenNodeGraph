@@ -1,16 +1,19 @@
 // =====================================================================================================================
-// Copyright 2024 Medusa Slockbower
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
+//  OpenShaderDesigner, an open source software utility to create materials and shaders.
+//  Copyright (C) 2024  Medusa Slockbower
 //
-// 	http://www.apache.org/licenses/LICENSE-2.0
+//  This program is free software: you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License as published by
+//  the Free Software Foundation, either version 3 of the License, or
+//  (at your option) any later version.
 //
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+//  This program is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  GNU General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public License
+//  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 // =====================================================================================================================
 
 
@@ -92,13 +95,10 @@ Node::Node(ShaderGraph& graph, ImVec2 pos)
 	,   .ActiveColor  = ImColor(0x82, 0x4C, 0x40)
 	,	.Enabled      = true
 	}
-	, IO
-	{
-		.DynamicInputs = false
-	}
+	, IO { }
 	, Info
 	{
-		.Const = false
+		.Flags = NodeFlags_None
 	}
 { }
 
@@ -200,10 +200,10 @@ void Node::Draw(ImGuiID id)
 
     ImGui::SetCursorPos(cursor);
 
-    //if(IO.DynamicInputs)
-    //{
-    //    ImGui::Text("\uEA11");
-    //}
+    if(Info.Flags & NodeFlags_DynamicInputs)
+    {
+        ImGui::Text("\uEA11");
+    }
 
     ImNodeGraph::EndNode();
 }
@@ -233,7 +233,6 @@ void ShaderGraph::DrawMenu()
         ImNodeGraph::BeginGraphPostOp("ShaderGraph");
 
         Shader_->Compile();
-        Console::Log(Console::Message, "{}", Shader_->GetCode());
 
         ImNodeGraph::EndGraphPostOp();
     }
@@ -282,6 +281,13 @@ void ShaderGraph::DrawWindow()
         if(ImGui::IsKeyPressed(ImGuiKey_C)) Copy();
         if(ImGui::IsKeyPressed(ImGuiKey_P)) Paste(ImGui::GetMousePos());
         if(ImGui::IsKeyPressed(ImGuiKey_X)) { Copy(); Erase(); }
+    }
+
+    const ImSet<ImGuiID>& Selected = *ImNodeGraph::GetSelected();
+    Selected_.reset();
+    if(Selected.Size == 1)
+    {
+        Selected_ = ImNodeGraph::GetUserID(*Selected.cbegin()).Int;
     }
 
     ImNodeGraph::EndGraphPostOp();
@@ -387,7 +393,7 @@ void ShaderGraph::Copy()
 void ShaderGraph::Erase()
 {
     GraphState& State = Shader_->GetState();
-    auto& Selected = ImNodeGraph::GetSelected();
+    ImSet<ImGuiID>& Selected = *ImNodeGraph::GetSelected();
     for(ImGuiID node : Selected)
     {
         State.RemoveNode(ImNodeGraph::GetUserID(node).Int);
@@ -407,7 +413,12 @@ void ShaderGraph::Clear()
 
 Node* ShaderGraph::FindNode(ImPinPtr ptr)
 {
-    return Shader_->GetState().Nodes[ImNodeGraph::GetUserID(ptr.Node).Int];
+    return Shader_->GetState().Nodes[ImNodeGraph::GetUserID("ShaderGraph", ptr.Node).Int];
+}
+
+Node* ShaderGraph::FindNode(ImGuiID id)
+{
+    return Shader_->GetState().Nodes[ImNodeGraph::GetUserID("ShaderGraph", id).Int];
 }
 
 Pin& ShaderGraph::FindPin(ImPinPtr ptr)
@@ -429,23 +440,38 @@ std::string ShaderGraph::GetValue(ImPinPtr ptr)
     
         NodeId pin_id = ImNodeGraph::GetUserID(ptr).Int;
         Pin& pin = FindPin(ptr);
+
+    	if(pin.Flags & PinFlags_Literal)
+    	{
+    		switch(pin.Type)
+    		{
+    			case PinType_UInt:   return std::to_string(pin.Value.get<glm::uint32>());
+    			case PinType_Int:    return std::to_string(pin.Value.get<glm::int32>());
+    			case PinType_Float:  return std::to_string(pin.Value.get<glm::float32>());
+    			case PinType_Vector:
+    			{
+    				const glm::vec3& val = pin.Value.get<glm::vec3>();
+    				return std::format("vec3({},{},{})", val.x, val.y, val.z);
+    			}
+    			default: return "0";
+    		}
+    	}
     
-        return std::format("{}{}_{}", node->Info.Alias, pin.Name, node_id);
+        return pin.GetVarName();
     }
     else
     {
         const ImVector<ImGuiID>& connections = ImNodeGraph::GetConnections(ptr);
+        Pin& pin = FindPin(ptr);
 
         // L-Value
         if(connections.empty())
         {
-            Pin& pin = FindPin(ptr);
-
             switch(pin.Type)
             {
-            case PinType_UInt:   return std::to_string(pin.Value.get<unsigned int>());
-            case PinType_Int:    return std::to_string(pin.Value.get<int>());
-            case PinType_Float:  return std::to_string(pin.Value.get<float>());
+            case PinType_UInt:   return std::to_string(pin.Value.get<glm::uint32>());
+            case PinType_Int:    return std::to_string(pin.Value.get<glm::int32>());
+            case PinType_Float:  return std::to_string(pin.Value.get<glm::float32>());
             case PinType_Vector:
             {
                 const glm::vec3& val = pin.Value.get<glm::vec3>();
@@ -495,11 +521,17 @@ void ShaderGraph::Register(const std::filesystem::path& path, ConstructorPtr con
 }
 
 Inspector::Inspector()
-	: EditorWindow("Inspector", 0)
+	: EditorWindow("Inspector", ImGuiWindowFlags_None)
 	, Graph(nullptr)
 {
 }
 
 void Inspector::DrawWindow()
 {
+    if(Graph->Shader_ == nullptr) return;
+
+    if(Graph->Selected_())
+    {
+        Graph->Shader_->GetState().Nodes[Graph->Selected_]->Inspect();
+    }
 }

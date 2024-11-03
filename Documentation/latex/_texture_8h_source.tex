@@ -1,0 +1,79 @@
+\doxysection{Texture.\+h}
+\hypertarget{_texture_8h_source}{}\label{_texture_8h_source}\index{Include/Renderer/Assets/Texture.h@{Include/Renderer/Assets/Texture.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//\ =====================================================================================================================}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ \ OpenShaderDesigner,\ an\ open\ source\ software\ utility\ to\ create\ materials\ and\ shaders.}}
+\DoxyCodeLine{00003\ \textcolor{comment}{//\ \ Copyright\ (C)\ 2024\ \ Medusa\ Slockbower}}
+\DoxyCodeLine{00004\ \textcolor{comment}{//}}
+\DoxyCodeLine{00005\ \textcolor{comment}{//\ \ This\ program\ is\ free\ software:\ you\ can\ redistribute\ it\ and/or\ modify}}
+\DoxyCodeLine{00006\ \textcolor{comment}{//\ \ it\ under\ the\ terms\ of\ the\ GNU\ General\ Public\ License\ as\ published\ by}}
+\DoxyCodeLine{00007\ \textcolor{comment}{//\ \ the\ Free\ Software\ Foundation,\ either\ version\ 3\ of\ the\ License,\ or}}
+\DoxyCodeLine{00008\ \textcolor{comment}{//\ \ (at\ your\ option)\ any\ later\ version.}}
+\DoxyCodeLine{00009\ \textcolor{comment}{//}}
+\DoxyCodeLine{00010\ \textcolor{comment}{//\ \ This\ program\ is\ distributed\ in\ the\ hope\ that\ it\ will\ be\ useful,}}
+\DoxyCodeLine{00011\ \textcolor{comment}{//\ \ but\ WITHOUT\ ANY\ WARRANTY;\ without\ even\ the\ implied\ warranty\ of}}
+\DoxyCodeLine{00012\ \textcolor{comment}{//\ \ MERCHANTABILITY\ or\ FITNESS\ FOR\ A\ PARTICULAR\ PURPOSE.\ \ See\ the}}
+\DoxyCodeLine{00013\ \textcolor{comment}{//\ \ GNU\ General\ Public\ License\ for\ more\ details.}}
+\DoxyCodeLine{00014\ \textcolor{comment}{//}}
+\DoxyCodeLine{00015\ \textcolor{comment}{//\ \ You\ should\ have\ received\ a\ copy\ of\ the\ GNU\ General\ Public\ License}}
+\DoxyCodeLine{00016\ \textcolor{comment}{//\ \ along\ with\ this\ program.\ \ If\ not,\ see\ <https://www.gnu.org/licenses/>.}}
+\DoxyCodeLine{00017\ \textcolor{comment}{//\ =====================================================================================================================}}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \textcolor{preprocessor}{\#ifndef\ TEXTURE\_H}}
+\DoxyCodeLine{00020\ \textcolor{preprocessor}{\#define\ TEXTURE\_H}}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ \textcolor{preprocessor}{\#include\ <glw/texture.h>}}
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00024\ \textcolor{preprocessor}{\#include\ "{}FileSystem/FileManager.h"{}}}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ \textcolor{keyword}{namespace\ }OpenShaderDesigner}
+\DoxyCodeLine{00027\ \{}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_open_shader_designer_1_1_texture}{Texture}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{class_open_shader_designer_1_1_file_manager_1_1_asset}{FileManager::Asset}}}
+\DoxyCodeLine{00030\ \{}
+\DoxyCodeLine{00031\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00032\ \ \ \ \ \textcolor{keyword}{using\ }HandleType\ =\ glw::texture<glw::texture2D,\ glw::rgba8>;}
+\DoxyCodeLine{00033\ \ \ \ \ }
+\DoxyCodeLine{00034\ \ \ \ \ \mbox{\hyperlink{class_open_shader_designer_1_1_texture}{Texture}}(\textcolor{keyword}{const}\ FileManager::Path\&\ path);}
+\DoxyCodeLine{00035\ \ \ \ \ \mbox{\hyperlink{class_open_shader_designer_1_1_texture}{Texture}}(\textcolor{keyword}{const}\ FileManager::Path\&\ src,\ \textcolor{keyword}{const}\ FileManager::Path\&\ dst);}
+\DoxyCodeLine{00036\ \ \ \ \ \mbox{\hyperlink{class_open_shader_designer_1_1_texture}{\string~Texture}}()\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00038\ \ \ \ \ \textcolor{keywordtype}{void}\ Open()\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00040\ \ \ \ \ \textcolor{keyword}{static}\ Asset*\ Create(\textcolor{keyword}{const}\ FileManager::Path\&\ path);}
+\DoxyCodeLine{00041\ \ \ \ \ \textcolor{keyword}{static}\ Asset*\ Load(\textcolor{keyword}{const}\ FileManager::Path\&\ path);}
+\DoxyCodeLine{00042\ \ \ \ \ \textcolor{keyword}{static}\ Asset*\ Import(\textcolor{keyword}{const}\ FileManager::Path\&\ src,\ \textcolor{keyword}{const}\ FileManager::Path\&\ dst);}
+\DoxyCodeLine{00043\ }
+\DoxyCodeLine{00044\ \ \ \ \ HandleType*\ operator-\/>()\ \{\ \textcolor{keywordflow}{return}\ Handle\_;\ \}}
+\DoxyCodeLine{00045\ \ \ \ \ \textcolor{keyword}{const}\ HandleType*\ operator-\/>()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ Handle\_;\ \}}
+\DoxyCodeLine{00046\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00047\ \ \ \ \ HandleType*\ Handle\_;}
+\DoxyCodeLine{00048\ \};}
+\DoxyCodeLine{00049\ }
+\DoxyCodeLine{00050\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_open_shader_designer_1_1_h_d_r_texture}{HDRTexture}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{class_open_shader_designer_1_1_file_manager_1_1_asset}{FileManager::Asset}}}
+\DoxyCodeLine{00051\ \{}
+\DoxyCodeLine{00052\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00053\ \ \ \ \ \textcolor{keyword}{using\ }HandleType\ =\ glw::texture<glw::texture2D,\ glw::rgba16>;}
+\DoxyCodeLine{00054\ }
+\DoxyCodeLine{00055\ \ \ \ \ \mbox{\hyperlink{class_open_shader_designer_1_1_h_d_r_texture}{HDRTexture}}(\textcolor{keyword}{const}\ FileManager::Path\&\ path);}
+\DoxyCodeLine{00056\ \ \ \ \ \mbox{\hyperlink{class_open_shader_designer_1_1_h_d_r_texture}{HDRTexture}}(\textcolor{keyword}{const}\ FileManager::Path\&\ src,\ \textcolor{keyword}{const}\ FileManager::Path\&\ dst);}
+\DoxyCodeLine{00057\ \ \ \ \ \mbox{\hyperlink{class_open_shader_designer_1_1_h_d_r_texture}{\string~HDRTexture}}()\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00058\ }
+\DoxyCodeLine{00059\ \ \ \ \ \textcolor{keywordtype}{void}\ Open()\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00060\ }
+\DoxyCodeLine{00061\ \ \ \ \ \textcolor{keyword}{static}\ Asset*\ Create(\textcolor{keyword}{const}\ FileManager::Path\&\ path);}
+\DoxyCodeLine{00062\ \ \ \ \ \textcolor{keyword}{static}\ Asset*\ Load(\textcolor{keyword}{const}\ FileManager::Path\&\ path);}
+\DoxyCodeLine{00063\ \ \ \ \ \textcolor{keyword}{static}\ Asset*\ Import(\textcolor{keyword}{const}\ FileManager::Path\&\ src,\ \textcolor{keyword}{const}\ FileManager::Path\&\ dst);}
+\DoxyCodeLine{00064\ }
+\DoxyCodeLine{00065\ \ \ \ \ HandleType*\ operator-\/>()\ \{\ \textcolor{keywordflow}{return}\ Handle\_;\ \}}
+\DoxyCodeLine{00066\ \ \ \ \ \textcolor{keyword}{const}\ HandleType*\ operator-\/>()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ Handle\_;\ \}}
+\DoxyCodeLine{00067\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00068\ \ \ \ \ HandleType*\ Handle\_;}
+\DoxyCodeLine{00069\ \};}
+\DoxyCodeLine{00070\ \ \ \ \ }
+\DoxyCodeLine{00071\ \}}
+\DoxyCodeLine{00072\ }
+\DoxyCodeLine{00073\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//TEXTURE\_H}}
+
+\end{DoxyCode}

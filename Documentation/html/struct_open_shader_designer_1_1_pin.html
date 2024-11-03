@@ -90,6 +90,7 @@ $(function(){ initResizable(false); });
 <div class="header">
   <div class="summary">
 <a href="#pub-types">Public Types</a> &#124;
+<a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-attribs">Public Attributes</a> &#124;
 <a href="#pub-static-attribs">Static Public Attributes</a> &#124;
 <a href="struct_open_shader_designer_1_1_pin-members.html">List of all members</a>  </div>
@@ -99,21 +100,18 @@ $(function(){ initResizable(false); });
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-types" name="pub-types"></a>
 Public Types</h2></td></tr>
-<tr class="memitem:a6ada53e38cf37f516479c3dcabddb284" id="r_a6ada53e38cf37f516479c3dcabddb284"><td class="memItemLeft" align="right" valign="top"><a id="a6ada53e38cf37f516479c3dcabddb284" name="a6ada53e38cf37f516479c3dcabddb284"></a>enum &#160;</td><td class="memItemRight" valign="bottom"><b>PinType</b> { <br />
-&#160;&#160;<b>INT</b> = 0
-, <b>UINT</b>
-, <b>FLOAT</b>
-, <b>VECTOR</b>
-, <br />
-&#160;&#160;<b>ANY</b>
-, <b>COUNT</b>
-<br />
- }</td></tr>
-<tr class="separator:a6ada53e38cf37f516479c3dcabddb284"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8adb1f80b40e1a4c7ad86fdb9e08e594" id="r_a8adb1f80b40e1a4c7ad86fdb9e08e594"><td class="memItemLeft" align="right" valign="top"><a id="a8adb1f80b40e1a4c7ad86fdb9e08e594" name="a8adb1f80b40e1a4c7ad86fdb9e08e594"></a>enum &#160;</td><td class="memItemRight" valign="bottom"><b>PinDirection</b> { <b>INPUT</b>
-, <b>OUTPUT</b>
- }</td></tr>
-<tr class="separator:a8adb1f80b40e1a4c7ad86fdb9e08e594"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a28a00315bb89ff12a3d58850554b8cbe" id="r_a28a00315bb89ff12a3d58850554b8cbe"><td class="memItemLeft" align="right" valign="top"><a id="a28a00315bb89ff12a3d58850554b8cbe" name="a28a00315bb89ff12a3d58850554b8cbe"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>Ambiguous</b> = ocu::any&lt;glm::int32, glm::uint32, glm::float32, glm::vec3&gt;</td></tr>
+<tr class="separator:a28a00315bb89ff12a3d58850554b8cbe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:a62cef8615821611c0c329887a1ba1540" id="r_a62cef8615821611c0c329887a1ba1540"><td class="memItemLeft" align="right" valign="top"><a id="a62cef8615821611c0c329887a1ba1540" name="a62cef8615821611c0c329887a1ba1540"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>Pin</b> (const std::string &amp;name, PinType type, FlagT flags=PinFlags_None)</td></tr>
+<tr class="separator:a62cef8615821611c0c329887a1ba1540"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a005a73845429eb5251a0d5df6710d415" id="r_a005a73845429eb5251a0d5df6710d415"><td class="memItemLeft" align="right" valign="top"><a id="a005a73845429eb5251a0d5df6710d415" name="a005a73845429eb5251a0d5df6710d415"></a>
+std::string&#160;</td><td class="memItemRight" valign="bottom"><b>GetVarName</b> () const</td></tr>
+<tr class="separator:a005a73845429eb5251a0d5df6710d415"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -123,20 +121,30 @@ std::string&#160;</td><td class="memItemRight" valign="bottom"><b>Name</b></td><
 <tr class="memitem:af0d09ac1168526f8f3a77c4ed180ef46" id="r_af0d09ac1168526f8f3a77c4ed180ef46"><td class="memItemLeft" align="right" valign="top"><a id="af0d09ac1168526f8f3a77c4ed180ef46" name="af0d09ac1168526f8f3a77c4ed180ef46"></a>
 PinType&#160;</td><td class="memItemRight" valign="bottom"><b>Type</b></td></tr>
 <tr class="separator:af0d09ac1168526f8f3a77c4ed180ef46"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa36a624e048b7dddbe797d456b05f649" id="r_aa36a624e048b7dddbe797d456b05f649"><td class="memItemLeft" align="right" valign="top"><a id="aa36a624e048b7dddbe797d456b05f649" name="aa36a624e048b7dddbe797d456b05f649"></a>
-PinDirection&#160;</td><td class="memItemRight" valign="bottom"><b>Direction</b></td></tr>
-<tr class="separator:aa36a624e048b7dddbe797d456b05f649"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a44ada8d63ee802839f61178ddefd8846" id="r_a44ada8d63ee802839f61178ddefd8846"><td class="memItemLeft" align="right" valign="top"><a id="a44ada8d63ee802839f61178ddefd8846" name="a44ada8d63ee802839f61178ddefd8846"></a>
+FlagT&#160;</td><td class="memItemRight" valign="bottom"><b>Flags</b></td></tr>
+<tr class="separator:a44ada8d63ee802839f61178ddefd8846"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1ee8f91d4602bdc1a2c0a66def8a6cd3" id="r_a1ee8f91d4602bdc1a2c0a66def8a6cd3"><td class="memItemLeft" align="right" valign="top"><a id="a1ee8f91d4602bdc1a2c0a66def8a6cd3" name="a1ee8f91d4602bdc1a2c0a66def8a6cd3"></a>
+Ambiguous&#160;</td><td class="memItemRight" valign="bottom"><b>Value</b></td></tr>
+<tr class="separator:a1ee8f91d4602bdc1a2c0a66def8a6cd3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6c7420afe120f244c26a15c04f46ce6b" id="r_a6c7420afe120f244c26a15c04f46ce6b"><td class="memItemLeft" align="right" valign="top"><a id="a6c7420afe120f244c26a15c04f46ce6b" name="a6c7420afe120f244c26a15c04f46ce6b"></a>
+ImPinPtr&#160;</td><td class="memItemRight" valign="bottom"><b>Ptr</b></td></tr>
+<tr class="separator:a6c7420afe120f244c26a15c04f46ce6b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-attribs" name="pub-static-attribs"></a>
 Static Public Attributes</h2></td></tr>
-<tr class="memitem:ac0bc314af51ae0f04cdeaf7911891c70" id="r_ac0bc314af51ae0f04cdeaf7911891c70"><td class="memItemLeft" align="right" valign="top">static const ImColor&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac0bc314af51ae0f04cdeaf7911891c70">Colors</a> [COUNT]</td></tr>
-<tr class="separator:ac0bc314af51ae0f04cdeaf7911891c70"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aafe6dbb5ecd7409ddd19e6acf27c9cb5" id="r_aafe6dbb5ecd7409ddd19e6acf27c9cb5"><td class="memItemLeft" align="right" valign="top">static const std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aafe6dbb5ecd7409ddd19e6acf27c9cb5">TypeNames</a> [COUNT]</td></tr>
-<tr class="separator:aafe6dbb5ecd7409ddd19e6acf27c9cb5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a25812619637a35ac0b1f388eda45ea07" id="r_a25812619637a35ac0b1f388eda45ea07"><td class="memItemLeft" align="right" valign="top">static const ImColor&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a25812619637a35ac0b1f388eda45ea07">Colors</a> [PinType_COUNT]</td></tr>
+<tr class="separator:a25812619637a35ac0b1f388eda45ea07"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5c95358bb98465ab9d5a0afefe5d06be" id="r_a5c95358bb98465ab9d5a0afefe5d06be"><td class="memItemLeft" align="right" valign="top">static constexpr const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5c95358bb98465ab9d5a0afefe5d06be">TypeNames</a> [PinType_COUNT]</td></tr>
+<tr class="separator:a5c95358bb98465ab9d5a0afefe5d06be"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2a2728ad0f1a62d01a9322701c63ec95" id="r_a2a2728ad0f1a62d01a9322701c63ec95"><td class="memItemLeft" align="right" valign="top">static const std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2a2728ad0f1a62d01a9322701c63ec95">TypeKeywords</a> [PinType_COUNT]</td></tr>
+<tr class="separator:a2a2728ad0f1a62d01a9322701c63ec95"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0c43cd506f74e269cedec662f97bc430" id="r_a0c43cd506f74e269cedec662f97bc430"><td class="memItemLeft" align="right" valign="top">static const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0c43cd506f74e269cedec662f97bc430">TypeWidths</a> [PinType_COUNT]</td></tr>
+<tr class="separator:a0c43cd506f74e269cedec662f97bc430"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Data Documentation</h2>
-<a id="ac0bc314af51ae0f04cdeaf7911891c70" name="ac0bc314af51ae0f04cdeaf7911891c70"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac0bc314af51ae0f04cdeaf7911891c70">&#9670;&#160;</a></span>Colors</h2>
+<a id="a25812619637a35ac0b1f388eda45ea07" name="a25812619637a35ac0b1f388eda45ea07"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a25812619637a35ac0b1f388eda45ea07">&#9670;&#160;</a></span>Colors</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -145,7 +153,7 @@ Static Public Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">const ImColor OpenShaderDesigner::Pin::Colors[COUNT]</td>
+          <td class="memname">const ImColor OpenShaderDesigner::Pin::Colors[PinType_COUNT]</td>
         </tr>
       </table>
   </td>
@@ -155,18 +163,17 @@ Static Public Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 <b>Initial value:</b><div class="fragment"><div class="line">= {</div>
-<div class="line">            ImColor(0xB9, 0xF5, 0x94)</div>
-<div class="line">        ,   ImColor(0x8C, 0xC0, 0x8C)</div>
-<div class="line">        ,   ImColor(0x37, 0x95, 0x85)</div>
-<div class="line">        ,   ImColor(0xE3, 0x7D, 0xDC)</div>
-<div class="line"> </div>
-<div class="line">        ,   ImColor(0xD2, 0xD5, 0xD3)</div>
+<div class="line">            ImColor(0x7A, 0x9F, 0x82) </div>
+<div class="line">        ,   ImColor(0x64, 0x94, 0xAA) </div>
+<div class="line">        ,   ImColor(0xA6, 0x3D, 0x40) </div>
+<div class="line">        ,   ImColor(0xE9, 0xB8, 0x72) </div>
+<div class="line">        ,   ImColor(0xFF, 0xFF, 0xFF) </div>
 <div class="line">        }</div>
 </div><!-- fragment -->
 </div>
 </div>
-<a id="aafe6dbb5ecd7409ddd19e6acf27c9cb5" name="aafe6dbb5ecd7409ddd19e6acf27c9cb5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aafe6dbb5ecd7409ddd19e6acf27c9cb5">&#9670;&#160;</a></span>TypeNames</h2>
+<a id="a2a2728ad0f1a62d01a9322701c63ec95" name="a2a2728ad0f1a62d01a9322701c63ec95"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2a2728ad0f1a62d01a9322701c63ec95">&#9670;&#160;</a></span>TypeKeywords</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -175,7 +182,7 @@ Static Public Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">const std::string OpenShaderDesigner::Pin::TypeNames[COUNT]</td>
+          <td class="memname">const std::string OpenShaderDesigner::Pin::TypeKeywords[PinType_COUNT]</td>
         </tr>
       </table>
   </td>
@@ -185,10 +192,69 @@ Static Public Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 <b>Initial value:</b><div class="fragment"><div class="line">= {</div>
-<div class="line">            <span class="stringliteral">&quot;Int&quot;</span></div>
-<div class="line">        ,   <span class="stringliteral">&quot;Unsigned Int&quot;</span></div>
+<div class="line">            <span class="stringliteral">&quot;uint&quot;</span></div>
+<div class="line">        ,   <span class="stringliteral">&quot;int&quot;</span></div>
+<div class="line">        ,   <span class="stringliteral">&quot;float&quot;</span></div>
+<div class="line">        ,   <span class="stringliteral">&quot;vec3&quot;</span></div>
+<div class="line">        ,   <span class="stringliteral">&quot;vec3&quot;</span></div>
+<div class="line">        }</div>
+</div><!-- fragment -->
+</div>
+</div>
+<a id="a5c95358bb98465ab9d5a0afefe5d06be" name="a5c95358bb98465ab9d5a0afefe5d06be"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5c95358bb98465ab9d5a0afefe5d06be">&#9670;&#160;</a></span>TypeNames</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const char* OpenShaderDesigner::Pin::TypeNames[PinType_COUNT]</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<b>Initial value:</b><div class="fragment"><div class="line">= {</div>
+<div class="line">            <span class="stringliteral">&quot;Unsigned Int&quot;</span></div>
+<div class="line">        ,   <span class="stringliteral">&quot;Int&quot;</span></div>
 <div class="line">        ,   <span class="stringliteral">&quot;Float&quot;</span></div>
 <div class="line">        ,   <span class="stringliteral">&quot;Vector&quot;</span></div>
+<div class="line">        ,   <span class="stringliteral">&quot;Any&quot;</span></div>
+<div class="line">        }</div>
+</div><!-- fragment -->
+</div>
+</div>
+<a id="a0c43cd506f74e269cedec662f97bc430" name="a0c43cd506f74e269cedec662f97bc430"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0c43cd506f74e269cedec662f97bc430">&#9670;&#160;</a></span>TypeWidths</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const int OpenShaderDesigner::Pin::TypeWidths[PinType_COUNT]</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<b>Initial value:</b><div class="fragment"><div class="line">= {</div>
+<div class="line">             1 </div>
+<div class="line">        ,    1 </div>
+<div class="line">        ,    1 </div>
+<div class="line">        ,    3 </div>
+<div class="line">        ,   -1 </div>
 <div class="line">        }</div>
 </div><!-- fragment -->
 </div>

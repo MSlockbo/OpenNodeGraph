@@ -1,16 +1,19 @@
 // =====================================================================================================================
-// Copyright 2024 Medusa Slockbower
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
+//  OpenShaderDesigner, an open source software utility to create materials and shaders.
+//  Copyright (C) 2024  Medusa Slockbower
 //
-// 	http://www.apache.org/licenses/LICENSE-2.0
+//  This program is free software: you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License as published by
+//  the Free Software Foundation, either version 3 of the License, or
+//  (at your option) any later version.
 //
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+//  This program is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  GNU General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public License
+//  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 // =====================================================================================================================
 
 #include <Renderer/Renderer.h>
@@ -23,29 +26,9 @@ Renderer::Renderer()
     : EditorWindow("View", 0)
     , Mode_(view_texture)
     , ViewTexture_(nullptr)
-    , Shader_(new glw::shader())
-{
-    if(not Shader_->attach_source(glw::compute, {
-        "#version 430 core\n"
-        "\n"
-        "layout (local_size_x = 8, local_size_y = 8, local_size_z = 1) in;\n"
-        "\n"
-        "layout (rgba32f, binding = 0) uniform restrict image2D out_Colour0;\n"
-        "\n"
-        "void main(void)\n"
-        "{\n"
-        "    imageStore(out_Colour0, ivec2(gl_GlobalInvocationID.xy), vec4(1, 0, 0, 1));\n"
-        "}\n"
-    }))
-    {
-        Console::Log(Console::Error, "Failed to compile shader: \n{}", Shader_->get_error_string());
-    }
-
-    if(not Shader_->link())
-    {
-        Console::Log(Console::Error, "Failed to link shader: \n{}", Shader_->get_error_string());
-    }
-}
+    , Shader_(nullptr)
+    , RenderTarget_(new HDRTexture::HandleType({ 512, 512 }))
+{ }
 
 Renderer::~Renderer()
 {
@@ -64,16 +47,22 @@ void Renderer::DrawWindow()
     {
     default: return;
 
-    case view_texture:
-        DrawTexture();
-        return;
+    case view_texture: DrawTexture(); return;
+    case shader: DrawShader(); return;
     }
 }
 
 void Renderer::OpenTexture(Texture* texture)
 {
+    
     ViewTexture_ = texture;
     Mode_ = view_texture;
+}
+
+void Renderer::OpenShader(ShaderAsset *shader)
+{
+    Shader_ = shader;
+    Mode_ = Renderer::shader;
 }
 
 void Renderer::DrawTexture()
@@ -90,7 +79,7 @@ void Renderer::DrawTexture()
     );
 }
 
-void Renderer::DrawFunction()
+void Renderer::DrawShader()
 {
-    
+    Shader_->View(RenderTarget_);
 }

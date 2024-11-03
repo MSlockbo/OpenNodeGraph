@@ -1,0 +1,107 @@
+\doxysection{Open\+Shader\+Designer\+::Nodes\+::Vector\+Math\+::Make\+Vector Struct Reference}
+\hypertarget{struct_open_shader_designer_1_1_nodes_1_1_vector_math_1_1_make_vector}{}\label{struct_open_shader_designer_1_1_nodes_1_1_vector_math_1_1_make_vector}\index{OpenShaderDesigner::Nodes::VectorMath::MakeVector@{OpenShaderDesigner::Nodes::VectorMath::MakeVector}}
+Inheritance diagram for Open\+Shader\+Designer\+::Nodes\+::Vector\+Math\+::Make\+Vector\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{struct_open_shader_designer_1_1_nodes_1_1_vector_math_1_1_make_vector}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{struct_open_shader_designer_1_1_nodes_1_1_vector_math_1_1_make_vector_a173673fb84de35afa16295d8b28a33f0}\label{struct_open_shader_designer_1_1_nodes_1_1_vector_math_1_1_make_vector_a173673fb84de35afa16295d8b28a33f0} 
+{\bfseries Make\+Vector} (\mbox{\hyperlink{class_open_shader_designer_1_1_shader_graph}{Shader\+Graph}} \&graph, Im\+Vec2 pos)
+\item 
+\mbox{\hyperlink{struct_open_shader_designer_1_1_node}{Node}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{struct_open_shader_designer_1_1_nodes_1_1_vector_math_1_1_make_vector_a5c4292db1c62f79e3b73f122adc6da4d}{Copy}} (\mbox{\hyperlink{class_open_shader_designer_1_1_shader_graph}{Shader\+Graph}} \&graph) const override
+\item 
+void \mbox{\hyperlink{struct_open_shader_designer_1_1_nodes_1_1_vector_math_1_1_make_vector_a1b087531558943cd385340040e003856}{Inspect}} () override
+\item 
+std\+::string \mbox{\hyperlink{struct_open_shader_designer_1_1_nodes_1_1_vector_math_1_1_make_vector_a43878d4560441a40ee8b4a7cc560c4d0}{Get\+Code}} () const override
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{struct_open_shader_designer_1_1_node}{Open\+Shader\+Designer\+::\+Node}}}
+\begin{DoxyCompactItemize}
+\item 
+{\bfseries Node} (\mbox{\hyperlink{class_open_shader_designer_1_1_shader_graph}{Shader\+Graph}} \&graph, Im\+Vec2 pos)
+\item 
+void {\bfseries Draw\+Pin} (int id, \mbox{\hyperlink{struct_open_shader_designer_1_1_pin}{Pin}} \&pin, Im\+Pin\+Direction direction)
+\item 
+void {\bfseries Draw} (Im\+Gui\+ID id)
+\item 
+virtual bool {\bfseries Check\+Connection} (\mbox{\hyperlink{struct_open_shader_designer_1_1_pin}{Pin}} \texorpdfstring{$\ast$}{*}, \mbox{\hyperlink{struct_open_shader_designer_1_1_pin}{Pin}} \texorpdfstring{$\ast$}{*})
+\item 
+virtual void {\bfseries Validate\+Connections} ()
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Public Attributes inherited from \mbox{\hyperlink{struct_open_shader_designer_1_1_node}{Open\+Shader\+Designer\+::\+Node}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_open_shader_designer_1_1_shader_graph}{Shader\+Graph}} \& {\bfseries Graph}
+\item 
+Im\+Vec2 {\bfseries Position} = \{ 0, 0 \}
+\item 
+\begin{tabbing}
+xx\=xx\=xx\=xx\=xx\=xx\=xx\=xx\=xx\=\kill
+struct \{\\
+\>std::string {\bfseries Title}\\
+\>ImColor {\bfseries Color}\\
+\>ImColor {\bfseries HoveredColor}\\
+\>ImColor {\bfseries ActiveColor}\\
+\>bool {\bfseries Enabled}\\
+\} {\bfseries Header}\\
+
+\end{tabbing}\item 
+\begin{tabbing}
+xx\=xx\=xx\=xx\=xx\=xx\=xx\=xx\=xx\=\kill
+struct \{\\
+\>std::vector$<$ \mbox{\hyperlink{struct_open_shader_designer_1_1_pin}{Pin}} $>$ {\bfseries Inputs}\\
+\>std::vector$<$ \mbox{\hyperlink{struct_open_shader_designer_1_1_pin}{Pin}} $>$ {\bfseries Outputs}\\
+\} {\bfseries IO}\\
+
+\end{tabbing}\item 
+\begin{tabbing}
+xx\=xx\=xx\=xx\=xx\=xx\=xx\=xx\=xx\=\kill
+struct \{\\
+\>std::string {\bfseries Alias}\\
+\>FlagT {\bfseries Flags}\\
+\} {\bfseries Info}\\
+
+\end{tabbing}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{struct_open_shader_designer_1_1_nodes_1_1_vector_math_1_1_make_vector_a5c4292db1c62f79e3b73f122adc6da4d}\index{OpenShaderDesigner::Nodes::VectorMath::MakeVector@{OpenShaderDesigner::Nodes::VectorMath::MakeVector}!Copy@{Copy}}
+\index{Copy@{Copy}!OpenShaderDesigner::Nodes::VectorMath::MakeVector@{OpenShaderDesigner::Nodes::VectorMath::MakeVector}}
+\doxysubsubsection{\texorpdfstring{Copy()}{Copy()}}
+{\footnotesize\ttfamily \label{struct_open_shader_designer_1_1_nodes_1_1_vector_math_1_1_make_vector_a5c4292db1c62f79e3b73f122adc6da4d} 
+\mbox{\hyperlink{struct_open_shader_designer_1_1_node}{Node}} \texorpdfstring{$\ast$}{*} Make\+Vector\+::\+Copy (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_open_shader_designer_1_1_shader_graph}{Shader\+Graph}} \&}]{graph}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [nodiscard]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{struct_open_shader_designer_1_1_node}{Open\+Shader\+Designer\+::\+Node}}.
+
+\Hypertarget{struct_open_shader_designer_1_1_nodes_1_1_vector_math_1_1_make_vector_a43878d4560441a40ee8b4a7cc560c4d0}\index{OpenShaderDesigner::Nodes::VectorMath::MakeVector@{OpenShaderDesigner::Nodes::VectorMath::MakeVector}!GetCode@{GetCode}}
+\index{GetCode@{GetCode}!OpenShaderDesigner::Nodes::VectorMath::MakeVector@{OpenShaderDesigner::Nodes::VectorMath::MakeVector}}
+\doxysubsubsection{\texorpdfstring{GetCode()}{GetCode()}}
+{\footnotesize\ttfamily \label{struct_open_shader_designer_1_1_nodes_1_1_vector_math_1_1_make_vector_a43878d4560441a40ee8b4a7cc560c4d0} 
+std\+::string Make\+Vector\+::\+Get\+Code (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{struct_open_shader_designer_1_1_node}{Open\+Shader\+Designer\+::\+Node}}.
+
+\Hypertarget{struct_open_shader_designer_1_1_nodes_1_1_vector_math_1_1_make_vector_a1b087531558943cd385340040e003856}\index{OpenShaderDesigner::Nodes::VectorMath::MakeVector@{OpenShaderDesigner::Nodes::VectorMath::MakeVector}!Inspect@{Inspect}}
+\index{Inspect@{Inspect}!OpenShaderDesigner::Nodes::VectorMath::MakeVector@{OpenShaderDesigner::Nodes::VectorMath::MakeVector}}
+\doxysubsubsection{\texorpdfstring{Inspect()}{Inspect()}}
+{\footnotesize\ttfamily \label{struct_open_shader_designer_1_1_nodes_1_1_vector_math_1_1_make_vector_a1b087531558943cd385340040e003856} 
+void Make\+Vector\+::\+Inspect (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{struct_open_shader_designer_1_1_node}{Open\+Shader\+Designer\+::\+Node}}.
+
+
+
+The documentation for this struct was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+Include/\+Graph/\+Nodes/\+Math/Vector.\+h\item 
+Source/\+Graph/\+Nodes/\+Math/Vector.\+cpp\end{DoxyCompactItemize}

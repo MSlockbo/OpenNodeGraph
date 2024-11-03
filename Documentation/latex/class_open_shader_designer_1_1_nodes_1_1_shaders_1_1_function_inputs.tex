@@ -1,0 +1,107 @@
+\doxysection{Open\+Shader\+Designer\+::Nodes\+::Shaders\+::Function\+Inputs Class Reference}
+\hypertarget{class_open_shader_designer_1_1_nodes_1_1_shaders_1_1_function_inputs}{}\label{class_open_shader_designer_1_1_nodes_1_1_shaders_1_1_function_inputs}\index{OpenShaderDesigner::Nodes::Shaders::FunctionInputs@{OpenShaderDesigner::Nodes::Shaders::FunctionInputs}}
+Inheritance diagram for Open\+Shader\+Designer\+::Nodes\+::Shaders\+::Function\+Inputs\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_open_shader_designer_1_1_nodes_1_1_shaders_1_1_function_inputs}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_open_shader_designer_1_1_nodes_1_1_shaders_1_1_function_inputs_a55b914ba0f6a21a861047392e19c802a}\label{class_open_shader_designer_1_1_nodes_1_1_shaders_1_1_function_inputs_a55b914ba0f6a21a861047392e19c802a} 
+{\bfseries Function\+Inputs} (\mbox{\hyperlink{class_open_shader_designer_1_1_shader_graph}{Shader\+Graph}} \&graph, Im\+Vec2 pos)
+\item 
+\mbox{\hyperlink{struct_open_shader_designer_1_1_node}{Node}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{class_open_shader_designer_1_1_nodes_1_1_shaders_1_1_function_inputs_a063bdeb9dfa83a1508f0bd8e288f8947}{Copy}} (\mbox{\hyperlink{class_open_shader_designer_1_1_shader_graph}{Shader\+Graph}} \&graph) const override
+\item 
+void \mbox{\hyperlink{class_open_shader_designer_1_1_nodes_1_1_shaders_1_1_function_inputs_a32f1175f771f5839b6a038abd9fc0fe7}{Inspect}} () override
+\item 
+std\+::string \mbox{\hyperlink{class_open_shader_designer_1_1_nodes_1_1_shaders_1_1_function_inputs_a3bf315ef7e300b9a81e80918ffe34c0a}{Get\+Code}} () const override
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{struct_open_shader_designer_1_1_node}{Open\+Shader\+Designer\+::\+Node}}}
+\begin{DoxyCompactItemize}
+\item 
+{\bfseries Node} (\mbox{\hyperlink{class_open_shader_designer_1_1_shader_graph}{Shader\+Graph}} \&graph, Im\+Vec2 pos)
+\item 
+void {\bfseries Draw\+Pin} (int id, \mbox{\hyperlink{struct_open_shader_designer_1_1_pin}{Pin}} \&pin, Im\+Pin\+Direction direction)
+\item 
+void {\bfseries Draw} (Im\+Gui\+ID id)
+\item 
+virtual bool {\bfseries Check\+Connection} (\mbox{\hyperlink{struct_open_shader_designer_1_1_pin}{Pin}} \texorpdfstring{$\ast$}{*}, \mbox{\hyperlink{struct_open_shader_designer_1_1_pin}{Pin}} \texorpdfstring{$\ast$}{*})
+\item 
+virtual void {\bfseries Validate\+Connections} ()
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Public Attributes inherited from \mbox{\hyperlink{struct_open_shader_designer_1_1_node}{Open\+Shader\+Designer\+::\+Node}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_open_shader_designer_1_1_shader_graph}{Shader\+Graph}} \& {\bfseries Graph}
+\item 
+Im\+Vec2 {\bfseries Position} = \{ 0, 0 \}
+\item 
+\begin{tabbing}
+xx\=xx\=xx\=xx\=xx\=xx\=xx\=xx\=xx\=\kill
+struct \{\\
+\>std::string {\bfseries Title}\\
+\>ImColor {\bfseries Color}\\
+\>ImColor {\bfseries HoveredColor}\\
+\>ImColor {\bfseries ActiveColor}\\
+\>bool {\bfseries Enabled}\\
+\} {\bfseries Header}\\
+
+\end{tabbing}\item 
+\begin{tabbing}
+xx\=xx\=xx\=xx\=xx\=xx\=xx\=xx\=xx\=\kill
+struct \{\\
+\>std::vector$<$ \mbox{\hyperlink{struct_open_shader_designer_1_1_pin}{Pin}} $>$ {\bfseries Inputs}\\
+\>std::vector$<$ \mbox{\hyperlink{struct_open_shader_designer_1_1_pin}{Pin}} $>$ {\bfseries Outputs}\\
+\} {\bfseries IO}\\
+
+\end{tabbing}\item 
+\begin{tabbing}
+xx\=xx\=xx\=xx\=xx\=xx\=xx\=xx\=xx\=\kill
+struct \{\\
+\>std::string {\bfseries Alias}\\
+\>FlagT {\bfseries Flags}\\
+\} {\bfseries Info}\\
+
+\end{tabbing}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_open_shader_designer_1_1_nodes_1_1_shaders_1_1_function_inputs_a063bdeb9dfa83a1508f0bd8e288f8947}\index{OpenShaderDesigner::Nodes::Shaders::FunctionInputs@{OpenShaderDesigner::Nodes::Shaders::FunctionInputs}!Copy@{Copy}}
+\index{Copy@{Copy}!OpenShaderDesigner::Nodes::Shaders::FunctionInputs@{OpenShaderDesigner::Nodes::Shaders::FunctionInputs}}
+\doxysubsubsection{\texorpdfstring{Copy()}{Copy()}}
+{\footnotesize\ttfamily \label{class_open_shader_designer_1_1_nodes_1_1_shaders_1_1_function_inputs_a063bdeb9dfa83a1508f0bd8e288f8947} 
+\mbox{\hyperlink{struct_open_shader_designer_1_1_node}{Node}} \texorpdfstring{$\ast$}{*} Function\+Inputs\+::\+Copy (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_open_shader_designer_1_1_shader_graph}{Shader\+Graph}} \&}]{graph}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [nodiscard]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{struct_open_shader_designer_1_1_node}{Open\+Shader\+Designer\+::\+Node}}.
+
+\Hypertarget{class_open_shader_designer_1_1_nodes_1_1_shaders_1_1_function_inputs_a3bf315ef7e300b9a81e80918ffe34c0a}\index{OpenShaderDesigner::Nodes::Shaders::FunctionInputs@{OpenShaderDesigner::Nodes::Shaders::FunctionInputs}!GetCode@{GetCode}}
+\index{GetCode@{GetCode}!OpenShaderDesigner::Nodes::Shaders::FunctionInputs@{OpenShaderDesigner::Nodes::Shaders::FunctionInputs}}
+\doxysubsubsection{\texorpdfstring{GetCode()}{GetCode()}}
+{\footnotesize\ttfamily \label{class_open_shader_designer_1_1_nodes_1_1_shaders_1_1_function_inputs_a3bf315ef7e300b9a81e80918ffe34c0a} 
+std\+::string Function\+Inputs\+::\+Get\+Code (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{struct_open_shader_designer_1_1_node}{Open\+Shader\+Designer\+::\+Node}}.
+
+\Hypertarget{class_open_shader_designer_1_1_nodes_1_1_shaders_1_1_function_inputs_a32f1175f771f5839b6a038abd9fc0fe7}\index{OpenShaderDesigner::Nodes::Shaders::FunctionInputs@{OpenShaderDesigner::Nodes::Shaders::FunctionInputs}!Inspect@{Inspect}}
+\index{Inspect@{Inspect}!OpenShaderDesigner::Nodes::Shaders::FunctionInputs@{OpenShaderDesigner::Nodes::Shaders::FunctionInputs}}
+\doxysubsubsection{\texorpdfstring{Inspect()}{Inspect()}}
+{\footnotesize\ttfamily \label{class_open_shader_designer_1_1_nodes_1_1_shaders_1_1_function_inputs_a32f1175f771f5839b6a038abd9fc0fe7} 
+void Function\+Inputs\+::\+Inspect (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{struct_open_shader_designer_1_1_node}{Open\+Shader\+Designer\+::\+Node}}.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+Include/\+Graph/\+Nodes/Shaders.\+h\item 
+Source/\+Graph/\+Nodes/Shaders.\+cpp\end{DoxyCompactItemize}

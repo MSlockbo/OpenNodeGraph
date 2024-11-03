@@ -1,0 +1,107 @@
+\doxysection{open\+\_\+cpp\+\_\+utils\+::hash\+\_\+table\texorpdfstring{$<$}{<} T, Hash, Alloc \texorpdfstring{$>$}{>} Class Template Reference}
+\hypertarget{classopen__cpp__utils_1_1hash__table}{}\label{classopen__cpp__utils_1_1hash__table}\index{open\_cpp\_utils::hash\_table$<$ T, Hash, Alloc $>$@{open\_cpp\_utils::hash\_table$<$ T, Hash, Alloc $>$}}
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{classopen__cpp__utils_1_1hash__table_1_1const__iterator}{const\+\_\+iterator}}
+\item 
+class \mbox{\hyperlink{classopen__cpp__utils_1_1hash__table_1_1iterator}{iterator}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classopen__cpp__utils_1_1hash__table_a0bc219f041a08cfa2e9015f5899a266c}\label{classopen__cpp__utils_1_1hash__table_a0bc219f041a08cfa2e9015f5899a266c} 
+using {\bfseries value\+\_\+type} = T
+\item 
+\Hypertarget{classopen__cpp__utils_1_1hash__table_a494cc48088a6e315dcc750eee598637c}\label{classopen__cpp__utils_1_1hash__table_a494cc48088a6e315dcc750eee598637c} 
+using {\bfseries pointer} = T\texorpdfstring{$\ast$}{*}
+\item 
+\Hypertarget{classopen__cpp__utils_1_1hash__table_a55ca23446894f10dcfd4ceb6e66f1f82}\label{classopen__cpp__utils_1_1hash__table_a55ca23446894f10dcfd4ceb6e66f1f82} 
+using {\bfseries const\+\_\+pointer} = const T\texorpdfstring{$\ast$}{*}
+\item 
+\Hypertarget{classopen__cpp__utils_1_1hash__table_a9b7bb1b98bdb9084efdd1ffa6419d475}\label{classopen__cpp__utils_1_1hash__table_a9b7bb1b98bdb9084efdd1ffa6419d475} 
+using {\bfseries reference} = T\&
+\item 
+\Hypertarget{classopen__cpp__utils_1_1hash__table_ad3fde6a027fbe47eea0974990b1aee94}\label{classopen__cpp__utils_1_1hash__table_ad3fde6a027fbe47eea0974990b1aee94} 
+using {\bfseries const\+\_\+reference} = const T\&
+\item 
+\Hypertarget{classopen__cpp__utils_1_1hash__table_a84d5034656c3e168d76811dba9d4d53f}\label{classopen__cpp__utils_1_1hash__table_a84d5034656c3e168d76811dba9d4d53f} 
+using {\bfseries hash\+\_\+type} = Hash
+\item 
+\Hypertarget{classopen__cpp__utils_1_1hash__table_ae7b566bb595de8f4ad6213f099a60380}\label{classopen__cpp__utils_1_1hash__table_ae7b566bb595de8f4ad6213f099a60380} 
+using {\bfseries allocator\+\_\+type} = typename std\+::allocator\+\_\+traits$<$Alloc$>$\+::template rebind\+\_\+alloc$<$\+\_\+\+Node$>$
+\item 
+\Hypertarget{classopen__cpp__utils_1_1hash__table_a6fe9cf62b56e5601a7e69a1743e0e57b}\label{classopen__cpp__utils_1_1hash__table_a6fe9cf62b56e5601a7e69a1743e0e57b} 
+using {\bfseries size\+\_\+type} = size\+\_\+t
+\item 
+\Hypertarget{classopen__cpp__utils_1_1hash__table_add4ca76a42c832712190cc51661f264b}\label{classopen__cpp__utils_1_1hash__table_add4ca76a42c832712190cc51661f264b} 
+using {\bfseries iterator\+\_\+type} = class \mbox{\hyperlink{classopen__cpp__utils_1_1hash__table_1_1iterator}{iterator}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classopen__cpp__utils_1_1hash__table_aa2a91ae63fdcd8a93d6e278072f8e779}\label{classopen__cpp__utils_1_1hash__table_aa2a91ae63fdcd8a93d6e278072f8e779} 
+\mbox{\hyperlink{classopen__cpp__utils_1_1hash__table_1_1iterator}{iterator}} {\bfseries begin} ()
+\item 
+\Hypertarget{classopen__cpp__utils_1_1hash__table_a5be64d2cc38355b287404c19dc784642}\label{classopen__cpp__utils_1_1hash__table_a5be64d2cc38355b287404c19dc784642} 
+\mbox{\hyperlink{classopen__cpp__utils_1_1hash__table_1_1iterator}{iterator}} {\bfseries end} ()
+\item 
+\Hypertarget{classopen__cpp__utils_1_1hash__table_a42f2d78b618bb4192b1e624e0f3b2567}\label{classopen__cpp__utils_1_1hash__table_a42f2d78b618bb4192b1e624e0f3b2567} 
+\mbox{\hyperlink{classopen__cpp__utils_1_1hash__table_1_1const__iterator}{const\+\_\+iterator}} {\bfseries begin} () const
+\item 
+\Hypertarget{classopen__cpp__utils_1_1hash__table_ae2e20aaea617e93afd7a74ad13852424}\label{classopen__cpp__utils_1_1hash__table_ae2e20aaea617e93afd7a74ad13852424} 
+\mbox{\hyperlink{classopen__cpp__utils_1_1hash__table_1_1const__iterator}{const\+\_\+iterator}} {\bfseries end} () const
+\item 
+\Hypertarget{classopen__cpp__utils_1_1hash__table_a76e14c061108e7ceff5c8a1d83479d6d}\label{classopen__cpp__utils_1_1hash__table_a76e14c061108e7ceff5c8a1d83479d6d} 
+{\bfseries hash\+\_\+table} (std\+::initializer\+\_\+list$<$ value\+\_\+type $>$ data)
+\item 
+\Hypertarget{classopen__cpp__utils_1_1hash__table_a3315d8cdd6c22cdd3e520f4b40c303df}\label{classopen__cpp__utils_1_1hash__table_a3315d8cdd6c22cdd3e520f4b40c303df} 
+{\bfseries hash\+\_\+table} (const \mbox{\hyperlink{classopen__cpp__utils_1_1hash__table}{hash\+\_\+table}} \&)
+\item 
+\Hypertarget{classopen__cpp__utils_1_1hash__table_af520cb6bc8b849bfa8e88c6bdc11d6fc}\label{classopen__cpp__utils_1_1hash__table_af520cb6bc8b849bfa8e88c6bdc11d6fc} 
+{\bfseries hash\+\_\+table} (\mbox{\hyperlink{classopen__cpp__utils_1_1hash__table}{hash\+\_\+table}} \&\&)=default
+\item 
+\Hypertarget{classopen__cpp__utils_1_1hash__table_a1f0aba69c6b93b6bbb6f6a9a357f153e}\label{classopen__cpp__utils_1_1hash__table_a1f0aba69c6b93b6bbb6f6a9a357f153e} 
+void {\bfseries reserve} (size\+\_\+t size)
+\item 
+\Hypertarget{classopen__cpp__utils_1_1hash__table_a4bffb6f6af0b2e9c994a6284c4aa63d7}\label{classopen__cpp__utils_1_1hash__table_a4bffb6f6af0b2e9c994a6284c4aa63d7} 
+void {\bfseries clear} ()
+\item 
+\Hypertarget{classopen__cpp__utils_1_1hash__table_ada05a71251271d360d204eb8d83a99c3}\label{classopen__cpp__utils_1_1hash__table_ada05a71251271d360d204eb8d83a99c3} 
+void {\bfseries insert} (const\+\_\+reference x)
+\item 
+\Hypertarget{classopen__cpp__utils_1_1hash__table_ae5a9b1a481f073a456f030091009905b}\label{classopen__cpp__utils_1_1hash__table_ae5a9b1a481f073a456f030091009905b} 
+void {\bfseries erase} (const\+\_\+reference x)
+\item 
+\Hypertarget{classopen__cpp__utils_1_1hash__table_a198dc9076c3bf1f5821434d95295f2e6}\label{classopen__cpp__utils_1_1hash__table_a198dc9076c3bf1f5821434d95295f2e6} 
+bool {\bfseries contains} (const\+\_\+reference x)
+\item 
+\Hypertarget{classopen__cpp__utils_1_1hash__table_ad46783615d18a3e947c129380890d742}\label{classopen__cpp__utils_1_1hash__table_ad46783615d18a3e947c129380890d742} 
+\mbox{\hyperlink{classopen__cpp__utils_1_1hash__table_1_1iterator}{iterator}} {\bfseries find} (const\+\_\+reference x)
+\item 
+\Hypertarget{classopen__cpp__utils_1_1hash__table_adc739a4af6fe790c79f724a01335fa3e}\label{classopen__cpp__utils_1_1hash__table_adc739a4af6fe790c79f724a01335fa3e} 
+\mbox{\hyperlink{classopen__cpp__utils_1_1hash__table_1_1const__iterator}{const\+\_\+iterator}} {\bfseries find} (const\+\_\+reference x) const
+\item 
+\Hypertarget{classopen__cpp__utils_1_1hash__table_aa88d857d381d4e4493b1f8c024f03e10}\label{classopen__cpp__utils_1_1hash__table_aa88d857d381d4e4493b1f8c024f03e10} 
+size\+\_\+type {\bfseries capacity} () const
+\item 
+\Hypertarget{classopen__cpp__utils_1_1hash__table_a62add835daf9a66595c6780b45d4b320}\label{classopen__cpp__utils_1_1hash__table_a62add835daf9a66595c6780b45d4b320} 
+size\+\_\+type {\bfseries size} () const
+\item 
+\Hypertarget{classopen__cpp__utils_1_1hash__table_a0570a3ff9b5c67215c821e93d4fdf551}\label{classopen__cpp__utils_1_1hash__table_a0570a3ff9b5c67215c821e93d4fdf551} 
+bool {\bfseries empty} () const
+\item 
+\Hypertarget{classopen__cpp__utils_1_1hash__table_ae6de890185d0590bfd0adb02cfe4afdc}\label{classopen__cpp__utils_1_1hash__table_ae6de890185d0590bfd0adb02cfe4afdc} 
+double {\bfseries occupancy} () const
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Friends}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classopen__cpp__utils_1_1hash__table_a67171474c4da6cc8efe0c7fafefd2b2d}\label{classopen__cpp__utils_1_1hash__table_a67171474c4da6cc8efe0c7fafefd2b2d} 
+class {\bfseries iterator}
+\end{DoxyCompactItemize}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+hash\+\_\+table.\+h\end{DoxyCompactItemize}

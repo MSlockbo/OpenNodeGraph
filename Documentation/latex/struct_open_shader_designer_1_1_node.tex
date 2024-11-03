@@ -3,53 +3,72 @@
 Inheritance diagram for Open\+Shader\+Designer\+::Node\+:\begin{figure}[H]
 \begin{center}
 \leavevmode
-\includegraphics[height=2.000000cm]{struct_open_shader_designer_1_1_node}
+\includegraphics[height=8.383233cm]{struct_open_shader_designer_1_1_node}
 \end{center}
 \end{figure}
 \doxysubsubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\Hypertarget{struct_open_shader_designer_1_1_node_a045b08fc2e3c7bfb0fb021872060eca1}\label{struct_open_shader_designer_1_1_node_a045b08fc2e3c7bfb0fb021872060eca1} 
-{\bfseries Node} (\mbox{\hyperlink{class_open_shader_designer_1_1_shader_graph}{Shader\+Graph}} \&graph, Im\+Vec2 pos, const std\+::string \&title, Im\+Color color, const std\+::vector$<$ \mbox{\hyperlink{struct_open_shader_designer_1_1_pin}{Pin}} $>$ \&inputs, bool dyn\+\_\+inputs, const std\+::vector$<$ \mbox{\hyperlink{struct_open_shader_designer_1_1_pin}{Pin}} $>$ \&outputs, bool constant=false)
+\Hypertarget{struct_open_shader_designer_1_1_node_ab4f52f2ee770ab7db5a6ce0321812ae6}\label{struct_open_shader_designer_1_1_node_ab4f52f2ee770ab7db5a6ce0321812ae6} 
+{\bfseries Node} (\mbox{\hyperlink{class_open_shader_designer_1_1_shader_graph}{Shader\+Graph}} \&graph, Im\+Vec2 pos)
+\item 
+\Hypertarget{struct_open_shader_designer_1_1_node_aae1e3d8c1abb2d72c592053e366e8840}\label{struct_open_shader_designer_1_1_node_aae1e3d8c1abb2d72c592053e366e8840} 
+void {\bfseries Draw\+Pin} (int id, \mbox{\hyperlink{struct_open_shader_designer_1_1_pin}{Pin}} \&pin, Im\+Pin\+Direction direction)
+\item 
+\Hypertarget{struct_open_shader_designer_1_1_node_a22b6559adc2d9a273bf99b0194231603}\label{struct_open_shader_designer_1_1_node_a22b6559adc2d9a273bf99b0194231603} 
+void {\bfseries Draw} (Im\+Gui\+ID id)
+\item 
+\Hypertarget{struct_open_shader_designer_1_1_node_a25b8d429436073c3b442a4f581f6ff8a}\label{struct_open_shader_designer_1_1_node_a25b8d429436073c3b442a4f581f6ff8a} 
+virtual bool {\bfseries Check\+Connection} (\mbox{\hyperlink{struct_open_shader_designer_1_1_pin}{Pin}} \texorpdfstring{$\ast$}{*}, \mbox{\hyperlink{struct_open_shader_designer_1_1_pin}{Pin}} \texorpdfstring{$\ast$}{*})
+\item 
+\Hypertarget{struct_open_shader_designer_1_1_node_aa8f5e9c49295ca32ecc944cdeadbffb6}\label{struct_open_shader_designer_1_1_node_aa8f5e9c49295ca32ecc944cdeadbffb6} 
+virtual void {\bfseries Validate\+Connections} ()
 \item 
 \Hypertarget{struct_open_shader_designer_1_1_node_a70bb11ea1a9c508676a2af05279a29f6}\label{struct_open_shader_designer_1_1_node_a70bb11ea1a9c508676a2af05279a29f6} 
 virtual \mbox{\hyperlink{struct_open_shader_designer_1_1_node}{Node}} \texorpdfstring{$\ast$}{*} {\bfseries Copy} (\mbox{\hyperlink{class_open_shader_designer_1_1_shader_graph}{Shader\+Graph}} \&graph) const =0
 \item 
 \Hypertarget{struct_open_shader_designer_1_1_node_a3f5a0246c1069278857299567ebf4ce4}\label{struct_open_shader_designer_1_1_node_a3f5a0246c1069278857299567ebf4ce4} 
 virtual void {\bfseries Inspect} ()=0
+\item 
+\Hypertarget{struct_open_shader_designer_1_1_node_a98140fc3b579d7c93449dd6c276a084f}\label{struct_open_shader_designer_1_1_node_a98140fc3b579d7c93449dd6c276a084f} 
+virtual std\+::string {\bfseries Get\+Code} () const =0
 \end{DoxyCompactItemize}
 \doxysubsubsection*{Public Attributes}
 \begin{DoxyCompactItemize}
 \item 
+\Hypertarget{struct_open_shader_designer_1_1_node_af6b21600f6bc41a58d535ba8ceed39ef}\label{struct_open_shader_designer_1_1_node_af6b21600f6bc41a58d535ba8ceed39ef} 
+\mbox{\hyperlink{class_open_shader_designer_1_1_shader_graph}{Shader\+Graph}} \& {\bfseries Graph}
+\item 
 \Hypertarget{struct_open_shader_designer_1_1_node_acf75149be57771e12f60179a284619e3}\label{struct_open_shader_designer_1_1_node_acf75149be57771e12f60179a284619e3} 
 Im\+Vec2 {\bfseries Position} = \{ 0, 0 \}
 \item 
-\Hypertarget{struct_open_shader_designer_1_1_node_a91a75bd71698f33ec205bcb06db9fb3f}\label{struct_open_shader_designer_1_1_node_a91a75bd71698f33ec205bcb06db9fb3f} 
+\Hypertarget{struct_open_shader_designer_1_1_node_a263180b3084d763d4983a99365eda7d5}\label{struct_open_shader_designer_1_1_node_a263180b3084d763d4983a99365eda7d5} 
 \begin{tabbing}
 xx\=xx\=xx\=xx\=xx\=xx\=xx\=xx\=xx\=\kill
 struct \{\\
-\>std::string {\bfseries Title} = "{}Node"{}\\
-\>ImColor {\bfseries Color} = Pin::Colors\mbox{[}Pin::VECTOR\mbox{]}\\
-\>bool {\bfseries Enabled} = true\\
+\>std::string {\bfseries Title}\\
+\>ImColor {\bfseries Color}\\
+\>ImColor {\bfseries HoveredColor}\\
+\>ImColor {\bfseries ActiveColor}\\
+\>bool {\bfseries Enabled}\\
 \} {\bfseries Header}\\
 
 \end{tabbing}\item 
-\Hypertarget{struct_open_shader_designer_1_1_node_afe91e26c03e73a1c84eb5bb6e6a155a0}\label{struct_open_shader_designer_1_1_node_afe91e26c03e73a1c84eb5bb6e6a155a0} 
+\Hypertarget{struct_open_shader_designer_1_1_node_ae343372527cd0672bd15cb7021b87926}\label{struct_open_shader_designer_1_1_node_ae343372527cd0672bd15cb7021b87926} 
 \begin{tabbing}
 xx\=xx\=xx\=xx\=xx\=xx\=xx\=xx\=xx\=\kill
 struct \{\\
 \>std::vector$<$ \mbox{\hyperlink{struct_open_shader_designer_1_1_pin}{Pin}} $>$ {\bfseries Inputs}\\
 \>std::vector$<$ \mbox{\hyperlink{struct_open_shader_designer_1_1_pin}{Pin}} $>$ {\bfseries Outputs}\\
-\>bool {\bfseries DynamicInputs} = false\\
 \} {\bfseries IO}\\
 
 \end{tabbing}\item 
-\Hypertarget{struct_open_shader_designer_1_1_node_afed7efba8bacb46381d5ad7ca4e5d935}\label{struct_open_shader_designer_1_1_node_afed7efba8bacb46381d5ad7ca4e5d935} 
+\Hypertarget{struct_open_shader_designer_1_1_node_af0ccbe515d464f1a1275b41a71054cc8}\label{struct_open_shader_designer_1_1_node_af0ccbe515d464f1a1275b41a71054cc8} 
 \begin{tabbing}
 xx\=xx\=xx\=xx\=xx\=xx\=xx\=xx\=xx\=\kill
 struct \{\\
-\>ImVec2 {\bfseries Size}\\
-\>bool {\bfseries Const}\\
+\>std::string {\bfseries Alias}\\
+\>FlagT {\bfseries Flags}\\
 \} {\bfseries Info}\\
 
 \end{tabbing}\end{DoxyCompactItemize}
