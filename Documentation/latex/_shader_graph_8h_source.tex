@@ -1,0 +1,322 @@
+\doxysection{Shader\+Graph.\+h}
+\hypertarget{_shader_graph_8h_source}{}\label{_shader_graph_8h_source}\index{Include/Graph/ShaderGraph.h@{Include/Graph/ShaderGraph.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//\ =====================================================================================================================}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ \ OpenShaderDesigner,\ an\ open\ source\ software\ utility\ to\ create\ materials\ and\ shaders.}}
+\DoxyCodeLine{00003\ \textcolor{comment}{//\ \ Copyright\ (C)\ 2024\ \ Medusa\ Slockbower}}
+\DoxyCodeLine{00004\ \textcolor{comment}{//}}
+\DoxyCodeLine{00005\ \textcolor{comment}{//\ \ This\ program\ is\ free\ software:\ you\ can\ redistribute\ it\ and/or\ modify}}
+\DoxyCodeLine{00006\ \textcolor{comment}{//\ \ it\ under\ the\ terms\ of\ the\ GNU\ General\ Public\ License\ as\ published\ by}}
+\DoxyCodeLine{00007\ \textcolor{comment}{//\ \ the\ Free\ Software\ Foundation,\ either\ version\ 3\ of\ the\ License,\ or}}
+\DoxyCodeLine{00008\ \textcolor{comment}{//\ \ (at\ your\ option)\ any\ later\ version.}}
+\DoxyCodeLine{00009\ \textcolor{comment}{//}}
+\DoxyCodeLine{00010\ \textcolor{comment}{//\ \ This\ program\ is\ distributed\ in\ the\ hope\ that\ it\ will\ be\ useful,}}
+\DoxyCodeLine{00011\ \textcolor{comment}{//\ \ but\ WITHOUT\ ANY\ WARRANTY;\ without\ even\ the\ implied\ warranty\ of}}
+\DoxyCodeLine{00012\ \textcolor{comment}{//\ \ MERCHANTABILITY\ or\ FITNESS\ FOR\ A\ PARTICULAR\ PURPOSE.\ \ See\ the}}
+\DoxyCodeLine{00013\ \textcolor{comment}{//\ \ GNU\ General\ Public\ License\ for\ more\ details.}}
+\DoxyCodeLine{00014\ \textcolor{comment}{//}}
+\DoxyCodeLine{00015\ \textcolor{comment}{//\ \ You\ should\ have\ received\ a\ copy\ of\ the\ GNU\ General\ Public\ License}}
+\DoxyCodeLine{00016\ \textcolor{comment}{//\ \ along\ with\ this\ program.\ \ If\ not,\ see\ <https://www.gnu.org/licenses/>.}}
+\DoxyCodeLine{00017\ \textcolor{comment}{//\ =====================================================================================================================}}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \textcolor{preprocessor}{\#ifndef\ OSD\_SHADERGRAPH\_H}}
+\DoxyCodeLine{00020\ \textcolor{preprocessor}{\#define\ OSD\_SHADERGRAPH\_H}}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ \textcolor{preprocessor}{\#include\ <Editor/EditorWindow.h>}}
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00024\ \textcolor{preprocessor}{\#include\ <vector>}}
+\DoxyCodeLine{00025\ \textcolor{preprocessor}{\#include\ <filesystem>}}
+\DoxyCodeLine{00026\ \textcolor{preprocessor}{\#include\ <unordered\_set>}}
+\DoxyCodeLine{00027\ \textcolor{preprocessor}{\#include\ <stack>}}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ \textcolor{preprocessor}{\#include\ <glm/glm.hpp>}}
+\DoxyCodeLine{00030\ \textcolor{preprocessor}{\#include\ <glw/common.h>}}
+\DoxyCodeLine{00031\ }
+\DoxyCodeLine{00032\ \textcolor{preprocessor}{\#include\ <open-\/cpp-\/utils/startup.h>}}
+\DoxyCodeLine{00033\ \textcolor{preprocessor}{\#include\ <open-\/cpp-\/utils/directed\_tree.h>}}
+\DoxyCodeLine{00034\ \textcolor{preprocessor}{\#include\ <open-\/cpp-\/utils/any.h>}}
+\DoxyCodeLine{00035\ \textcolor{preprocessor}{\#include\ <open-\/cpp-\/utils/object\_pool.h>}}
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00037\ \textcolor{preprocessor}{\#include\ <imnode-\/graph/imnode\_graph.h>}}
+\DoxyCodeLine{00038\ }
+\DoxyCodeLine{00039\ \textcolor{preprocessor}{\#include\ "{}FileSystem/FileManager.h"{}}}
+\DoxyCodeLine{00040\ \textcolor{preprocessor}{\#include\ <Renderer/Assets/Texture.h>}}
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00043\ \textcolor{keyword}{namespace\ }ocu\ =\ open\_cpp\_utils;}
+\DoxyCodeLine{00044\ }
+\DoxyCodeLine{00045\ \textcolor{preprocessor}{\#define\ RegisterNode(Name,\ Type)\ \(\backslash\)}}
+\DoxyCodeLine{00046\ \textcolor{preprocessor}{\ \ \ \ inline\ Node*\ Create\#\#Type(ShaderGraph\&\ graph,\ ImVec2\ pos)\ \{\ return\ new\ Type(graph,\ pos);\ \}\ \(\backslash\)}}
+\DoxyCodeLine{00047\ \textcolor{preprocessor}{\ \ \ \ STARTUP(\_Register\#\#Type)\ \{\ ShaderGraph::Register(Name,\ Create\#\#Type);\ \}}}
+\DoxyCodeLine{00048\ }
+\DoxyCodeLine{00049\ \textcolor{keyword}{namespace\ }OpenShaderDesigner}
+\DoxyCodeLine{00050\ \{}
+\DoxyCodeLine{00051\ \ \ \ \ \textcolor{keyword}{class\ }ShaderGraph;}
+\DoxyCodeLine{00052\ }
+\DoxyCodeLine{00053\ \ \ \ \ \textcolor{keyword}{using\ }PinType\ =\ int;}
+\DoxyCodeLine{00054\ \ \ \ \ \textcolor{keyword}{enum}\ PinType\_}
+\DoxyCodeLine{00055\ \ \ \ \ \{}
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ PinType\_UInt\ =\ 0}
+\DoxyCodeLine{00057\ \ \ \ \ ,\ \ \ PinType\_Int}
+\DoxyCodeLine{00058\ \ \ \ \ ,\ \ \ PinType\_Float}
+\DoxyCodeLine{00059\ \ \ \ \ ,\ \ \ PinType\_Vector}
+\DoxyCodeLine{00060\ }
+\DoxyCodeLine{00061\ \ \ \ \ ,\ \ \ PinType\_Any}
+\DoxyCodeLine{00062\ \ \ \ \ ,\ \ \ PinType\_COUNT}
+\DoxyCodeLine{00063\ \ \ \ \ \};}
+\DoxyCodeLine{00064\ }
+\DoxyCodeLine{00065\ \ \ \ \ \textcolor{keyword}{using\ }FlagT\ =\ \textcolor{keywordtype}{unsigned}\ int;}
+\DoxyCodeLine{00066\ \ \ \ \ \textcolor{keyword}{enum}\ PinFlags\_}
+\DoxyCodeLine{00067\ \ \ \ \ \{}
+\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ PinFlags\_None\ \ \ \ \ \ \ \ \ \ \ =\ 0}
+\DoxyCodeLine{00069\ \ \ \ \ ,\ \ \ PinFlags\_NoCollapse\ \ \ \ \ =\ 1\ <<\ 0}
+\DoxyCodeLine{00070\ \ \ \ \ ,\ \ \ PinFlags\_AlwaysCollapse\ =\ 1\ <<\ 1}
+\DoxyCodeLine{00071\ \ \ \ \ ,\ \ \ PinFlags\_NoPadding\ \ \ \ \ \ =\ 1\ <<\ 2}
+\DoxyCodeLine{00072\ \ \ \ \ ,\ \ \ PinFlags\_Ambiguous\ \ \ \ \ \ =\ 1\ <<\ 3}
+\DoxyCodeLine{00073\ \ \ \ \ \};}
+\DoxyCodeLine{00074\ \ \ \ \ }
+\DoxyCodeLine{00075\ \ \ \ \ \textcolor{keyword}{enum}\ InterpolationType\_\ :\ glw::enum\_t}
+\DoxyCodeLine{00076\ \ \ \ \ \{}
+\DoxyCodeLine{00077\ \ \ \ \ \ \ \ \ InterpolationType\_Flat\ =\ 0}
+\DoxyCodeLine{00078\ \ \ \ \ ,\ \ \ InterpolationType\_Screen}
+\DoxyCodeLine{00079\ \ \ \ \ ,\ \ \ InterpolationType\_Smooth}
+\DoxyCodeLine{00080\ \ \ \ \ \};}
+\DoxyCodeLine{00081\ }
+\DoxyCodeLine{00082\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_open_shader_designer_1_1_pin}{Pin}}}
+\DoxyCodeLine{00083\ \ \ \ \ \{}
+\DoxyCodeLine{00084\ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keyword}{const}\ \textcolor{keyword}{static}\ ImColor\ Colors[PinType\_COUNT]\ =\ \{}
+\DoxyCodeLine{00085\ \ \ \ \ \ \ \ \ \ \ \ \ ImColor(0x7A,\ 0x9F,\ 0x82)\ \textcolor{comment}{//\ Unsigned\ Int}}
+\DoxyCodeLine{00086\ \ \ \ \ \ \ \ \ ,\ \ \ ImColor(0x64,\ 0x94,\ 0xAA)\ \textcolor{comment}{//\ Int}}
+\DoxyCodeLine{00087\ \ \ \ \ \ \ \ \ ,\ \ \ ImColor(0xA6,\ 0x3D,\ 0x40)\ \textcolor{comment}{//\ Float}}
+\DoxyCodeLine{00088\ \ \ \ \ \ \ \ \ ,\ \ \ ImColor(0xE9,\ 0xB8,\ 0x72)\ \textcolor{comment}{//\ Vector}}
+\DoxyCodeLine{00089\ \ \ \ \ \ \ \ \ ,\ \ \ ImColor(0xFF,\ 0xFF,\ 0xFF)\ \textcolor{comment}{//\ Any}}
+\DoxyCodeLine{00090\ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{00091\ }
+\DoxyCodeLine{00092\ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ TypeNames[PinType\_COUNT]\ =\ \{}
+\DoxyCodeLine{00093\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}Unsigned\ Int"{}}}
+\DoxyCodeLine{00094\ \ \ \ \ \ \ \ \ ,\ \ \ \textcolor{stringliteral}{"{}Int"{}}}
+\DoxyCodeLine{00095\ \ \ \ \ \ \ \ \ ,\ \ \ \textcolor{stringliteral}{"{}Float"{}}}
+\DoxyCodeLine{00096\ \ \ \ \ \ \ \ \ ,\ \ \ \textcolor{stringliteral}{"{}Vector"{}}}
+\DoxyCodeLine{00097\ \ \ \ \ \ \ \ \ ,\ \ \ \textcolor{stringliteral}{"{}Any"{}}}
+\DoxyCodeLine{00098\ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{00099\ }
+\DoxyCodeLine{00100\ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keyword}{const}\ \textcolor{keyword}{static}\ std::string\ TypeKeywords[PinType\_COUNT]\ =\ \{}
+\DoxyCodeLine{00101\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}uint"{}}}
+\DoxyCodeLine{00102\ \ \ \ \ \ \ \ \ ,\ \ \ \textcolor{stringliteral}{"{}int"{}}}
+\DoxyCodeLine{00103\ \ \ \ \ \ \ \ \ ,\ \ \ \textcolor{stringliteral}{"{}float"{}}}
+\DoxyCodeLine{00104\ \ \ \ \ \ \ \ \ ,\ \ \ \textcolor{stringliteral}{"{}vec3"{}}}
+\DoxyCodeLine{00105\ \ \ \ \ \ \ \ \ ,\ \ \ \textcolor{stringliteral}{"{}vec3"{}}}
+\DoxyCodeLine{00106\ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{00107\ }
+\DoxyCodeLine{00108\ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keyword}{const}\ \textcolor{keyword}{static}\ \textcolor{keywordtype}{int}\ TypeWidths[PinType\_COUNT]\ =\ \{}
+\DoxyCodeLine{00109\ \ \ \ \ \ \ \ \ \ \ \ \ \ 1\ \textcolor{comment}{//\ Unsigned\ Int}}
+\DoxyCodeLine{00110\ \ \ \ \ \ \ \ \ ,\ \ \ \ 1\ \textcolor{comment}{//\ Int}}
+\DoxyCodeLine{00111\ \ \ \ \ \ \ \ \ ,\ \ \ \ 1\ \textcolor{comment}{//\ Float}}
+\DoxyCodeLine{00112\ \ \ \ \ \ \ \ \ ,\ \ \ \ 3\ \textcolor{comment}{//\ Vector}}
+\DoxyCodeLine{00113\ \ \ \ \ \ \ \ \ ,\ \ \ -\/1\ \textcolor{comment}{//\ Any}}
+\DoxyCodeLine{00114\ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{00115\ }
+\DoxyCodeLine{00116\ \ \ \ \ \ \ \ \ \textcolor{keyword}{using\ }Ambiguous\ =\ ocu::any<glm::int32,\ glm::uint32,\ glm::float32,\ glm::vec3>;}
+\DoxyCodeLine{00117\ }
+\DoxyCodeLine{00118\ \ \ \ \ \ \ \ \ std::string\ Name;}
+\DoxyCodeLine{00119\ \ \ \ \ \ \ \ \ PinType\ \ \ \ \ Type;}
+\DoxyCodeLine{00120\ \ \ \ \ \ \ \ \ FlagT\ \ \ \ \ \ \ Flags;}
+\DoxyCodeLine{00121\ \ \ \ \ \ \ \ \ Ambiguous\ \ \ Value;}
+\DoxyCodeLine{00122\ \ \ \ \ \ \ \ \ ImPinPtr\ \ \ \ Ptr;}
+\DoxyCodeLine{00123\ }
+\DoxyCodeLine{00124\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_open_shader_designer_1_1_pin}{Pin}}(\textcolor{keyword}{const}\ std::string\&\ name,\ PinType\ type,\ FlagT\ flags\ =\ PinFlags\_None)}
+\DoxyCodeLine{00125\ \ \ \ \ \ \ \ \ \ \ \ \ :\ Name(name)}
+\DoxyCodeLine{00126\ \ \ \ \ \ \ \ \ \ \ \ \ ,\ Type(type)}
+\DoxyCodeLine{00127\ \ \ \ \ \ \ \ \ \ \ \ \ ,\ Flags(flags)}
+\DoxyCodeLine{00128\ \ \ \ \ \ \ \ \ \{\ \}}
+\DoxyCodeLine{00129\ }
+\DoxyCodeLine{00130\ \ \ \ \ \ \ \ \ std::string\ GetVarName()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ std::format(\textcolor{stringliteral}{"{}\{\}\_\{\}"{}},\ Name,\ Ptr.Node);\ \}}
+\DoxyCodeLine{00131\ \ \ \ \ \};}
+\DoxyCodeLine{00132\ }
+\DoxyCodeLine{00133\ \ \ \ \ \textcolor{keyword}{enum}\ NodeFlags\_}
+\DoxyCodeLine{00134\ \ \ \ \ \{}
+\DoxyCodeLine{00135\ \ \ \ \ \ \ \ \ NodeFlags\_None\ \ \ \ \ \ \ \ \ \ \ =\ 0}
+\DoxyCodeLine{00136\ \ \ \ \ ,\ \ \ NodeFlags\_Const\ \ \ \ \ \ \ \ \ \ =\ 0x0000'0001}
+\DoxyCodeLine{00137\ \ \ \ \ ,\ \ \ NodeFlags\_DynamicInputs\ \ =\ 0x0000'0002}
+\DoxyCodeLine{00138\ \ \ \ \ ,\ \ \ NodeFlags\_DynamicOutputs\ =\ 0x0000'0004}
+\DoxyCodeLine{00139\ \ \ \ \ \};}
+\DoxyCodeLine{00140\ }
+\DoxyCodeLine{00141\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_open_shader_designer_1_1_node}{Node}}}
+\DoxyCodeLine{00142\ \ \ \ \ \{}
+\DoxyCodeLine{00143\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00144\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_open_shader_designer_1_1_shader_graph}{ShaderGraph}}\&\ Graph;}
+\DoxyCodeLine{00145\ \ \ \ \ \ \ \ \ ImVec2\ \ \ \ \ \ \ Position\ =\ \{\ 0,\ 0\ \};}
+\DoxyCodeLine{00146\ }
+\DoxyCodeLine{00147\ \ \ \ \ \ \ \ \ \textcolor{keyword}{struct}}
+\DoxyCodeLine{00148\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00149\ \ \ \ \ \ \ \ \ \ \ \ \ std::string\ Title;}
+\DoxyCodeLine{00150\ \ \ \ \ \ \ \ \ \ \ \ \ ImColor\ \ \ \ \ Color,\ HoveredColor,\ ActiveColor;}
+\DoxyCodeLine{00151\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ \ Enabled;}
+\DoxyCodeLine{00152\ \ \ \ \ \ \ \ \ \}\ Header;}
+\DoxyCodeLine{00153\ }
+\DoxyCodeLine{00154\ \ \ \ \ \ \ \ \ \textcolor{keyword}{struct}}
+\DoxyCodeLine{00155\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00156\ \ \ \ \ \ \ \ \ \ \ \ \ std::vector<Pin>\ Inputs,\ Outputs;}
+\DoxyCodeLine{00157\ \ \ \ \ \ \ \ \ \}\ IO;}
+\DoxyCodeLine{00158\ }
+\DoxyCodeLine{00159\ \ \ \ \ \ \ \ \ \textcolor{keyword}{struct}}
+\DoxyCodeLine{00160\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00161\ \ \ \ \ \ \ \ \ \ \ \ \ std::string\ Alias;}
+\DoxyCodeLine{00162\ \ \ \ \ \ \ \ \ \ \ \ \ FlagT\ \ \ \ \ \ \ Flags;}
+\DoxyCodeLine{00163\ \ \ \ \ \ \ \ \ \}\ Info;}
+\DoxyCodeLine{00164\ }
+\DoxyCodeLine{00165\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_open_shader_designer_1_1_node}{Node}}(\mbox{\hyperlink{class_open_shader_designer_1_1_shader_graph}{ShaderGraph}}\&\ graph,\ ImVec2\ pos);}
+\DoxyCodeLine{00166\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{struct_open_shader_designer_1_1_node}{\string~Node}}()\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00167\ }
+\DoxyCodeLine{00168\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ DrawPin(\textcolor{keywordtype}{int}\ \textcolor{keywordtype}{id},\ \mbox{\hyperlink{struct_open_shader_designer_1_1_pin}{Pin}}\&\ pin,\ ImPinDirection\ direction);}
+\DoxyCodeLine{00169\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ Draw(ImGuiID\ \textcolor{keywordtype}{id});}
+\DoxyCodeLine{00170\ }
+\DoxyCodeLine{00171\ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{bool}\ CheckConnection(\mbox{\hyperlink{struct_open_shader_designer_1_1_pin}{Pin}}*,\ \mbox{\hyperlink{struct_open_shader_designer_1_1_pin}{Pin}}*)\ \{\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};\ \}}
+\DoxyCodeLine{00172\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ ValidateConnections()\ \{\ \}}
+\DoxyCodeLine{00173\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00174\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{struct_open_shader_designer_1_1_node}{Node}}*\ Copy(\mbox{\hyperlink{class_open_shader_designer_1_1_shader_graph}{ShaderGraph}}\&\ graph)\ \textcolor{keyword}{const}\ =\ 0;}
+\DoxyCodeLine{00175\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ Inspect()\ =\ 0;}
+\DoxyCodeLine{00176\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ std::string\ GetCode()\ \textcolor{keyword}{const}\ =\ 0;}
+\DoxyCodeLine{00177\ \ \ \ \ \};}
+\DoxyCodeLine{00178\ \ \ \ \ }
+\DoxyCodeLine{00179\ \ \ \ \ \textcolor{keyword}{using\ }NodeList\ =\ ocu::object\_list<Node*>;}
+\DoxyCodeLine{00180\ \ \ \ \ \textcolor{keyword}{using\ }NodeId\ =\ NodeList::uuid\_type;}
+\DoxyCodeLine{00181\ }
+\DoxyCodeLine{00182\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_open_shader_designer_1_1_attribute}{Attribute}}}
+\DoxyCodeLine{00183\ \ \ \ \ \{}
+\DoxyCodeLine{00184\ \ \ \ \ \ \ \ \ std::string\ Name;}
+\DoxyCodeLine{00185\ \ \ \ \ \ \ \ \ glw::enum\_t\ Type;}
+\DoxyCodeLine{00186\ \ \ \ \ \ \ \ \ glw::enum\_t\ Interpolation;}
+\DoxyCodeLine{00187\ \ \ \ \ \ \ \ \ glw::size\_t\ Count;}
+\DoxyCodeLine{00188\ \ \ \ \ \};}
+\DoxyCodeLine{00189\ }
+\DoxyCodeLine{00190\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_open_shader_designer_1_1_parameter}{Parameter}}}
+\DoxyCodeLine{00191\ \ \ \ \ \{}
+\DoxyCodeLine{00192\ \ \ \ \ \ \ \ \ std::string\ Name;}
+\DoxyCodeLine{00193\ \ \ \ \ \ \ \ \ glw::enum\_t\ Type;}
+\DoxyCodeLine{00194\ \ \ \ \ \ \ \ \ glw::size\_t\ Count;\ \textcolor{comment}{//\ For\ arrays}}
+\DoxyCodeLine{00195\ \ \ \ \ \};}
+\DoxyCodeLine{00196\ \ \ \ \ }
+\DoxyCodeLine{00197\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_open_shader_designer_1_1_graph_state}{GraphState}}}
+\DoxyCodeLine{00198\ \ \ \ \ \{}
+\DoxyCodeLine{00199\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00200\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_open_shader_designer_1_1_shader_graph}{ShaderGraph}}\&\ Parent;}
+\DoxyCodeLine{00201\ \ \ \ \ \ \ \ \ NodeList\ \ \ \ \ Nodes;}
+\DoxyCodeLine{00202\ }
+\DoxyCodeLine{00203\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_open_shader_designer_1_1_graph_state}{GraphState}}(\mbox{\hyperlink{class_open_shader_designer_1_1_shader_graph}{ShaderGraph}}\&\ parent);}
+\DoxyCodeLine{00204\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_open_shader_designer_1_1_graph_state}{GraphState}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{struct_open_shader_designer_1_1_graph_state}{GraphState}}\&\ other);}
+\DoxyCodeLine{00205\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_open_shader_designer_1_1_graph_state}{\string~GraphState}}();}
+\DoxyCodeLine{00206\ }
+\DoxyCodeLine{00207\ \ \ \ \ \ \ \ \ NodeId\ AddNode(\mbox{\hyperlink{struct_open_shader_designer_1_1_node}{Node}}*\ node)\ \{\ \textcolor{keywordflow}{return}\ Nodes.insert(node);\ \}}
+\DoxyCodeLine{00208\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ RemoveNode(NodeId\ node)\ \{\ \textcolor{keywordflow}{if}(Nodes[node]-\/>Info.Flags\ \&\ NodeFlags\_Const)\ \textcolor{keywordflow}{return};\ Nodes.erase(node);\ \}}
+\DoxyCodeLine{00209\ }
+\DoxyCodeLine{00210\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_open_shader_designer_1_1_graph_state}{GraphState}}\&\ operator=(\textcolor{keyword}{const}\ \mbox{\hyperlink{struct_open_shader_designer_1_1_graph_state}{GraphState}}\&\ other);}
+\DoxyCodeLine{00211\ \ \ \ \ \};}
+\DoxyCodeLine{00212\ }
+\DoxyCodeLine{00213\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_open_shader_designer_1_1_shader_asset}{ShaderAsset}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{class_open_shader_designer_1_1_file_manager_1_1_asset}{FileManager::Asset}}}
+\DoxyCodeLine{00214\ \ \ \ \ \{}
+\DoxyCodeLine{00215\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00216\ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ std::string\ VersionString\ =\ \textcolor{stringliteral}{"{}\#version\ 430\ core"{}};}
+\DoxyCodeLine{00217\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00218\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_open_shader_designer_1_1_shader_asset}{ShaderAsset}}(\textcolor{keyword}{const}\ FileManager::Path\&\ path,\ \mbox{\hyperlink{class_open_shader_designer_1_1_shader_graph}{ShaderGraph}}\&\ graph)}
+\DoxyCodeLine{00219\ \ \ \ \ \ \ \ \ \ \ \ \ :\ Asset(path)}
+\DoxyCodeLine{00220\ \ \ \ \ \ \ \ \ \ \ \ \ ,\ State\_(graph)}
+\DoxyCodeLine{00221\ \ \ \ \ \ \ \ \ \{\ \}}
+\DoxyCodeLine{00222\ }
+\DoxyCodeLine{00223\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ PushState()\ \ \ \ \ \ \ \ \ \ \ \ \{\ History\_.push(State\_);\ \}}
+\DoxyCodeLine{00224\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ PopState()\ \ \ \ \ \ \ \ \ \ \ \ \ \{\ State\_\ =\ History\_.top();\ History\_.pop();\}}
+\DoxyCodeLine{00225\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00226\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_open_shader_designer_1_1_graph_state}{GraphState}}\&\ GetState()\ \ \ \ \ \ \ \ \ \ \ \ \ \{\ \textcolor{keywordflow}{return}\ State\_;\ \}}
+\DoxyCodeLine{00227\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{struct_open_shader_designer_1_1_graph_state}{GraphState}}\&\ GetState()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ State\_;\ \}}
+\DoxyCodeLine{00228\ }
+\DoxyCodeLine{00229\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_open_shader_designer_1_1_shader_graph}{ShaderGraph}}\&\ GetGraph()\ \{\ \textcolor{keywordflow}{return}\ State\_.Parent;\ \}}
+\DoxyCodeLine{00230\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_open_shader_designer_1_1_shader_graph}{ShaderGraph}}\&\ GetGraph()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ State\_.Parent;\ \}}
+\DoxyCodeLine{00231\ }
+\DoxyCodeLine{00232\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ Compile()\ =\ 0;}
+\DoxyCodeLine{00233\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ View(HDRTexture::HandleType*\ Target)\ =\ 0;}
+\DoxyCodeLine{00234\ }
+\DoxyCodeLine{00235\ \ \ \ \ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{00236\ \ \ \ \ \ \ \ \ std::string\ Code;}
+\DoxyCodeLine{00237\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00238\ }
+\DoxyCodeLine{00239\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00240\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_open_shader_designer_1_1_graph_state}{GraphState}}\ \ \ \ \ \ \ \ \ \ \ \ \ State\_;}
+\DoxyCodeLine{00241\ \ \ \ \ \ \ \ \ std::stack<GraphState>\ History\_;}
+\DoxyCodeLine{00242\ \ \ \ \ \};}
+\DoxyCodeLine{00243\ }
+\DoxyCodeLine{00244\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_open_shader_designer_1_1_shader_graph}{ShaderGraph}}}
+\DoxyCodeLine{00245\ \ \ \ \ \ \ \ \ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{class_open_shader_designer_1_1_editor_window}{EditorWindow}}}
+\DoxyCodeLine{00246\ \ \ \ \ \{}
+\DoxyCodeLine{00247\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00248\ \ \ \ \ \ \ \ \ \textcolor{keyword}{friend}\ \mbox{\hyperlink{struct_open_shader_designer_1_1_node}{Node}};}
+\DoxyCodeLine{00249\ }
+\DoxyCodeLine{00250\ \ \ \ \ \ \ \ \ \textcolor{keyword}{using\ }ConstructorPtr\ =\ \mbox{\hyperlink{struct_open_shader_designer_1_1_node}{Node}}*(*)(\mbox{\hyperlink{class_open_shader_designer_1_1_shader_graph}{ShaderGraph}}\&,\ ImVec2);}
+\DoxyCodeLine{00251\ \ \ \ \ \ \ \ \ \textcolor{keyword}{struct\ }ContextMenuItem}
+\DoxyCodeLine{00252\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00253\ \ \ \ \ \ \ \ \ \ \ \ \ std::string\ \ \ \ Name;}
+\DoxyCodeLine{00254\ \ \ \ \ \ \ \ \ \ \ \ \ ConstructorPtr\ Constructor;}
+\DoxyCodeLine{00255\ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{00256\ }
+\DoxyCodeLine{00257\ \ \ \ \ \ \ \ \ \textcolor{keyword}{using\ }ContextMenuHierarchy\ =\ ocu::directed\_tree<ContextMenuItem>;}
+\DoxyCodeLine{00258\ \ \ \ \ \ \ \ \ \textcolor{keyword}{using\ }ContextID\ =\ ContextMenuHierarchy::node;}
+\DoxyCodeLine{00259\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00260\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ ContextMenuHierarchy\&\ ContextMenu()\ \{\ \textcolor{keyword}{static}\ ContextMenuHierarchy\ Menu\ \{\{\ \textcolor{stringliteral}{"{}"{}},\ \textcolor{keyword}{nullptr}\ \}\};\ \textcolor{keywordflow}{return}\ Menu;\ \}}
+\DoxyCodeLine{00261\ }
+\DoxyCodeLine{00262\ }
+\DoxyCodeLine{00263\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00264\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_open_shader_designer_1_1_shader_graph}{ShaderGraph}}();}
+\DoxyCodeLine{00265\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{class_open_shader_designer_1_1_shader_graph}{\string~ShaderGraph}}();}
+\DoxyCodeLine{00266\ }
+\DoxyCodeLine{00267\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_open_shader_designer_1_1_shader_graph_ab165317b9a0b95648df1e7009c220a04}{OnOpen}}()\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00268\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_open_shader_designer_1_1_shader_graph_aca7fbcf7c2f9b05c0f69c8d4b58eee27}{DrawMenu}}()\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00269\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_open_shader_designer_1_1_shader_graph_af028ed8ea55d12a1bb2bcf51c817398b}{DrawWindow}}()\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00270\ }
+\DoxyCodeLine{00271\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ DrawContextMenu();}
+\DoxyCodeLine{00272\ }
+\DoxyCodeLine{00273\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ Copy();}
+\DoxyCodeLine{00274\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ Erase();}
+\DoxyCodeLine{00275\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ Paste(ImVec2\ pos);}
+\DoxyCodeLine{00276\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ Clear();}
+\DoxyCodeLine{00277\ }
+\DoxyCodeLine{00278\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_open_shader_designer_1_1_node}{Node}}*\ FindNode(ImPinPtr\ ptr);}
+\DoxyCodeLine{00279\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_open_shader_designer_1_1_node}{Node}}*\ FindNode(ImGuiID\ \textcolor{keywordtype}{id});}
+\DoxyCodeLine{00280\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_open_shader_designer_1_1_pin}{Pin}}\&\ \ FindPin(ImPinPtr\ ptr);}
+\DoxyCodeLine{00281\ }
+\DoxyCodeLine{00282\ \ \ \ \ \ \ \ \ std::string\ GetValue(ImPinPtr\ ptr);}
+\DoxyCodeLine{00283\ }
+\DoxyCodeLine{00284\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ OpenShader(\mbox{\hyperlink{class_open_shader_designer_1_1_shader_asset}{ShaderAsset}}*\ asset)\ \{\ Shader\_\ =\ asset;\ \}}
+\DoxyCodeLine{00285\ }
+\DoxyCodeLine{00286\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ Register(\textcolor{keyword}{const}\ std::filesystem::path\&\ path,\ ConstructorPtr\ constructor);}
+\DoxyCodeLine{00287\ }
+\DoxyCodeLine{00288\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00289\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ TODO:\ Make\ bitfield}}
+\DoxyCodeLine{00290\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ GrabFocus\_;}
+\DoxyCodeLine{00291\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_open_shader_designer_1_1_shader_asset}{ShaderAsset}}*\ Shader\_;}
+\DoxyCodeLine{00292\ \ \ \ \ \ \ \ \ ImVec2\ ContextMenuPosition\_;}
+\DoxyCodeLine{00293\ \ \ \ \ \ \ \ \ ocu::optional<NodeId>\ Selected\_;}
+\DoxyCodeLine{00294\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00295\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00296\ }
+\DoxyCodeLine{00297\ \ \ \ \ \ \ \ \ \textcolor{keyword}{friend}\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_open_shader_designer_1_1_inspector}{Inspector}};}
+\DoxyCodeLine{00298\ \ \ \ \ \};}
+\DoxyCodeLine{00299\ }
+\DoxyCodeLine{00300\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_open_shader_designer_1_1_inspector}{Inspector}}}
+\DoxyCodeLine{00301\ \ \ \ \ \ \ \ \ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{class_open_shader_designer_1_1_editor_window}{EditorWindow}}}
+\DoxyCodeLine{00302\ \ \ \ \ \{}
+\DoxyCodeLine{00303\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00304\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_open_shader_designer_1_1_inspector}{Inspector}}();}
+\DoxyCodeLine{00305\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{class_open_shader_designer_1_1_inspector}{\string~Inspector}}()\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00306\ }
+\DoxyCodeLine{00307\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_open_shader_designer_1_1_inspector_a69fb8726df2442514a65dc29a9660c24}{DrawWindow}}()\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00308\ }
+\DoxyCodeLine{00309\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00310\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_open_shader_designer_1_1_shader_graph}{ShaderGraph}}*\ Graph;}
+\DoxyCodeLine{00311\ }
+\DoxyCodeLine{00312\ \ \ \ \ \ \ \ \ \textcolor{keyword}{friend}\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_open_shader_designer_1_1_shader_graph}{ShaderGraph}};}
+\DoxyCodeLine{00313\ \ \ \ \ \};}
+\DoxyCodeLine{00314\ \}}
+\DoxyCodeLine{00315\ }
+\DoxyCodeLine{00316\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//\ OSD\_SHADERGRAPH\_H}}
+
+\end{DoxyCode}

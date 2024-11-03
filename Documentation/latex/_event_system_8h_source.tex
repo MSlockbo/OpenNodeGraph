@@ -1,0 +1,123 @@
+\doxysection{Event\+System.\+h}
+\hypertarget{_event_system_8h_source}{}\label{_event_system_8h_source}\index{Include/Core/EventSystem.h@{Include/Core/EventSystem.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//\ =====================================================================================================================}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ \ OpenShaderDesigner,\ an\ open\ source\ software\ utility\ to\ create\ materials\ and\ shaders.}}
+\DoxyCodeLine{00003\ \textcolor{comment}{//\ \ Copyright\ (C)\ 2024\ \ Medusa\ Slockbower}}
+\DoxyCodeLine{00004\ \textcolor{comment}{//}}
+\DoxyCodeLine{00005\ \textcolor{comment}{//\ \ This\ program\ is\ free\ software:\ you\ can\ redistribute\ it\ and/or\ modify}}
+\DoxyCodeLine{00006\ \textcolor{comment}{//\ \ it\ under\ the\ terms\ of\ the\ GNU\ General\ Public\ License\ as\ published\ by}}
+\DoxyCodeLine{00007\ \textcolor{comment}{//\ \ the\ Free\ Software\ Foundation,\ either\ version\ 3\ of\ the\ License,\ or}}
+\DoxyCodeLine{00008\ \textcolor{comment}{//\ \ (at\ your\ option)\ any\ later\ version.}}
+\DoxyCodeLine{00009\ \textcolor{comment}{//}}
+\DoxyCodeLine{00010\ \textcolor{comment}{//\ \ This\ program\ is\ distributed\ in\ the\ hope\ that\ it\ will\ be\ useful,}}
+\DoxyCodeLine{00011\ \textcolor{comment}{//\ \ but\ WITHOUT\ ANY\ WARRANTY;\ without\ even\ the\ implied\ warranty\ of}}
+\DoxyCodeLine{00012\ \textcolor{comment}{//\ \ MERCHANTABILITY\ or\ FITNESS\ FOR\ A\ PARTICULAR\ PURPOSE.\ \ See\ the}}
+\DoxyCodeLine{00013\ \textcolor{comment}{//\ \ GNU\ General\ Public\ License\ for\ more\ details.}}
+\DoxyCodeLine{00014\ \textcolor{comment}{//}}
+\DoxyCodeLine{00015\ \textcolor{comment}{//\ \ You\ should\ have\ received\ a\ copy\ of\ the\ GNU\ General\ Public\ License}}
+\DoxyCodeLine{00016\ \textcolor{comment}{//\ \ along\ with\ this\ program.\ \ If\ not,\ see\ <https://www.gnu.org/licenses/>.}}
+\DoxyCodeLine{00017\ \textcolor{comment}{//\ =====================================================================================================================}}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \textcolor{preprocessor}{\#ifndef\ ENGINE\_EVENTSYSTEM\_H}}
+\DoxyCodeLine{00020\ \textcolor{preprocessor}{\#define\ ENGINE\_EVENTSYSTEM\_H}}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ \textcolor{preprocessor}{\#include\ <open-\/cpp-\/utils/unique\_id.h>}}
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00024\ \textcolor{preprocessor}{\#include\ <cstdint>}}
+\DoxyCodeLine{00025\ \textcolor{preprocessor}{\#include\ <list>}}
+\DoxyCodeLine{00026\ \textcolor{preprocessor}{\#include\ <mutex>}}
+\DoxyCodeLine{00027\ }
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ \textcolor{preprocessor}{\#define\ MAX\_EVENT\_TYPES\ 256}}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \textcolor{keyword}{namespace\ }ocu\ =\ open\_cpp\_utils;}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00033\ \textcolor{keyword}{namespace\ }OpenShaderDesigner}
+\DoxyCodeLine{00034\ \{}
+\DoxyCodeLine{00035\ \ \ \ \ }
+\DoxyCodeLine{00039\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_open_shader_designer_1_1_event}{Event}}}
+\DoxyCodeLine{00040\ \{}
+\DoxyCodeLine{00041\ \ \ \ \ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T>}
+\DoxyCodeLine{00042\ \ \ \ \ \textcolor{keyword}{static}\ uint8\_t\ TypeOf()\ \{\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast<}uint8\_t\textcolor{keyword}{>}(ocu::unique\_id<uint8\_t,\ T>());\ \}}
+\DoxyCodeLine{00043\ }
+\DoxyCodeLine{00048\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keyword}{inline}\ uint8\_t\ \mbox{\hyperlink{struct_open_shader_designer_1_1_event_a1920b3e03c8e47a463f403cd7c29dc26}{GetID}}()\ \textcolor{keyword}{const}\ =\ 0;}
+\DoxyCodeLine{00049\ \};}
+\DoxyCodeLine{00050\ }
+\DoxyCodeLine{00051\ }
+\DoxyCodeLine{00055\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_open_shader_designer_1_1___impl_event_handler}{\_ImplEventHandler}}}
+\DoxyCodeLine{00056\ \{}
+\DoxyCodeLine{00057\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{bool}\ \_HandleEvent(\textcolor{keyword}{const}\ \mbox{\hyperlink{struct_open_shader_designer_1_1_event}{Event}}*\ event)\ =\ 0;}
+\DoxyCodeLine{00058\ }
+\DoxyCodeLine{00059\ \ \ \ \ \textcolor{keyword}{friend}\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_open_shader_designer_1_1_event_system}{EventSystem}};}
+\DoxyCodeLine{00060\ \};}
+\DoxyCodeLine{00061\ }
+\DoxyCodeLine{00066\ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ EventType>}
+\DoxyCodeLine{00067\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_open_shader_designer_1_1_event_handler}{EventHandler}}\ :\ \textcolor{keyword}{private}\ \mbox{\hyperlink{class_open_shader_designer_1_1___impl_event_handler}{\_ImplEventHandler}}}
+\DoxyCodeLine{00068\ \{}
+\DoxyCodeLine{00069\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00070\ \ \ \ \ \textcolor{keyword}{using\ }\mbox{\hyperlink{class_open_shader_designer_1_1_event_handler_ac7326c1ee1a04cf764475dc7c74dc021}{HandledType}}\ =\ EventType;\ }
+\DoxyCodeLine{00071\ }
+\DoxyCodeLine{00076\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_open_shader_designer_1_1_event_handler_a3f8d4130cfbb6c7b1f6be52d0d6e1fae}{HandleEvent}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{class_open_shader_designer_1_1_event_handler_ac7326c1ee1a04cf764475dc7c74dc021}{HandledType}}*\ event)\ =\ 0;}
+\DoxyCodeLine{00077\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00078\ }
+\DoxyCodeLine{00083\ \ \ \ \ \textcolor{keywordtype}{bool}\ \_HandleEvent(\textcolor{keyword}{const}\ \mbox{\hyperlink{struct_open_shader_designer_1_1_event}{Event}}*\ event)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00084\ \};}
+\DoxyCodeLine{00085\ }
+\DoxyCodeLine{00089\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_open_shader_designer_1_1_event_system}{EventSystem}}}
+\DoxyCodeLine{00090\ \{}
+\DoxyCodeLine{00091\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00095\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_open_shader_designer_1_1_event_system_a55942d1d9b1d427c40aeade3b0ee8600}{PostEvent}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{struct_open_shader_designer_1_1_event}{Event}}*);}
+\DoxyCodeLine{00096\ }
+\DoxyCodeLine{00101\ \ \ \ \ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T>}
+\DoxyCodeLine{00102\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_open_shader_designer_1_1_event_system_ad7aaf19637c81922d02dafe92ff1982d}{RegisterHandler}}(\mbox{\hyperlink{class_open_shader_designer_1_1_event_handler}{EventHandler<T>}}*);}
+\DoxyCodeLine{00103\ }
+\DoxyCodeLine{00108\ \ \ \ \ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T>}
+\DoxyCodeLine{00109\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_open_shader_designer_1_1_event_system_a46be97970de801727824e3ac8cc93872}{UnregisterHandler}}(\mbox{\hyperlink{class_open_shader_designer_1_1_event_handler}{EventHandler<T>}}*);}
+\DoxyCodeLine{00110\ }
+\DoxyCodeLine{00111\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00112\ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keyword}{static}\ std::list<\_ImplEventHandler*>\ HandlerMap\_[MAX\_EVENT\_TYPES];}
+\DoxyCodeLine{00113\ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keyword}{static}\ std::mutex\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Lock\_;}
+\DoxyCodeLine{00114\ }
+\DoxyCodeLine{00115\ \ \ \ \ \mbox{\hyperlink{class_open_shader_designer_1_1_event_system}{EventSystem}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{class_open_shader_designer_1_1_event_system}{EventSystem}}\&)\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{00116\ \ \ \ \ \mbox{\hyperlink{class_open_shader_designer_1_1_event_system}{EventSystem}}(\mbox{\hyperlink{class_open_shader_designer_1_1_event_system}{EventSystem}}\&\&)\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{00117\ \};}
+\DoxyCodeLine{00118\ }
+\DoxyCodeLine{00119\ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T>}
+\DoxyCodeLine{00120\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_open_shader_designer_1_1_event_system_a46be97970de801727824e3ac8cc93872}{EventSystem::UnregisterHandler}}(\mbox{\hyperlink{class_open_shader_designer_1_1_event_handler}{EventHandler<T>}}*\ handler)}
+\DoxyCodeLine{00121\ \{}
+\DoxyCodeLine{00122\ \ \ \ \ \textcolor{comment}{//\ Thread\ safe}}
+\DoxyCodeLine{00123\ \ \ \ \ std::lock\_guard\ guard(Lock\_);}
+\DoxyCodeLine{00124\ \ \ \ \ \textcolor{keyword}{const}\ uint8\_t\ index\ =\ T::ID;}
+\DoxyCodeLine{00125\ \ \ \ \ std::erase(HandlerMap\_[index],\ \textcolor{keyword}{reinterpret\_cast<}\mbox{\hyperlink{class_open_shader_designer_1_1___impl_event_handler}{\_ImplEventHandler}}*\textcolor{keyword}{>}(handler));}
+\DoxyCodeLine{00126\ \}}
+\DoxyCodeLine{00127\ }
+\DoxyCodeLine{00128\ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T>}
+\DoxyCodeLine{00129\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_open_shader_designer_1_1_event_system_ad7aaf19637c81922d02dafe92ff1982d}{EventSystem::RegisterHandler}}(\mbox{\hyperlink{class_open_shader_designer_1_1_event_handler}{EventHandler<T>}}*\ handler)}
+\DoxyCodeLine{00130\ \{}
+\DoxyCodeLine{00131\ \ \ \ \ \textcolor{comment}{//\ Thread\ safe}}
+\DoxyCodeLine{00132\ \ \ \ \ std::lock\_guard\ guard(Lock\_);}
+\DoxyCodeLine{00133\ \ \ \ \ \textcolor{keyword}{const}\ uint8\_t\ index\ =\ T::ID;}
+\DoxyCodeLine{00134\ \ \ \ \ HandlerMap\_[index].push\_back(\textcolor{keyword}{reinterpret\_cast<}\mbox{\hyperlink{class_open_shader_designer_1_1___impl_event_handler}{\_ImplEventHandler}}*\textcolor{keyword}{>}(handler));}
+\DoxyCodeLine{00135\ \}}
+\DoxyCodeLine{00136\ }
+\DoxyCodeLine{00137\ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ EventType>}
+\DoxyCodeLine{00138\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_open_shader_designer_1_1_event_handler}{EventHandler<EventType>::\_HandleEvent}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{struct_open_shader_designer_1_1_event}{Event}}\ *event)}
+\DoxyCodeLine{00139\ \{}
+\DoxyCodeLine{00140\ \ \ \ \ \textcolor{keywordflow}{if}(EventType::ID\ !=\ event-\/>\mbox{\hyperlink{struct_open_shader_designer_1_1_event_a1920b3e03c8e47a463f403cd7c29dc26}{GetID}}())\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00141\ \ \ \ \ \textcolor{keywordflow}{return}\ HandleEvent(\textcolor{keyword}{reinterpret\_cast<}\textcolor{keyword}{const\ }EventType*\textcolor{keyword}{>}(event));}
+\DoxyCodeLine{00142\ \}}
+\DoxyCodeLine{00143\ \ \ \ \ }
+\DoxyCodeLine{00144\ \}}
+\DoxyCodeLine{00145\ }
+\DoxyCodeLine{00146\ \textcolor{preprocessor}{\#define\ BeginEvent(EVENT)\ struct\ EVENT\ :\ OpenShaderDesigner::Event\ \(\backslash\)}}
+\DoxyCodeLine{00147\ \textcolor{preprocessor}{\ \ \ \ \{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \(\backslash\)}}
+\DoxyCodeLine{00148\ \textcolor{preprocessor}{\ \ \ \ static\ inline\ const\ uint8\_t\ ID\ =\ Event::TypeOf<EVENT>();\ \(\backslash\)}}
+\DoxyCodeLine{00149\ \textcolor{preprocessor}{\ \ \ \ inline\ uint8\_t\ GetID()\ const\ override\ \{\ return\ ID;\ \}}}
+\DoxyCodeLine{00150\ }
+\DoxyCodeLine{00151\ \textcolor{preprocessor}{\#define\ EndEvent\ \};}}
+\DoxyCodeLine{00152\ }
+\DoxyCodeLine{00153\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//ENGINE\_EVENTSYSTEM\_H}}
+
+\end{DoxyCode}

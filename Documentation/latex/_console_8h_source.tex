@@ -1,0 +1,160 @@
+\doxysection{Console.\+h}
+\hypertarget{_console_8h_source}{}\label{_console_8h_source}\index{Include/Core/Console.h@{Include/Core/Console.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//\ =====================================================================================================================}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ \ OpenShaderDesigner,\ an\ open\ source\ software\ utility\ to\ create\ materials\ and\ shaders.}}
+\DoxyCodeLine{00003\ \textcolor{comment}{//\ \ Copyright\ (C)\ 2024\ \ Medusa\ Slockbower}}
+\DoxyCodeLine{00004\ \textcolor{comment}{//}}
+\DoxyCodeLine{00005\ \textcolor{comment}{//\ \ This\ program\ is\ free\ software:\ you\ can\ redistribute\ it\ and/or\ modify}}
+\DoxyCodeLine{00006\ \textcolor{comment}{//\ \ it\ under\ the\ terms\ of\ the\ GNU\ General\ Public\ License\ as\ published\ by}}
+\DoxyCodeLine{00007\ \textcolor{comment}{//\ \ the\ Free\ Software\ Foundation,\ either\ version\ 3\ of\ the\ License,\ or}}
+\DoxyCodeLine{00008\ \textcolor{comment}{//\ \ (at\ your\ option)\ any\ later\ version.}}
+\DoxyCodeLine{00009\ \textcolor{comment}{//}}
+\DoxyCodeLine{00010\ \textcolor{comment}{//\ \ This\ program\ is\ distributed\ in\ the\ hope\ that\ it\ will\ be\ useful,}}
+\DoxyCodeLine{00011\ \textcolor{comment}{//\ \ but\ WITHOUT\ ANY\ WARRANTY;\ without\ even\ the\ implied\ warranty\ of}}
+\DoxyCodeLine{00012\ \textcolor{comment}{//\ \ MERCHANTABILITY\ or\ FITNESS\ FOR\ A\ PARTICULAR\ PURPOSE.\ \ See\ the}}
+\DoxyCodeLine{00013\ \textcolor{comment}{//\ \ GNU\ General\ Public\ License\ for\ more\ details.}}
+\DoxyCodeLine{00014\ \textcolor{comment}{//}}
+\DoxyCodeLine{00015\ \textcolor{comment}{//\ \ You\ should\ have\ received\ a\ copy\ of\ the\ GNU\ General\ Public\ License}}
+\DoxyCodeLine{00016\ \textcolor{comment}{//\ \ along\ with\ this\ program.\ \ If\ not,\ see\ <https://www.gnu.org/licenses/>.}}
+\DoxyCodeLine{00017\ \textcolor{comment}{//\ =====================================================================================================================}}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \textcolor{preprocessor}{\#ifndef\ CONSOLE\_H}}
+\DoxyCodeLine{00020\ \textcolor{preprocessor}{\#define\ CONSOLE\_H}}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ \textcolor{preprocessor}{\#include\ <imgui-\/docking/imgui.h>}}
+\DoxyCodeLine{00023\ \textcolor{preprocessor}{\#include\ <filesystem>}}
+\DoxyCodeLine{00024\ \textcolor{preprocessor}{\#include\ <format>}}
+\DoxyCodeLine{00025\ \textcolor{preprocessor}{\#include\ <iostream>}}
+\DoxyCodeLine{00026\ \textcolor{preprocessor}{\#include\ <sstream>}}
+\DoxyCodeLine{00027\ \textcolor{preprocessor}{\#include\ <thread>}}
+\DoxyCodeLine{00028\ \textcolor{preprocessor}{\#include\ <list>}}
+\DoxyCodeLine{00029\ \textcolor{preprocessor}{\#include\ <mutex>}}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \textcolor{keyword}{namespace\ }OpenShaderDesigner}
+\DoxyCodeLine{00032\ \{}
+\DoxyCodeLine{00033\ \ \ \ \ }
+\DoxyCodeLine{00034\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_open_shader_designer_1_1_console}{Console}}}
+\DoxyCodeLine{00035\ \{}
+\DoxyCodeLine{00036\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00040\ \ \ \ \ \textcolor{keyword}{enum}\ \mbox{\hyperlink{class_open_shader_designer_1_1_console_afddf06383dd93a079794251e747978fd}{Settings}}}
+\DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ :\ uint8\_t}
+\DoxyCodeLine{00042\ \ \ \ \ \{}
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ Settings\_ShowTimeStamp\ =\ 0b00000001}
+\DoxyCodeLine{00044\ \ \ \ \ ,\ \ \ Settings\_ShowThread\ \ \ \ =\ 0b00000010}
+\DoxyCodeLine{00045\ \ \ \ \ ,\ \ \ Settings\_Severity\ \ \ \ \ \ =\ 0b00000100}
+\DoxyCodeLine{00046\ \ \ \ \ ,\ \ \ Settings\_ShowFileInfo\ \ =\ 0b00001000}
+\DoxyCodeLine{00047\ \ \ \ \ ,\ \ \ Settings\_WrapText\ \ \ \ \ \ =\ 0b00010000}
+\DoxyCodeLine{00048\ }
+\DoxyCodeLine{00049\ \ \ \ \ ,\ \ \ Settings\_ALL\ \ \ \ \ =\ 0xFF}
+\DoxyCodeLine{00050\ \ \ \ \ ,\ \ \ Settings\_Default\ =\ Settings\_ALL\ \string^\ Settings\_WrapText}
+\DoxyCodeLine{00051\ \ \ \ \ \};}
+\DoxyCodeLine{00052\ }
+\DoxyCodeLine{00056\ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ std::string\ \mbox{\hyperlink{class_open_shader_designer_1_1_console_a858d18576b3e7e542d4723316ae71e21}{SettingNames}}[]\ =}
+\DoxyCodeLine{00057\ \ \ \ \ \{}
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}Timestamps"{}},\ \textcolor{stringliteral}{"{}Thread\ IDs"{}},\ \textcolor{stringliteral}{"{}Severity"{}},\ \textcolor{stringliteral}{"{}File\ Info"{}},\ \textcolor{stringliteral}{"{}Wrapping"{}}}
+\DoxyCodeLine{00059\ \ \ \ \ \};}
+\DoxyCodeLine{00060\ }
+\DoxyCodeLine{00064\ \ \ \ \ \textcolor{keyword}{enum}\ \mbox{\hyperlink{class_open_shader_designer_1_1_console_a880eae5d076afe686248bbb0f6a83771}{Severity}}}
+\DoxyCodeLine{00065\ \ \ \ \ \ \ \ \ :\ \textcolor{keywordtype}{int}}
+\DoxyCodeLine{00066\ \ \ \ \ \{}
+\DoxyCodeLine{00067\ \ \ \ \ \ \ \ \ Message\ =\ 0,}
+\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ Warning,}
+\DoxyCodeLine{00069\ \ \ \ \ \ \ \ \ Error,}
+\DoxyCodeLine{00070\ \ \ \ \ \ \ \ \ Fatal,}
+\DoxyCodeLine{00071\ \ \ \ \ \ \ \ \ Alert,}
+\DoxyCodeLine{00072\ \ \ \ \ \ \ \ \ Command,}
+\DoxyCodeLine{00073\ \ \ \ \ \ \ \ \ COUNT,}
+\DoxyCodeLine{00074\ \ \ \ \ \ \ \ \ DEFAULT\ =\ Warning}
+\DoxyCodeLine{00075\ \ \ \ \ \};}
+\DoxyCodeLine{00076\ }
+\DoxyCodeLine{00080\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ \textcolor{keyword}{const}\ std::string\ \mbox{\hyperlink{class_open_shader_designer_1_1_console_abac05fdca9513434894c10df2473d8b9}{Severities}}[]\ =}
+\DoxyCodeLine{00081\ \ \ \ \ \{}
+\DoxyCodeLine{00082\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}Message"{}},\ \textcolor{stringliteral}{"{}Warning"{}},\ \textcolor{stringliteral}{"{}Error"{}},\ \textcolor{stringliteral}{"{}Fatal"{}},\ \textcolor{stringliteral}{"{}Alert"{}},\ \textcolor{stringliteral}{"{}Command"{}}}
+\DoxyCodeLine{00083\ \ \ \ \ \};}
+\DoxyCodeLine{00084\ }
+\DoxyCodeLine{00090\ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ ImVec4\ \mbox{\hyperlink{class_open_shader_designer_1_1_console_abc25e7d9ad33fdcc95fe11df9a9c3fc4}{ImGuiColor}}(\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ RGB)}
+\DoxyCodeLine{00091\ \ \ \ \ \{}
+\DoxyCodeLine{00092\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \{}
+\DoxyCodeLine{00093\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{float}\textcolor{keyword}{>}((RGB\ >>\ 24)\ \&\ 255)\ /\ 255.0f,\ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{float}\textcolor{keyword}{>}((RGB\ >>\ 16)\ \&\ 255)\ /\ 255.0f,}
+\DoxyCodeLine{00094\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{float}\textcolor{keyword}{>}((RGB\ >>\ 8)\ \&\ 255)\ /\ 255.0f,\ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{float}\textcolor{keyword}{>}((RGB\ >>\ 0)\ \&\ 255)\ /\ 255.0f}
+\DoxyCodeLine{00095\ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{00096\ \ \ \ \ \}}
+\DoxyCodeLine{00097\ }
+\DoxyCodeLine{00101\ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ ImVec4\ \mbox{\hyperlink{class_open_shader_designer_1_1_console_a1a476dcb9b07e3ad0d54e08775118b35}{SeverityColors}}[]\ =\ \{}
+\DoxyCodeLine{00102\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_open_shader_designer_1_1_console_abc25e7d9ad33fdcc95fe11df9a9c3fc4}{ImGuiColor}}(0xA4B9C4FF),\ \mbox{\hyperlink{class_open_shader_designer_1_1_console_abc25e7d9ad33fdcc95fe11df9a9c3fc4}{ImGuiColor}}(0xF2C554FF),\ \mbox{\hyperlink{class_open_shader_designer_1_1_console_abc25e7d9ad33fdcc95fe11df9a9c3fc4}{ImGuiColor}}(0xE57327FF),\ \mbox{\hyperlink{class_open_shader_designer_1_1_console_abc25e7d9ad33fdcc95fe11df9a9c3fc4}{ImGuiColor}}(0xCC211EFF),}
+\DoxyCodeLine{00103\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_open_shader_designer_1_1_console_abc25e7d9ad33fdcc95fe11df9a9c3fc4}{ImGuiColor}}(0x9CDCFEFF),}
+\DoxyCodeLine{00104\ \ \ \ \ \};}
+\DoxyCodeLine{00105\ }
+\DoxyCodeLine{00106\ \ \ \ \ \textcolor{keyword}{static}\ std::string\ ThreadID()}
+\DoxyCodeLine{00107\ \ \ \ \ \{}
+\DoxyCodeLine{00108\ \ \ \ \ \ \ \ \ std::stringstream\ ss;}
+\DoxyCodeLine{00109\ \ \ \ \ \ \ \ \ ss\ <<\ std::this\_thread::get\_id();}
+\DoxyCodeLine{00110\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ ss.str();}
+\DoxyCodeLine{00111\ \ \ \ \ \}}
+\DoxyCodeLine{00112\ }
+\DoxyCodeLine{00122\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}...\ Args>}
+\DoxyCodeLine{00123\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ Log(\textcolor{keyword}{const}\ std::string\&\ file}
+\DoxyCodeLine{00124\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{int}\ line}
+\DoxyCodeLine{00125\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ,\ \mbox{\hyperlink{class_open_shader_designer_1_1_console_a880eae5d076afe686248bbb0f6a83771}{Severity}}\ severity\ =\ Severity::DEFAULT}
+\DoxyCodeLine{00126\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ,\ \textcolor{keyword}{const}\ std::format\_string<Args...>\&\ message\ =\ \textcolor{stringliteral}{"{}"{}}}
+\DoxyCodeLine{00127\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ,\ Args\&\&...\ vargs);}
+\DoxyCodeLine{00128\ }
+\DoxyCodeLine{00129\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ DrawMenu();}
+\DoxyCodeLine{00130\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ DrawWindow();}
+\DoxyCodeLine{00131\ }
+\DoxyCodeLine{00132\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{bool}\ Open\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00133\ }
+\DoxyCodeLine{00134\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00135\ \ \ \ \ \textcolor{keyword}{struct\ }LogEntry}
+\DoxyCodeLine{00136\ \ \ \ \ \{}
+\DoxyCodeLine{00137\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::string\ Message;}
+\DoxyCodeLine{00138\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ Severity\ Severity;}
+\DoxyCodeLine{00139\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::string\ File,\ Timestamp,\ Thread;}
+\DoxyCodeLine{00140\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{int}\ Line;}
+\DoxyCodeLine{00141\ \ \ \ \ \};}
+\DoxyCodeLine{00142\ }
+\DoxyCodeLine{00148\ \ \ \ \ \textcolor{keyword}{static}\ std::string\ Format(\textcolor{keyword}{const}\ LogEntry\&\ entry,\ uint8\_t\ settings);}
+\DoxyCodeLine{00149\ }
+\DoxyCodeLine{00154\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ ProcessCommand(\textcolor{keyword}{const}\ std::string\&\ command);}
+\DoxyCodeLine{00155\ }
+\DoxyCodeLine{00156\ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keyword}{static}\ std::list<LogEntry>\ EntryLog\_;}
+\DoxyCodeLine{00157\ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keyword}{static}\ std::mutex\ \ \ \ \ \ \ \ \ \ Lock\_;}
+\DoxyCodeLine{00158\ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keyword}{static}\ \textcolor{keywordtype}{int}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Filter\_\ =\ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}\textcolor{keyword}{>}(0xFFFFFFFF);}
+\DoxyCodeLine{00159\ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keyword}{static}\ uint8\_t\ \ \ \ \ \ \ \ \ \ \ \ \ Settings\_\ =\ Settings\_Default;}
+\DoxyCodeLine{00160\ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keyword}{static}\ std::string\ \ \ \ \ \ \ \ \ CommandBuffer\_;}
+\DoxyCodeLine{00161\ \};}
+\DoxyCodeLine{00162\ }
+\DoxyCodeLine{00163\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}...\ Args>}
+\DoxyCodeLine{00164\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_open_shader_designer_1_1_console_a4b0e458b796c898279bcb8fedf960920}{Console::Log}}(}
+\DoxyCodeLine{00165\ \ \ \ \ \textcolor{keyword}{const}\ std::string\&\ file}
+\DoxyCodeLine{00166\ \ \ \ \ ,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{int}\ line}
+\DoxyCodeLine{00167\ \ \ \ \ ,\ \mbox{\hyperlink{class_open_shader_designer_1_1_console_a880eae5d076afe686248bbb0f6a83771}{Severity}}\ severity}
+\DoxyCodeLine{00168\ \ \ \ \ ,\ \textcolor{keyword}{const}\ std::format\_string<Args...>\&\ fmt}
+\DoxyCodeLine{00169\ \ \ \ \ ,\ Args\&\&...\ vargs)}
+\DoxyCodeLine{00170\ \{}
+\DoxyCodeLine{00171\ \ \ \ \ \textcolor{keyword}{auto}\ t\ =\ std::time(\textcolor{keyword}{nullptr});}
+\DoxyCodeLine{00172\ \textcolor{preprocessor}{\#ifdef\ \_MSC\_VER}}
+\DoxyCodeLine{00173\ \textcolor{preprocessor}{\#pragma\ warning(disable:4996)}}
+\DoxyCodeLine{00174\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00175\ \ \ \ \ \textcolor{keyword}{auto}\ tm\ =\ *std::localtime(\&t);}
+\DoxyCodeLine{00176\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{auto}\ rel\ =\ std::filesystem::relative(file,\ PROJECT\_DIR).string();}
+\DoxyCodeLine{00177\ }
+\DoxyCodeLine{00178\ \ \ \ \ std::lock\_guard\ guard(Lock\_);}
+\DoxyCodeLine{00179\ \ \ \ \ LogEntry\ entry\{}
+\DoxyCodeLine{00180\ \ \ \ \ \ \ \ \ std::vformat(fmt.get(),\ std::make\_format\_args(vargs...)),\ severity,\ rel,\ std::format(}
+\DoxyCodeLine{00181\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}\{:0>2\}:\{:0>2\}:\{:0>2\}"{}},\ tm.tm\_hour,\ tm.tm\_min,\ tm.tm\_sec),}
+\DoxyCodeLine{00182\ \ \ \ \ \ \ \ \ ThreadID(),\ line}
+\DoxyCodeLine{00183\ \ \ \ \ \};}
+\DoxyCodeLine{00184\ \ \ \ \ EntryLog\_.push\_back(entry);}
+\DoxyCodeLine{00185\ \ \ \ \ std::cout\ <<\ Format(entry,\ Settings\_ALL)\ <<\ std::endl;}
+\DoxyCodeLine{00186\ \}}
+\DoxyCodeLine{00187\ \ \ \ \ }
+\DoxyCodeLine{00188\ \}}
+\DoxyCodeLine{00189\ }
+\DoxyCodeLine{00190\ \textcolor{preprocessor}{\#define\ Log(...)\ Log(\_\_FILE\_\_,\ \_\_LINE\_\_,\ \_\_VA\_ARGS\_\_)}}
+\DoxyCodeLine{00191\ }
+\DoxyCodeLine{00192\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//CONSOLE\_H}}
+
+\end{DoxyCode}

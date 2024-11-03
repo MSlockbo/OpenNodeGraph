@@ -1,0 +1,32 @@
+\doxysection{Main\+Menu\+Bar.\+h}
+\hypertarget{_main_menu_bar_8h_source}{}\label{_main_menu_bar_8h_source}\index{Include/Editor/MainMenuBar.h@{Include/Editor/MainMenuBar.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ Created\ by\ Maddie\ on\ 9/14/2024.}}
+\DoxyCodeLine{00003\ \textcolor{comment}{//}}
+\DoxyCodeLine{00004\ }
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#ifndef\ MAINMENUBAR\_H}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#define\ MAINMENUBAR\_H}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ <imgui-\/docking/imgui.h>}}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{keyword}{namespace\ }OpenShaderDesigner}
+\DoxyCodeLine{00011\ \{}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_open_shader_designer_1_1_main_menu_bar}{MainMenuBar}}}
+\DoxyCodeLine{00014\ \{}
+\DoxyCodeLine{00015\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00016\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ DrawMenuBar()\ =\ 0;}
+\DoxyCodeLine{00017\ }
+\DoxyCodeLine{00018\ \ \ \ \ \textcolor{keyword}{friend}\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_open_shader_designer_1_1_editor_system}{EditorSystem}};}
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00020\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00021\ \ \ \ \ \textcolor{keywordtype}{void}\ Draw()\ \{\ ImGui::BeginMainMenuBar();\ DrawMenuBar();\ ImGui::EndMainMenuBar();\ \}}
+\DoxyCodeLine{00022\ \};}
+\DoxyCodeLine{00023\ \ \ \ \ }
+\DoxyCodeLine{00024\ \}}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//MAINMENUBAR\_H}}
+
+\end{DoxyCode}

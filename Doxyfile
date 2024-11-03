@@ -1,0 +1,5 @@
+OUTPUT_DIRECTORY       = "C:/Users/Medusa/Documents/Work/Personal/OpenShaderDesigner/Documentation/"
+INPUT                  = "C:/Users/Medusa/Documents/Work/Personal/OpenShaderDesigner/README.md" "C:/Users/Medusa/Documents/Work/Personal/OpenShaderDesigner/Include/" "C:/Users/Medusa/Documents/Work/Personal/OpenShaderDesigner/Source/"
+RECURSIVE              = YES
+PROJECT_NAME           = "OpenShaderDesigner"
+PROJECT_NUMBER         = "0.0.1"

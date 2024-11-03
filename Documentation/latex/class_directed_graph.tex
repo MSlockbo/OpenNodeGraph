@@ -1,0 +1,80 @@
+\doxysection{Directed\+Graph\texorpdfstring{$<$}{<} T \texorpdfstring{$>$}{>} Class Template Reference}
+\hypertarget{class_directed_graph}{}\label{class_directed_graph}\index{DirectedGraph$<$ T $>$@{DirectedGraph$<$ T $>$}}
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{class_directed_graph_1_1_breadth_first}{Breadth\+First}}
+\item 
+class \mbox{\hyperlink{class_directed_graph_1_1_in_order}{In\+Order}}
+\item 
+class \mbox{\hyperlink{class_directed_graph_1_1_post_order}{Post\+Order}}
+\item 
+class \mbox{\hyperlink{class_directed_graph_1_1_pre_order}{Pre\+Order}}
+\item 
+class \mbox{\hyperlink{class_directed_graph_1_1_traverser}{Traverser}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_directed_graph_aa809ed501f418a4dbe7b72efddc095ec}\label{class_directed_graph_aa809ed501f418a4dbe7b72efddc095ec} 
+using {\bfseries Data\+Type} = T
+\item 
+\Hypertarget{class_directed_graph_a5ffe130ff8dad45a955446718f0e1db4}\label{class_directed_graph_a5ffe130ff8dad45a955446718f0e1db4} 
+using {\bfseries Node} = uint32\+\_\+t
+\item 
+\Hypertarget{class_directed_graph_a738b5e4ca65142a05310ebbfbb9fee3b}\label{class_directed_graph_a738b5e4ca65142a05310ebbfbb9fee3b} 
+using {\bfseries Node\+Queue} = std\+::deque$<$Node$>$
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_directed_graph_a6d87b77efb284cadb6176d221a493408}\label{class_directed_graph_a6d87b77efb284cadb6176d221a493408} 
+Node {\bfseries Parent} (Node node) const
+\item 
+\Hypertarget{class_directed_graph_a127158a921ffe739e1202bebde709d38}\label{class_directed_graph_a127158a921ffe739e1202bebde709d38} 
+Node {\bfseries First\+Child} (Node node) const
+\item 
+\Hypertarget{class_directed_graph_a64501efa2fd518b6c863f39074f4fb8c}\label{class_directed_graph_a64501efa2fd518b6c863f39074f4fb8c} 
+Node {\bfseries Next\+Sibling} (Node node) const
+\item 
+\Hypertarget{class_directed_graph_afd96f1cf738e23ab2363189680df26a3}\label{class_directed_graph_afd96f1cf738e23ab2363189680df26a3} 
+Node {\bfseries Left\+Most} (Node node) const
+\item 
+\Hypertarget{class_directed_graph_a2ae8657ce1bf390ff0f0a854d945c524}\label{class_directed_graph_a2ae8657ce1bf390ff0f0a854d945c524} 
+uint32\+\_\+t {\bfseries Depth} (Node node) const
+\item 
+\Hypertarget{class_directed_graph_a48ac253ed873b53fea69a0f218ccb71b}\label{class_directed_graph_a48ac253ed873b53fea69a0f218ccb71b} 
+Node {\bfseries Insert} (const Data\+Type \&data, Node parent)
+\item 
+\Hypertarget{class_directed_graph_a8d003103f1a8367a13f39ad75fee1b3a}\label{class_directed_graph_a8d003103f1a8367a13f39ad75fee1b3a} 
+void {\bfseries Erase} (Node node)
+\item 
+\Hypertarget{class_directed_graph_a1a03e1a70e9f89c4962bac58900f5211}\label{class_directed_graph_a1a03e1a70e9f89c4962bac58900f5211} 
+Data\+Type \& {\bfseries operator\mbox{[}$\,$\mbox{]}} (Node node)
+\item 
+\Hypertarget{class_directed_graph_acf2b47ac25e3fe4f6712c41822086d41}\label{class_directed_graph_acf2b47ac25e3fe4f6712c41822086d41} 
+const Data\+Type \& {\bfseries operator\mbox{[}$\,$\mbox{]}} (Node node) const
+\item 
+\Hypertarget{class_directed_graph_a6ea605fcb6884c8fe31c7de9ffd1f764}\label{class_directed_graph_a6ea605fcb6884c8fe31c7de9ffd1f764} 
+{\footnotesize template$<$typename V , typename O $>$ }\\void {\bfseries Traverse} (V \&visitor)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Friends}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_directed_graph_a286a665c131525fe4b907a4da94634b4}\label{class_directed_graph_a286a665c131525fe4b907a4da94634b4} 
+class {\bfseries Breadth\+First}
+\item 
+\Hypertarget{class_directed_graph_a017d5b5291951a2705cad0fb52dd231f}\label{class_directed_graph_a017d5b5291951a2705cad0fb52dd231f} 
+class {\bfseries Pre\+Order}
+\item 
+\Hypertarget{class_directed_graph_a3434ce1356b6d21582e02a0a2ce278f0}\label{class_directed_graph_a3434ce1356b6d21582e02a0a2ce278f0} 
+class {\bfseries In\+Order}
+\item 
+\Hypertarget{class_directed_graph_a3717c020ac7d256d52e1b5b484433661}\label{class_directed_graph_a3717c020ac7d256d52e1b5b484433661} 
+class {\bfseries Post\+Order}
+\end{DoxyCompactItemize}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+Include/\+Utility/Directed\+Graph.\+h\end{DoxyCompactItemize}

@@ -1,0 +1,66 @@
+\doxysection{Any\texorpdfstring{$<$}{<} T, Rest... \texorpdfstring{$>$}{>} Class Template Reference}
+\hypertarget{class_any_3_01_t_00_01_rest_8_8_8_01_4}{}\label{class_any_3_01_t_00_01_rest_8_8_8_01_4}\index{Any$<$ T, Rest... $>$@{Any$<$ T, Rest... $>$}}
+
+
+Package multiple types into a single variable, useful for instances where a value may be multiple types.  
+
+
+
+
+{\ttfamily \#include $<$Any.\+h$>$}
+
+Inheritance diagram for Any\texorpdfstring{$<$}{<} T, Rest... \texorpdfstring{$>$}{>}\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_any_3_01_t_00_01_rest_8_8_8_01_4}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_any_3_01_t_00_01_rest_8_8_8_01_4_a516f589e8812eea947648bfb4d33e8b6}\label{class_any_3_01_t_00_01_rest_8_8_8_01_4_a516f589e8812eea947648bfb4d33e8b6} 
+{\bfseries Any} (const This\+Type \&value, const Rest \&...other)
+\item 
+\Hypertarget{class_any_3_01_t_00_01_rest_8_8_8_01_4_a777fd7faf0b62c3a0117528c227f1d8d}\label{class_any_3_01_t_00_01_rest_8_8_8_01_4_a777fd7faf0b62c3a0117528c227f1d8d} 
+{\bfseries Any} (This\+Type \&\&value, Rest \&\&...other)
+\item 
+\Hypertarget{class_any_3_01_t_00_01_rest_8_8_8_01_4_a426b897700aff012363ea9200a3776b3}\label{class_any_3_01_t_00_01_rest_8_8_8_01_4_a426b897700aff012363ea9200a3776b3} 
+{\bfseries Any} (const \mbox{\hyperlink{class_any}{Any}} \&other)=default
+\item 
+\Hypertarget{class_any_3_01_t_00_01_rest_8_8_8_01_4_a57419a9ff5f78e792f332b0701d2717f}\label{class_any_3_01_t_00_01_rest_8_8_8_01_4_a57419a9ff5f78e792f332b0701d2717f} 
+{\bfseries Any} (\mbox{\hyperlink{class_any}{Any}} \&\&other)=default
+\item 
+\Hypertarget{class_any_3_01_t_00_01_rest_8_8_8_01_4_a3e7c3c9089107c7eff8e00af678df00a}\label{class_any_3_01_t_00_01_rest_8_8_8_01_4_a3e7c3c9089107c7eff8e00af678df00a} 
+\mbox{\hyperlink{class_any}{Any}} \& {\bfseries operator=} (const \mbox{\hyperlink{class_any}{Any}} \&)=default
+\item 
+\Hypertarget{class_any_3_01_t_00_01_rest_8_8_8_01_4_ad73121e0262892162aa58d33a10d0de6}\label{class_any_3_01_t_00_01_rest_8_8_8_01_4_ad73121e0262892162aa58d33a10d0de6} 
+\mbox{\hyperlink{class_any}{Any}} \& {\bfseries operator=} (\mbox{\hyperlink{class_any}{Any}} \&\&)=default
+\item 
+\Hypertarget{class_any_3_01_t_00_01_rest_8_8_8_01_4_a61a686f88d35bc2bb418d01271f7837c}\label{class_any_3_01_t_00_01_rest_8_8_8_01_4_a61a686f88d35bc2bb418d01271f7837c} 
+{\bfseries operator This\+Type} () const
+\item 
+\Hypertarget{class_any_3_01_t_00_01_rest_8_8_8_01_4_a705946411d31067238aa615f64e58fbc}\label{class_any_3_01_t_00_01_rest_8_8_8_01_4_a705946411d31067238aa615f64e58fbc} 
+{\bfseries operator This\+Type \&} ()
+\item 
+\Hypertarget{class_any_3_01_t_00_01_rest_8_8_8_01_4_ae912c7de87c0835463b5439530b60cfb}\label{class_any_3_01_t_00_01_rest_8_8_8_01_4_ae912c7de87c0835463b5439530b60cfb} 
+{\bfseries operator const This\+Type \&} () const
+\item 
+\Hypertarget{class_any_3_01_t_00_01_rest_8_8_8_01_4_acee4d61d7ab263ea7200663df092d2d2}\label{class_any_3_01_t_00_01_rest_8_8_8_01_4_acee4d61d7ab263ea7200663df092d2d2} 
+{\bfseries operator This\+Type \&\&} ()
+\item 
+\Hypertarget{class_any_3_01_t_00_01_rest_8_8_8_01_4_a194a2d5c210bdb17cf5b4fac7d71fba7}\label{class_any_3_01_t_00_01_rest_8_8_8_01_4_a194a2d5c210bdb17cf5b4fac7d71fba7} 
+{\bfseries operator This\+Type \texorpdfstring{$\ast$}{*}} ()
+\item 
+\Hypertarget{class_any_3_01_t_00_01_rest_8_8_8_01_4_a22a3125c29bea1bc53ab1b3c3499ee8e}\label{class_any_3_01_t_00_01_rest_8_8_8_01_4_a22a3125c29bea1bc53ab1b3c3499ee8e} 
+{\bfseries operator const This\+Type \texorpdfstring{$\ast$}{*}} () const
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$typename T, typename... Rest$>$\newline
+class Any$<$ T, Rest... $>$}
+Package multiple types into a single variable, useful for instances where a value may be multiple types. 
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+Include/\+Utility/Any.\+h\end{DoxyCompactItemize}

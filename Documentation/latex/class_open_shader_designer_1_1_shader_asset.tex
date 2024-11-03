@@ -1,0 +1,78 @@
+\doxysection{Open\+Shader\+Designer\+::Shader\+Asset Class Reference}
+\hypertarget{class_open_shader_designer_1_1_shader_asset}{}\label{class_open_shader_designer_1_1_shader_asset}\index{OpenShaderDesigner::ShaderAsset@{OpenShaderDesigner::ShaderAsset}}
+Inheritance diagram for Open\+Shader\+Designer\+::Shader\+Asset\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=3.000000cm]{class_open_shader_designer_1_1_shader_asset}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_open_shader_designer_1_1_shader_asset_a411e70c19667709da461b4ef42001b44}\label{class_open_shader_designer_1_1_shader_asset_a411e70c19667709da461b4ef42001b44} 
+{\bfseries Shader\+Asset} (const File\+Manager\+::\+Path \&path, \mbox{\hyperlink{class_open_shader_designer_1_1_shader_graph}{Shader\+Graph}} \&graph)
+\item 
+\Hypertarget{class_open_shader_designer_1_1_shader_asset_a690ca6a8eedb65afdbf29c430593aabb}\label{class_open_shader_designer_1_1_shader_asset_a690ca6a8eedb65afdbf29c430593aabb} 
+void {\bfseries Push\+State} ()
+\item 
+\Hypertarget{class_open_shader_designer_1_1_shader_asset_a853099f0275eea8bcea9acc2647e0144}\label{class_open_shader_designer_1_1_shader_asset_a853099f0275eea8bcea9acc2647e0144} 
+void {\bfseries Pop\+State} ()
+\item 
+\Hypertarget{class_open_shader_designer_1_1_shader_asset_a414d96171b3ab41fbfd5271e7b8d36eb}\label{class_open_shader_designer_1_1_shader_asset_a414d96171b3ab41fbfd5271e7b8d36eb} 
+\mbox{\hyperlink{struct_open_shader_designer_1_1_graph_state}{Graph\+State}} \& {\bfseries Get\+State} ()
+\item 
+\Hypertarget{class_open_shader_designer_1_1_shader_asset_a671012652a9cd8ffefdbaa840158dfdf}\label{class_open_shader_designer_1_1_shader_asset_a671012652a9cd8ffefdbaa840158dfdf} 
+const \mbox{\hyperlink{struct_open_shader_designer_1_1_graph_state}{Graph\+State}} \& {\bfseries Get\+State} () const
+\item 
+\Hypertarget{class_open_shader_designer_1_1_shader_asset_ad620fd04894af31c1897dfceaf84acf4}\label{class_open_shader_designer_1_1_shader_asset_ad620fd04894af31c1897dfceaf84acf4} 
+\mbox{\hyperlink{class_open_shader_designer_1_1_shader_graph}{Shader\+Graph}} \& {\bfseries Get\+Graph} ()
+\item 
+\Hypertarget{class_open_shader_designer_1_1_shader_asset_a4f097fdd7834132e95992a97bae4c8c2}\label{class_open_shader_designer_1_1_shader_asset_a4f097fdd7834132e95992a97bae4c8c2} 
+const \mbox{\hyperlink{class_open_shader_designer_1_1_shader_graph}{Shader\+Graph}} \& {\bfseries Get\+Graph} () const
+\item 
+\Hypertarget{class_open_shader_designer_1_1_shader_asset_af6e1c0090f31690e78d6c098da558df6}\label{class_open_shader_designer_1_1_shader_asset_af6e1c0090f31690e78d6c098da558df6} 
+virtual void {\bfseries Compile} ()=0
+\item 
+\Hypertarget{class_open_shader_designer_1_1_shader_asset_a4d8bd56ab2f2351e2e057b37b173e4b1}\label{class_open_shader_designer_1_1_shader_asset_a4d8bd56ab2f2351e2e057b37b173e4b1} 
+virtual void {\bfseries View} (HDRTexture\+::\+Handle\+Type \texorpdfstring{$\ast$}{*}Target)=0
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{class_open_shader_designer_1_1_file_manager_1_1_asset}{Open\+Shader\+Designer\+::\+File\+Manager\+::\+Asset}}}
+\begin{DoxyCompactItemize}
+\item 
+{\bfseries Asset} (const Path \&path)
+\item 
+bool {\bfseries Dirty} () const
+\item 
+virtual void {\bfseries Open} ()
+\item 
+virtual void {\bfseries Save} (const Path \&path)
+\item 
+File \& {\bfseries Get\+File} ()
+\item 
+File\+ID {\bfseries Get\+ID} () const
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_open_shader_designer_1_1_shader_asset_a223dff108849f67440f154a4cec8e10c}\label{class_open_shader_designer_1_1_shader_asset_a223dff108849f67440f154a4cec8e10c} 
+static const std\+::string {\bfseries Version\+String} = "{}\#version 430 core"{}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_open_shader_designer_1_1_shader_asset_a4ddc7073a26b7c0797f99d69eb560ebc}\label{class_open_shader_designer_1_1_shader_asset_a4ddc7073a26b7c0797f99d69eb560ebc} 
+std\+::string {\bfseries Code}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Protected Member Functions inherited from \mbox{\hyperlink{class_open_shader_designer_1_1_file_manager_1_1_asset}{Open\+Shader\+Designer\+::\+File\+Manager\+::\+Asset}}}
+\begin{DoxyCompactItemize}
+\item 
+void {\bfseries Make\+Dirty} ()
+\item 
+\mbox{\hyperlink{class_open_shader_designer_1_1_file_manager}{File\+Manager}} \texorpdfstring{$\ast$}{*} {\bfseries Parent} () const
+\end{DoxyCompactItemize}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+Include/\+Graph/Shader\+Graph.\+h\end{DoxyCompactItemize}

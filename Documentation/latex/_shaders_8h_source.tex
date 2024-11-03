@@ -1,0 +1,156 @@
+\doxysection{Shaders.\+h}
+\hypertarget{_shaders_8h_source}{}\label{_shaders_8h_source}\index{Include/Graph/Nodes/Shaders.h@{Include/Graph/Nodes/Shaders.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//\ =====================================================================================================================}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ \ OpenShaderDesigner,\ an\ open\ source\ software\ utility\ to\ create\ materials\ and\ shaders.}}
+\DoxyCodeLine{00003\ \textcolor{comment}{//\ \ Copyright\ (C)\ 2024\ \ Medusa\ Slockbower}}
+\DoxyCodeLine{00004\ \textcolor{comment}{//}}
+\DoxyCodeLine{00005\ \textcolor{comment}{//\ \ This\ program\ is\ free\ software:\ you\ can\ redistribute\ it\ and/or\ modify}}
+\DoxyCodeLine{00006\ \textcolor{comment}{//\ \ it\ under\ the\ terms\ of\ the\ GNU\ General\ Public\ License\ as\ published\ by}}
+\DoxyCodeLine{00007\ \textcolor{comment}{//\ \ the\ Free\ Software\ Foundation,\ either\ version\ 3\ of\ the\ License,\ or}}
+\DoxyCodeLine{00008\ \textcolor{comment}{//\ \ (at\ your\ option)\ any\ later\ version.}}
+\DoxyCodeLine{00009\ \textcolor{comment}{//}}
+\DoxyCodeLine{00010\ \textcolor{comment}{//\ \ This\ program\ is\ distributed\ in\ the\ hope\ that\ it\ will\ be\ useful,}}
+\DoxyCodeLine{00011\ \textcolor{comment}{//\ \ but\ WITHOUT\ ANY\ WARRANTY;\ without\ even\ the\ implied\ warranty\ of}}
+\DoxyCodeLine{00012\ \textcolor{comment}{//\ \ MERCHANTABILITY\ or\ FITNESS\ FOR\ A\ PARTICULAR\ PURPOSE.\ \ See\ the}}
+\DoxyCodeLine{00013\ \textcolor{comment}{//\ \ GNU\ General\ Public\ License\ for\ more\ details.}}
+\DoxyCodeLine{00014\ \textcolor{comment}{//}}
+\DoxyCodeLine{00015\ \textcolor{comment}{//\ \ You\ should\ have\ received\ a\ copy\ of\ the\ GNU\ General\ Public\ License}}
+\DoxyCodeLine{00016\ \textcolor{comment}{//\ \ along\ with\ this\ program.\ \ If\ not,\ see\ <https://www.gnu.org/licenses/>.}}
+\DoxyCodeLine{00017\ \textcolor{comment}{//\ =====================================================================================================================}}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \textcolor{preprocessor}{\#ifndef\ OSD\_SHADERS\_H}}
+\DoxyCodeLine{00020\ \textcolor{preprocessor}{\#define\ OSD\_SHADERS\_H}}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ \textcolor{preprocessor}{\#include\ <glm/vec4.hpp>}}
+\DoxyCodeLine{00023\ \textcolor{preprocessor}{\#include\ <Graph/ShaderGraph.h>}}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ \textcolor{preprocessor}{\#include\ "{}glw/shader.h"{}}}
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00027\ \textcolor{keyword}{namespace\ }OpenShaderDesigner::Nodes::Shaders}
+\DoxyCodeLine{00028\ \{}
+\DoxyCodeLine{00029\ \ \ \ \ }
+\DoxyCodeLine{00030\ \textcolor{comment}{//\ Header\ Colors\ =======================================================================================================}}
+\DoxyCodeLine{00031\ }
+\DoxyCodeLine{00032\ \textcolor{keyword}{inline}\ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ ImColor\ HeaderColor\ \ \ \ \ \ \ \ =\ ImColor(0xA9,\ 0x85,\ 0xC1);}
+\DoxyCodeLine{00033\ \textcolor{keyword}{inline}\ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ ImColor\ HeaderHoveredColor\ =\ ImColor(0xBB,\ 0x96,\ 0xD4);}
+\DoxyCodeLine{00034\ \textcolor{keyword}{inline}\ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ ImColor\ HeaderActiveColor\ \ =\ ImColor(0x8D,\ 0x68,\ 0xA6);}
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00036\ \textcolor{keyword}{inline}\ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ std::string\ HeaderMarker\ =\ \textcolor{stringliteral}{"{}\(\backslash\)uF42E\ "{}};}
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00038\ \textcolor{comment}{//\ =====================================================================================================================}}
+\DoxyCodeLine{00039\ \textcolor{comment}{//\ Shaders}}
+\DoxyCodeLine{00040\ \textcolor{comment}{//\ =====================================================================================================================}}
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00043\ \textcolor{comment}{//\ Function\ Inputs\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00044\ }
+\DoxyCodeLine{00045\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_open_shader_designer_1_1_nodes_1_1_shaders_1_1_function_inputs}{FunctionInputs}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{struct_open_shader_designer_1_1_node}{Node}}}
+\DoxyCodeLine{00046\ \{}
+\DoxyCodeLine{00047\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00048\ \ \ \ \ \mbox{\hyperlink{class_open_shader_designer_1_1_nodes_1_1_shaders_1_1_function_inputs}{FunctionInputs}}(\mbox{\hyperlink{class_open_shader_designer_1_1_shader_graph}{ShaderGraph}}\&\ graph,\ ImVec2\ pos);}
+\DoxyCodeLine{00049\ \ \ \ \ \mbox{\hyperlink{class_open_shader_designer_1_1_nodes_1_1_shaders_1_1_function_inputs}{\string~FunctionInputs}}()\ \textcolor{keyword}{override}\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00050\ }
+\DoxyCodeLine{00051\ \ \ \ \ [[nodiscard]]\ \mbox{\hyperlink{struct_open_shader_designer_1_1_node}{Node}}*\ Copy(\mbox{\hyperlink{class_open_shader_designer_1_1_shader_graph}{ShaderGraph}}\&\ graph)\ \textcolor{keyword}{const\ override};}
+\DoxyCodeLine{00052\ \ \ \ \ \textcolor{keywordtype}{void}\ Inspect()\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00053\ }
+\DoxyCodeLine{00054\ \ \ \ \ std::string\ GetCode()\ \textcolor{keyword}{const\ override};}
+\DoxyCodeLine{00055\ \};}
+\DoxyCodeLine{00056\ }
+\DoxyCodeLine{00057\ }
+\DoxyCodeLine{00058\ \textcolor{comment}{//\ Function\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00059\ }
+\DoxyCodeLine{00066\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_open_shader_designer_1_1_nodes_1_1_shaders_1_1_function}{Function}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{struct_open_shader_designer_1_1_node}{Node}},\ \textcolor{keyword}{public}\ \mbox{\hyperlink{class_open_shader_designer_1_1_shader_asset}{ShaderAsset}}}
+\DoxyCodeLine{00067\ \{}
+\DoxyCodeLine{00068\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00069\ \ \ \ \ \mbox{\hyperlink{class_open_shader_designer_1_1_nodes_1_1_shaders_1_1_function}{Function}}(\textcolor{keyword}{const}\ FileManager::Path\&\ path,\ \mbox{\hyperlink{class_open_shader_designer_1_1_shader_graph}{ShaderGraph}}\&\ graph);}
+\DoxyCodeLine{00070\ \ \ \ \ \mbox{\hyperlink{class_open_shader_designer_1_1_nodes_1_1_shaders_1_1_function}{\string~Function}}()\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00071\ }
+\DoxyCodeLine{00072\ \ \ \ \ [[nodiscard]]\ \mbox{\hyperlink{struct_open_shader_designer_1_1_node}{Node}}*\ Copy(\mbox{\hyperlink{class_open_shader_designer_1_1_shader_graph}{ShaderGraph}}\&\ graph)\ \textcolor{keyword}{const\ override};}
+\DoxyCodeLine{00073\ \ \ \ \ \textcolor{keywordtype}{void}\ Inspect()\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00074\ }
+\DoxyCodeLine{00075\ \ \ \ \ \textcolor{keywordtype}{void}\ Compile()\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00076\ \ \ \ \ \textcolor{keywordtype}{void}\ Open()\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00077\ }
+\DoxyCodeLine{00078\ \ \ \ \ \textcolor{keyword}{static}\ Asset*\ Create(\textcolor{keyword}{const}\ FileManager::Path\&\ path);}
+\DoxyCodeLine{00079\ \ \ \ \ \textcolor{keyword}{static}\ Asset*\ Load(\textcolor{keyword}{const}\ FileManager::Path\&\ path);}
+\DoxyCodeLine{00080\ \ \ \ \ \textcolor{keyword}{static}\ Asset*\ Import(\textcolor{keyword}{const}\ FileManager::Path\&\ src,\ \textcolor{keyword}{const}\ FileManager::Path\&\ dst);}
+\DoxyCodeLine{00081\ }
+\DoxyCodeLine{00082\ \ \ \ \ std::string\ GetCode()\ \textcolor{keyword}{const\ override};}
+\DoxyCodeLine{00083\ \ \ \ \ \textcolor{keywordtype}{void}\ View(HDRTexture::HandleType*\ Target)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00084\ }
+\DoxyCodeLine{00085\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00086\ \ \ \ \ \textcolor{keyword}{using\ }InputMap\ =\ ocu::map<int,\ glw::enum\_t>;}
+\DoxyCodeLine{00087\ }
+\DoxyCodeLine{00088\ \ \ \ \ \textcolor{keyword}{enum}\ FuncInput\_\ :\ glw::enum\_t}
+\DoxyCodeLine{00089\ \ \ \ \ \{}
+\DoxyCodeLine{00090\ \ \ \ \ \ \ \ \ FuncInput\_Custom\ =\ 0}
+\DoxyCodeLine{00091\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00092\ \ \ \ \ ,\ \ \ FuncInput\_X}
+\DoxyCodeLine{00093\ \ \ \ \ ,\ \ \ FuncInput\_Y}
+\DoxyCodeLine{00094\ \ \ \ \ ,\ \ \ FuncInput\_XY}
+\DoxyCodeLine{00095\ }
+\DoxyCodeLine{00096\ \ \ \ \ ,\ \ \ FuncInput\_U}
+\DoxyCodeLine{00097\ \ \ \ \ ,\ \ \ FuncInput\_V}
+\DoxyCodeLine{00098\ \ \ \ \ ,\ \ \ FuncInput\_UV}
+\DoxyCodeLine{00099\ }
+\DoxyCodeLine{00100\ \ \ \ \ ,\ \ \ FuncInput\_Time}
+\DoxyCodeLine{00101\ \ \ \ \ ,\ \ \ FuncInput\_DeltaTime}
+\DoxyCodeLine{00102\ \ \ \ \ \};}
+\DoxyCodeLine{00103\ }
+\DoxyCodeLine{00104\ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ std::vector<glw::enum\_t>\ InputTypes[]\ =\ \{}
+\DoxyCodeLine{00105\ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ PinType\_UInt\ */}\ \ \ \{\ FuncInput\_Custom,\ FuncInput\_X,\ FuncInput\_Y\ \}}
+\DoxyCodeLine{00106\ \ \ \ \ ,\ \ \ \textcolor{comment}{/*\ PinType\_Int\ */}\ \ \ \ \{\ FuncInput\_Custom,\ FuncInput\_X,\ FuncInput\_Y\ \}}
+\DoxyCodeLine{00107\ \ \ \ \ ,\ \ \ \textcolor{comment}{/*\ PinType\_Float\ */}\ \ \{\ FuncInput\_Custom,\ FuncInput\_X,\ FuncInput\_Y,\ FuncInput\_U,\ FuncInput\_V,\ FuncInput\_Time,\ FuncInput\_DeltaTime\ \}}
+\DoxyCodeLine{00108\ \ \ \ \ ,\ \ \ \textcolor{comment}{/*\ PinType\_Vector\ */}\ \{\ FuncInput\_Custom,\ FuncInput\_XY,\ FuncInput\_UV\ \}}
+\DoxyCodeLine{00109\ \ \ \ \ \};}
+\DoxyCodeLine{00110\ }
+\DoxyCodeLine{00111\ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ std::string\ InputNames[]\ =\ \{}
+\DoxyCodeLine{00112\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}Custom..."{}}}
+\DoxyCodeLine{00113\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00114\ \ \ \ \ ,\ \ \ \textcolor{stringliteral}{"{}X"{}}}
+\DoxyCodeLine{00115\ \ \ \ \ ,\ \ \ \textcolor{stringliteral}{"{}Y"{}}}
+\DoxyCodeLine{00116\ \ \ \ \ ,\ \ \ \textcolor{stringliteral}{"{}XY"{}}}
+\DoxyCodeLine{00117\ }
+\DoxyCodeLine{00118\ \ \ \ \ ,\ \ \ \textcolor{stringliteral}{"{}U"{}}}
+\DoxyCodeLine{00119\ \ \ \ \ ,\ \ \ \textcolor{stringliteral}{"{}V"{}}}
+\DoxyCodeLine{00120\ \ \ \ \ ,\ \ \ \textcolor{stringliteral}{"{}UV"{}}}
+\DoxyCodeLine{00121\ }
+\DoxyCodeLine{00122\ \ \ \ \ ,\ \ \ \textcolor{stringliteral}{"{}Time"{}}}
+\DoxyCodeLine{00123\ \ \ \ \ ,\ \ \ \textcolor{stringliteral}{"{}Delta\ Time"{}}}
+\DoxyCodeLine{00124\ \ \ \ \ \};}
+\DoxyCodeLine{00125\ }
+\DoxyCodeLine{00126\ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ std::string\ InputVars[]\ =\ \{}
+\DoxyCodeLine{00127\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}"{}}}
+\DoxyCodeLine{00128\ \ \ \ \ ,\ \ \ \textcolor{stringliteral}{"{}x"{}}}
+\DoxyCodeLine{00129\ \ \ \ \ ,\ \ \ \textcolor{stringliteral}{"{}y"{}}}
+\DoxyCodeLine{00130\ \ \ \ \ ,\ \ \ \textcolor{stringliteral}{"{}xy"{}}}
+\DoxyCodeLine{00131\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00132\ \ \ \ \ ,\ \ \ \textcolor{stringliteral}{"{}u"{}}}
+\DoxyCodeLine{00133\ \ \ \ \ ,\ \ \ \textcolor{stringliteral}{"{}v"{}}}
+\DoxyCodeLine{00134\ \ \ \ \ ,\ \ \ \textcolor{stringliteral}{"{}uv"{}}}
+\DoxyCodeLine{00135\ }
+\DoxyCodeLine{00136\ \ \ \ \ ,\ \ \ \textcolor{stringliteral}{"{}t"{}}}
+\DoxyCodeLine{00137\ \ \ \ \ ,\ \ \ \textcolor{stringliteral}{"{}dt"{}}}
+\DoxyCodeLine{00138\ \ \ \ \ \};}
+\DoxyCodeLine{00139\ \ \ \ \ }
+\DoxyCodeLine{00140\ \ \ \ \ \textcolor{keywordtype}{void}\ DrawImage\_(HDRTexture::HandleType*\ Target);}
+\DoxyCodeLine{00141\ \ \ \ \ \textcolor{keywordtype}{void}\ DrawInputs\_();}
+\DoxyCodeLine{00142\ \ \ \ \ \textcolor{keywordtype}{void}\ Render\_(HDRTexture::HandleType*\ Target);}
+\DoxyCodeLine{00143\ \ \ \ \ \textcolor{keywordtype}{void}\ CompileDisplayShader\_();}
+\DoxyCodeLine{00144\ }
+\DoxyCodeLine{00145\ \ \ \ \ glw::shader*\ \ \ \ \ Shader\_;}
+\DoxyCodeLine{00146\ \ \ \ \ std::string\ DisplayCode\_;}
+\DoxyCodeLine{00147\ \ \ \ \ \mbox{\hyperlink{class_open_shader_designer_1_1_nodes_1_1_shaders_1_1_function_inputs}{FunctionInputs}}\ \ \ Inputs\_;}
+\DoxyCodeLine{00148\ \ \ \ \ NodeId\ \ \ \ ID\_,\ InputsID\_;}
+\DoxyCodeLine{00149\ \ \ \ \ InputMap\ \ \ \ InputValues\_;}
+\DoxyCodeLine{00150\ \ \ \ \ uint32\_t\ \ \ \ \ DisplayVar\_;}
+\DoxyCodeLine{00151\ \};}
+\DoxyCodeLine{00152\ }
+\DoxyCodeLine{00153\ \ \ \ \ }
+\DoxyCodeLine{00154\ \}}
+\DoxyCodeLine{00155\ \ \ \ \ }
+\DoxyCodeLine{00156\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//\ OSD\_SHADERS\_H}}
+
+\end{DoxyCode}

@@ -1,0 +1,96 @@
+\doxysection{open\+\_\+cpp\+\_\+utils\+::filesystem\texorpdfstring{$<$}{<} T\+\_\+, L\+\_\+ \texorpdfstring{$>$}{>} Class Template Reference}
+\hypertarget{classopen__cpp__utils_1_1filesystem}{}\label{classopen__cpp__utils_1_1filesystem}\index{open\_cpp\_utils::filesystem$<$ T\_, L\_ $>$@{open\_cpp\_utils::filesystem$<$ T\_, L\_ $>$}}
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{classopen__cpp__utils_1_1filesystem_1_1file}{file}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classopen__cpp__utils_1_1filesystem_ada8f2dee17a0dabd6057c388acb3ea59}\label{classopen__cpp__utils_1_1filesystem_ada8f2dee17a0dabd6057c388acb3ea59} 
+using {\bfseries data\+\_\+t} = T\+\_\+
+\item 
+\Hypertarget{classopen__cpp__utils_1_1filesystem_ae492b070f10b14de8f0b0e06db0cad6a}\label{classopen__cpp__utils_1_1filesystem_ae492b070f10b14de8f0b0e06db0cad6a} 
+using {\bfseries loader} = L\+\_\+
+\item 
+\Hypertarget{classopen__cpp__utils_1_1filesystem_a9d4c55a8b4709bf56d1e333911abc4c6}\label{classopen__cpp__utils_1_1filesystem_a9d4c55a8b4709bf56d1e333911abc4c6} 
+using {\bfseries file\+\_\+tree} = \mbox{\hyperlink{classopen__cpp__utils_1_1directed__tree}{directed\+\_\+tree}}$<$\mbox{\hyperlink{classopen__cpp__utils_1_1filesystem_1_1file}{file}}$>$
+\item 
+\Hypertarget{classopen__cpp__utils_1_1filesystem_aa6c1a990e07979c1806a2aa9b67a5179}\label{classopen__cpp__utils_1_1filesystem_aa6c1a990e07979c1806a2aa9b67a5179} 
+using {\bfseries fileptr} = \mbox{\hyperlink{classopen__cpp__utils_1_1filesystem_1_1file}{file}}\texorpdfstring{$\ast$}{*}
+\item 
+\Hypertarget{classopen__cpp__utils_1_1filesystem_acf06e85736b21be638f99bd61c67b953}\label{classopen__cpp__utils_1_1filesystem_acf06e85736b21be638f99bd61c67b953} 
+using {\bfseries file\+\_\+id} = typename file\+\_\+tree\+::node
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classopen__cpp__utils_1_1filesystem_a1ba38b4c439c9f53d13a5a103950f253}\label{classopen__cpp__utils_1_1filesystem_a1ba38b4c439c9f53d13a5a103950f253} 
+\mbox{\hyperlink{classopen__cpp__utils_1_1filesystem_1_1file}{file}} \& {\bfseries operator\mbox{[}$\,$\mbox{]}} (file\+\_\+id id)
+\item 
+\Hypertarget{classopen__cpp__utils_1_1filesystem_a801c602298152c6dbcb5a61397491e9d}\label{classopen__cpp__utils_1_1filesystem_a801c602298152c6dbcb5a61397491e9d} 
+const \mbox{\hyperlink{classopen__cpp__utils_1_1filesystem_1_1file}{file}} \& {\bfseries operator\mbox{[}$\,$\mbox{]}} (file\+\_\+id id) const
+\item 
+\Hypertarget{classopen__cpp__utils_1_1filesystem_a59ddf3168971c3c5c1fc8aed7578ba0a}\label{classopen__cpp__utils_1_1filesystem_a59ddf3168971c3c5c1fc8aed7578ba0a} 
+file\+\_\+id {\bfseries load\+\_\+directory} (const path\+\_\+t \&directory)
+\item 
+\Hypertarget{classopen__cpp__utils_1_1filesystem_a216fc5734b8ed8a26ac08858517b745e}\label{classopen__cpp__utils_1_1filesystem_a216fc5734b8ed8a26ac08858517b745e} 
+void {\bfseries close\+\_\+directory} (file\+\_\+id id)
+\item 
+\Hypertarget{classopen__cpp__utils_1_1filesystem_ac1f0ec9ce270682a61b16e7744419c68}\label{classopen__cpp__utils_1_1filesystem_ac1f0ec9ce270682a61b16e7744419c68} 
+file\+\_\+id {\bfseries import} (const path\+\_\+t \&path, file\+\_\+id parent)
+\item 
+\Hypertarget{classopen__cpp__utils_1_1filesystem_aa902ba9de5ba9eab747e46cc1e851a31}\label{classopen__cpp__utils_1_1filesystem_aa902ba9de5ba9eab747e46cc1e851a31} 
+file\+\_\+id {\bfseries create} (const std\+::string \&name, file\+\_\+id parent)
+\item 
+\Hypertarget{classopen__cpp__utils_1_1filesystem_a47800ffb214776279b5aa0e1d8a1c3ed}\label{classopen__cpp__utils_1_1filesystem_a47800ffb214776279b5aa0e1d8a1c3ed} 
+file\+\_\+id {\bfseries create\+\_\+folder} (const std\+::string \&name, file\+\_\+id parent)
+\item 
+\Hypertarget{classopen__cpp__utils_1_1filesystem_a3dc8f1fd504bd376b56ad8899a8356ed}\label{classopen__cpp__utils_1_1filesystem_a3dc8f1fd504bd376b56ad8899a8356ed} 
+void {\bfseries rename} (file\+\_\+id id, const std\+::string \&name)
+\item 
+\Hypertarget{classopen__cpp__utils_1_1filesystem_a881034a4e435e2fcde5ed0c6da66f19e}\label{classopen__cpp__utils_1_1filesystem_a881034a4e435e2fcde5ed0c6da66f19e} 
+void {\bfseries clear} ()
+\item 
+\Hypertarget{classopen__cpp__utils_1_1filesystem_ac22e7c05bc86df5bf1e1409460133686}\label{classopen__cpp__utils_1_1filesystem_ac22e7c05bc86df5bf1e1409460133686} 
+void {\bfseries erase} (file\+\_\+id id)
+\item 
+\Hypertarget{classopen__cpp__utils_1_1filesystem_aa9d1337dac8d4eb18985b9c4301eb50c}\label{classopen__cpp__utils_1_1filesystem_aa9d1337dac8d4eb18985b9c4301eb50c} 
+void {\bfseries erase} (const path\+\_\+t \&path)
+\item 
+\Hypertarget{classopen__cpp__utils_1_1filesystem_ae66fa1cceb7c9594665efbbab8fe270f}\label{classopen__cpp__utils_1_1filesystem_ae66fa1cceb7c9594665efbbab8fe270f} 
+file\+\_\+id {\bfseries find} (const path\+\_\+t \&path) const
+\item 
+\Hypertarget{classopen__cpp__utils_1_1filesystem_ab6a21c70e483899ad6934c1aaf0725a7}\label{classopen__cpp__utils_1_1filesystem_ab6a21c70e483899ad6934c1aaf0725a7} 
+file\+\_\+id {\bfseries parent} (file\+\_\+id id) const
+\item 
+\Hypertarget{classopen__cpp__utils_1_1filesystem_a37c0677a4b092a121ed561a34a8f5e48}\label{classopen__cpp__utils_1_1filesystem_a37c0677a4b092a121ed561a34a8f5e48} 
+file\+\_\+id {\bfseries next} (file\+\_\+id id) const
+\item 
+\Hypertarget{classopen__cpp__utils_1_1filesystem_a67981d61a1bda8f91f9b21d6e9952e23}\label{classopen__cpp__utils_1_1filesystem_a67981d61a1bda8f91f9b21d6e9952e23} 
+file\+\_\+id {\bfseries prev} (file\+\_\+id id) const
+\item 
+\Hypertarget{classopen__cpp__utils_1_1filesystem_a7f0d8c7b56ae8cf06a7054490e5d5563}\label{classopen__cpp__utils_1_1filesystem_a7f0d8c7b56ae8cf06a7054490e5d5563} 
+file\+\_\+id {\bfseries begin} (file\+\_\+id id) const
+\item 
+\Hypertarget{classopen__cpp__utils_1_1filesystem_ac4217146535751e73490f9dde678b6e9}\label{classopen__cpp__utils_1_1filesystem_ac4217146535751e73490f9dde678b6e9} 
+file\+\_\+id {\bfseries end} (file\+\_\+id) const
+\item 
+\Hypertarget{classopen__cpp__utils_1_1filesystem_adde187dab17551a650efcad74d76fb8d}\label{classopen__cpp__utils_1_1filesystem_adde187dab17551a650efcad74d76fb8d} 
+uint32\+\_\+t {\bfseries depth} (file\+\_\+id id) const
+\item 
+\Hypertarget{classopen__cpp__utils_1_1filesystem_a165a1bebcdee9832d4187db513a5e6ef}\label{classopen__cpp__utils_1_1filesystem_a165a1bebcdee9832d4187db513a5e6ef} 
+{\footnotesize template$<$typename O  = typename file\+\_\+tree\+::pre\+\_\+order, typename V $>$ }\\void {\bfseries traverse} (V \&visitor)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classopen__cpp__utils_1_1filesystem_ad092011f03c4ccca6b03bc90c5d46a4f}\label{classopen__cpp__utils_1_1filesystem_ad092011f03c4ccca6b03bc90c5d46a4f} 
+static constexpr file\+\_\+id {\bfseries root} = file\+\_\+tree\+::root
+\end{DoxyCompactItemize}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+filesystem.\+h\end{DoxyCompactItemize}

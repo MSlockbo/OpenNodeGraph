@@ -1,0 +1,542 @@
+\doxysection{directed\+\_\+tree.\+h}
+\hypertarget{directed__tree_8h_source}{}\label{directed__tree_8h_source}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//\ =====================================================================================================================}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ \ open-\/cpp-\/utils,\ an\ open-\/source\ cpp\ library\ with\ data\ structures\ that\ extend\ the\ STL.}}
+\DoxyCodeLine{00003\ \textcolor{comment}{//\ \ Copyright\ (C)\ 2024\ \ Medusa\ Slockbower}}
+\DoxyCodeLine{00004\ \textcolor{comment}{//}}
+\DoxyCodeLine{00005\ \textcolor{comment}{//\ \ This\ program\ is\ free\ software:\ you\ can\ redistribute\ it\ and/or\ modify}}
+\DoxyCodeLine{00006\ \textcolor{comment}{//\ \ it\ under\ the\ terms\ of\ the\ GNU\ General\ Public\ License\ as\ published\ by}}
+\DoxyCodeLine{00007\ \textcolor{comment}{//\ \ the\ Free\ Software\ Foundation,\ either\ version\ 3\ of\ the\ License,\ or}}
+\DoxyCodeLine{00008\ \textcolor{comment}{//\ \ (at\ your\ option)\ any\ later\ version.}}
+\DoxyCodeLine{00009\ \textcolor{comment}{//}}
+\DoxyCodeLine{00010\ \textcolor{comment}{//\ \ This\ program\ is\ distributed\ in\ the\ hope\ that\ it\ will\ be\ useful,}}
+\DoxyCodeLine{00011\ \textcolor{comment}{//\ \ but\ WITHOUT\ ANY\ WARRANTY;\ without\ even\ the\ implied\ warranty\ of}}
+\DoxyCodeLine{00012\ \textcolor{comment}{//\ \ MERCHANTABILITY\ or\ FITNESS\ FOR\ A\ PARTICULAR\ PURPOSE.\ \ See\ the}}
+\DoxyCodeLine{00013\ \textcolor{comment}{//\ \ GNU\ General\ Public\ License\ for\ more\ details.}}
+\DoxyCodeLine{00014\ \textcolor{comment}{//}}
+\DoxyCodeLine{00015\ \textcolor{comment}{//\ \ You\ should\ have\ received\ a\ copy\ of\ the\ GNU\ General\ Public\ License}}
+\DoxyCodeLine{00016\ \textcolor{comment}{//\ \ along\ with\ this\ program.\ \ If\ not,\ see\ <https://www.gnu.org/licenses/>.}}
+\DoxyCodeLine{00017\ \textcolor{comment}{//\ =====================================================================================================================}}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \textcolor{preprocessor}{\#ifndef\ OPEN\_CPP\_UTILS\_DIRECTED\_TREE\_H}}
+\DoxyCodeLine{00020\ \textcolor{preprocessor}{\#define\ OPEN\_CPP\_UTILS\_DIRECTED\_TREE\_H}}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ \textcolor{preprocessor}{\#include\ <vector>}}
+\DoxyCodeLine{00023\ \textcolor{preprocessor}{\#include\ <deque>}}
+\DoxyCodeLine{00024\ \textcolor{preprocessor}{\#include\ <algorithm>}}
+\DoxyCodeLine{00025\ \textcolor{preprocessor}{\#include\ <cstring>}}
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00027\ \textcolor{keyword}{namespace\ }open\_cpp\_utils}
+\DoxyCodeLine{00028\ \{}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00037\ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T,\ \textcolor{keyword}{class}\ Alloc\ =\ std::allocator<T>>}
+\DoxyCodeLine{00038\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classopen__cpp__utils_1_1directed__tree}{directed\_tree}}}
+\DoxyCodeLine{00039\ \{}
+\DoxyCodeLine{00040\ \textcolor{comment}{//\ Forward\ Definitions\ =================================================================================================}}
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00042\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00043\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{classopen__cpp__utils_1_1directed__tree_1_1breadth__first}{breadth\_first}};}
+\DoxyCodeLine{00044\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{classopen__cpp__utils_1_1directed__tree_1_1pre__order}{pre\_order}};}
+\DoxyCodeLine{00045\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{classopen__cpp__utils_1_1directed__tree_1_1in__order}{in\_order}};}
+\DoxyCodeLine{00046\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{classopen__cpp__utils_1_1directed__tree_1_1post__order}{post\_order}};}
+\DoxyCodeLine{00047\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{classopen__cpp__utils_1_1directed__tree_1_1unordered}{unordered}};}
+\DoxyCodeLine{00048\ }
+\DoxyCodeLine{00049\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00050\ \ \ \ \ \textcolor{keyword}{struct\ }Node\_;}
+\DoxyCodeLine{00051\ }
+\DoxyCodeLine{00052\ }
+\DoxyCodeLine{00053\ \textcolor{comment}{//\ Typedefs\ ============================================================================================================}}
+\DoxyCodeLine{00054\ }
+\DoxyCodeLine{00055\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00056\ \ \ \ \ \textcolor{keyword}{using\ }data\_type\ \ =\ T;}
+\DoxyCodeLine{00057\ \ \ \ \ \textcolor{keyword}{using\ }node\ \ \ \ \ \ \ =\ size\_t;}
+\DoxyCodeLine{00058\ \ \ \ \ \textcolor{keyword}{using\ }node\_queue\ =\ std::deque<node>;}
+\DoxyCodeLine{00059\ }
+\DoxyCodeLine{00060\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00061\ \ \ \ \ \textcolor{keyword}{using\ }s\_alloc\ \ \ =\ Alloc;}
+\DoxyCodeLine{00062\ \ \ \ \ \textcolor{keyword}{using\ }h\_alloc\ \ \ =\ \textcolor{keyword}{typename}\ std::allocator\_traits<s\_alloc>::template\ rebind\_alloc<Node\_>;\ \textcolor{comment}{//\ Gross}}
+\DoxyCodeLine{00063\ \ \ \ \ \textcolor{keyword}{using\ }hierarchy\ =\ Node\_*;}
+\DoxyCodeLine{00064\ \ \ \ \ \textcolor{keyword}{using\ }storage\ \ \ =\ data\_type*;}
+\DoxyCodeLine{00065\ }
+\DoxyCodeLine{00066\ }
+\DoxyCodeLine{00067\ \textcolor{comment}{//\ Constants\ ===========================================================================================================}}
+\DoxyCodeLine{00068\ }
+\DoxyCodeLine{00069\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00070\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ std::integral\_constant<node,\ 0>\ root\{\};}
+\DoxyCodeLine{00071\ }
+\DoxyCodeLine{00072\ }
+\DoxyCodeLine{00073\ \textcolor{comment}{//\ Data\ Structures\ =====================================================================================================}}
+\DoxyCodeLine{00074\ }
+\DoxyCodeLine{00075\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00076\ \ \ \ \ \textcolor{keyword}{struct\ }Node\_}
+\DoxyCodeLine{00077\ \ \ \ \ \{}
+\DoxyCodeLine{00078\ \ \ \ \ \ \ \ \ \textcolor{keyword}{enum}\ flags}
+\DoxyCodeLine{00079\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00080\ \ \ \ \ \ \ \ \ \ \ \ \ valid\ =\ 0x0001}
+\DoxyCodeLine{00081\ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{00082\ }
+\DoxyCodeLine{00083\ \ \ \ \ \ \ \ \ node\ parent,\ child,\ prev\_sibling,\ next\_sibling;}
+\DoxyCodeLine{00084\ \ \ \ \ \ \ \ \ uint32\_t\ flags,\ depth;}
+\DoxyCodeLine{00085\ }
+\DoxyCodeLine{00086\ \ \ \ \ \ \ \ \ Node\_()\ :\ parent(0),\ child(0),\ prev\_sibling(0),\ next\_sibling(0),\ flags(0),\ depth(0)\ \{\ \}}
+\DoxyCodeLine{00087\ \ \ \ \ \};}
+\DoxyCodeLine{00088\ }
+\DoxyCodeLine{00089\ }
+\DoxyCodeLine{00090\ \textcolor{comment}{//\ Functions\ ===========================================================================================================}}
+\DoxyCodeLine{00091\ }
+\DoxyCodeLine{00092\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00093\ }
+\DoxyCodeLine{00094\ \textcolor{comment}{//\ Helpers\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00095\ }
+\DoxyCodeLine{00096\ \ \ \ \ \textcolor{keywordtype}{void}\ grow\_()}
+\DoxyCodeLine{00097\ \ \ \ \ \{}
+\DoxyCodeLine{00098\ \ \ \ \ \ \ \ \ hierarchy\ g\_old\ =\ graph\_;}
+\DoxyCodeLine{00099\ \ \ \ \ \ \ \ \ storage\ \ \ d\_old\ =\ data\_;}
+\DoxyCodeLine{00100\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \ \ \ c\_old\ =\ capacity\_;}
+\DoxyCodeLine{00101\ }
+\DoxyCodeLine{00102\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(capacity\_\ ==\ 0)\ capacity\_\ \ =\ 10;}
+\DoxyCodeLine{00103\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ capacity\_\ *=\ 2;}
+\DoxyCodeLine{00104\ }
+\DoxyCodeLine{00105\ \ \ \ \ \ \ \ \ graph\_\ =\ g\_alloc\_.allocate(capacity\_);}
+\DoxyCodeLine{00106\ \ \ \ \ \ \ \ \ data\_\ \ =\ d\_alloc\_.allocate(capacity\_);}
+\DoxyCodeLine{00107\ }
+\DoxyCodeLine{00108\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(size\_\ >\ 0)}
+\DoxyCodeLine{00109\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00110\ \ \ \ \ \ \ \ \ \ \ \ \ std::memcpy(graph\_,\ g\_old,\ size\_\ *\ \textcolor{keyword}{sizeof}(Node\_));}
+\DoxyCodeLine{00111\ \ \ \ \ \ \ \ \ \ \ \ \ std::memcpy(data\_,\ \ d\_old,\ size\_\ *\ \textcolor{keyword}{sizeof}(data\_type));}
+\DoxyCodeLine{00112\ }
+\DoxyCodeLine{00113\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}(node\ i\ =\ size\_;\ i\ <\ capacity\_;\ ++i)}
+\DoxyCodeLine{00114\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00115\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ graph\_[i]\ =\ Node\_();}
+\DoxyCodeLine{00116\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::construct\_at(data\_\ +\ i);}
+\DoxyCodeLine{00117\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00118\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00119\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}}
+\DoxyCodeLine{00120\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00121\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}(node\ i\ =\ 0;\ i\ <\ capacity\_;\ ++i)}
+\DoxyCodeLine{00122\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00123\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ graph\_[i]\ =\ Node\_();}
+\DoxyCodeLine{00124\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::construct\_at(data\_\ +\ i);}
+\DoxyCodeLine{00125\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00126\ }
+\DoxyCodeLine{00127\ \ \ \ \ \ \ \ \ \ \ \ \ graph\_[0].flags\ =\ Node\_::valid;}
+\DoxyCodeLine{00128\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00129\ }
+\DoxyCodeLine{00130\ \ \ \ \ \ \ \ \ g\_alloc\_.deallocate(g\_old,\ c\_old);}
+\DoxyCodeLine{00131\ \ \ \ \ \ \ \ \ d\_alloc\_.deallocate(d\_old,\ c\_old);}
+\DoxyCodeLine{00132\ \ \ \ \ \}}
+\DoxyCodeLine{00133\ }
+\DoxyCodeLine{00134\ \ \ \ \ node\ push\_back\_(\textcolor{keyword}{const}\ data\_type\&\ data)}
+\DoxyCodeLine{00135\ \ \ \ \ \{}
+\DoxyCodeLine{00136\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(size\_\ >=\ capacity\_)\ grow\_();}
+\DoxyCodeLine{00137\ \ \ \ \ \ \ \ \ std::construct\_at(data\_\ +\ size\_,\ data);}
+\DoxyCodeLine{00138\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ size\_++;}
+\DoxyCodeLine{00139\ \ \ \ \ \}}
+\DoxyCodeLine{00140\ }
+\DoxyCodeLine{00141\ \ \ \ \ node\ push\_back\_(data\_type\&\&\ data)}
+\DoxyCodeLine{00142\ \ \ \ \ \{}
+\DoxyCodeLine{00143\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(size\_\ >=\ capacity\_)\ grow\_();}
+\DoxyCodeLine{00144\ \ \ \ \ \ \ \ \ std::construct\_at(data\_\ +\ size\_,\ std::forward<T>(data));}
+\DoxyCodeLine{00145\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ size\_++;}
+\DoxyCodeLine{00146\ \ \ \ \ \}}
+\DoxyCodeLine{00147\ \ \ \ \ }
+\DoxyCodeLine{00148\ }
+\DoxyCodeLine{00149\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00150\ }
+\DoxyCodeLine{00151\ \textcolor{comment}{//\ Constructors\ \&\ Destructor\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00152\ }
+\DoxyCodeLine{00156\ \ \ \ \ \mbox{\hyperlink{classopen__cpp__utils_1_1directed__tree_ae178a606c211c614ba7c6959de10ac82}{directed\_tree}}()}
+\DoxyCodeLine{00157\ \ \ \ \ \ \ \ \ :\ size\_(0),\ capacity\_(0)}
+\DoxyCodeLine{00158\ \ \ \ \ \ \ \ \ ,\ graph\_(nullptr),\ data\_(nullptr)}
+\DoxyCodeLine{00159\ \ \ \ \ \{\ push\_back\_(T());\ \}}
+\DoxyCodeLine{00160\ \ \ \ \ }
+\DoxyCodeLine{00161\ \ \ \ \ \mbox{\hyperlink{classopen__cpp__utils_1_1directed__tree_ae178a606c211c614ba7c6959de10ac82}{directed\_tree}}(data\_type\&\&\ data)}
+\DoxyCodeLine{00162\ \ \ \ \ \ \ \ \ :\ size\_(0),\ capacity\_(0)}
+\DoxyCodeLine{00163\ \ \ \ \ \ \ \ \ ,\ graph\_(nullptr),\ data\_(nullptr)}
+\DoxyCodeLine{00164\ \ \ \ \ \{\ push\_back\_(std::forward<T>(data));\ \}}
+\DoxyCodeLine{00165\ \ \ \ \ }
+\DoxyCodeLine{00166\ \ \ \ \ \mbox{\hyperlink{classopen__cpp__utils_1_1directed__tree_ae178a606c211c614ba7c6959de10ac82}{directed\_tree}}(\textcolor{keyword}{const}\ data\_type\&\ data)}
+\DoxyCodeLine{00167\ \ \ \ \ \ \ \ \ :\ size\_(0),\ capacity\_(0)}
+\DoxyCodeLine{00168\ \ \ \ \ \ \ \ \ ,\ graph\_(nullptr),\ data\_(nullptr)}
+\DoxyCodeLine{00169\ \ \ \ \ \{\ push\_back\_(data);\ \}}
+\DoxyCodeLine{00170\ }
+\DoxyCodeLine{00171\ \ \ \ \ \string~directed\_tree()\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00172\ }
+\DoxyCodeLine{00173\ }
+\DoxyCodeLine{00174\ \textcolor{comment}{//\ Tree\ Navigation\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00175\ }
+\DoxyCodeLine{00181\ \ \ \ \ [[nodiscard]]\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classopen__cpp__utils_1_1directed__tree_aac38b40db651e5687e663bdd303e8886}{valid}}(node\ \textcolor{keywordtype}{id})\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ graph\_\ ?\ graph\_[id].flags\ \&\ Node\_::valid\ :\ \textcolor{keyword}{false};\ \}}
+\DoxyCodeLine{00182\ }
+\DoxyCodeLine{00188\ \ \ \ \ [[nodiscard]]\ node\ \mbox{\hyperlink{classopen__cpp__utils_1_1directed__tree_a10f828e98ef3d5ce490a603e4045a736}{parent}}(node\ \textcolor{keywordtype}{id})\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ graph\_\ ?\ graph\_[id].parent\ :\ 0;\ \}}
+\DoxyCodeLine{00189\ }
+\DoxyCodeLine{00195\ \ \ \ \ [[nodiscard]]\ node\ \mbox{\hyperlink{classopen__cpp__utils_1_1directed__tree_a1ee24c2a22978b8c3f990292baa88e6a}{first\_child}}(node\ \textcolor{keywordtype}{id})\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ graph\_\ ?\ graph\_[id].child\ :\ 0;\ \}}
+\DoxyCodeLine{00196\ }
+\DoxyCodeLine{00202\ \ \ \ \ [[nodiscard]]\ node\ \mbox{\hyperlink{classopen__cpp__utils_1_1directed__tree_a6339dd5e1b6f6c8d55e939a7f0feb355}{last\_child}}(node\ \textcolor{keywordtype}{id})\textcolor{keyword}{\ const}}
+\DoxyCodeLine{00203\ \textcolor{keyword}{\ \ \ \ }\{}
+\DoxyCodeLine{00204\ \ \ \ \ \ \ \ \ node\ c\ =\ \mbox{\hyperlink{classopen__cpp__utils_1_1directed__tree_a1ee24c2a22978b8c3f990292baa88e6a}{first\_child}}(\textcolor{keywordtype}{id});}
+\DoxyCodeLine{00205\ }
+\DoxyCodeLine{00206\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{while}(c\ !=\ 0)\ \{\ \textcolor{keywordflow}{if}(graph\_[c].\mbox{\hyperlink{classopen__cpp__utils_1_1directed__tree_a2dbfd46238b9c9941902e3e8a326db69}{next\_sibling}}\ ==\ 0)\ \textcolor{keywordflow}{break};\ c\ =\ graph\_[c].next\_sibling;\ \}}
+\DoxyCodeLine{00207\ }
+\DoxyCodeLine{00208\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ c;}
+\DoxyCodeLine{00209\ \ \ \ \ \}}
+\DoxyCodeLine{00210\ }
+\DoxyCodeLine{00216\ \ \ \ \ [[nodiscard]]\ node\ \mbox{\hyperlink{classopen__cpp__utils_1_1directed__tree_a06b775a2fa9d970b029bdc3a22d561bf}{prev\_sibling}}(node\ \textcolor{keywordtype}{id})\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ graph\_[id].prev\_sibling;\ \}}
+\DoxyCodeLine{00217\ }
+\DoxyCodeLine{00223\ \ \ \ \ [[nodiscard]]\ node\ \mbox{\hyperlink{classopen__cpp__utils_1_1directed__tree_a2dbfd46238b9c9941902e3e8a326db69}{next\_sibling}}(node\ \textcolor{keywordtype}{id})\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ graph\_[id].next\_sibling;\ \}}
+\DoxyCodeLine{00224\ }
+\DoxyCodeLine{00230\ \ \ \ \ [[nodiscard]]\ node\ \mbox{\hyperlink{classopen__cpp__utils_1_1directed__tree_a38cbac2c1dcd82e0f1984a2ab4ccaeb4}{left\_most}}(node\ \textcolor{keywordtype}{id})\textcolor{keyword}{\ const}}
+\DoxyCodeLine{00231\ \textcolor{keyword}{\ \ \ \ }\{}
+\DoxyCodeLine{00232\ \ \ \ \ \ \ \ \ node\ current\ =\ id;}
+\DoxyCodeLine{00233\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{while}(\textcolor{keywordtype}{id}\ =\ \mbox{\hyperlink{classopen__cpp__utils_1_1directed__tree_a1ee24c2a22978b8c3f990292baa88e6a}{first\_child}}(current))\ current\ =\ id;}
+\DoxyCodeLine{00234\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ current;}
+\DoxyCodeLine{00235\ \ \ \ \ \}}
+\DoxyCodeLine{00236\ }
+\DoxyCodeLine{00242\ \ \ \ \ [[nodiscard]]\ uint32\_t\ \mbox{\hyperlink{classopen__cpp__utils_1_1directed__tree_a14bebe19888219ebef3c25076ac7e739}{depth}}(node\ \textcolor{keywordtype}{id})\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ graph\_[id].depth;\ \}}
+\DoxyCodeLine{00243\ }
+\DoxyCodeLine{00244\ }
+\DoxyCodeLine{00245\ \textcolor{comment}{//\ Tree\ Modification\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00246\ }
+\DoxyCodeLine{00251\ \ \ \ \ node\ \mbox{\hyperlink{classopen__cpp__utils_1_1directed__tree_a9f469505ca6dd336e16bf1fa756491a1}{next\_id}}()\textcolor{keyword}{\ const}}
+\DoxyCodeLine{00252\ \textcolor{keyword}{\ \ \ \ }\{}
+\DoxyCodeLine{00253\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(freed\_.empty())\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast<}node\textcolor{keyword}{>}(size\_);}
+\DoxyCodeLine{00254\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ freed\_.front();}
+\DoxyCodeLine{00255\ \ \ \ \ \}}
+\DoxyCodeLine{00256\ }
+\DoxyCodeLine{00264\ \ \ \ \ node\ \mbox{\hyperlink{classopen__cpp__utils_1_1directed__tree_af9d76505db29e4e7e1bbad14bd5e4998}{insert}}(\textcolor{keyword}{const}\ data\_type\&\ data,\ node\ p\_id,\ node\ sib\ =\ 0)}
+\DoxyCodeLine{00265\ \ \ \ \ \{}
+\DoxyCodeLine{00266\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ If\ there\ are\ no\ freed\ nodes,\ create\ a\ new\ node\ and\ mark\ it\ as\ freed}}
+\DoxyCodeLine{00267\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(freed\_.empty())}
+\DoxyCodeLine{00268\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00269\ \ \ \ \ \ \ \ \ \ \ \ \ freed\_.push\_back(push\_back\_(std::forward<T>(data)));}
+\DoxyCodeLine{00270\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00271\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}}
+\DoxyCodeLine{00272\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00273\ \ \ \ \ \ \ \ \ \ \ \ \ std::construct\_at(data\_\ +\ freed\_.front(),\ std::forward<T>(data));}
+\DoxyCodeLine{00274\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00275\ }
+\DoxyCodeLine{00276\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Pop\ a\ freed\ node\ from\ the\ stack}}
+\DoxyCodeLine{00277\ \ \ \ \ \ \ \ \ node\ \textcolor{keywordtype}{id}\ \ \ =\ freed\_.front();\ freed\_.pop\_front();}
+\DoxyCodeLine{00278\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ back\ =\ sib\ ==\ 0;}
+\DoxyCodeLine{00279\ \ \ \ \ \ \ \ \ node\ s\_id\ =\ back\ ?\ \mbox{\hyperlink{classopen__cpp__utils_1_1directed__tree_a6339dd5e1b6f6c8d55e939a7f0feb355}{last\_child}}(p\_id)\ :\ sib;}
+\DoxyCodeLine{00280\ \ \ \ \ \ \ \ \ Node\_\&\ node\ \ \ =\ graph\_[id];}
+\DoxyCodeLine{00281\ \ \ \ \ \ \ \ \ Node\_\&\ \mbox{\hyperlink{classopen__cpp__utils_1_1directed__tree_a10f828e98ef3d5ce490a603e4045a736}{parent}}\ =\ graph\_[p\_id];}
+\DoxyCodeLine{00282\ }
+\DoxyCodeLine{00283\ \ \ \ \ \ \ \ \ Node\_\&\ sibling\ =\ graph\_[s\_id];}
+\DoxyCodeLine{00284\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(\mbox{\hyperlink{classopen__cpp__utils_1_1directed__tree_a10f828e98ef3d5ce490a603e4045a736}{parent}}.child\ ==\ root\ ||\ (s\_id\ ==\ \mbox{\hyperlink{classopen__cpp__utils_1_1directed__tree_a10f828e98ef3d5ce490a603e4045a736}{parent}}.child\ \&\&\ !back))\ \mbox{\hyperlink{classopen__cpp__utils_1_1directed__tree_a10f828e98ef3d5ce490a603e4045a736}{parent}}.child\ =\ id;}
+\DoxyCodeLine{00285\ }
+\DoxyCodeLine{00286\ \ \ \ \ \ \ \ \ node.next\_sibling\ =\ node.prev\_sibling\ =\ 0;}
+\DoxyCodeLine{00287\ \ \ \ \ \ \ \ \ node.parent\ =\ p\_id;}
+\DoxyCodeLine{00288\ \ \ \ \ \ \ \ \ node.depth\ =\ \mbox{\hyperlink{classopen__cpp__utils_1_1directed__tree_a10f828e98ef3d5ce490a603e4045a736}{parent}}.depth\ +\ 1;}
+\DoxyCodeLine{00289\ \ \ \ \ \ \ \ \ node.flags\ =\ Node\_::valid;}
+\DoxyCodeLine{00290\ \ \ \ \ \ \ \ \ node.child\ =\ 0;}
+\DoxyCodeLine{00291\ }
+\DoxyCodeLine{00292\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(s\_id\ ==\ 0)\ \textcolor{keywordflow}{return}\ id;}
+\DoxyCodeLine{00293\ }
+\DoxyCodeLine{00294\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(back)}
+\DoxyCodeLine{00295\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00296\ \ \ \ \ \ \ \ \ \ \ \ \ node.next\_sibling\ =\ sibling.next\_sibling;}
+\DoxyCodeLine{00297\ \ \ \ \ \ \ \ \ \ \ \ \ node.prev\_sibling\ =\ s\_id;}
+\DoxyCodeLine{00298\ }
+\DoxyCodeLine{00299\ \ \ \ \ \ \ \ \ \ \ \ \ sibling.next\_sibling\ =\ id;}
+\DoxyCodeLine{00300\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00301\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}}
+\DoxyCodeLine{00302\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00303\ \ \ \ \ \ \ \ \ \ \ \ \ node.next\_sibling\ =\ s\_id;}
+\DoxyCodeLine{00304\ \ \ \ \ \ \ \ \ \ \ \ \ node.prev\_sibling\ =\ sibling.prev\_sibling;}
+\DoxyCodeLine{00305\ }
+\DoxyCodeLine{00306\ \ \ \ \ \ \ \ \ \ \ \ \ sibling.prev\_sibling\ =\ id;}
+\DoxyCodeLine{00307\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00308\ }
+\DoxyCodeLine{00309\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ id;}
+\DoxyCodeLine{00310\ \ \ \ \ \}}
+\DoxyCodeLine{00311\ }
+\DoxyCodeLine{00319\ \ \ \ \ node\ \mbox{\hyperlink{classopen__cpp__utils_1_1directed__tree_acc834118457f713918dc864e3c5dc9a6}{insert}}(data\_type\&\&\ data,\ node\ p\_id,\ node\ sib\ =\ root)}
+\DoxyCodeLine{00320\ \ \ \ \ \{}
+\DoxyCodeLine{00321\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ If\ there\ are\ no\ freed\ nodes,\ create\ a\ new\ node\ and\ mark\ it\ as\ freed}}
+\DoxyCodeLine{00322\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(freed\_.empty())}
+\DoxyCodeLine{00323\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00324\ \ \ \ \ \ \ \ \ \ \ \ \ freed\_.push\_back(push\_back\_(std::forward<T>(data)));}
+\DoxyCodeLine{00325\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00326\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}}
+\DoxyCodeLine{00327\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00328\ \ \ \ \ \ \ \ \ \ \ \ \ std::construct\_at(data\_\ +\ freed\_.front(),\ std::forward<T>(data));}
+\DoxyCodeLine{00329\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00330\ }
+\DoxyCodeLine{00331\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Pop\ a\ freed\ node\ from\ the\ stack}}
+\DoxyCodeLine{00332\ \ \ \ \ \ \ \ \ node\ \textcolor{keywordtype}{id}\ \ \ =\ freed\_.front();\ freed\_.pop\_front();}
+\DoxyCodeLine{00333\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ back\ =\ sib\ ==\ root;}
+\DoxyCodeLine{00334\ \ \ \ \ \ \ \ \ node\ s\_id\ =\ back\ ?\ \mbox{\hyperlink{classopen__cpp__utils_1_1directed__tree_a6339dd5e1b6f6c8d55e939a7f0feb355}{last\_child}}(p\_id)\ :\ sib;}
+\DoxyCodeLine{00335\ \ \ \ \ \ \ \ \ Node\_\&\ node\ \ \ =\ graph\_[id];}
+\DoxyCodeLine{00336\ \ \ \ \ \ \ \ \ Node\_\&\ \mbox{\hyperlink{classopen__cpp__utils_1_1directed__tree_a10f828e98ef3d5ce490a603e4045a736}{parent}}\ =\ graph\_[p\_id];}
+\DoxyCodeLine{00337\ }
+\DoxyCodeLine{00338\ \ \ \ \ \ \ \ \ Node\_\&\ sibling\ =\ graph\_[s\_id];}
+\DoxyCodeLine{00339\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(\mbox{\hyperlink{classopen__cpp__utils_1_1directed__tree_a10f828e98ef3d5ce490a603e4045a736}{parent}}.child\ ==\ root\ ||\ (s\_id\ ==\ \mbox{\hyperlink{classopen__cpp__utils_1_1directed__tree_a10f828e98ef3d5ce490a603e4045a736}{parent}}.child\ \&\&\ !back))\ \mbox{\hyperlink{classopen__cpp__utils_1_1directed__tree_a10f828e98ef3d5ce490a603e4045a736}{parent}}.child\ =\ id;}
+\DoxyCodeLine{00340\ }
+\DoxyCodeLine{00341\ \ \ \ \ \ \ \ \ node.next\_sibling\ =\ node.prev\_sibling\ =\ 0;}
+\DoxyCodeLine{00342\ \ \ \ \ \ \ \ \ node.parent\ =\ p\_id;}
+\DoxyCodeLine{00343\ \ \ \ \ \ \ \ \ node.depth\ =\ \mbox{\hyperlink{classopen__cpp__utils_1_1directed__tree_a10f828e98ef3d5ce490a603e4045a736}{parent}}.depth\ +\ 1;}
+\DoxyCodeLine{00344\ \ \ \ \ \ \ \ \ node.flags\ =\ Node\_::valid;}
+\DoxyCodeLine{00345\ \ \ \ \ \ \ \ \ node.child\ =\ 0;}
+\DoxyCodeLine{00346\ }
+\DoxyCodeLine{00347\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(s\_id\ ==\ 0)\ \textcolor{keywordflow}{return}\ id;}
+\DoxyCodeLine{00348\ }
+\DoxyCodeLine{00349\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(back)}
+\DoxyCodeLine{00350\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00351\ \ \ \ \ \ \ \ \ \ \ \ \ node.next\_sibling\ =\ sibling.next\_sibling;}
+\DoxyCodeLine{00352\ \ \ \ \ \ \ \ \ \ \ \ \ node.prev\_sibling\ =\ s\_id;}
+\DoxyCodeLine{00353\ }
+\DoxyCodeLine{00354\ \ \ \ \ \ \ \ \ \ \ \ \ sibling.next\_sibling\ =\ id;}
+\DoxyCodeLine{00355\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00356\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}}
+\DoxyCodeLine{00357\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00358\ \ \ \ \ \ \ \ \ \ \ \ \ node.next\_sibling\ =\ s\_id;}
+\DoxyCodeLine{00359\ \ \ \ \ \ \ \ \ \ \ \ \ node.prev\_sibling\ =\ sibling.prev\_sibling;}
+\DoxyCodeLine{00360\ }
+\DoxyCodeLine{00361\ \ \ \ \ \ \ \ \ \ \ \ \ sibling.prev\_sibling\ =\ id;}
+\DoxyCodeLine{00362\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00363\ }
+\DoxyCodeLine{00364\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ id;}
+\DoxyCodeLine{00365\ \ \ \ \ \}}
+\DoxyCodeLine{00366\ }
+\DoxyCodeLine{00367\ \ \ \ \ \textcolor{keywordtype}{void}\ swap(node\ a,\ node\ b)}
+\DoxyCodeLine{00368\ \ \ \ \ \{}
+\DoxyCodeLine{00369\ \ \ \ \ \ \ \ \ Node\_\&\ A\ =\ graph\_[a];}
+\DoxyCodeLine{00370\ \ \ \ \ \ \ \ \ Node\_\&\ B\ =\ graph\_[b];}
+\DoxyCodeLine{00371\ }
+\DoxyCodeLine{00372\ \ \ \ \ \ \ \ \ std::swap(A,\ B);}
+\DoxyCodeLine{00373\ }
+\DoxyCodeLine{00374\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(graph\_[B.parent].child\ ==\ a)\ graph\_[B.parent].child\ =\ b;}
+\DoxyCodeLine{00375\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(graph\_[A.parent].child\ ==\ b)\ graph\_[A.parent].child\ =\ a;}
+\DoxyCodeLine{00376\ \ \ \ \ \}}
+\DoxyCodeLine{00377\ }
+\DoxyCodeLine{00378\ \ \ \ \ \textcolor{keywordtype}{void}\ clear()}
+\DoxyCodeLine{00379\ \ \ \ \ \{}
+\DoxyCodeLine{00380\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <\ size\_;\ ++i)}
+\DoxyCodeLine{00381\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00382\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(\mbox{\hyperlink{classopen__cpp__utils_1_1directed__tree_aac38b40db651e5687e663bdd303e8886}{valid}}(i)\ ==\ \textcolor{keyword}{false})\ \textcolor{keywordflow}{continue};}
+\DoxyCodeLine{00383\ }
+\DoxyCodeLine{00384\ \ \ \ \ \ \ \ \ \ \ \ \ graph\_[i].flags\ =\ 0;}
+\DoxyCodeLine{00385\ \ \ \ \ \ \ \ \ \ \ \ \ std::destroy\_at(data\_\ +\ i);}
+\DoxyCodeLine{00386\ \ \ \ \ \ \ \ \ \ \ \ \ freed\_.push\_back(i);}
+\DoxyCodeLine{00387\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00388\ }
+\DoxyCodeLine{00389\ \ \ \ \ \ \ \ \ g\_alloc\_.deallocate(graph\_,\ capacity\_);}
+\DoxyCodeLine{00390\ \ \ \ \ \ \ \ \ d\_alloc\_.deallocate(data\_,\ capacity\_);}
+\DoxyCodeLine{00391\ \ \ \ \ \ \ \ \ capacity\_\ =\ 0;\ size\_\ =\ 0;}
+\DoxyCodeLine{00392\ \ \ \ \ \}}
+\DoxyCodeLine{00393\ }
+\DoxyCodeLine{00398\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classopen__cpp__utils_1_1directed__tree_aafd1b11a9b14342a7d3f46c8c43451f2}{erase}}(node\ \textcolor{keywordtype}{id})}
+\DoxyCodeLine{00399\ \ \ \ \ \{}
+\DoxyCodeLine{00400\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(\textcolor{keywordtype}{id}\ ==\ root)\ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00401\ }
+\DoxyCodeLine{00402\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Mark\ node\ as\ invalid\ and\ push\ it\ to\ the\ freed\ list}}
+\DoxyCodeLine{00403\ \ \ \ \ \ \ \ \ Node\_\&\ erased\ =\ graph\_[id];}
+\DoxyCodeLine{00404\ \ \ \ \ \ \ \ \ erased.flags\ =\ 0;}
+\DoxyCodeLine{00405\ \ \ \ \ \ \ \ \ freed\_.push\_back(\textcolor{keywordtype}{id});}
+\DoxyCodeLine{00406\ \ \ \ \ \ \ \ \ std::destroy\_at(data\_\ +\ \textcolor{keywordtype}{id});}
+\DoxyCodeLine{00407\ }
+\DoxyCodeLine{00408\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Update\ the\ parent's\ child}}
+\DoxyCodeLine{00409\ \ \ \ \ \ \ \ \ graph\_[erased.parent].child\ =\ erased.next\_sibling;}
+\DoxyCodeLine{00410\ }
+\DoxyCodeLine{00411\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Update\ siblings}}
+\DoxyCodeLine{00412\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(erased.next\_sibling)\ graph\_[erased.next\_sibling].prev\_sibling\ =\ erased.prev\_sibling;}
+\DoxyCodeLine{00413\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(erased.prev\_sibling)\ graph\_[erased.prev\_sibling].next\_sibling\ =\ erased.next\_sibling;}
+\DoxyCodeLine{00414\ }
+\DoxyCodeLine{00415\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Erase\ children\ -\/\ essentially\ breadth\ first\ propagation\ down\ the\ tree}}
+\DoxyCodeLine{00416\ \ \ \ \ \ \ \ \ node\_queue\ stack\{\ erased.child\ \};}
+\DoxyCodeLine{00417\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{while}(stack.empty()\ ==\ \textcolor{keyword}{false})}
+\DoxyCodeLine{00418\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00419\ \ \ \ \ \ \ \ \ \ \ \ \ node\ next\ =\ stack.front();\ stack.pop\_front();}
+\DoxyCodeLine{00420\ \ \ \ \ \ \ \ \ \ \ \ \ Node\_\&\ child\ =\ graph\_[next];}
+\DoxyCodeLine{00421\ \ \ \ \ \ \ \ \ \ \ \ \ child.flags\ =\ 0;}
+\DoxyCodeLine{00422\ \ \ \ \ \ \ \ \ \ \ \ \ freed\_.push\_back(next);}
+\DoxyCodeLine{00423\ \ \ \ \ \ \ \ \ \ \ \ \ std::destroy\_at(data\_\ +\ next);}
+\DoxyCodeLine{00424\ }
+\DoxyCodeLine{00425\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(child.next\_sibling)\ stack.push\_front(child.next\_sibling);}
+\DoxyCodeLine{00426\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(child.child)\ \ \ \ \ \ \ \ stack.push\_front(child.child);}
+\DoxyCodeLine{00427\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00428\ \ \ \ \ \}}
+\DoxyCodeLine{00429\ }
+\DoxyCodeLine{00430\ }
+\DoxyCodeLine{00431\ \textcolor{comment}{//\ Tree\ Access\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00432\ }
+\DoxyCodeLine{00438\ \ \ \ \ data\_type\&\ \mbox{\hyperlink{classopen__cpp__utils_1_1directed__tree_a75a113b0542210c67d5ee1039b37dcca}{operator[]}}(node\ \textcolor{keywordtype}{id})\ \{\ \textcolor{keywordflow}{return}\ data\_[id];\ \}}
+\DoxyCodeLine{00439\ }
+\DoxyCodeLine{00445\ \ \ \ \ [[nodiscard]]\ \textcolor{keyword}{const}\ data\_type\&\ \mbox{\hyperlink{classopen__cpp__utils_1_1directed__tree_a5ea177cf14e05db354550b59df307f67}{operator[]}}(node\ \textcolor{keywordtype}{id})\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ data\_[id];\ \}}
+\DoxyCodeLine{00446\ }
+\DoxyCodeLine{00447\ }
+\DoxyCodeLine{00448\ \textcolor{comment}{//\ Visitor\ Pattern\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00449\ }
+\DoxyCodeLine{00456\ \ \ \ \ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ O\ =\ pre\_order,\ \textcolor{keyword}{typename}\ V>}
+\DoxyCodeLine{00457\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classopen__cpp__utils_1_1directed__tree_ad6ac014058e9ef045c979f76a96c0b37}{traverse}}(V\&\ visitor)}
+\DoxyCodeLine{00458\ \ \ \ \ \{}
+\DoxyCodeLine{00459\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classopen__cpp__utils_1_1directed__tree_1_1traverser}{traverser<V,\ O>}}\ \mbox{\hyperlink{classopen__cpp__utils_1_1directed__tree_1_1traverser}{traverser}}(*\textcolor{keyword}{this},\ visitor);}
+\DoxyCodeLine{00460\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classopen__cpp__utils_1_1directed__tree_1_1traverser}{traverser}}();}
+\DoxyCodeLine{00461\ \ \ \ \ \}}
+\DoxyCodeLine{00462\ }
+\DoxyCodeLine{00463\ }
+\DoxyCodeLine{00464\ \textcolor{comment}{//\ Variables\ =======================================================================================================}}
+\DoxyCodeLine{00465\ }
+\DoxyCodeLine{00466\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00467\ \ \ \ \ h\_alloc\ \ \ g\_alloc\_;}
+\DoxyCodeLine{00468\ \ \ \ \ s\_alloc\ \ \ d\_alloc\_;}
+\DoxyCodeLine{00469\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \ \ \ size\_,\ capacity\_;}
+\DoxyCodeLine{00470\ \ \ \ \ hierarchy\ graph\_;}
+\DoxyCodeLine{00471\ \ \ \ \ storage\ \ \ data\_;}
+\DoxyCodeLine{00472\ \ \ \ \ node\_queue\ freed\_;}
+\DoxyCodeLine{00473\ }
+\DoxyCodeLine{00474\ }
+\DoxyCodeLine{00475\ \textcolor{comment}{//\ Navigation\ ======================================================================================================}}
+\DoxyCodeLine{00476\ }
+\DoxyCodeLine{00477\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00478\ }
+\DoxyCodeLine{00479\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{classopen__cpp__utils_1_1directed__tree_1_1unordered}{unordered}}}
+\DoxyCodeLine{00480\ \ \ \ \ \{}
+\DoxyCodeLine{00481\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00482\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classopen__cpp__utils_1_1directed__tree_1_1unordered}{unordered}}(\mbox{\hyperlink{classopen__cpp__utils_1_1directed__tree}{directed\_tree}}\&\ graph)\ :\ graph\_(graph),\ current\_(root)\ \{\ \}}
+\DoxyCodeLine{00483\ }
+\DoxyCodeLine{00484\ \ \ \ \ \ \ \ \ node\ operator()(node\ \textcolor{keywordtype}{id})}
+\DoxyCodeLine{00485\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00486\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{while}(!graph\_.valid(current\_)\ ||\ current\_\ ==\ root)}
+\DoxyCodeLine{00487\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00488\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ++current\_;}
+\DoxyCodeLine{00489\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00490\ }
+\DoxyCodeLine{00491\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{id}\ =\ current\_;}
+\DoxyCodeLine{00492\ \ \ \ \ \ \ \ \ \ \ \ \ current\_\ ++;}
+\DoxyCodeLine{00493\ }
+\DoxyCodeLine{00494\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keywordtype}{id}\ ==\ graph\_.graph\_.size()\ ?\ 0\ :\ id;}
+\DoxyCodeLine{00495\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00496\ }
+\DoxyCodeLine{00497\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00498\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classopen__cpp__utils_1_1directed__tree}{directed\_tree}}\&\ graph\_;}
+\DoxyCodeLine{00499\ \ \ \ \ \ \ \ \ node\ \ \ \ \ \ \ \ \ \ \ current\_;}
+\DoxyCodeLine{00500\ \ \ \ \ \};}
+\DoxyCodeLine{00501\ }
+\DoxyCodeLine{00505\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{classopen__cpp__utils_1_1directed__tree_1_1breadth__first}{breadth\_first}}}
+\DoxyCodeLine{00506\ \ \ \ \ \{}
+\DoxyCodeLine{00507\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00508\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classopen__cpp__utils_1_1directed__tree_1_1breadth__first}{breadth\_first}}(\mbox{\hyperlink{classopen__cpp__utils_1_1directed__tree}{directed\_tree}}\&\ graph)\ :\ graph\_(graph),\ visit\_queue\_(0)\ \{\ \}}
+\DoxyCodeLine{00509\ }
+\DoxyCodeLine{00510\ \ \ \ \ \ \ \ \ node\ operator()(node\ \textcolor{keywordtype}{id})}
+\DoxyCodeLine{00511\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00512\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{id}\ =\ visit\_queue\_.back();\ visit\_queue\_.pop\_back();}
+\DoxyCodeLine{00513\ \ \ \ \ \ \ \ \ \ \ \ \ Node\_\&\ current\ =\ graph\_.graph\_[id];}
+\DoxyCodeLine{00514\ }
+\DoxyCodeLine{00515\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(current.next\_sibling)\ visit\_queue\_.push\_back(current.next\_sibling);}
+\DoxyCodeLine{00516\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(current.child)\ visit\_queue\_.push\_front(current.child);}
+\DoxyCodeLine{00517\ }
+\DoxyCodeLine{00518\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(visit\_queue\_.empty())\ \textcolor{keywordflow}{return}\ 0;}
+\DoxyCodeLine{00519\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ id;}
+\DoxyCodeLine{00520\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00521\ }
+\DoxyCodeLine{00522\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00523\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classopen__cpp__utils_1_1directed__tree}{directed\_tree}}\&\ graph\_;}
+\DoxyCodeLine{00524\ \ \ \ \ \ \ \ \ node\_queue\ \ \ \ \ \ visit\_queue\_;}
+\DoxyCodeLine{00525\ \ \ \ \ \};}
+\DoxyCodeLine{00526\ }
+\DoxyCodeLine{00527\ }
+\DoxyCodeLine{00531\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{classopen__cpp__utils_1_1directed__tree_1_1pre__order}{pre\_order}}}
+\DoxyCodeLine{00532\ \ \ \ \ \{}
+\DoxyCodeLine{00533\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00534\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classopen__cpp__utils_1_1directed__tree_1_1pre__order}{pre\_order}}(\mbox{\hyperlink{classopen__cpp__utils_1_1directed__tree}{directed\_tree}}\&\ graph)\ :\ graph\_(graph)\ \{\ \}}
+\DoxyCodeLine{00535\ }
+\DoxyCodeLine{00536\ \ \ \ \ \ \ \ \ node\ operator()(node\ \textcolor{keywordtype}{id})}
+\DoxyCodeLine{00537\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00538\ \ \ \ \ \ \ \ \ \ \ \ \ Node\_\&\ current\ =\ graph\_.graph\_[id];}
+\DoxyCodeLine{00539\ }
+\DoxyCodeLine{00540\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(current.next\_sibling)\ visit\_queue\_.push\_front(current.next\_sibling);}
+\DoxyCodeLine{00541\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(current.child)\ visit\_queue\_.push\_front(current.child);}
+\DoxyCodeLine{00542\ }
+\DoxyCodeLine{00543\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(visit\_queue\_.empty())\ \textcolor{keywordflow}{return}\ 0;}
+\DoxyCodeLine{00544\ \ \ \ \ \ \ \ \ \ \ \ \ node\ next\ =\ visit\_queue\_.front();\ visit\_queue\_.pop\_front();}
+\DoxyCodeLine{00545\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ next;}
+\DoxyCodeLine{00546\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00547\ }
+\DoxyCodeLine{00548\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00549\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classopen__cpp__utils_1_1directed__tree}{directed\_tree}}\&\ graph\_;}
+\DoxyCodeLine{00550\ \ \ \ \ \ \ \ \ node\_queue\ \ \ \ \ \ visit\_queue\_;}
+\DoxyCodeLine{00551\ \ \ \ \ \};}
+\DoxyCodeLine{00552\ }
+\DoxyCodeLine{00553\ }
+\DoxyCodeLine{00557\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{classopen__cpp__utils_1_1directed__tree_1_1in__order}{in\_order}}}
+\DoxyCodeLine{00558\ \ \ \ \ \{}
+\DoxyCodeLine{00559\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00560\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classopen__cpp__utils_1_1directed__tree_1_1in__order}{in\_order}}(\mbox{\hyperlink{classopen__cpp__utils_1_1directed__tree}{directed\_tree}}\&\ graph)\ :\ graph\_(graph)\ \{\ \}}
+\DoxyCodeLine{00561\ }
+\DoxyCodeLine{00562\ \ \ \ \ \ \ \ \ node\ operator()(node\ \textcolor{keywordtype}{id})}
+\DoxyCodeLine{00563\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00564\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(\textcolor{keywordtype}{id}\ ==\ 0)\ visit\_queue\_.push\_back(graph\_.left\_most(\textcolor{keywordtype}{id}));}
+\DoxyCodeLine{00565\ }
+\DoxyCodeLine{00566\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{id}\ =\ visit\_queue\_.front();\ visit\_queue\_.pop\_front();}
+\DoxyCodeLine{00567\ \ \ \ \ \ \ \ \ \ \ \ \ Node\_\&\ current\ =\ graph\_.graph\_[id];}
+\DoxyCodeLine{00568\ }
+\DoxyCodeLine{00569\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(current.Sibling)}
+\DoxyCodeLine{00570\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00571\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(graph\_.next\_sibling(current.Sibling))\ visit\_queue\_.push\_back(current.parent);}
+\DoxyCodeLine{00572\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ visit\_queue\_.push\_back(graph\_.left\_most(current.Sibling));}
+\DoxyCodeLine{00573\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00574\ }
+\DoxyCodeLine{00575\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ id;}
+\DoxyCodeLine{00576\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00577\ }
+\DoxyCodeLine{00578\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00579\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classopen__cpp__utils_1_1directed__tree}{directed\_tree}}\&\ graph\_;}
+\DoxyCodeLine{00580\ \ \ \ \ \ \ \ \ node\_queue\ \ \ \ \ \ visit\_queue\_;}
+\DoxyCodeLine{00581\ \ \ \ \ \};}
+\DoxyCodeLine{00582\ }
+\DoxyCodeLine{00583\ }
+\DoxyCodeLine{00587\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{classopen__cpp__utils_1_1directed__tree_1_1post__order}{post\_order}}}
+\DoxyCodeLine{00588\ \ \ \ \ \{}
+\DoxyCodeLine{00589\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00590\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classopen__cpp__utils_1_1directed__tree_1_1post__order}{post\_order}}(\mbox{\hyperlink{classopen__cpp__utils_1_1directed__tree}{directed\_tree}}\&\ graph)\ :\ graph\_(graph)\ \{\ \}}
+\DoxyCodeLine{00591\ }
+\DoxyCodeLine{00592\ \ \ \ \ \ \ \ \ node\ operator()(node\ \textcolor{keywordtype}{id})}
+\DoxyCodeLine{00593\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00594\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(visit\_queue\_.empty())\ visit\_queue\_.push\_back(graph\_.left\_most(\textcolor{keywordtype}{id}));}
+\DoxyCodeLine{00595\ }
+\DoxyCodeLine{00596\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{id}\ =\ visit\_queue\_.front();\ visit\_queue\_.pop\_front();}
+\DoxyCodeLine{00597\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(\textcolor{keywordtype}{id}\ ==\ 0)\ \textcolor{keywordflow}{return}\ id;}
+\DoxyCodeLine{00598\ \ \ \ \ \ \ \ \ \ \ \ \ Node\_\&\ current\ =\ graph\_.graph\_[id];}
+\DoxyCodeLine{00599\ }
+\DoxyCodeLine{00600\ \ \ \ \ \ \ \ \ \ \ \ \ visit\_queue\_.push\_back(current.Sibling\ ?\ graph\_.left\_most(current.Sibling)\ :\ graph\_.parent(\textcolor{keywordtype}{id}));}
+\DoxyCodeLine{00601\ }
+\DoxyCodeLine{00602\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ id;}
+\DoxyCodeLine{00603\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00604\ }
+\DoxyCodeLine{00605\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00606\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classopen__cpp__utils_1_1directed__tree}{directed\_tree}}\&\ graph\_;}
+\DoxyCodeLine{00607\ \ \ \ \ \ \ \ \ node\_queue\ \ \ \ \ visit\_queue\_;}
+\DoxyCodeLine{00608\ \ \ \ \ \};}
+\DoxyCodeLine{00609\ }
+\DoxyCodeLine{00610\ }
+\DoxyCodeLine{00614\ \ \ \ \ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ V,\ \textcolor{keyword}{typename}\ O>}
+\DoxyCodeLine{00615\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{classopen__cpp__utils_1_1directed__tree_1_1traverser}{traverser}}}
+\DoxyCodeLine{00616\ \ \ \ \ \{}
+\DoxyCodeLine{00617\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00618\ \ \ \ \ \ \ \ \ \textcolor{keyword}{using\ }visitor\_type\ =\ V;}
+\DoxyCodeLine{00619\ \ \ \ \ \ \ \ \ \textcolor{keyword}{using\ }order\_type\ =\ O;}
+\DoxyCodeLine{00620\ }
+\DoxyCodeLine{00621\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classopen__cpp__utils_1_1directed__tree_1_1traverser}{traverser}}(\mbox{\hyperlink{classopen__cpp__utils_1_1directed__tree}{directed\_tree}}\&\ graph,\ visitor\_type\&\ visitor)\ :\ graph\_(graph),\ visitor\_(visitor),\ order\_(graph)\ \{\ \}}
+\DoxyCodeLine{00622\ }
+\DoxyCodeLine{00623\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ operator()()}
+\DoxyCodeLine{00624\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00625\ \ \ \ \ \ \ \ \ \ \ \ \ node\ \textcolor{keywordtype}{id}\ =\ 0;}
+\DoxyCodeLine{00626\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{while}(\textcolor{keywordtype}{id}\ =\ order\_(\textcolor{keywordtype}{id}))}
+\DoxyCodeLine{00627\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00628\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(visitor\_(graph\_[\textcolor{keywordtype}{id}],\ \textcolor{keywordtype}{id}))\ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00629\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00630\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00631\ }
+\DoxyCodeLine{00632\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00633\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classopen__cpp__utils_1_1directed__tree}{directed\_tree}}\&\ graph\_;}
+\DoxyCodeLine{00634\ \ \ \ \ \ \ \ \ visitor\_type\&\ \ \ visitor\_;}
+\DoxyCodeLine{00635\ \ \ \ \ \ \ \ \ order\_type\ \ \ \ \ \ order\_;}
+\DoxyCodeLine{00636\ \ \ \ \ \};}
+\DoxyCodeLine{00637\ \};}
+\DoxyCodeLine{00638\ \}}
+\DoxyCodeLine{00639\ }
+\DoxyCodeLine{00640\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//\ OPEN\_CPP\_UTILS\_DIRECTED\_TREE\_H}}
+
+\end{DoxyCode}

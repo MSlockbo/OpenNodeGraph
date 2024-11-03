@@ -1,0 +1,349 @@
+\doxysection{filesystem.\+h}
+\hypertarget{filesystem_8h_source}{}\label{filesystem_8h_source}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//\ =====================================================================================================================}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ \ open-\/cpp-\/utils,\ an\ open-\/source\ cpp\ library\ with\ data\ structures\ that\ extend\ the\ STL.}}
+\DoxyCodeLine{00003\ \textcolor{comment}{//\ \ Copyright\ (C)\ 2024\ \ Medusa\ Slockbower}}
+\DoxyCodeLine{00004\ \textcolor{comment}{//}}
+\DoxyCodeLine{00005\ \textcolor{comment}{//\ \ This\ program\ is\ free\ software:\ you\ can\ redistribute\ it\ and/or\ modify}}
+\DoxyCodeLine{00006\ \textcolor{comment}{//\ \ it\ under\ the\ terms\ of\ the\ GNU\ General\ Public\ License\ as\ published\ by}}
+\DoxyCodeLine{00007\ \textcolor{comment}{//\ \ the\ Free\ Software\ Foundation,\ either\ version\ 3\ of\ the\ License,\ or}}
+\DoxyCodeLine{00008\ \textcolor{comment}{//\ \ (at\ your\ option)\ any\ later\ version.}}
+\DoxyCodeLine{00009\ \textcolor{comment}{//}}
+\DoxyCodeLine{00010\ \textcolor{comment}{//\ \ This\ program\ is\ distributed\ in\ the\ hope\ that\ it\ will\ be\ useful,}}
+\DoxyCodeLine{00011\ \textcolor{comment}{//\ \ but\ WITHOUT\ ANY\ WARRANTY;\ without\ even\ the\ implied\ warranty\ of}}
+\DoxyCodeLine{00012\ \textcolor{comment}{//\ \ MERCHANTABILITY\ or\ FITNESS\ FOR\ A\ PARTICULAR\ PURPOSE.\ \ See\ the}}
+\DoxyCodeLine{00013\ \textcolor{comment}{//\ \ GNU\ General\ Public\ License\ for\ more\ details.}}
+\DoxyCodeLine{00014\ \textcolor{comment}{//}}
+\DoxyCodeLine{00015\ \textcolor{comment}{//\ \ You\ should\ have\ received\ a\ copy\ of\ the\ GNU\ General\ Public\ License}}
+\DoxyCodeLine{00016\ \textcolor{comment}{//\ \ along\ with\ this\ program.\ \ If\ not,\ see\ <https://www.gnu.org/licenses/>.}}
+\DoxyCodeLine{00017\ \textcolor{comment}{//\ =====================================================================================================================}}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \textcolor{preprocessor}{\#ifndef\ OPEN\_CPP\_UTILS\_FILESYSTEM\_H}}
+\DoxyCodeLine{00020\ \textcolor{preprocessor}{\#define\ OPEN\_CPP\_UTILS\_FILESYSTEM\_H}}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ \textcolor{preprocessor}{\#include\ <filesystem>}}
+\DoxyCodeLine{00023\ \textcolor{preprocessor}{\#include\ <iostream>}}
+\DoxyCodeLine{00024\ \textcolor{preprocessor}{\#include\ <stack>}}
+\DoxyCodeLine{00025\ \textcolor{preprocessor}{\#include\ <utility>}}
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00027\ \textcolor{preprocessor}{\#include\ "{}directed\_tree.h"{}}}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ \textcolor{keyword}{namespace\ }open\_cpp\_utils}
+\DoxyCodeLine{00030\ \{}
+\DoxyCodeLine{00031\ }
+\DoxyCodeLine{00032\ \textcolor{keyword}{using\ }path\_t\ =\ std::filesystem::path;}
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00034\ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T\_,\ \textcolor{keyword}{typename}\ L\_>}
+\DoxyCodeLine{00035\ \textcolor{keyword}{class\ \ }\mbox{\hyperlink{classopen__cpp__utils_1_1filesystem}{filesystem}}}
+\DoxyCodeLine{00036\ \{}
+\DoxyCodeLine{00037\ \textcolor{comment}{//\ Typedefs\ ============================================================================================================}}
+\DoxyCodeLine{00038\ \ \ \ \ }
+\DoxyCodeLine{00039\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00040\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{classopen__cpp__utils_1_1filesystem_1_1file}{file}};}
+\DoxyCodeLine{00041\ \ \ \ \ \textcolor{keyword}{using\ }data\_t\ =\ T\_;}
+\DoxyCodeLine{00042\ \ \ \ \ \textcolor{keyword}{using\ }loader\ =\ L\_;}
+\DoxyCodeLine{00043\ \ \ \ \ \textcolor{keyword}{using\ }\mbox{\hyperlink{classopen__cpp__utils_1_1directed__tree}{file\_tree}}\ =\ \mbox{\hyperlink{classopen__cpp__utils_1_1directed__tree}{directed\_tree<file>}};}
+\DoxyCodeLine{00044\ \ \ \ \ \textcolor{keyword}{using\ }\mbox{\hyperlink{classopen__cpp__utils_1_1filesystem_1_1file}{fileptr}}\ \ \ =\ \mbox{\hyperlink{classopen__cpp__utils_1_1filesystem_1_1file}{file}}*;}
+\DoxyCodeLine{00045\ \ \ \ \ \textcolor{keyword}{using\ }file\_id\ =\ \textcolor{keyword}{typename}\ file\_tree::node;}
+\DoxyCodeLine{00046\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ file\_id\ root\ =\ file\_tree::root;}
+\DoxyCodeLine{00047\ }
+\DoxyCodeLine{00048\ }
+\DoxyCodeLine{00049\ \textcolor{comment}{//\ Structs\ =============================================================================================================}}
+\DoxyCodeLine{00050\ }
+\DoxyCodeLine{00051\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00052\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{classopen__cpp__utils_1_1filesystem_1_1file}{file}}}
+\DoxyCodeLine{00053\ \ \ \ \ \{}
+\DoxyCodeLine{00054\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classopen__cpp__utils_1_1filesystem_1_1file}{file}}(\mbox{\hyperlink{classopen__cpp__utils_1_1filesystem}{filesystem}}*\ parent,\ file\_id\ node,\ path\_t\ path,\ data\_t*\ data)}
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ \ \ \ \ :\ parent\_(parent),\ node\_(node),\ path\_(std::move(path)),\ value\_(data)}
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ \{\ \}}
+\DoxyCodeLine{00058\ }
+\DoxyCodeLine{00059\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00060\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classopen__cpp__utils_1_1filesystem_1_1file}{file}}()\ :\ parent\_(\textcolor{keyword}{nullptr}),\ node\_(0),\ path\_(\textcolor{stringliteral}{"{}"{}}),\ value\_(\textcolor{keyword}{nullptr})\ \{\ \}}
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classopen__cpp__utils_1_1filesystem_1_1file}{file}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classopen__cpp__utils_1_1filesystem_1_1file}{file}}\&)\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00062\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classopen__cpp__utils_1_1filesystem_1_1file}{file}}(\mbox{\hyperlink{classopen__cpp__utils_1_1filesystem_1_1file}{file}}\&\&)\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classopen__cpp__utils_1_1filesystem_1_1file}{\string~file}}()\ \{\ \textcolor{keyword}{delete}\ value\_;\ \}}
+\DoxyCodeLine{00064\ }
+\DoxyCodeLine{00065\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ path\_t\&\ path()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ path\_;\ \}}
+\DoxyCodeLine{00066\ }
+\DoxyCodeLine{00067\ \ \ \ \ \ \ \ \ data\_t*\ get\_data()\ \{\ \textcolor{keywordflow}{return}\ value\_;\ \}}
+\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ data\_t*\ get\_data()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ value\_;\ \}}
+\DoxyCodeLine{00069\ }
+\DoxyCodeLine{00070\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classopen__cpp__utils_1_1filesystem}{filesystem}}\&\ system()\ \{\ \textcolor{keywordflow}{return}\ *parent\_;\ \}}
+\DoxyCodeLine{00071\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classopen__cpp__utils_1_1filesystem}{filesystem}}\&\ system()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ *parent\_;\ \}}
+\DoxyCodeLine{00072\ }
+\DoxyCodeLine{00073\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ is\_directory()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ std::filesystem::is\_directory(path\_);\ \}}
+\DoxyCodeLine{00074\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ empty()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ is\_empty(path\_);\ \}}
+\DoxyCodeLine{00075\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ has\_subdirectory()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{for}(\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ path\ :\ std::filesystem::directory\_iterator\{\ path\_\ \})\ \{\ \textcolor{keywordflow}{if}(std::filesystem::is\_directory(path))\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};\ \}\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};\ \}}
+\DoxyCodeLine{00076\ }
+\DoxyCodeLine{00077\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ erase()\ \{\ \textcolor{keyword}{delete}\ value\_;\ value\_\ =\ \textcolor{keyword}{nullptr};\ \}}
+\DoxyCodeLine{00078\ }
+\DoxyCodeLine{00079\ \ \ \ \ \ \ \ \ file\_id\ get\_id()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ node\_;\ \}}
+\DoxyCodeLine{00080\ }
+\DoxyCodeLine{00081\ \ \ \ \ \ \ \ \ data\_t*\ operator-\/>()\ \{\ \textcolor{keywordflow}{return}\ value\_;\ \}}
+\DoxyCodeLine{00082\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ data\_t*\ operator-\/>()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ value\_;\ \}}
+\DoxyCodeLine{00083\ }
+\DoxyCodeLine{00084\ \ \ \ \ \ \ \ \ data\_t*\ operator*()\ \{\ \textcolor{keywordflow}{return}\ value\_;\ \}}
+\DoxyCodeLine{00085\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ data\_t*\ operator*()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ value\_;\ \}}
+\DoxyCodeLine{00086\ }
+\DoxyCodeLine{00087\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00088\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classopen__cpp__utils_1_1filesystem}{filesystem}}*\ parent\_;}
+\DoxyCodeLine{00089\ \ \ \ \ \ \ \ \ file\_id\ \ \ \ \ node\_;}
+\DoxyCodeLine{00090\ \ \ \ \ \ \ \ \ path\_t\ \ \ \ \ \ path\_;}
+\DoxyCodeLine{00091\ \ \ \ \ \ \ \ \ data\_t*\ \ \ \ \ value\_;}
+\DoxyCodeLine{00092\ }
+\DoxyCodeLine{00093\ \ \ \ \ \ \ \ \ \textcolor{keyword}{friend}\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classopen__cpp__utils_1_1filesystem}{filesystem}};}
+\DoxyCodeLine{00094\ \ \ \ \ \};}
+\DoxyCodeLine{00095\ }
+\DoxyCodeLine{00096\ }
+\DoxyCodeLine{00097\ \textcolor{comment}{//\ Functions\ ===========================================================================================================}}
+\DoxyCodeLine{00098\ \ \ \ \ }
+\DoxyCodeLine{00099\ }
+\DoxyCodeLine{00100\ \textcolor{comment}{//\ Helpers\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00101\ }
+\DoxyCodeLine{00102\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00103\ \ \ \ \ }
+\DoxyCodeLine{00104\ \ \ \ \ \textcolor{keyword}{static}\ path\_t\ resolve\_(\textcolor{keyword}{const}\ path\_t\&\ path)\ \{\ \textcolor{keywordflow}{return}\ absolute(canonical(path));\ \}}
+\DoxyCodeLine{00105\ \ \ \ \ }
+\DoxyCodeLine{00106\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ is\_parent\_(\textcolor{keyword}{const}\ path\_t\&\ base,\ \textcolor{keyword}{const}\ path\_t\&\ path)}
+\DoxyCodeLine{00107\ \ \ \ \ \{\ \textcolor{keywordflow}{return}\ std::mismatch(path.begin(),\ path.end(),\ base.begin(),\ base.end()).second\ ==\ base.end();\ \}}
+\DoxyCodeLine{00108\ \ \ \ \ }
+\DoxyCodeLine{00109\ \ \ \ \ file\_id\ find\_(path\_t\ path)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00110\ }
+\DoxyCodeLine{00111\ file\_id\ get\_index\_(file\_id\ parent,\ \textcolor{keyword}{const}\ path\_t\ \&path);}
+\DoxyCodeLine{00112\ \ \ \ \ }
+\DoxyCodeLine{00113\ }
+\DoxyCodeLine{00114\ \textcolor{comment}{//\ Constructors\ \&\ Destructor\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00115\ }
+\DoxyCodeLine{00116\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00117\ \ \ \ \ filesystem()\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00118\ \ \ \ \ \string~filesystem()\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00119\ }
+\DoxyCodeLine{00120\ \ \ \ \ file\&\ operator[](file\_id\ \textcolor{keywordtype}{id})\ \{\ \textcolor{keywordflow}{return}\ tree\_[id];\ \}}
+\DoxyCodeLine{00121\ \ \ \ \ \textcolor{keyword}{const}\ file\&\ operator[](file\_id\ \textcolor{keywordtype}{id})\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ tree\_[id];\ \}}
+\DoxyCodeLine{00122\ }
+\DoxyCodeLine{00123\ \ \ \ \ file\_id\ load\_directory(\textcolor{keyword}{const}\ path\_t\ \&directory);}
+\DoxyCodeLine{00124\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ close\_directory(file\_id\ \textcolor{keywordtype}{id})\ \{\ tree\_.\mbox{\hyperlink{classopen__cpp__utils_1_1directed__tree_aafd1b11a9b14342a7d3f46c8c43451f2}{erase}}(\textcolor{keywordtype}{id});\ \}}
+\DoxyCodeLine{00125\ \ \ \ \ }
+\DoxyCodeLine{00126\ \ \ \ \ file\_id\ \textcolor{keyword}{import}(\textcolor{keyword}{const}\ path\_t\&\ path,\ file\_id\ parent);}
+\DoxyCodeLine{00127\ }
+\DoxyCodeLine{00128\ \ \ \ \ file\_id\ create(\textcolor{keyword}{const}\ std::string\&\ name,\ file\_id\ parent);}
+\DoxyCodeLine{00129\ \ \ \ \ file\_id\ create\_folder(\textcolor{keyword}{const}\ std::string\&\ name,\ file\_id\ parent);}
+\DoxyCodeLine{00130\ }
+\DoxyCodeLine{00131\ \ \ \ \ \textcolor{keywordtype}{void}\ rename(file\_id\ \textcolor{keywordtype}{id},\ \textcolor{keyword}{const}\ std::string\&\ name);}
+\DoxyCodeLine{00132\ }
+\DoxyCodeLine{00133\ \ \ \ \ \textcolor{keywordtype}{void}\ clear()\ \{\ tree\_.clear();\ \}}
+\DoxyCodeLine{00134\ \ \ \ \ \textcolor{keywordtype}{void}\ erase(file\_id\ \textcolor{keywordtype}{id});}
+\DoxyCodeLine{00135\ \ \ \ \ \textcolor{keywordtype}{void}\ erase(\textcolor{keyword}{const}\ path\_t\&\ path);}
+\DoxyCodeLine{00136\ }
+\DoxyCodeLine{00137\ \ \ \ \ file\_id\ find(\textcolor{keyword}{const}\ path\_t\&\ path)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00138\ \ \ \ \ }
+\DoxyCodeLine{00139\ \ \ \ \ file\_id\ parent(file\_id\ \textcolor{keywordtype}{id})\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ tree\_.\mbox{\hyperlink{classopen__cpp__utils_1_1directed__tree_a10f828e98ef3d5ce490a603e4045a736}{parent}}(tree\_[\textcolor{keywordtype}{id}].get\_id());\ \}}
+\DoxyCodeLine{00140\ \ \ \ \ file\_id\ next(file\_id\ \textcolor{keywordtype}{id})\textcolor{keyword}{\ \ \ const\ }\{\ \textcolor{keywordflow}{return}\ tree\_.\mbox{\hyperlink{classopen__cpp__utils_1_1directed__tree_a2dbfd46238b9c9941902e3e8a326db69}{next\_sibling}}(tree\_[\textcolor{keywordtype}{id}].get\_id());\ \}}
+\DoxyCodeLine{00141\ \ \ \ \ file\_id\ prev(file\_id\ \textcolor{keywordtype}{id})\textcolor{keyword}{\ \ \ const\ }\{\ \textcolor{keywordflow}{return}\ tree\_.\mbox{\hyperlink{classopen__cpp__utils_1_1directed__tree_a06b775a2fa9d970b029bdc3a22d561bf}{prev\_sibling}}(tree\_[\textcolor{keywordtype}{id}].get\_id());\ \}}
+\DoxyCodeLine{00142\ \ \ \ \ file\_id\ begin(file\_id\ \textcolor{keywordtype}{id})\textcolor{keyword}{\ \ const\ }\{\ \textcolor{keywordflow}{return}\ tree\_.\mbox{\hyperlink{classopen__cpp__utils_1_1directed__tree_a1ee24c2a22978b8c3f990292baa88e6a}{first\_child}}(tree\_[\textcolor{keywordtype}{id}].get\_id());\ \}}
+\DoxyCodeLine{00143\ \ \ \ \ file\_id\ end(file\_id)\textcolor{keyword}{\ \ \ \ \ \ \ const\ }\{\ \textcolor{keywordflow}{return}\ file\_tree::root;\ \}}
+\DoxyCodeLine{00144\ }
+\DoxyCodeLine{00145\ \ \ \ \ uint32\_t\ \ \ \ depth(file\_id\ \textcolor{keywordtype}{id})\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ tree\_.\mbox{\hyperlink{classopen__cpp__utils_1_1directed__tree_a14bebe19888219ebef3c25076ac7e739}{depth}}(tree\_[\textcolor{keywordtype}{id}].get\_id());\ \}}
+\DoxyCodeLine{00146\ }
+\DoxyCodeLine{00147\ \ \ \ \ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ O\ =\ \textcolor{keyword}{typename}\ file\_tree::pre\_order,\ \textcolor{keyword}{typename}\ V>}
+\DoxyCodeLine{00148\ \ \ \ \ \textcolor{keywordtype}{void}\ traverse(V\&\ visitor)\ \{\ tree\_.template\ traverse<O>(visitor);\ \}}
+\DoxyCodeLine{00149\ }
+\DoxyCodeLine{00150\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00151\ \ \ \ \ file\_tree\ tree\_;}
+\DoxyCodeLine{00152\ \};}
+\DoxyCodeLine{00153\ }
+\DoxyCodeLine{00154\ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T\_,\ \textcolor{keyword}{typename}\ L\_>}
+\DoxyCodeLine{00155\ \textcolor{keyword}{typename}\ filesystem<T\_,\ L\_>::file\_id\ filesystem<T\_,\ L\_>::find\_(path\_t\ path)\textcolor{keyword}{\ const}}
+\DoxyCodeLine{00156\ \textcolor{keyword}{}\{}
+\DoxyCodeLine{00157\ \ \ \ \ \textcolor{comment}{//\ Check\ if\ the\ path\ exists}}
+\DoxyCodeLine{00158\ \ \ \ \ \textcolor{keywordflow}{if}(not\ exists(path))\ \textcolor{keywordflow}{return}\ file\_tree::root;}
+\DoxyCodeLine{00159\ }
+\DoxyCodeLine{00160\ \ \ \ \ \textcolor{comment}{//\ Setup\ for\ traversal}}
+\DoxyCodeLine{00161\ \ \ \ \ path\ =\ resolve\_(path);}
+\DoxyCodeLine{00162\ \ \ \ \ file\_id\ dir\ =\ tree\_.first\_child(file\_tree::root);}
+\DoxyCodeLine{00163\ }
+\DoxyCodeLine{00164\ \ \ \ \ \textcolor{comment}{//\ Get\ the\ parent\ folder}}
+\DoxyCodeLine{00165\ \ \ \ \ \textcolor{keywordflow}{while}(dir\ !=\ file\_tree::root)}
+\DoxyCodeLine{00166\ \ \ \ \ \{}
+\DoxyCodeLine{00167\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(is\_parent\_(tree\_[dir].path(),\ path))\ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00168\ \ \ \ \ \ \ \ \ dir\ =\ tree\_.next\_sibling(dir);}
+\DoxyCodeLine{00169\ \ \ \ \ \}}
+\DoxyCodeLine{00170\ }
+\DoxyCodeLine{00171\ \ \ \ \ \textcolor{comment}{//\ Path\ does\ not\ exist\ in\ file\ system}}
+\DoxyCodeLine{00172\ \ \ \ \ \textcolor{keywordflow}{if}(dir\ ==\ file\_tree::root)\ \textcolor{keywordflow}{return}\ file\_tree::root;}
+\DoxyCodeLine{00173\ }
+\DoxyCodeLine{00174\ \ \ \ \ \textcolor{comment}{//\ Get\ starting\ point\ for\ iteration}}
+\DoxyCodeLine{00175\ \ \ \ \ \textcolor{keyword}{auto}\ parent\ =\ tree\_[dir].path();}
+\DoxyCodeLine{00176\ \ \ \ \ \textcolor{keyword}{auto}\ start\ =\ std::mismatch(path.begin(),\ path.end(),\ parent.begin(),\ parent.end()).first;}
+\DoxyCodeLine{00177\ }
+\DoxyCodeLine{00178\ \ \ \ \ \textcolor{comment}{//\ Parse\ down\ the\ tree}}
+\DoxyCodeLine{00179\ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keyword}{auto}\ it\ =\ start;\ it\ !=\ path.end();\ ++it)}
+\DoxyCodeLine{00180\ \ \ \ \ \{}
+\DoxyCodeLine{00181\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}(file\_id\ child\ =\ tree\_.first\_child(dir);\ child\ !=\ file\_tree::root;\ child\ =\ tree\_.next\_sibling(child))}
+\DoxyCodeLine{00182\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00183\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(tree\_[child].path().filename()\ ==\ it-\/>filename())}
+\DoxyCodeLine{00184\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00185\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ dir\ =\ child;}
+\DoxyCodeLine{00186\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00187\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00188\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00189\ \ \ \ \ \}}
+\DoxyCodeLine{00190\ }
+\DoxyCodeLine{00191\ \ \ \ \ \textcolor{keywordflow}{return}\ dir;}
+\DoxyCodeLine{00192\ \}}
+\DoxyCodeLine{00193\ }
+\DoxyCodeLine{00194\ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T\_,\ \textcolor{keyword}{typename}\ L\_>}
+\DoxyCodeLine{00195\ \textcolor{keyword}{typename}\ filesystem<T\_,\ L\_>::file\_id\ filesystem<T\_,\ L\_>::get\_index\_(file\_id\ parent,\ \textcolor{keyword}{const}\ path\_t\ \&path)}
+\DoxyCodeLine{00196\ \{}
+\DoxyCodeLine{00197\ \ \ \ \ file\_id\ dir\ =\ tree\_.first\_child(parent);}
+\DoxyCodeLine{00198\ }
+\DoxyCodeLine{00199\ \ \ \ \ \textcolor{comment}{//\ Get\ the\ insertion\ index}}
+\DoxyCodeLine{00200\ \ \ \ \ \textcolor{keywordflow}{while}(dir\ !=\ file\_tree::root)}
+\DoxyCodeLine{00201\ \ \ \ \ \{}
+\DoxyCodeLine{00202\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(tree\_[dir].path().filename().compare(path.filename())\ >\ 0)\ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00203\ }
+\DoxyCodeLine{00204\ \ \ \ \ \ \ \ \ dir\ =\ tree\_.next\_sibling(dir);}
+\DoxyCodeLine{00205\ \ \ \ \ \}}
+\DoxyCodeLine{00206\ }
+\DoxyCodeLine{00207\ \ \ \ \ \textcolor{keywordflow}{return}\ dir;}
+\DoxyCodeLine{00208\ \}}
+\DoxyCodeLine{00209\ }
+\DoxyCodeLine{00210\ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T\_,\ \textcolor{keyword}{typename}\ L\_>}
+\DoxyCodeLine{00211\ \textcolor{keyword}{typename}\ filesystem<T\_,\ L\_>::file\_id\ filesystem<T\_,\ L\_>::load\_directory(\textcolor{keyword}{const}\ path\_t\&\ path)}
+\DoxyCodeLine{00212\ \{}
+\DoxyCodeLine{00213\ \ \ \ \ \textcolor{keywordflow}{if}(not\ exists(path))\ \textcolor{keywordflow}{return}\ root;}
+\DoxyCodeLine{00214\ \ \ \ \ }
+\DoxyCodeLine{00215\ \ \ \ \ \textcolor{keyword}{const}\ path\_t\ directory\ =\ canonical(absolute(path));}
+\DoxyCodeLine{00216\ \ \ \ \ file\_id\ dir\ =\ tree\_.first\_child(file\_tree::root);}
+\DoxyCodeLine{00217\ }
+\DoxyCodeLine{00218\ \ \ \ \ \textcolor{comment}{//\ Validate\ this\ isn't\ a\ subdirectory}}
+\DoxyCodeLine{00219\ \ \ \ \ \textcolor{keywordflow}{while}(dir\ !=\ file\_tree::root)}
+\DoxyCodeLine{00220\ \ \ \ \ \{}
+\DoxyCodeLine{00221\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(is\_parent\_(tree\_[dir].path(),\ directory))\ \textcolor{keywordflow}{return}\ find(directory);}
+\DoxyCodeLine{00222\ \ \ \ \ \ \ \ \ dir\ =\ tree\_.next\_sibling(dir);}
+\DoxyCodeLine{00223\ \ \ \ \ \}}
+\DoxyCodeLine{00224\ }
+\DoxyCodeLine{00225\ \ \ \ \ dir\ =\ get\_index\_(file\_tree::root,\ directory);}
+\DoxyCodeLine{00226\ \ \ \ \ dir\ =\ tree\_.insert(file(\textcolor{keyword}{this},\ tree\_.next\_id(),\ directory,\ \textcolor{keyword}{nullptr}),\ file\_tree::root,\ dir);}
+\DoxyCodeLine{00227\ \ \ \ \ tree\_[dir].value\_\ =\ loader::load(directory,\ dir);}
+\DoxyCodeLine{00228\ \ \ \ \ file\_id\ res\ =\ dir;}
+\DoxyCodeLine{00229\ }
+\DoxyCodeLine{00230\ \ \ \ \ \textcolor{keyword}{using\ }iter\_t\ =\ std::filesystem::directory\_iterator;}
+\DoxyCodeLine{00231\ \ \ \ \ std::stack<std::tuple<path\_t,\ file\_id,\ iter\_t>>\ working;}
+\DoxyCodeLine{00232\ \ \ \ \ working.emplace(directory,\ dir,\ iter\_t(directory));}
+\DoxyCodeLine{00233\ }
+\DoxyCodeLine{00234\ \ \ \ \ \textcolor{keywordflow}{while}(not\ working.empty())}
+\DoxyCodeLine{00235\ \ \ \ \ \{}
+\DoxyCodeLine{00236\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\&\ top\ =\ working.top();}
+\DoxyCodeLine{00237\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ file\_id\ p\_dir\ =\ std::get<1>(top);}
+\DoxyCodeLine{00238\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ iter\_t\&\ it\ \ \ \ =\ std::get<2>(top);}
+\DoxyCodeLine{00239\ }
+\DoxyCodeLine{00240\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(std::filesystem::begin(it)\ ==\ std::filesystem::end(it))}
+\DoxyCodeLine{00241\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00242\ \ \ \ \ \ \ \ \ \ \ \ \ working.pop();}
+\DoxyCodeLine{00243\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{continue};}
+\DoxyCodeLine{00244\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00245\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00246\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ path\_t\ \ path\ \ =\ *it;}
+\DoxyCodeLine{00247\ }
+\DoxyCodeLine{00248\ \ \ \ \ \ \ \ \ file\_id\ created\ =\ tree\_.insert(file(\textcolor{keyword}{this},\ tree\_.next\_id(),\ path,\ \textcolor{keyword}{nullptr}),\ p\_dir);}
+\DoxyCodeLine{00249\ \ \ \ \ \ \ \ \ tree\_[created].value\_\ =\ loader::load(path,\ created);}
+\DoxyCodeLine{00250\ }
+\DoxyCodeLine{00251\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(is\_directory(path))}
+\DoxyCodeLine{00252\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00253\ \ \ \ \ \ \ \ \ \ \ \ \ working.emplace(path,\ created,\ iter\_t(path));}
+\DoxyCodeLine{00254\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00255\ }
+\DoxyCodeLine{00256\ \ \ \ \ \ \ \ \ ++std::get<2>(top);}
+\DoxyCodeLine{00257\ \ \ \ \ \}}
+\DoxyCodeLine{00258\ }
+\DoxyCodeLine{00259\ \ \ \ \ \textcolor{keywordflow}{return}\ res;}
+\DoxyCodeLine{00260\ \}}
+\DoxyCodeLine{00261\ }
+\DoxyCodeLine{00262\ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T\_,\ \textcolor{keyword}{typename}\ L\_>}
+\DoxyCodeLine{00263\ \textcolor{keyword}{typename}\ filesystem<T\_,\ L\_>::file\_id\ filesystem<T\_,\ L\_>::import(\textcolor{keyword}{const}\ path\_t\&\ path,\ file\_id\ parent)}
+\DoxyCodeLine{00264\ \{}
+\DoxyCodeLine{00265\ \ \ \ \ \textcolor{keywordflow}{if}(not\ exists(path))\ \textcolor{keywordflow}{return}\ root;}
+\DoxyCodeLine{00266\ }
+\DoxyCodeLine{00267\ \ \ \ \ file\&\ prnt\ =\ tree\_[parent];}
+\DoxyCodeLine{00268\ \ \ \ \ path\_t\ nloc\ =\ prnt.path()\ /\ path.filename();}
+\DoxyCodeLine{00269\ \ \ \ \ \textcolor{keyword}{const}\ file\_id\ node\ =\ tree\_.insert(file(\textcolor{keyword}{this},\ tree\_.next\_id(),\ nloc,\ \textcolor{keyword}{nullptr}),\ parent,\ get\_index\_(parent,\ nloc));}
+\DoxyCodeLine{00270\ \ \ \ \ tree\_[node].value\_\ =\ loader::import(path,\ nloc,\ node);}
+\DoxyCodeLine{00271\ \ \ \ \ \textcolor{keywordflow}{return}\ node;}
+\DoxyCodeLine{00272\ \}}
+\DoxyCodeLine{00273\ }
+\DoxyCodeLine{00274\ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T\_,\ \textcolor{keyword}{typename}\ L\_>}
+\DoxyCodeLine{00275\ \textcolor{keyword}{typename}\ filesystem<T\_,\ L\_>::file\_id\ filesystem<T\_,\ L\_>::create(\textcolor{keyword}{const}\ std::string\ \&name,\ file\_id\ parent)}
+\DoxyCodeLine{00276\ \{}
+\DoxyCodeLine{00277\ \ \ \ \ file\&\ prnt\ =\ tree\_[parent];}
+\DoxyCodeLine{00278\ \ \ \ \ \textcolor{keyword}{const}\ file\_id\ p\_dir\ =\ prnt.get\_id();}
+\DoxyCodeLine{00279\ \ \ \ \ \textcolor{keyword}{const}\ path\_t\ path\ \ =\ prnt.path()\ /\ name;}
+\DoxyCodeLine{00280\ \ \ \ \ }
+\DoxyCodeLine{00281\ \ \ \ \ \textcolor{keyword}{const}\ file\_id\ node\ =\ tree\_.insert(file(\textcolor{keyword}{this},\ tree\_.next\_id(),\ path,\ \textcolor{keyword}{nullptr}),\ parent,\ get\_index\_(parent,\ path));}
+\DoxyCodeLine{00282\ \ \ \ \ tree\_[node].value\_\ =\ loader::create(path,\ node);}
+\DoxyCodeLine{00283\ \ \ \ \ \textcolor{keywordflow}{return}\ node;}
+\DoxyCodeLine{00284\ \}}
+\DoxyCodeLine{00285\ }
+\DoxyCodeLine{00286\ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T\_,\ \textcolor{keyword}{typename}\ L\_>}
+\DoxyCodeLine{00287\ \textcolor{keyword}{typename}\ filesystem<T\_,\ L\_>::file\_id\ filesystem<T\_,\ L\_>::create\_folder(\textcolor{keyword}{const}\ std::string\ \&name,\ file\_id\ parent)}
+\DoxyCodeLine{00288\ \{}
+\DoxyCodeLine{00289\ \ \ \ \ file\&\ prnt\ =\ tree\_[parent];}
+\DoxyCodeLine{00290\ \ \ \ \ \textcolor{keyword}{const}\ path\_t\ path\ \ =\ prnt.path()\ /\ name;}
+\DoxyCodeLine{00291\ \ \ \ \ create\_directory(path);}
+\DoxyCodeLine{00292\ \ \ \ \ data\_t*\ data\ =\ loader::load(path);}
+\DoxyCodeLine{00293\ \ \ \ \ }
+\DoxyCodeLine{00294\ \ \ \ \ \textcolor{keyword}{const}\ file\_id\ node\ \ =\ tree\_.insert(file(\textcolor{keyword}{this},\ tree\_.next\_id(),\ path,\ data),\ parent,\ get\_index\_(parent,\ path));}
+\DoxyCodeLine{00295\ }
+\DoxyCodeLine{00296\ \ \ \ \ \textcolor{keywordflow}{return}\ tree\_[node];}
+\DoxyCodeLine{00297\ \}}
+\DoxyCodeLine{00298\ }
+\DoxyCodeLine{00299\ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T\_,\ \textcolor{keyword}{typename}\ L\_>}
+\DoxyCodeLine{00300\ \textcolor{keywordtype}{void}\ filesystem<T\_,\ L\_>::rename(file\_id\ \textcolor{keywordtype}{id},\ \textcolor{keyword}{const}\ std::string\&\ name)}
+\DoxyCodeLine{00301\ \{}
+\DoxyCodeLine{00302\ \ \ \ \ file\&\ file\ =\ tree\_[id];}
+\DoxyCodeLine{00303\ \ \ \ \ \textcolor{keyword}{const}\ std::string\ new\_name\ =\ path\_t(name).stem().string()\ +\ file.path().extension().string();}
+\DoxyCodeLine{00304\ }
+\DoxyCodeLine{00305\ \ \ \ \ fileptr\ current\ =\ \&file;}
+\DoxyCodeLine{00306\ \ \ \ \ \textcolor{keywordflow}{while}(\textcolor{keyword}{true})}
+\DoxyCodeLine{00307\ \ \ \ \ \{}
+\DoxyCodeLine{00308\ \ \ \ \ \ \ \ \ fileptr\ next\ =\ \&tree\_[filesystem::next(current-\/>get\_id())];}
+\DoxyCodeLine{00309\ \ \ \ \ \ \ \ \ fileptr\ prev\ =\ \&tree\_[filesystem::prev(current-\/>get\_id())];}
+\DoxyCodeLine{00310\ }
+\DoxyCodeLine{00311\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(next\ !=\ \&tree\_[root]\ \&\&\ new\_name.compare(next-\/>path().filename().string())\ >\ 0)\ \{\ tree\_.swap(current-\/>get\_id(),\ next-\/>get\_id());\ current\ =\ next;\ \textcolor{keywordflow}{continue};\ \}}
+\DoxyCodeLine{00312\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(next\ !=\ \&tree\_[root]\ \&\&\ new\_name.compare(prev-\/>path().filename().string())\ <\ 0)\ \{\ tree\_.swap(current-\/>get\_id(),\ prev-\/>get\_id());\ current\ =\ prev;\ \textcolor{keywordflow}{continue};\ \}}
+\DoxyCodeLine{00313\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00314\ \ \ \ \ \}}
+\DoxyCodeLine{00315\ }
+\DoxyCodeLine{00316\ \ \ \ \ \textcolor{keyword}{const}\ path\_t\ new\_path\ =\ current-\/>path().parent\_path()\ /\ new\_name;}
+\DoxyCodeLine{00317\ \ \ \ \ std::filesystem::rename(current-\/>path(),\ new\_path);}
+\DoxyCodeLine{00318\ \ \ \ \ current-\/>path\_\ =\ new\_path;}
+\DoxyCodeLine{00319\ \}}
+\DoxyCodeLine{00320\ }
+\DoxyCodeLine{00321\ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T\_,\ \textcolor{keyword}{typename}\ L\_>}
+\DoxyCodeLine{00322\ \textcolor{keywordtype}{void}\ filesystem<T\_,\ L\_>::erase(file\_id\ \textcolor{keywordtype}{id})}
+\DoxyCodeLine{00323\ \{}
+\DoxyCodeLine{00324\ \ \ \ \ file\&\ file\ =\ tree\_[id];}
+\DoxyCodeLine{00325\ \ \ \ \ std::filesystem::remove(file.path());}
+\DoxyCodeLine{00326\ \ \ \ \ tree\_.erase(\textcolor{keywordtype}{id});}
+\DoxyCodeLine{00327\ \}}
+\DoxyCodeLine{00328\ }
+\DoxyCodeLine{00329\ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T\_,\ \textcolor{keyword}{typename}\ L\_>}
+\DoxyCodeLine{00330\ \textcolor{keywordtype}{void}\ filesystem<T\_,\ L\_>::erase(\textcolor{keyword}{const}\ path\_t\ \&path)}
+\DoxyCodeLine{00331\ \{}
+\DoxyCodeLine{00332\ \ \ \ \ \textcolor{keyword}{const}\ file\_id\ \textcolor{keywordtype}{id}\ =\ find\_(path);}
+\DoxyCodeLine{00333\ \ \ \ \ erase(tree\_[\textcolor{keywordtype}{id}]);}
+\DoxyCodeLine{00334\ \}}
+\DoxyCodeLine{00335\ }
+\DoxyCodeLine{00336\ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T\_,\ \textcolor{keyword}{typename}\ L\_>}
+\DoxyCodeLine{00337\ \textcolor{keyword}{typename}\ filesystem<T\_,\ L\_>::file\_id\ filesystem<T\_,\ L\_>::find(\textcolor{keyword}{const}\ path\_t\ \&path)\textcolor{keyword}{\ const}}
+\DoxyCodeLine{00338\ \textcolor{keyword}{}\{}
+\DoxyCodeLine{00339\ \ \ \ \ \textcolor{keywordflow}{return}\ find\_(path);}
+\DoxyCodeLine{00340\ \}}
+\DoxyCodeLine{00341\ \ \ \ \ }
+\DoxyCodeLine{00342\ \}}
+\DoxyCodeLine{00343\ }
+\DoxyCodeLine{00344\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//\ OPEN\_CPP\_UTILS\_FILESYSTEM\_H}}
+
+\end{DoxyCode}

@@ -1,0 +1,123 @@
+\doxysection{Trigonometry.\+h}
+\hypertarget{_trigonometry_8h_source}{}\label{_trigonometry_8h_source}\index{Include/Graph/Nodes/Math/Trigonometry.h@{Include/Graph/Nodes/Math/Trigonometry.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//\ =====================================================================================================================}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ \ OpenShaderDesigner,\ an\ open\ source\ software\ utility\ to\ create\ materials\ and\ shaders.}}
+\DoxyCodeLine{00003\ \textcolor{comment}{//\ \ Copyright\ (C)\ 2024\ \ Medusa\ Slockbower}}
+\DoxyCodeLine{00004\ \textcolor{comment}{//}}
+\DoxyCodeLine{00005\ \textcolor{comment}{//\ \ This\ program\ is\ free\ software:\ you\ can\ redistribute\ it\ and/or\ modify}}
+\DoxyCodeLine{00006\ \textcolor{comment}{//\ \ it\ under\ the\ terms\ of\ the\ GNU\ General\ Public\ License\ as\ published\ by}}
+\DoxyCodeLine{00007\ \textcolor{comment}{//\ \ the\ Free\ Software\ Foundation,\ either\ version\ 3\ of\ the\ License,\ or}}
+\DoxyCodeLine{00008\ \textcolor{comment}{//\ \ (at\ your\ option)\ any\ later\ version.}}
+\DoxyCodeLine{00009\ \textcolor{comment}{//}}
+\DoxyCodeLine{00010\ \textcolor{comment}{//\ \ This\ program\ is\ distributed\ in\ the\ hope\ that\ it\ will\ be\ useful,}}
+\DoxyCodeLine{00011\ \textcolor{comment}{//\ \ but\ WITHOUT\ ANY\ WARRANTY;\ without\ even\ the\ implied\ warranty\ of}}
+\DoxyCodeLine{00012\ \textcolor{comment}{//\ \ MERCHANTABILITY\ or\ FITNESS\ FOR\ A\ PARTICULAR\ PURPOSE.\ \ See\ the}}
+\DoxyCodeLine{00013\ \textcolor{comment}{//\ \ GNU\ General\ Public\ License\ for\ more\ details.}}
+\DoxyCodeLine{00014\ \textcolor{comment}{//}}
+\DoxyCodeLine{00015\ \textcolor{comment}{//\ \ You\ should\ have\ received\ a\ copy\ of\ the\ GNU\ General\ Public\ License}}
+\DoxyCodeLine{00016\ \textcolor{comment}{//\ \ along\ with\ this\ program.\ \ If\ not,\ see\ <https://www.gnu.org/licenses/>.}}
+\DoxyCodeLine{00017\ \textcolor{comment}{//\ =====================================================================================================================}}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \textcolor{preprocessor}{\#ifndef\ TRIGONOMETRY\_H}}
+\DoxyCodeLine{00020\ \textcolor{preprocessor}{\#define\ TRIGONOMETRY\_H}}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ \textcolor{preprocessor}{\#include\ <Graph/Nodes/Math/Functions.h>}}
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00024\ \textcolor{keyword}{namespace\ }OpenShaderDesigner::Nodes::Math}
+\DoxyCodeLine{00025\ \{}
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00027\ \textcolor{comment}{//\ =====================================================================================================================}}
+\DoxyCodeLine{00028\ \textcolor{comment}{//\ Trigonometry}}
+\DoxyCodeLine{00029\ \textcolor{comment}{//\ =====================================================================================================================}}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ }
+\DoxyCodeLine{00032\ \textcolor{comment}{//\ Sine\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00033\ \ \ \ \ }
+\DoxyCodeLine{00034\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_open_shader_designer_1_1_nodes_1_1_math_1_1_sine}{Sine}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{struct_open_shader_designer_1_1_nodes_1_1_math_1_1_math_op}{MathOp}}}
+\DoxyCodeLine{00035\ \{}
+\DoxyCodeLine{00036\ \ \ \ \ \mbox{\hyperlink{struct_open_shader_designer_1_1_nodes_1_1_math_1_1_sine}{Sine}}(\mbox{\hyperlink{class_open_shader_designer_1_1_shader_graph}{ShaderGraph}}\&\ graph,\ ImVec2\ pos);}
+\DoxyCodeLine{00037\ \ \ \ \ \mbox{\hyperlink{struct_open_shader_designer_1_1_nodes_1_1_math_1_1_sine}{\string~Sine}}()\ \textcolor{keyword}{override}\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00038\ }
+\DoxyCodeLine{00039\ \ \ \ \ [[nodiscard]]\ \mbox{\hyperlink{struct_open_shader_designer_1_1_node}{Node}}*\ Copy(\mbox{\hyperlink{class_open_shader_designer_1_1_shader_graph}{ShaderGraph}}\&\ graph)\ \textcolor{keyword}{const\ override};}
+\DoxyCodeLine{00040\ \ \ \ \ \textcolor{keywordtype}{void}\ Inspect()\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00042\ \ \ \ \ std::string\ GetCode()\ \textcolor{keyword}{const\ override};}
+\DoxyCodeLine{00043\ \};}
+\DoxyCodeLine{00044\ }
+\DoxyCodeLine{00045\ \ \ \ \ }
+\DoxyCodeLine{00046\ \textcolor{comment}{//\ Cosine\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00047\ \ \ \ \ }
+\DoxyCodeLine{00048\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_open_shader_designer_1_1_nodes_1_1_math_1_1_cosine}{Cosine}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{struct_open_shader_designer_1_1_nodes_1_1_math_1_1_math_op}{MathOp}}}
+\DoxyCodeLine{00049\ \{}
+\DoxyCodeLine{00050\ \ \ \ \ \mbox{\hyperlink{struct_open_shader_designer_1_1_nodes_1_1_math_1_1_cosine}{Cosine}}(\mbox{\hyperlink{class_open_shader_designer_1_1_shader_graph}{ShaderGraph}}\&\ graph,\ ImVec2\ pos);}
+\DoxyCodeLine{00051\ \ \ \ \ \mbox{\hyperlink{struct_open_shader_designer_1_1_nodes_1_1_math_1_1_cosine}{\string~Cosine}}()\ \textcolor{keyword}{override}\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00052\ }
+\DoxyCodeLine{00053\ \ \ \ \ [[nodiscard]]\ \mbox{\hyperlink{struct_open_shader_designer_1_1_node}{Node}}*\ Copy(\mbox{\hyperlink{class_open_shader_designer_1_1_shader_graph}{ShaderGraph}}\&\ graph)\ \textcolor{keyword}{const\ override};}
+\DoxyCodeLine{00054\ \ \ \ \ \textcolor{keywordtype}{void}\ Inspect()\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00055\ }
+\DoxyCodeLine{00056\ \ \ \ \ std::string\ GetCode()\ \textcolor{keyword}{const\ override};}
+\DoxyCodeLine{00057\ \};}
+\DoxyCodeLine{00058\ }
+\DoxyCodeLine{00059\ \ \ \ \ }
+\DoxyCodeLine{00060\ \textcolor{comment}{//\ Tangent\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00061\ }
+\DoxyCodeLine{00062\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_open_shader_designer_1_1_nodes_1_1_math_1_1_tangent}{Tangent}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{struct_open_shader_designer_1_1_nodes_1_1_math_1_1_math_op}{MathOp}}}
+\DoxyCodeLine{00063\ \{}
+\DoxyCodeLine{00064\ \ \ \ \ \mbox{\hyperlink{struct_open_shader_designer_1_1_nodes_1_1_math_1_1_tangent}{Tangent}}(\mbox{\hyperlink{class_open_shader_designer_1_1_shader_graph}{ShaderGraph}}\&\ graph,\ ImVec2\ pos);}
+\DoxyCodeLine{00065\ \ \ \ \ \mbox{\hyperlink{struct_open_shader_designer_1_1_nodes_1_1_math_1_1_tangent}{\string~Tangent}}()\ \textcolor{keyword}{override}\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00066\ }
+\DoxyCodeLine{00067\ \ \ \ \ [[nodiscard]]\ \mbox{\hyperlink{struct_open_shader_designer_1_1_node}{Node}}*\ Copy(\mbox{\hyperlink{class_open_shader_designer_1_1_shader_graph}{ShaderGraph}}\&\ graph)\ \textcolor{keyword}{const\ override};}
+\DoxyCodeLine{00068\ \ \ \ \ \textcolor{keywordtype}{void}\ Inspect()\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00069\ }
+\DoxyCodeLine{00070\ \ \ \ \ std::string\ GetCode()\ \textcolor{keyword}{const\ override};}
+\DoxyCodeLine{00071\ \};}
+\DoxyCodeLine{00072\ }
+\DoxyCodeLine{00073\ }
+\DoxyCodeLine{00074\ \textcolor{comment}{//\ ArcSine\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00075\ }
+\DoxyCodeLine{00076\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_open_shader_designer_1_1_nodes_1_1_math_1_1_arc_sine}{ArcSine}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{struct_open_shader_designer_1_1_nodes_1_1_math_1_1_math_op}{MathOp}}}
+\DoxyCodeLine{00077\ \{}
+\DoxyCodeLine{00078\ \ \ \ \ \mbox{\hyperlink{struct_open_shader_designer_1_1_nodes_1_1_math_1_1_arc_sine}{ArcSine}}(\mbox{\hyperlink{class_open_shader_designer_1_1_shader_graph}{ShaderGraph}}\&\ graph,\ ImVec2\ pos);}
+\DoxyCodeLine{00079\ \ \ \ \ \mbox{\hyperlink{struct_open_shader_designer_1_1_nodes_1_1_math_1_1_arc_sine}{\string~ArcSine}}()\ \textcolor{keyword}{override}\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00080\ }
+\DoxyCodeLine{00081\ \ \ \ \ [[nodiscard]]\ \mbox{\hyperlink{struct_open_shader_designer_1_1_node}{Node}}*\ Copy(\mbox{\hyperlink{class_open_shader_designer_1_1_shader_graph}{ShaderGraph}}\&\ graph)\ \textcolor{keyword}{const\ override};}
+\DoxyCodeLine{00082\ \ \ \ \ \textcolor{keywordtype}{void}\ Inspect()\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00083\ }
+\DoxyCodeLine{00084\ \ \ \ \ std::string\ GetCode()\ \textcolor{keyword}{const\ override};}
+\DoxyCodeLine{00085\ \};}
+\DoxyCodeLine{00086\ }
+\DoxyCodeLine{00087\ }
+\DoxyCodeLine{00088\ \textcolor{comment}{//\ ArcCosine\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00089\ }
+\DoxyCodeLine{00090\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_open_shader_designer_1_1_nodes_1_1_math_1_1_arc_cosine}{ArcCosine}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{struct_open_shader_designer_1_1_nodes_1_1_math_1_1_math_op}{MathOp}}}
+\DoxyCodeLine{00091\ \{}
+\DoxyCodeLine{00092\ \ \ \ \ \mbox{\hyperlink{struct_open_shader_designer_1_1_nodes_1_1_math_1_1_arc_cosine}{ArcCosine}}(\mbox{\hyperlink{class_open_shader_designer_1_1_shader_graph}{ShaderGraph}}\&\ graph,\ ImVec2\ pos);}
+\DoxyCodeLine{00093\ \ \ \ \ \mbox{\hyperlink{struct_open_shader_designer_1_1_nodes_1_1_math_1_1_arc_cosine}{\string~ArcCosine}}()\ \textcolor{keyword}{override}\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00094\ }
+\DoxyCodeLine{00095\ \ \ \ \ [[nodiscard]]\ \mbox{\hyperlink{struct_open_shader_designer_1_1_node}{Node}}*\ Copy(\mbox{\hyperlink{class_open_shader_designer_1_1_shader_graph}{ShaderGraph}}\&\ graph)\ \textcolor{keyword}{const\ override};}
+\DoxyCodeLine{00096\ \ \ \ \ \textcolor{keywordtype}{void}\ Inspect()\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00097\ }
+\DoxyCodeLine{00098\ \ \ \ \ std::string\ GetCode()\ \textcolor{keyword}{const\ override};}
+\DoxyCodeLine{00099\ \};}
+\DoxyCodeLine{00100\ }
+\DoxyCodeLine{00101\ }
+\DoxyCodeLine{00102\ \textcolor{comment}{//\ ArcTangent\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00103\ }
+\DoxyCodeLine{00104\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_open_shader_designer_1_1_nodes_1_1_math_1_1_arc_tangent}{ArcTangent}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{struct_open_shader_designer_1_1_nodes_1_1_math_1_1_math_op}{MathOp}}}
+\DoxyCodeLine{00105\ \{}
+\DoxyCodeLine{00106\ \ \ \ \ \mbox{\hyperlink{struct_open_shader_designer_1_1_nodes_1_1_math_1_1_arc_tangent}{ArcTangent}}(\mbox{\hyperlink{class_open_shader_designer_1_1_shader_graph}{ShaderGraph}}\&\ graph,\ ImVec2\ pos);}
+\DoxyCodeLine{00107\ \ \ \ \ \mbox{\hyperlink{struct_open_shader_designer_1_1_nodes_1_1_math_1_1_arc_tangent}{\string~ArcTangent}}()\ \textcolor{keyword}{override}\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00108\ }
+\DoxyCodeLine{00109\ \ \ \ \ [[nodiscard]]\ \mbox{\hyperlink{struct_open_shader_designer_1_1_node}{Node}}*\ Copy(\mbox{\hyperlink{class_open_shader_designer_1_1_shader_graph}{ShaderGraph}}\&\ graph)\ \textcolor{keyword}{const\ override};}
+\DoxyCodeLine{00110\ \ \ \ \ \textcolor{keywordtype}{void}\ Inspect()\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00111\ }
+\DoxyCodeLine{00112\ \ \ \ \ std::string\ GetCode()\ \textcolor{keyword}{const\ override};}
+\DoxyCodeLine{00113\ \};}
+\DoxyCodeLine{00114\ }
+\DoxyCodeLine{00115\ \}}
+\DoxyCodeLine{00116\ }
+\DoxyCodeLine{00117\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//TRIGONOMETRY\_H}}
+
+\end{DoxyCode}

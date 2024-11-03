@@ -1,0 +1,130 @@
+\doxysection{Open\+Shader\+Designer\+::Nodes\+::Math\+::Power Struct Reference}
+\hypertarget{struct_open_shader_designer_1_1_nodes_1_1_math_1_1_power}{}\label{struct_open_shader_designer_1_1_nodes_1_1_math_1_1_power}\index{OpenShaderDesigner::Nodes::Math::Power@{OpenShaderDesigner::Nodes::Math::Power}}
+Inheritance diagram for Open\+Shader\+Designer\+::Nodes\+::Math\+::Power\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=3.000000cm]{struct_open_shader_designer_1_1_nodes_1_1_math_1_1_power}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{struct_open_shader_designer_1_1_nodes_1_1_math_1_1_power_a406717098a1d7daf4d3162f387507646}\label{struct_open_shader_designer_1_1_nodes_1_1_math_1_1_power_a406717098a1d7daf4d3162f387507646} 
+{\bfseries Power} (\mbox{\hyperlink{class_open_shader_designer_1_1_shader_graph}{Shader\+Graph}} \&graph, Im\+Vec2 pos)
+\item 
+\mbox{\hyperlink{struct_open_shader_designer_1_1_node}{Node}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{struct_open_shader_designer_1_1_nodes_1_1_math_1_1_power_a4b0cb4828124982381a6b4028882f1b3}{Copy}} (\mbox{\hyperlink{class_open_shader_designer_1_1_shader_graph}{Shader\+Graph}} \&graph) const override
+\item 
+void \mbox{\hyperlink{struct_open_shader_designer_1_1_nodes_1_1_math_1_1_power_ad1d1a083b2cb6d4fb713147044eeca5c}{Inspect}} () override
+\item 
+std\+::string \mbox{\hyperlink{struct_open_shader_designer_1_1_nodes_1_1_math_1_1_power_a02c90a702c711d5f03985a1ed7d3869d}{Get\+Code}} () const override
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{struct_open_shader_designer_1_1_nodes_1_1_math_1_1_math_op}{Open\+Shader\+Designer\+::\+Nodes\+::\+Math\+::\+Math\+Op}}}
+\begin{DoxyCompactItemize}
+\item 
+{\bfseries Math\+Op} (\mbox{\hyperlink{class_open_shader_designer_1_1_shader_graph}{Shader\+Graph}} \&graph, Im\+Vec2 pos)
+\item 
+virtual bool \mbox{\hyperlink{struct_open_shader_designer_1_1_nodes_1_1_math_1_1_math_op_a891db2c8f3e24e33b5334432ac5aaa34}{Check\+Connection}} (\mbox{\hyperlink{struct_open_shader_designer_1_1_pin}{Pin}} \texorpdfstring{$\ast$}{*}, \mbox{\hyperlink{struct_open_shader_designer_1_1_pin}{Pin}} \texorpdfstring{$\ast$}{*}) override
+\item 
+virtual void \mbox{\hyperlink{struct_open_shader_designer_1_1_nodes_1_1_math_1_1_math_op_adcdb081e65e85d06d8bf29e44c9fb758}{Validate\+Connections}} () override
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{struct_open_shader_designer_1_1_node}{Open\+Shader\+Designer\+::\+Node}}}
+\begin{DoxyCompactItemize}
+\item 
+{\bfseries Node} (\mbox{\hyperlink{class_open_shader_designer_1_1_shader_graph}{Shader\+Graph}} \&graph, Im\+Vec2 pos)
+\item 
+void {\bfseries Draw\+Pin} (int id, \mbox{\hyperlink{struct_open_shader_designer_1_1_pin}{Pin}} \&pin, Im\+Pin\+Direction direction)
+\item 
+void {\bfseries Draw} (Im\+Gui\+ID id)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Public Types inherited from \mbox{\hyperlink{struct_open_shader_designer_1_1_nodes_1_1_math_1_1_math_op}{Open\+Shader\+Designer\+::\+Nodes\+::\+Math\+::\+Math\+Op}}}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{struct_open_shader_designer_1_1_nodes_1_1_math_1_1_math_op_a0e9a54e0db2cdf459fbf78a4e3ccd8e8}\label{struct_open_shader_designer_1_1_nodes_1_1_math_1_1_math_op_a0e9a54e0db2cdf459fbf78a4e3ccd8e8} 
+enum {\bfseries Math\+Op\+Flags\+\_\+} \+: glw\+::enum\+\_\+t \{ {\bfseries Math\+Op\+Flags\+\_\+\+None} = 0
+, {\bfseries Math\+Op\+Flags\+\_\+\+Allow\+Multiple\+Input\+Types} = 0x0000\textquotesingle{}0001
+ \}
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes inherited from \mbox{\hyperlink{struct_open_shader_designer_1_1_nodes_1_1_math_1_1_math_op}{Open\+Shader\+Designer\+::\+Nodes\+::\+Math\+::\+Math\+Op}}}
+\begin{DoxyCompactItemize}
+\item 
+\begin{tabbing}
+xx\=xx\=xx\=xx\=xx\=xx\=xx\=xx\=xx\=\kill
+struct \{\\
+\>glw::enum\_t {\bfseries Flags}\\
+\} {\bfseries Math}\\
+
+\end{tabbing}\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes inherited from \mbox{\hyperlink{struct_open_shader_designer_1_1_node}{Open\+Shader\+Designer\+::\+Node}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_open_shader_designer_1_1_shader_graph}{Shader\+Graph}} \& {\bfseries Graph}
+\item 
+Im\+Vec2 {\bfseries Position} = \{ 0, 0 \}
+\item 
+\begin{tabbing}
+xx\=xx\=xx\=xx\=xx\=xx\=xx\=xx\=xx\=\kill
+struct \{\\
+\>std::string {\bfseries Title}\\
+\>ImColor {\bfseries Color}\\
+\>ImColor {\bfseries HoveredColor}\\
+\>ImColor {\bfseries ActiveColor}\\
+\>bool {\bfseries Enabled}\\
+\} {\bfseries Header}\\
+
+\end{tabbing}\item 
+\begin{tabbing}
+xx\=xx\=xx\=xx\=xx\=xx\=xx\=xx\=xx\=\kill
+struct \{\\
+\>std::vector$<$ \mbox{\hyperlink{struct_open_shader_designer_1_1_pin}{Pin}} $>$ {\bfseries Inputs}\\
+\>std::vector$<$ \mbox{\hyperlink{struct_open_shader_designer_1_1_pin}{Pin}} $>$ {\bfseries Outputs}\\
+\} {\bfseries IO}\\
+
+\end{tabbing}\item 
+\begin{tabbing}
+xx\=xx\=xx\=xx\=xx\=xx\=xx\=xx\=xx\=\kill
+struct \{\\
+\>std::string {\bfseries Alias}\\
+\>FlagT {\bfseries Flags}\\
+\} {\bfseries Info}\\
+
+\end{tabbing}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{struct_open_shader_designer_1_1_nodes_1_1_math_1_1_power_a4b0cb4828124982381a6b4028882f1b3}\index{OpenShaderDesigner::Nodes::Math::Power@{OpenShaderDesigner::Nodes::Math::Power}!Copy@{Copy}}
+\index{Copy@{Copy}!OpenShaderDesigner::Nodes::Math::Power@{OpenShaderDesigner::Nodes::Math::Power}}
+\doxysubsubsection{\texorpdfstring{Copy()}{Copy()}}
+{\footnotesize\ttfamily \label{struct_open_shader_designer_1_1_nodes_1_1_math_1_1_power_a4b0cb4828124982381a6b4028882f1b3} 
+\mbox{\hyperlink{struct_open_shader_designer_1_1_node}{Node}} \texorpdfstring{$\ast$}{*} Power\+::\+Copy (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_open_shader_designer_1_1_shader_graph}{Shader\+Graph}} \&}]{graph}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [nodiscard]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{struct_open_shader_designer_1_1_node}{Open\+Shader\+Designer\+::\+Node}}.
+
+\Hypertarget{struct_open_shader_designer_1_1_nodes_1_1_math_1_1_power_a02c90a702c711d5f03985a1ed7d3869d}\index{OpenShaderDesigner::Nodes::Math::Power@{OpenShaderDesigner::Nodes::Math::Power}!GetCode@{GetCode}}
+\index{GetCode@{GetCode}!OpenShaderDesigner::Nodes::Math::Power@{OpenShaderDesigner::Nodes::Math::Power}}
+\doxysubsubsection{\texorpdfstring{GetCode()}{GetCode()}}
+{\footnotesize\ttfamily \label{struct_open_shader_designer_1_1_nodes_1_1_math_1_1_power_a02c90a702c711d5f03985a1ed7d3869d} 
+std\+::string Power\+::\+Get\+Code (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{struct_open_shader_designer_1_1_node}{Open\+Shader\+Designer\+::\+Node}}.
+
+\Hypertarget{struct_open_shader_designer_1_1_nodes_1_1_math_1_1_power_ad1d1a083b2cb6d4fb713147044eeca5c}\index{OpenShaderDesigner::Nodes::Math::Power@{OpenShaderDesigner::Nodes::Math::Power}!Inspect@{Inspect}}
+\index{Inspect@{Inspect}!OpenShaderDesigner::Nodes::Math::Power@{OpenShaderDesigner::Nodes::Math::Power}}
+\doxysubsubsection{\texorpdfstring{Inspect()}{Inspect()}}
+{\footnotesize\ttfamily \label{struct_open_shader_designer_1_1_nodes_1_1_math_1_1_power_ad1d1a083b2cb6d4fb713147044eeca5c} 
+void Power\+::\+Inspect (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{struct_open_shader_designer_1_1_node}{Open\+Shader\+Designer\+::\+Node}}.
+
+
+
+The documentation for this struct was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+Include/\+Graph/\+Nodes/\+Math/Functions.\+h\item 
+Source/\+Graph/\+Nodes/\+Math/Functions.\+cpp\end{DoxyCompactItemize}

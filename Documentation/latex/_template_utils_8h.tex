@@ -1,0 +1,75 @@
+\doxysection{Include/\+Utility/\+Template\+Utils.h File Reference}
+\hypertarget{_template_utils_8h}{}\label{_template_utils_8h}\index{Include/Utility/TemplateUtils.h@{Include/Utility/TemplateUtils.h}}
+
+
+Provides compile time evaluation utilities for templates and template packs.  
+
+
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{struct_constant_value}{Constant\+Value$<$ T, V $>$}}
+\begin{DoxyCompactList}\small\item\em Compile-\/time constant value. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{struct_get_pack_element}{Get\+Pack\+Element$<$ I, T, Ts $>$}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+{\footnotesize template$<$bool V$>$ }\\using \mbox{\hyperlink{_template_utils_8h_a4ec4c561f8a620b1a281b243abb77390}{Bool\+Constant}} = \mbox{\hyperlink{struct_constant_value}{Constant\+Value}}$<$bool, V$>$
+\begin{DoxyCompactList}\small\item\em Compile-\/time constant boolean value. \end{DoxyCompactList}\item 
+\Hypertarget{_template_utils_8h_adeed5746027088c5ee9ce594b2dc5f97}\label{_template_utils_8h_adeed5746027088c5ee9ce594b2dc5f97} 
+using {\bfseries True\+Type} = \mbox{\hyperlink{_template_utils_8h_a4ec4c561f8a620b1a281b243abb77390}{Bool\+Constant}}$<$true$>$
+\begin{DoxyCompactList}\small\item\em Constant True Value. \end{DoxyCompactList}\item 
+\Hypertarget{_template_utils_8h_a5d03e0d64b76930405274da5a45e8c24}\label{_template_utils_8h_a5d03e0d64b76930405274da5a45e8c24} 
+using {\bfseries False\+Type} = \mbox{\hyperlink{_template_utils_8h_a4ec4c561f8a620b1a281b243abb77390}{Bool\+Constant}}$<$false$>$
+\begin{DoxyCompactList}\small\item\em Constant False Value. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+{\footnotesize template$<$typename T , typename... Ts$>$ }\\constexpr bool \mbox{\hyperlink{_template_utils_8h_a41b103eb68d30e57aeca48ed2c66e162}{Is\+Unique$<$ T, Ts... $>$}} = \mbox{\hyperlink{_template_utils_8h_a4ec4c561f8a620b1a281b243abb77390}{Bool\+Constant}}$<$(!Is\+Same$<$T, Ts$>$ \&\& ...) \&\& Is\+Unique$<$Ts...$>$$>$\{\}
+\begin{DoxyCompactList}\small\item\em Check if all types in a template pack are unique. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Provides compile time evaluation utilities for templates and template packs. 
+
+
+
+\doxysubsection{Typedef Documentation}
+\Hypertarget{_template_utils_8h_a4ec4c561f8a620b1a281b243abb77390}\index{TemplateUtils.h@{TemplateUtils.h}!BoolConstant@{BoolConstant}}
+\index{BoolConstant@{BoolConstant}!TemplateUtils.h@{TemplateUtils.h}}
+\doxysubsubsection{\texorpdfstring{BoolConstant}{BoolConstant}}
+{\footnotesize\ttfamily \label{_template_utils_8h_a4ec4c561f8a620b1a281b243abb77390} 
+template$<$bool V$>$ \\
+using \mbox{\hyperlink{_template_utils_8h_a4ec4c561f8a620b1a281b243abb77390}{Bool\+Constant}} = \mbox{\hyperlink{struct_constant_value}{Constant\+Value}}$<$bool, V$>$}
+
+
+
+Compile-\/time constant boolean value. 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em V} & Value \\
+\hline
+\end{DoxyTemplParams}
+
+
+\doxysubsection{Variable Documentation}
+\Hypertarget{_template_utils_8h_a41b103eb68d30e57aeca48ed2c66e162}\index{TemplateUtils.h@{TemplateUtils.h}!IsUnique$<$ T, Ts... $>$@{IsUnique$<$ T, Ts... $>$}}
+\index{IsUnique$<$ T, Ts... $>$@{IsUnique$<$ T, Ts... $>$}!TemplateUtils.h@{TemplateUtils.h}}
+\doxysubsubsection{\texorpdfstring{IsUnique$<$ T, Ts... $>$}{IsUnique< T, Ts... >}}
+{\footnotesize\ttfamily \label{_template_utils_8h_a41b103eb68d30e57aeca48ed2c66e162} 
+template$<$typename T , typename... Ts$>$ \\
+bool Is\+Unique$<$ T, Ts... $>$ = \mbox{\hyperlink{_template_utils_8h_a4ec4c561f8a620b1a281b243abb77390}{Bool\+Constant}}$<$(!Is\+Same$<$T, Ts$>$ \&\& ...) \&\& Is\+Unique$<$Ts...$>$$>$\{\}\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [constexpr]}}
+
+
+
+Check if all types in a template pack are unique. 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em T} & First element of template pack \\
+\hline
+{\em Ts} & Rest of the template pack \\
+\hline
+\end{DoxyTemplParams}

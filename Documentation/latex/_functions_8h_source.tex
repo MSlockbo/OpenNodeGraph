@@ -1,0 +1,187 @@
+\doxysection{Functions.\+h}
+\hypertarget{_functions_8h_source}{}\label{_functions_8h_source}\index{Include/Graph/Nodes/Math/Functions.h@{Include/Graph/Nodes/Math/Functions.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//\ =====================================================================================================================}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ \ OpenShaderDesigner,\ an\ open\ source\ software\ utility\ to\ create\ materials\ and\ shaders.}}
+\DoxyCodeLine{00003\ \textcolor{comment}{//\ \ Copyright\ (C)\ 2024\ \ Medusa\ Slockbower}}
+\DoxyCodeLine{00004\ \textcolor{comment}{//}}
+\DoxyCodeLine{00005\ \textcolor{comment}{//\ \ This\ program\ is\ free\ software:\ you\ can\ redistribute\ it\ and/or\ modify}}
+\DoxyCodeLine{00006\ \textcolor{comment}{//\ \ it\ under\ the\ terms\ of\ the\ GNU\ General\ Public\ License\ as\ published\ by}}
+\DoxyCodeLine{00007\ \textcolor{comment}{//\ \ the\ Free\ Software\ Foundation,\ either\ version\ 3\ of\ the\ License,\ or}}
+\DoxyCodeLine{00008\ \textcolor{comment}{//\ \ (at\ your\ option)\ any\ later\ version.}}
+\DoxyCodeLine{00009\ \textcolor{comment}{//}}
+\DoxyCodeLine{00010\ \textcolor{comment}{//\ \ This\ program\ is\ distributed\ in\ the\ hope\ that\ it\ will\ be\ useful,}}
+\DoxyCodeLine{00011\ \textcolor{comment}{//\ \ but\ WITHOUT\ ANY\ WARRANTY;\ without\ even\ the\ implied\ warranty\ of}}
+\DoxyCodeLine{00012\ \textcolor{comment}{//\ \ MERCHANTABILITY\ or\ FITNESS\ FOR\ A\ PARTICULAR\ PURPOSE.\ \ See\ the}}
+\DoxyCodeLine{00013\ \textcolor{comment}{//\ \ GNU\ General\ Public\ License\ for\ more\ details.}}
+\DoxyCodeLine{00014\ \textcolor{comment}{//}}
+\DoxyCodeLine{00015\ \textcolor{comment}{//\ \ You\ should\ have\ received\ a\ copy\ of\ the\ GNU\ General\ Public\ License}}
+\DoxyCodeLine{00016\ \textcolor{comment}{//\ \ along\ with\ this\ program.\ \ If\ not,\ see\ <https://www.gnu.org/licenses/>.}}
+\DoxyCodeLine{00017\ \textcolor{comment}{//\ =====================================================================================================================}}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \textcolor{preprocessor}{\#ifndef\ OSD\_MATH\_H}}
+\DoxyCodeLine{00020\ \textcolor{preprocessor}{\#define\ OSD\_MATH\_H}}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ \textcolor{preprocessor}{\#include\ <glm/vec4.hpp>}}
+\DoxyCodeLine{00023\ \textcolor{preprocessor}{\#include\ <Graph/ShaderGraph.h>}}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ \textcolor{keyword}{namespace\ }ocu\ =\ open\_cpp\_utils;}
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00027\ \textcolor{keyword}{namespace\ }OpenShaderDesigner::Nodes::Math}
+\DoxyCodeLine{00028\ \{}
+\DoxyCodeLine{00029\ \ \ \ \ }
+\DoxyCodeLine{00030\ \textcolor{comment}{//\ Header\ Colors\ =======================================================================================================}}
+\DoxyCodeLine{00031\ }
+\DoxyCodeLine{00032\ \textcolor{keyword}{inline}\ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ ImColor\ HeaderColor\ \ \ \ \ \ \ \ =\ ImColor(0xA7,\ 0x62,\ 0x53);}
+\DoxyCodeLine{00033\ \textcolor{keyword}{inline}\ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ ImColor\ HeaderHoveredColor\ =\ ImColor(0xC5,\ 0x79,\ 0x67);}
+\DoxyCodeLine{00034\ \textcolor{keyword}{inline}\ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ ImColor\ HeaderActiveColor\ \ =\ ImColor(0x82,\ 0x4C,\ 0x40);}
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00036\ \textcolor{keyword}{inline}\ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ std::string\ HeaderMarker\ \ \ \ \ \ \ =\ \textcolor{stringliteral}{"{}\(\backslash\)uF3B9\ "{}};}
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00038\ }
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00040\ \textcolor{comment}{//\ =====================================================================================================================}}
+\DoxyCodeLine{00041\ \textcolor{comment}{//\ Operations}}
+\DoxyCodeLine{00042\ \textcolor{comment}{//\ =====================================================================================================================}}
+\DoxyCodeLine{00043\ }
+\DoxyCodeLine{00044\ }
+\DoxyCodeLine{00045\ \textcolor{comment}{//\ Math\ Op\ Prototype\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00046\ }
+\DoxyCodeLine{00047\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_open_shader_designer_1_1_nodes_1_1_math_1_1_math_op}{MathOp}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{struct_open_shader_designer_1_1_node}{Node}}}
+\DoxyCodeLine{00048\ \{}
+\DoxyCodeLine{00049\ \ \ \ \ \textcolor{keyword}{enum}\ MathOpFlags\_\ :\ glw::enum\_t}
+\DoxyCodeLine{00050\ \ \ \ \ \{}
+\DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ MathOpFlags\_None\ =\ 0}
+\DoxyCodeLine{00052\ \ \ \ \ ,\ \ \ MathOpFlags\_AllowMultipleInputTypes\ =\ 0x0000'0001}
+\DoxyCodeLine{00053\ \ \ \ \ \};}
+\DoxyCodeLine{00054\ \ \ \ \ }
+\DoxyCodeLine{00055\ \ \ \ \ \mbox{\hyperlink{struct_open_shader_designer_1_1_nodes_1_1_math_1_1_math_op}{MathOp}}(\mbox{\hyperlink{class_open_shader_designer_1_1_shader_graph}{ShaderGraph}}\&\ graph,\ ImVec2\ pos);}
+\DoxyCodeLine{00056\ \ \ \ \ \mbox{\hyperlink{struct_open_shader_designer_1_1_nodes_1_1_math_1_1_math_op}{\string~MathOp}}()\ \textcolor{keyword}{override}\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00057\ }
+\DoxyCodeLine{00058\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{bool}\ CheckConnection(\mbox{\hyperlink{struct_open_shader_designer_1_1_pin}{Pin}}*,\ \mbox{\hyperlink{struct_open_shader_designer_1_1_pin}{Pin}}*)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00059\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ ValidateConnections()\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00060\ }
+\DoxyCodeLine{00061\ \ \ \ \ \textcolor{keyword}{struct}}
+\DoxyCodeLine{00062\ \ \ \ \ \{}
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ glw::enum\_t\ Flags;}
+\DoxyCodeLine{00064\ \ \ \ \ \}\ Math;}
+\DoxyCodeLine{00065\ \};}
+\DoxyCodeLine{00066\ }
+\DoxyCodeLine{00067\ }
+\DoxyCodeLine{00068\ \textcolor{comment}{//\ Add\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00069\ }
+\DoxyCodeLine{00070\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_open_shader_designer_1_1_nodes_1_1_math_1_1_add}{Add}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{struct_open_shader_designer_1_1_nodes_1_1_math_1_1_math_op}{MathOp}}}
+\DoxyCodeLine{00071\ \{}
+\DoxyCodeLine{00072\ \ \ \ \ \mbox{\hyperlink{struct_open_shader_designer_1_1_nodes_1_1_math_1_1_add}{Add}}(\mbox{\hyperlink{class_open_shader_designer_1_1_shader_graph}{ShaderGraph}}\&\ graph,\ ImVec2\ pos);}
+\DoxyCodeLine{00073\ \ \ \ \ \mbox{\hyperlink{struct_open_shader_designer_1_1_nodes_1_1_math_1_1_add}{\string~Add}}()\ \textcolor{keyword}{override}\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00074\ }
+\DoxyCodeLine{00075\ \ \ \ \ [[nodiscard]]\ \mbox{\hyperlink{struct_open_shader_designer_1_1_node}{Node}}*\ Copy(\mbox{\hyperlink{class_open_shader_designer_1_1_shader_graph}{ShaderGraph}}\&\ graph)\ \textcolor{keyword}{const\ override};}
+\DoxyCodeLine{00076\ \ \ \ \ \textcolor{keywordtype}{void}\ Inspect()\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00077\ }
+\DoxyCodeLine{00078\ \ \ \ \ std::string\ GetCode()\ \textcolor{keyword}{const\ override};}
+\DoxyCodeLine{00079\ \};}
+\DoxyCodeLine{00080\ }
+\DoxyCodeLine{00081\ }
+\DoxyCodeLine{00082\ \textcolor{comment}{//\ Subtract\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00083\ }
+\DoxyCodeLine{00084\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_open_shader_designer_1_1_nodes_1_1_math_1_1_subtract}{Subtract}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{struct_open_shader_designer_1_1_nodes_1_1_math_1_1_math_op}{MathOp}}}
+\DoxyCodeLine{00085\ \{}
+\DoxyCodeLine{00086\ \ \ \ \ \mbox{\hyperlink{struct_open_shader_designer_1_1_nodes_1_1_math_1_1_subtract}{Subtract}}(\mbox{\hyperlink{class_open_shader_designer_1_1_shader_graph}{ShaderGraph}}\&\ graph,\ ImVec2\ pos);}
+\DoxyCodeLine{00087\ \ \ \ \ \mbox{\hyperlink{struct_open_shader_designer_1_1_nodes_1_1_math_1_1_subtract}{\string~Subtract}}()\ \textcolor{keyword}{override}\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00088\ }
+\DoxyCodeLine{00089\ \ \ \ \ [[nodiscard]]\ \mbox{\hyperlink{struct_open_shader_designer_1_1_node}{Node}}*\ Copy(\mbox{\hyperlink{class_open_shader_designer_1_1_shader_graph}{ShaderGraph}}\&\ graph)\ \textcolor{keyword}{const\ override};}
+\DoxyCodeLine{00090\ \ \ \ \ \textcolor{keywordtype}{void}\ Inspect()\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00091\ }
+\DoxyCodeLine{00092\ \ \ \ \ std::string\ GetCode()\ \textcolor{keyword}{const\ override};}
+\DoxyCodeLine{00093\ \};}
+\DoxyCodeLine{00094\ }
+\DoxyCodeLine{00095\ \textcolor{comment}{//\ Multiply\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00096\ }
+\DoxyCodeLine{00097\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_open_shader_designer_1_1_nodes_1_1_math_1_1_multiply}{Multiply}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{struct_open_shader_designer_1_1_nodes_1_1_math_1_1_math_op}{MathOp}}}
+\DoxyCodeLine{00098\ \{}
+\DoxyCodeLine{00099\ \ \ \ \ \mbox{\hyperlink{struct_open_shader_designer_1_1_nodes_1_1_math_1_1_multiply}{Multiply}}(\mbox{\hyperlink{class_open_shader_designer_1_1_shader_graph}{ShaderGraph}}\&\ graph,\ ImVec2\ pos);}
+\DoxyCodeLine{00100\ \ \ \ \ \mbox{\hyperlink{struct_open_shader_designer_1_1_nodes_1_1_math_1_1_multiply}{\string~Multiply}}()\ \textcolor{keyword}{override}\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00101\ }
+\DoxyCodeLine{00102\ \ \ \ \ [[nodiscard]]\ \mbox{\hyperlink{struct_open_shader_designer_1_1_node}{Node}}*\ Copy(\mbox{\hyperlink{class_open_shader_designer_1_1_shader_graph}{ShaderGraph}}\&\ graph)\ \textcolor{keyword}{const\ override};}
+\DoxyCodeLine{00103\ \ \ \ \ \textcolor{keywordtype}{void}\ Inspect()\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00104\ }
+\DoxyCodeLine{00105\ \ \ \ \ std::string\ GetCode()\ \textcolor{keyword}{const\ override};}
+\DoxyCodeLine{00106\ \};}
+\DoxyCodeLine{00107\ }
+\DoxyCodeLine{00108\ }
+\DoxyCodeLine{00109\ \textcolor{comment}{//\ Divide\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00110\ }
+\DoxyCodeLine{00111\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_open_shader_designer_1_1_nodes_1_1_math_1_1_divide}{Divide}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{struct_open_shader_designer_1_1_nodes_1_1_math_1_1_math_op}{MathOp}}}
+\DoxyCodeLine{00112\ \{}
+\DoxyCodeLine{00113\ \ \ \ \ \mbox{\hyperlink{struct_open_shader_designer_1_1_nodes_1_1_math_1_1_divide}{Divide}}(\mbox{\hyperlink{class_open_shader_designer_1_1_shader_graph}{ShaderGraph}}\&\ graph,\ ImVec2\ pos);}
+\DoxyCodeLine{00114\ \ \ \ \ \mbox{\hyperlink{struct_open_shader_designer_1_1_nodes_1_1_math_1_1_divide}{\string~Divide}}()\ \textcolor{keyword}{override}\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00115\ }
+\DoxyCodeLine{00116\ \ \ \ \ [[nodiscard]]\ \mbox{\hyperlink{struct_open_shader_designer_1_1_node}{Node}}*\ Copy(\mbox{\hyperlink{class_open_shader_designer_1_1_shader_graph}{ShaderGraph}}\&\ graph)\ \textcolor{keyword}{const\ override};}
+\DoxyCodeLine{00117\ \ \ \ \ \textcolor{keywordtype}{void}\ Inspect()\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00118\ }
+\DoxyCodeLine{00119\ \ \ \ \ std::string\ GetCode()\ \textcolor{keyword}{const\ override};}
+\DoxyCodeLine{00120\ \};}
+\DoxyCodeLine{00121\ }
+\DoxyCodeLine{00122\ }
+\DoxyCodeLine{00123\ \textcolor{comment}{//\ Abs\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00124\ }
+\DoxyCodeLine{00125\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_open_shader_designer_1_1_nodes_1_1_math_1_1_absolute_value}{AbsoluteValue}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{struct_open_shader_designer_1_1_nodes_1_1_math_1_1_math_op}{MathOp}}}
+\DoxyCodeLine{00126\ \{}
+\DoxyCodeLine{00127\ \ \ \ \ \mbox{\hyperlink{struct_open_shader_designer_1_1_nodes_1_1_math_1_1_absolute_value}{AbsoluteValue}}(\mbox{\hyperlink{class_open_shader_designer_1_1_shader_graph}{ShaderGraph}}\&\ graph,\ ImVec2\ pos);}
+\DoxyCodeLine{00128\ \ \ \ \ \mbox{\hyperlink{struct_open_shader_designer_1_1_nodes_1_1_math_1_1_absolute_value}{\string~AbsoluteValue}}()\ \textcolor{keyword}{override}\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00129\ }
+\DoxyCodeLine{00130\ \ \ \ \ [[nodiscard]]\ \mbox{\hyperlink{struct_open_shader_designer_1_1_node}{Node}}*\ Copy(\mbox{\hyperlink{class_open_shader_designer_1_1_shader_graph}{ShaderGraph}}\&\ graph)\ \textcolor{keyword}{const\ override};}
+\DoxyCodeLine{00131\ \ \ \ \ \textcolor{keywordtype}{void}\ Inspect()\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00132\ }
+\DoxyCodeLine{00133\ \ \ \ \ std::string\ GetCode()\ \textcolor{keyword}{const\ override};}
+\DoxyCodeLine{00134\ \};}
+\DoxyCodeLine{00135\ }
+\DoxyCodeLine{00136\ }
+\DoxyCodeLine{00137\ \textcolor{comment}{//\ SquareRoot\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00138\ }
+\DoxyCodeLine{00139\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_open_shader_designer_1_1_nodes_1_1_math_1_1_square_root}{SquareRoot}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{struct_open_shader_designer_1_1_nodes_1_1_math_1_1_math_op}{MathOp}}}
+\DoxyCodeLine{00140\ \{}
+\DoxyCodeLine{00141\ \ \ \ \ \mbox{\hyperlink{struct_open_shader_designer_1_1_nodes_1_1_math_1_1_square_root}{SquareRoot}}(\mbox{\hyperlink{class_open_shader_designer_1_1_shader_graph}{ShaderGraph}}\&\ graph,\ ImVec2\ pos);}
+\DoxyCodeLine{00142\ \ \ \ \ \mbox{\hyperlink{struct_open_shader_designer_1_1_nodes_1_1_math_1_1_square_root}{\string~SquareRoot}}()\ \textcolor{keyword}{override}\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00143\ }
+\DoxyCodeLine{00144\ \ \ \ \ [[nodiscard]]\ \mbox{\hyperlink{struct_open_shader_designer_1_1_node}{Node}}*\ Copy(\mbox{\hyperlink{class_open_shader_designer_1_1_shader_graph}{ShaderGraph}}\&\ graph)\ \textcolor{keyword}{const\ override};}
+\DoxyCodeLine{00145\ \ \ \ \ \textcolor{keywordtype}{void}\ Inspect()\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00146\ }
+\DoxyCodeLine{00147\ \ \ \ \ std::string\ GetCode()\ \textcolor{keyword}{const\ override};}
+\DoxyCodeLine{00148\ \};}
+\DoxyCodeLine{00149\ }
+\DoxyCodeLine{00150\ \ \ \ \ }
+\DoxyCodeLine{00151\ \textcolor{comment}{//\ Power\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00152\ }
+\DoxyCodeLine{00153\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_open_shader_designer_1_1_nodes_1_1_math_1_1_power}{Power}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{struct_open_shader_designer_1_1_nodes_1_1_math_1_1_math_op}{MathOp}}}
+\DoxyCodeLine{00154\ \{}
+\DoxyCodeLine{00155\ \ \ \ \ \mbox{\hyperlink{struct_open_shader_designer_1_1_nodes_1_1_math_1_1_power}{Power}}(\mbox{\hyperlink{class_open_shader_designer_1_1_shader_graph}{ShaderGraph}}\&\ graph,\ ImVec2\ pos);}
+\DoxyCodeLine{00156\ \ \ \ \ \mbox{\hyperlink{struct_open_shader_designer_1_1_nodes_1_1_math_1_1_power}{\string~Power}}()\ \textcolor{keyword}{override}\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00157\ }
+\DoxyCodeLine{00158\ \ \ \ \ [[nodiscard]]\ \mbox{\hyperlink{struct_open_shader_designer_1_1_node}{Node}}*\ Copy(\mbox{\hyperlink{class_open_shader_designer_1_1_shader_graph}{ShaderGraph}}\&\ graph)\ \textcolor{keyword}{const\ override};}
+\DoxyCodeLine{00159\ \ \ \ \ \textcolor{keywordtype}{void}\ Inspect()\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00160\ }
+\DoxyCodeLine{00161\ \ \ \ \ std::string\ GetCode()\ \textcolor{keyword}{const\ override};}
+\DoxyCodeLine{00162\ \};}
+\DoxyCodeLine{00163\ }
+\DoxyCodeLine{00164\ }
+\DoxyCodeLine{00165\ \textcolor{comment}{//\ Exponential\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00166\ }
+\DoxyCodeLine{00167\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_open_shader_designer_1_1_nodes_1_1_math_1_1_exponential}{Exponential}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{struct_open_shader_designer_1_1_nodes_1_1_math_1_1_math_op}{MathOp}}}
+\DoxyCodeLine{00168\ \{}
+\DoxyCodeLine{00169\ \ \ \ \ \mbox{\hyperlink{struct_open_shader_designer_1_1_nodes_1_1_math_1_1_exponential}{Exponential}}(\mbox{\hyperlink{class_open_shader_designer_1_1_shader_graph}{ShaderGraph}}\&\ graph,\ ImVec2\ pos);}
+\DoxyCodeLine{00170\ \ \ \ \ \mbox{\hyperlink{struct_open_shader_designer_1_1_nodes_1_1_math_1_1_exponential}{\string~Exponential}}()\ \textcolor{keyword}{override}\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00171\ }
+\DoxyCodeLine{00172\ \ \ \ \ [[nodiscard]]\ \mbox{\hyperlink{struct_open_shader_designer_1_1_node}{Node}}*\ Copy(\mbox{\hyperlink{class_open_shader_designer_1_1_shader_graph}{ShaderGraph}}\&\ graph)\ \textcolor{keyword}{const\ override};}
+\DoxyCodeLine{00173\ \ \ \ \ \textcolor{keywordtype}{void}\ Inspect()\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00174\ }
+\DoxyCodeLine{00175\ \ \ \ \ std::string\ GetCode()\ \textcolor{keyword}{const\ override};}
+\DoxyCodeLine{00176\ \};}
+\DoxyCodeLine{00177\ }
+\DoxyCodeLine{00178\ }
+\DoxyCodeLine{00179\ \}}
+\DoxyCodeLine{00180\ }
+\DoxyCodeLine{00181\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//\ OPEN\_SHADER\_DESIGNER\_MATH\_H}}
+
+\end{DoxyCode}

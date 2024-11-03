@@ -1,0 +1,65 @@
+\doxysection{Open\+Shader\+Designer\+::Event\+System Class Reference}
+\hypertarget{class_open_shader_designer_1_1_event_system}{}\label{class_open_shader_designer_1_1_event_system}\index{OpenShaderDesigner::EventSystem@{OpenShaderDesigner::EventSystem}}
+
+
+\doxylink{class_open_shader_designer_1_1_event_system}{Event\+System} for posting Events to be handled.  
+
+
+
+
+{\ttfamily \#include $<$Event\+System.\+h$>$}
+
+\doxysubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_open_shader_designer_1_1_event_system_a55942d1d9b1d427c40aeade3b0ee8600}\label{class_open_shader_designer_1_1_event_system_a55942d1d9b1d427c40aeade3b0ee8600} 
+static void {\bfseries Post\+Event} (const \mbox{\hyperlink{struct_open_shader_designer_1_1_event}{Event}} \texorpdfstring{$\ast$}{*})
+\begin{DoxyCompactList}\small\item\em Post an \doxylink{struct_open_shader_designer_1_1_event}{Event} to be Handled. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename T $>$ }\\static void \mbox{\hyperlink{class_open_shader_designer_1_1_event_system_ad7aaf19637c81922d02dafe92ff1982d}{Register\+Handler}} (\mbox{\hyperlink{class_open_shader_designer_1_1_event_handler}{Event\+Handler}}$<$ T $>$ \texorpdfstring{$\ast$}{*})
+\begin{DoxyCompactList}\small\item\em Register an \doxylink{class_open_shader_designer_1_1_event_handler}{Event\+Handler} with the \doxylink{class_open_shader_designer_1_1_event_system}{Event\+System}. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename T $>$ }\\static void \mbox{\hyperlink{class_open_shader_designer_1_1_event_system_a46be97970de801727824e3ac8cc93872}{Unregister\+Handler}} (\mbox{\hyperlink{class_open_shader_designer_1_1_event_handler}{Event\+Handler}}$<$ T $>$ \texorpdfstring{$\ast$}{*})
+\begin{DoxyCompactList}\small\item\em Unregister an \doxylink{class_open_shader_designer_1_1_event_handler}{Event\+Handler} with the \doxylink{class_open_shader_designer_1_1_event_system}{Event\+System}. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\doxylink{class_open_shader_designer_1_1_event_system}{Event\+System} for posting Events to be handled. 
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_open_shader_designer_1_1_event_system_ad7aaf19637c81922d02dafe92ff1982d}\index{OpenShaderDesigner::EventSystem@{OpenShaderDesigner::EventSystem}!RegisterHandler@{RegisterHandler}}
+\index{RegisterHandler@{RegisterHandler}!OpenShaderDesigner::EventSystem@{OpenShaderDesigner::EventSystem}}
+\doxysubsubsection{\texorpdfstring{RegisterHandler()}{RegisterHandler()}}
+{\footnotesize\ttfamily \label{class_open_shader_designer_1_1_event_system_ad7aaf19637c81922d02dafe92ff1982d} 
+template$<$typename T $>$ \\
+void Open\+Shader\+Designer\+::\+Event\+System\+::\+Register\+Handler (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_open_shader_designer_1_1_event_handler}{Event\+Handler}}$<$ T $>$ \texorpdfstring{$\ast$}{*}}]{handler}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Register an \doxylink{class_open_shader_designer_1_1_event_handler}{Event\+Handler} with the \doxylink{class_open_shader_designer_1_1_event_system}{Event\+System}. 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em T} & Component\+Type of \doxylink{struct_open_shader_designer_1_1_event}{Event} handled by the \doxylink{class_open_shader_designer_1_1_event_handler}{Event\+Handler}. \\
+\hline
+\end{DoxyTemplParams}
+\Hypertarget{class_open_shader_designer_1_1_event_system_a46be97970de801727824e3ac8cc93872}\index{OpenShaderDesigner::EventSystem@{OpenShaderDesigner::EventSystem}!UnregisterHandler@{UnregisterHandler}}
+\index{UnregisterHandler@{UnregisterHandler}!OpenShaderDesigner::EventSystem@{OpenShaderDesigner::EventSystem}}
+\doxysubsubsection{\texorpdfstring{UnregisterHandler()}{UnregisterHandler()}}
+{\footnotesize\ttfamily \label{class_open_shader_designer_1_1_event_system_a46be97970de801727824e3ac8cc93872} 
+template$<$typename T $>$ \\
+void Open\+Shader\+Designer\+::\+Event\+System\+::\+Unregister\+Handler (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_open_shader_designer_1_1_event_handler}{Event\+Handler}}$<$ T $>$ \texorpdfstring{$\ast$}{*}}]{handler}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Unregister an \doxylink{class_open_shader_designer_1_1_event_handler}{Event\+Handler} with the \doxylink{class_open_shader_designer_1_1_event_system}{Event\+System}. 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em T} & Component\+Type of \doxylink{struct_open_shader_designer_1_1_event}{Event} handled by the \doxylink{class_open_shader_designer_1_1_event_handler}{Event\+Handler}. \\
+\hline
+\end{DoxyTemplParams}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+Include/\+Core/Event\+System.\+h\item 
+Source/\+Core/Event\+System.\+cpp\end{DoxyCompactItemize}

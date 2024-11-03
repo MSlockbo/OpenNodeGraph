@@ -1,0 +1,130 @@
+\doxysection{Open\+Shader\+Designer\+::Nodes\+::Math\+::Arc\+Cosine Struct Reference}
+\hypertarget{struct_open_shader_designer_1_1_nodes_1_1_math_1_1_arc_cosine}{}\label{struct_open_shader_designer_1_1_nodes_1_1_math_1_1_arc_cosine}\index{OpenShaderDesigner::Nodes::Math::ArcCosine@{OpenShaderDesigner::Nodes::Math::ArcCosine}}
+Inheritance diagram for Open\+Shader\+Designer\+::Nodes\+::Math\+::Arc\+Cosine\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=3.000000cm]{struct_open_shader_designer_1_1_nodes_1_1_math_1_1_arc_cosine}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{struct_open_shader_designer_1_1_nodes_1_1_math_1_1_arc_cosine_aecb39913f19f05b42f1f9250edcabcf5}\label{struct_open_shader_designer_1_1_nodes_1_1_math_1_1_arc_cosine_aecb39913f19f05b42f1f9250edcabcf5} 
+{\bfseries Arc\+Cosine} (\mbox{\hyperlink{class_open_shader_designer_1_1_shader_graph}{Shader\+Graph}} \&graph, Im\+Vec2 pos)
+\item 
+\mbox{\hyperlink{struct_open_shader_designer_1_1_node}{Node}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{struct_open_shader_designer_1_1_nodes_1_1_math_1_1_arc_cosine_a7fcd52a2fdc3385184d355fb5909ce1c}{Copy}} (\mbox{\hyperlink{class_open_shader_designer_1_1_shader_graph}{Shader\+Graph}} \&graph) const override
+\item 
+void \mbox{\hyperlink{struct_open_shader_designer_1_1_nodes_1_1_math_1_1_arc_cosine_a8f1ec3f1c4a86f50e260a142380270bf}{Inspect}} () override
+\item 
+std\+::string \mbox{\hyperlink{struct_open_shader_designer_1_1_nodes_1_1_math_1_1_arc_cosine_aba20d7ae53d4849c213f54f4afe965e3}{Get\+Code}} () const override
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{struct_open_shader_designer_1_1_nodes_1_1_math_1_1_math_op}{Open\+Shader\+Designer\+::\+Nodes\+::\+Math\+::\+Math\+Op}}}
+\begin{DoxyCompactItemize}
+\item 
+{\bfseries Math\+Op} (\mbox{\hyperlink{class_open_shader_designer_1_1_shader_graph}{Shader\+Graph}} \&graph, Im\+Vec2 pos)
+\item 
+virtual bool \mbox{\hyperlink{struct_open_shader_designer_1_1_nodes_1_1_math_1_1_math_op_a891db2c8f3e24e33b5334432ac5aaa34}{Check\+Connection}} (\mbox{\hyperlink{struct_open_shader_designer_1_1_pin}{Pin}} \texorpdfstring{$\ast$}{*}, \mbox{\hyperlink{struct_open_shader_designer_1_1_pin}{Pin}} \texorpdfstring{$\ast$}{*}) override
+\item 
+virtual void \mbox{\hyperlink{struct_open_shader_designer_1_1_nodes_1_1_math_1_1_math_op_adcdb081e65e85d06d8bf29e44c9fb758}{Validate\+Connections}} () override
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{struct_open_shader_designer_1_1_node}{Open\+Shader\+Designer\+::\+Node}}}
+\begin{DoxyCompactItemize}
+\item 
+{\bfseries Node} (\mbox{\hyperlink{class_open_shader_designer_1_1_shader_graph}{Shader\+Graph}} \&graph, Im\+Vec2 pos)
+\item 
+void {\bfseries Draw\+Pin} (int id, \mbox{\hyperlink{struct_open_shader_designer_1_1_pin}{Pin}} \&pin, Im\+Pin\+Direction direction)
+\item 
+void {\bfseries Draw} (Im\+Gui\+ID id)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Public Types inherited from \mbox{\hyperlink{struct_open_shader_designer_1_1_nodes_1_1_math_1_1_math_op}{Open\+Shader\+Designer\+::\+Nodes\+::\+Math\+::\+Math\+Op}}}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{struct_open_shader_designer_1_1_nodes_1_1_math_1_1_math_op_a0e9a54e0db2cdf459fbf78a4e3ccd8e8}\label{struct_open_shader_designer_1_1_nodes_1_1_math_1_1_math_op_a0e9a54e0db2cdf459fbf78a4e3ccd8e8} 
+enum {\bfseries Math\+Op\+Flags\+\_\+} \+: glw\+::enum\+\_\+t \{ {\bfseries Math\+Op\+Flags\+\_\+\+None} = 0
+, {\bfseries Math\+Op\+Flags\+\_\+\+Allow\+Multiple\+Input\+Types} = 0x0000\textquotesingle{}0001
+ \}
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes inherited from \mbox{\hyperlink{struct_open_shader_designer_1_1_nodes_1_1_math_1_1_math_op}{Open\+Shader\+Designer\+::\+Nodes\+::\+Math\+::\+Math\+Op}}}
+\begin{DoxyCompactItemize}
+\item 
+\begin{tabbing}
+xx\=xx\=xx\=xx\=xx\=xx\=xx\=xx\=xx\=\kill
+struct \{\\
+\>glw::enum\_t {\bfseries Flags}\\
+\} {\bfseries Math}\\
+
+\end{tabbing}\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes inherited from \mbox{\hyperlink{struct_open_shader_designer_1_1_node}{Open\+Shader\+Designer\+::\+Node}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_open_shader_designer_1_1_shader_graph}{Shader\+Graph}} \& {\bfseries Graph}
+\item 
+Im\+Vec2 {\bfseries Position} = \{ 0, 0 \}
+\item 
+\begin{tabbing}
+xx\=xx\=xx\=xx\=xx\=xx\=xx\=xx\=xx\=\kill
+struct \{\\
+\>std::string {\bfseries Title}\\
+\>ImColor {\bfseries Color}\\
+\>ImColor {\bfseries HoveredColor}\\
+\>ImColor {\bfseries ActiveColor}\\
+\>bool {\bfseries Enabled}\\
+\} {\bfseries Header}\\
+
+\end{tabbing}\item 
+\begin{tabbing}
+xx\=xx\=xx\=xx\=xx\=xx\=xx\=xx\=xx\=\kill
+struct \{\\
+\>std::vector$<$ \mbox{\hyperlink{struct_open_shader_designer_1_1_pin}{Pin}} $>$ {\bfseries Inputs}\\
+\>std::vector$<$ \mbox{\hyperlink{struct_open_shader_designer_1_1_pin}{Pin}} $>$ {\bfseries Outputs}\\
+\} {\bfseries IO}\\
+
+\end{tabbing}\item 
+\begin{tabbing}
+xx\=xx\=xx\=xx\=xx\=xx\=xx\=xx\=xx\=\kill
+struct \{\\
+\>std::string {\bfseries Alias}\\
+\>FlagT {\bfseries Flags}\\
+\} {\bfseries Info}\\
+
+\end{tabbing}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{struct_open_shader_designer_1_1_nodes_1_1_math_1_1_arc_cosine_a7fcd52a2fdc3385184d355fb5909ce1c}\index{OpenShaderDesigner::Nodes::Math::ArcCosine@{OpenShaderDesigner::Nodes::Math::ArcCosine}!Copy@{Copy}}
+\index{Copy@{Copy}!OpenShaderDesigner::Nodes::Math::ArcCosine@{OpenShaderDesigner::Nodes::Math::ArcCosine}}
+\doxysubsubsection{\texorpdfstring{Copy()}{Copy()}}
+{\footnotesize\ttfamily \label{struct_open_shader_designer_1_1_nodes_1_1_math_1_1_arc_cosine_a7fcd52a2fdc3385184d355fb5909ce1c} 
+\mbox{\hyperlink{struct_open_shader_designer_1_1_node}{Node}} \texorpdfstring{$\ast$}{*} Arc\+Cosine\+::\+Copy (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_open_shader_designer_1_1_shader_graph}{Shader\+Graph}} \&}]{graph}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [nodiscard]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{struct_open_shader_designer_1_1_node}{Open\+Shader\+Designer\+::\+Node}}.
+
+\Hypertarget{struct_open_shader_designer_1_1_nodes_1_1_math_1_1_arc_cosine_aba20d7ae53d4849c213f54f4afe965e3}\index{OpenShaderDesigner::Nodes::Math::ArcCosine@{OpenShaderDesigner::Nodes::Math::ArcCosine}!GetCode@{GetCode}}
+\index{GetCode@{GetCode}!OpenShaderDesigner::Nodes::Math::ArcCosine@{OpenShaderDesigner::Nodes::Math::ArcCosine}}
+\doxysubsubsection{\texorpdfstring{GetCode()}{GetCode()}}
+{\footnotesize\ttfamily \label{struct_open_shader_designer_1_1_nodes_1_1_math_1_1_arc_cosine_aba20d7ae53d4849c213f54f4afe965e3} 
+std\+::string Arc\+Cosine\+::\+Get\+Code (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{struct_open_shader_designer_1_1_node}{Open\+Shader\+Designer\+::\+Node}}.
+
+\Hypertarget{struct_open_shader_designer_1_1_nodes_1_1_math_1_1_arc_cosine_a8f1ec3f1c4a86f50e260a142380270bf}\index{OpenShaderDesigner::Nodes::Math::ArcCosine@{OpenShaderDesigner::Nodes::Math::ArcCosine}!Inspect@{Inspect}}
+\index{Inspect@{Inspect}!OpenShaderDesigner::Nodes::Math::ArcCosine@{OpenShaderDesigner::Nodes::Math::ArcCosine}}
+\doxysubsubsection{\texorpdfstring{Inspect()}{Inspect()}}
+{\footnotesize\ttfamily \label{struct_open_shader_designer_1_1_nodes_1_1_math_1_1_arc_cosine_a8f1ec3f1c4a86f50e260a142380270bf} 
+void Arc\+Cosine\+::\+Inspect (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{struct_open_shader_designer_1_1_node}{Open\+Shader\+Designer\+::\+Node}}.
+
+
+
+The documentation for this struct was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+Include/\+Graph/\+Nodes/\+Math/Trigonometry.\+h\item 
+Source/\+Graph/\+Nodes/\+Math/Trigonometry.\+cpp\end{DoxyCompactItemize}

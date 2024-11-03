@@ -1,0 +1,87 @@
+\doxysection{Open\+Shader\+Designer\+::Project Class Reference}
+\hypertarget{class_open_shader_designer_1_1_project}{}\label{class_open_shader_designer_1_1_project}\index{OpenShaderDesigner::Project@{OpenShaderDesigner::Project}}
+Inheritance diagram for Open\+Shader\+Designer\+::Project\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_open_shader_designer_1_1_project}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{class_open_shader_designer_1_1_project_a37f1864f16760fef258e0c94d88774b9}{Draw\+Menu\+Bar}} () override
+\item 
+void \mbox{\hyperlink{class_open_shader_designer_1_1_project_a932318e9f0aec8bfaecd58062027254d}{Open}} () override
+\item 
+void \mbox{\hyperlink{class_open_shader_designer_1_1_project_a3e5a9ccbfcd0a14f1e3452f146e539ce}{Save}} (const File\+Manager\+::\+Path \&path) override
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{class_open_shader_designer_1_1_file_manager_1_1_asset}{Open\+Shader\+Designer\+::\+File\+Manager\+::\+Asset}}}
+\begin{DoxyCompactItemize}
+\item 
+{\bfseries Asset} (const Path \&path)
+\item 
+bool {\bfseries Dirty} () const
+\item 
+File \& {\bfseries Get\+File} ()
+\item 
+File\+ID {\bfseries Get\+ID} () const
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_open_shader_designer_1_1_project_a94230d7f30b1dbad3b24a22573067e8d}\label{class_open_shader_designer_1_1_project_a94230d7f30b1dbad3b24a22573067e8d} 
+static Asset \texorpdfstring{$\ast$}{*} {\bfseries Create} (const File\+Manager\+::\+Path \&path)
+\item 
+\Hypertarget{class_open_shader_designer_1_1_project_a7c0fbf0f13b1e090022672040ec945a2}\label{class_open_shader_designer_1_1_project_a7c0fbf0f13b1e090022672040ec945a2} 
+static Asset \texorpdfstring{$\ast$}{*} {\bfseries Load} (const File\+Manager\+::\+Path \&path)
+\item 
+\Hypertarget{class_open_shader_designer_1_1_project_a348060b5a5221515789e6739a6c736db}\label{class_open_shader_designer_1_1_project_a348060b5a5221515789e6739a6c736db} 
+static Asset \texorpdfstring{$\ast$}{*} {\bfseries Import} (const File\+Manager\+::\+Path \&src, const File\+Manager\+::\+Path \&dst)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Protected Member Functions inherited from \mbox{\hyperlink{class_open_shader_designer_1_1_file_manager_1_1_asset}{Open\+Shader\+Designer\+::\+File\+Manager\+::\+Asset}}}
+\begin{DoxyCompactItemize}
+\item 
+void {\bfseries Make\+Dirty} ()
+\item 
+\mbox{\hyperlink{class_open_shader_designer_1_1_file_manager}{File\+Manager}} \texorpdfstring{$\ast$}{*} {\bfseries Parent} () const
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_open_shader_designer_1_1_project_a37f1864f16760fef258e0c94d88774b9}\index{OpenShaderDesigner::Project@{OpenShaderDesigner::Project}!DrawMenuBar@{DrawMenuBar}}
+\index{DrawMenuBar@{DrawMenuBar}!OpenShaderDesigner::Project@{OpenShaderDesigner::Project}}
+\doxysubsubsection{\texorpdfstring{DrawMenuBar()}{DrawMenuBar()}}
+{\footnotesize\ttfamily \label{class_open_shader_designer_1_1_project_a37f1864f16760fef258e0c94d88774b9} 
+void Project\+::\+Draw\+Menu\+Bar (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_open_shader_designer_1_1_main_menu_bar}{Open\+Shader\+Designer\+::\+Main\+Menu\+Bar}}.
+
+\Hypertarget{class_open_shader_designer_1_1_project_a932318e9f0aec8bfaecd58062027254d}\index{OpenShaderDesigner::Project@{OpenShaderDesigner::Project}!Open@{Open}}
+\index{Open@{Open}!OpenShaderDesigner::Project@{OpenShaderDesigner::Project}}
+\doxysubsubsection{\texorpdfstring{Open()}{Open()}}
+{\footnotesize\ttfamily \label{class_open_shader_designer_1_1_project_a932318e9f0aec8bfaecd58062027254d} 
+void Project\+::\+Open (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Reimplemented from \mbox{\hyperlink{class_open_shader_designer_1_1_file_manager_1_1_asset}{Open\+Shader\+Designer\+::\+File\+Manager\+::\+Asset}}.
+
+\Hypertarget{class_open_shader_designer_1_1_project_a3e5a9ccbfcd0a14f1e3452f146e539ce}\index{OpenShaderDesigner::Project@{OpenShaderDesigner::Project}!Save@{Save}}
+\index{Save@{Save}!OpenShaderDesigner::Project@{OpenShaderDesigner::Project}}
+\doxysubsubsection{\texorpdfstring{Save()}{Save()}}
+{\footnotesize\ttfamily \label{class_open_shader_designer_1_1_project_a3e5a9ccbfcd0a14f1e3452f146e539ce} 
+void Project\+::\+Save (\begin{DoxyParamCaption}\item[{const File\+Manager\+::\+Path \&}]{path}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Reimplemented from \mbox{\hyperlink{class_open_shader_designer_1_1_file_manager_1_1_asset}{Open\+Shader\+Designer\+::\+File\+Manager\+::\+Asset}}.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+Include/\+Project/Project.\+h\item 
+Source/\+Project/Project.\+cpp\end{DoxyCompactItemize}
