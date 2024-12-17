@@ -32,7 +32,7 @@ struct MathOp : public Node
 	MathOp(ShaderGraph& graph, ImVec2 pos);
 	~MathOp() override = default;
 
-	virtual bool CheckConnection(Pin*, Pin*) override;
+	virtual bool CheckConnection(const Pin*, const Pin*) const override;
 	virtual void ValidateConnections() override;
 
 	struct

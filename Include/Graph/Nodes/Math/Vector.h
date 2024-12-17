@@ -45,7 +45,6 @@ struct MakeVector : public Node
     ~MakeVector() override = default;
 
     [[nodiscard]] Node* Copy(ShaderGraph& graph) const override;
-    void Inspect() override;
 
     std::string GetCode() const override;
 };
@@ -59,7 +58,6 @@ struct BreakVector : public Node
     ~BreakVector() override = default;
 
     [[nodiscard]] Node* Copy(ShaderGraph& graph) const override;
-    void Inspect() override;
 
     std::string GetCode() const override;
 };

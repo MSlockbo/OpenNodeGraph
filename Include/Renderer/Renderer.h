@@ -46,8 +46,9 @@ public:
 
     void OpenTexture(Texture* texture);
     void OpenShader(ShaderAsset* shader);
+
     
-private:
+private:	
     void DrawTexture();
     void DrawShader();
 

@@ -32,7 +32,7 @@ MathOp::MathOp(ShaderGraph &graph, ImVec2 pos)
 
 }
 
-bool MathOp::CheckConnection(Pin* a, Pin* b)
+bool MathOp::CheckConnection(const Pin* a, const Pin* b) const
 {
 	if(a->Type == b->Type)                               return true;
 	if(Math.Flags & MathOpFlags_AllowMultipleInputTypes) return true;

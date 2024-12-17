@@ -26,10 +26,10 @@ int main(int, char**)
 
     Window::Configuration config;
     config.Application.Title = "OpenShaderDesigner";
-    config.Video.Multisamples = 16;
-    config.Video.Fullscreen = Window::FullscreenMode::WINDOWED;
-    config.Video.Resolution = { 1280, 720 };
-    config.Video.HDR = false;
+    //config.Video.Multisamples = 16;
+    config.Video.Fullscreen = Window::FullscreenMode::FULLSCREEN;
+    //config.Video.Resolution = { 1280, 720 };
+    config.Video.HDR = true;
 
     Engine::Start(config);
 

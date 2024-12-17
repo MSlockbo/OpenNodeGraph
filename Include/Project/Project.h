@@ -34,7 +34,7 @@ public:
     void DrawMenuBar() override;
 
     void Open() override;
-    void Save(const FileManager::Path& path) override;
+    void Write(const FileManager::Path& path) override;
 
     static Asset* Create(const FileManager::Path& path);
     static Asset* Load(const FileManager::Path& path);

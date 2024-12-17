@@ -19,24 +19,35 @@
 #include <Core/Console.h>
 #include <Editor/EditorSystem.h>
 #include <Core/Engine.h>
-#include <imgui-docking/imgui_internal.h>
 
-#include <imgui-docking/backends/imgui_impl_sdl2.h>
+#include <imgui-docking/imgui_internal.h>
+#include <imgui-docking/backends/imgui_impl_sdl3.h>
 #include <imgui-docking/backends/imgui_impl_opengl3.h>
 #include <imgui-docking/misc/freetype/imgui_freetype.h>
 
 #include <imnode-graph/imnode_graph.h>
 
+#define END_LINE "\n"
+
 using namespace OpenShaderDesigner;
+
+void EditorSystem_ReadOpen(ImGuiContext*, ImGuiSettingsHandler*, const char* name)
+{
+	
+}
 
 void EditorSystem::Initialize()
 {
 	Window& Window = Engine::GetMainWindow();
 
-	Console::Log(Console::Severity::Alert, "Initializing Dear ImGUI");
+	// Initialize ImGui
+	Console::Log(Console::Severity::Alert, "Creating ImGui Context");
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
 
+	// Set Style
+	Console::Log(Console::Message, "Setting Editor Style");
+	
 	// https://github.com/ocornut/imgui/issues/707#issuecomment-917151020
 	ImVec4* colors = ImGui::GetStyle().Colors;
 	colors[ImGuiCol_Text]                   = ImVec4(1.00f, 1.00f, 1.00f, 1.00f);
@@ -119,34 +130,100 @@ void EditorSystem::Initialize()
 	style.LogSliderDeadzone                 = 4;
 	style.TabRounding                       = 4;
 
+	// Load Fonts
+	Console::Log(Console::Message, "Loading Editor Fonts");
 
+	// Import Base Font
 	ImGuiIO& io = ImGui::GetIO();
-
 	static ImWchar ranges[] = { 0x1, static_cast<ImWchar>(0x1FFFF), 0 };
     static ImFontConfig cfg;
     io.Fonts->AddFontFromFileTTF("./Assets/Fonts/FiraMono-Regular.ttf", 20.0f, nullptr, ranges);
-	
+
+	// Import Icon Font
     cfg.MergeMode = true;
     cfg.FontBuilderFlags |= ImGuiFreeTypeBuilderFlags_LoadColor;
 	io.Fonts->AddFontFromFileTTF("./Assets/Fonts/remixicon.ttf", 18.0f, &cfg, ranges);
 
+	// Set Docking Settings
 	io.ConfigWindowsMoveFromTitleBarOnly = true;
 	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 
+	// Setup ImNodeGraph
+	Console::Log(Console::Message, "Adding Fonts to ImNodeGraph");
     ImNodeGraph::AddFont("./Assets/Fonts/FiraMono-Regular.ttf", 20.0f, ranges);
     ImNodeGraph::AddFont("./Assets/Fonts/remixicon.ttf", 18.0f, ranges);
+
+	Console::Log(Console::Message, "Creating ImNodeGraph Context");
     ImNodeGraph::CreateContext();
 
-	ImGui_ImplSDL2_InitForOpenGL(Window.GetHandle(), Window.GetContext());
+	// Initiialize Backend
+	Console::Log(Console::Message, "Initializing ImGui Backend");
+	ImGui_ImplSDL3_InitForOpenGL(Window.GetHandle(), Window.GetContext());
 	ImGui_ImplOpenGL3_Init("#version 460 core");
+	
+	// Setup Framebuffer
+	glm::ivec2 size = Engine::GetMainWindow().Size();
+	DrawBuffer_ = new FrameBuffer(size);
+	DrawBuffer_->build();
 
+	glw::enum_t status = DrawBuffer_->get_status();
+	Console::Log(Console::Message, "Framebuffer built, status: \"{}\"", glw::translate_framebuffer_status(status));
+
+	// Setup color correction shader
+	ColorCorrection_ = new glw::shader();
+	if(not ColorCorrection_->attach_source(glw::compute, {
+		"#version 460 core"															END_LINE
+	,	glw::shader::built_ins_compute,												END_LINE
+	,	"layout (local_size_x = 8, local_size_y = 8, local_size_z = 8) in;"			END_LINE
+		"layout (rgba16f, binding = 0) coherent restrict uniform image2D Color;"	END_LINE
+		"uniform float Whitepoint = 1.0, Gamma = 2.2;"								END_LINE
+		"void main(void)"															END_LINE
+		"{"																			END_LINE
+		"	ivec2 pixel = ivec2(gl_GlobalInvocationID.xy);"							END_LINE
+		"	uvec2 size  = glw_RequestedInvocations.xy;"								END_LINE
+		"	if(pixel.x >= size.x || pixel.y >= size.y) return;"						END_LINE
+		"	vec3 val = imageLoad(Color, pixel).rgb;"								END_LINE
+		"	val = pow(val, vec3(Gamma)) * Whitepoint;"								END_LINE
+		"	imageStore(Color, pixel, vec4(val, 1));"								END_LINE
+		"}"																			END_LINE
+	}))
+	{
+		Console::Log(
+			Console::Severity::Fatal
+		,	"Color Correction Compile Failed:" END_LINE "{}"
+		,	ColorCorrection_->get_error_string()
+		);
+	}
+	
+	if(not ColorCorrection_->link())
+	{
+		Console::Log(
+			Console::Severity::Fatal
+		,	"Color Correction Link Failed:" END_LINE "{}"
+		,	ColorCorrection_->get_error_string()
+		);
+	}
+
+	WhitepointDisplay_ = new HDRTexture({ 2, 1 });
+	WhitepointDisplay_->set_mag_filter(glw::nearest);
+	RebuildWhitepointDisplay_();
+	
+	// Alert we have initialized ImGui
 	Console::Log(Console::Severity::Alert, "Initialized ImGui ({})", IMGUI_VERSION);
 }
 
 void EditorSystem::Draw()
 {
+	const auto& Window = Engine::GetMainWindow();
+	
+	if(DrawBuffer_)
+	{
+		DrawBuffer_->resize(Window.Size());
+		DrawBuffer_->bind();
+	}
+	
 	ImGui_ImplOpenGL3_NewFrame();
-	ImGui_ImplSDL2_NewFrame();
+	ImGui_ImplSDL3_NewFrame();
 
 	ImGui::NewFrame();
 	ImGui::DockSpaceOverViewport(0, ImGui::GetMainViewport(), ImGuiDockNodeFlags_PassthruCentralNode);
@@ -169,10 +246,68 @@ void EditorSystem::Draw()
 		if(editor == nullptr || !editor->IsOpen()) continue;
 		editor->Draw();
 	}
+	
+	if(OpenCalibration_)
+	{
+		ImGui::OpenPopup("HDRCalibration");
+	}
+	
+	if(ImGui::BeginPopupModal("HDRCalibration", &OpenCalibration_, ImGuiWindowFlags_None))
+	{
+		if(ImGui::SliderFloat("White Point", &Whitepoint, 0.0f, 10.0f))
+		{
+			RebuildWhitepointDisplay_();
+		}
+		
+		ImGui::SliderFloat("Gamma", &Gamma, 0.0f, 10.0f);
+		
+		ImVec2 Avail = ImGui::GetContentRegionAvail();
+		float  Width = Avail.x;
+		if(Width / 2 > Avail.y) Width = Avail.y * 2;
+		
+		ImGui::Image(
+			reinterpret_cast<ImTextureID>(static_cast<intptr_t>(WhitepointDisplay_->handle()))
+		,	{ Width, Width / 2 }
+		);
+
+		ImGui::EndPopup();
+	}
 
 	ImGui::Render();
 
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
+	if(DrawBuffer_)
+	{
+		if(Window.Config().Video.HDR && not OpenCalibration_)
+		{
+			ColorCorrection_->bind();
+			ColorCorrection_->operator[]("Whitepoint") = Whitepoint;
+			ColorCorrection_->operator[]("Gamma") = Gamma;
+			DrawBuffer_->get<1>().bind_image(0, glw::access_read_write);
+			ColorCorrection_->dispatch(Window.Size().x, Window.Size().y, 1);
+		}
+		
+		DrawBuffer_->blit(
+			glw::color_attachment0
+		,	glw::default_framebuffer, glw::back_buffer
+		,	{ 0, 0 }, Window.Size()
+		,	{ 0, 0 }, Window.Size()
+		,	glw::nearest
+		);
+	}
+}
+
+void EditorSystem::OpenHDRCalibration()
+{
+	OpenCalibration_ = true;
+}
+
+void EditorSystem::RebuildWhitepointDisplay_()
+{
+	glm::vec3 Pixels[] = { glm::vec3(Whitepoint), glm::vec3(10.0f) };
+
+	WhitepointDisplay_->upload(Pixels, { 2, 1 }, { 0, 0 }, 0, glw::rgb, glw::float32);
 }
 
 void EditorSystem::Shutdown()
@@ -182,7 +317,7 @@ void EditorSystem::Shutdown()
     
 	// Shutdown ImGui
 	ImGui_ImplOpenGL3_Shutdown();
-	ImGui_ImplSDL2_Shutdown();
+	ImGui_ImplSDL3_Shutdown();
 
     ImNodeGraph::DestroyContext();
 	ImGui::DestroyContext();
@@ -190,5 +325,5 @@ void EditorSystem::Shutdown()
 
 void EditorSystem::HandleEvents(SDL_Event* event)
 {
-	ImGui_ImplSDL2_ProcessEvent(event);
+	ImGui_ImplSDL3_ProcessEvent(event);
 }

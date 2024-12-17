@@ -116,7 +116,7 @@ if(IMGUI_BACKEND_SDL3)
     find_package(SDL3 REQUIRED)
     list(APPEND IMGUI_SOURCES backends/imgui_impl_sdl3.cpp)
     list(APPEND IMGUI_HEADERS backends/imgui_impl_sdl3.h)
-    list(APPEND IMGUI_DEPENDENCIES SDL3)
+    list(APPEND IMGUI_DEPENDENCIES SDL3::SDL3)
 
     if(IMGUI_BACKEND_SDL_RENDERER)
         list(APPEND IMGUI_SOURCES backends/imgui_impl_sdlrenderer3.cpp)

@@ -34,47 +34,14 @@ Texture::Texture(const FileManager::Path &path)
     : Asset(path)
     , Handle_(nullptr)
 {
-    int width, height, channels;
-    uint8_t* pixels = stbi_load(path.string().c_str(), &width, &height, &channels, 0);
-    Handle_ = new HandleType({ width, height });
-    glw::enum_t layout;
-
-    switch (channels)
-    {
-    case 1: layout = glw::r; break;
-    case 2: layout = glw::rg; break;
-    case 3: layout = glw::rgb; break;
-    case 4: layout = glw::rgba; break;
-    default: layout = glw::r; break;
-    }
-    
-    Handle_->upload(pixels, { width, height }, { 0, 0 }, 0, layout, glw::uint8);
-    Handle_->generate_mipmaps();
-    stbi_image_free(pixels);
+	Texture::Read(path);
 }
 
 Texture::Texture(const FileManager::Path &src, const FileManager::Path &dst)
     : Asset(dst)
     , Handle_(nullptr)
 {
-    int width, height, channels;
-    uint8_t* pixels = stbi_load(src.string().c_str(), &width, &height, &channels, 0);
-    Handle_ = new HandleType({ width, height });
-    glw::enum_t layout;
-
-    switch (channels)
-    {
-    case 1:  layout = glw::r8_i;    break;
-    case 2:  layout = glw::rg8_i;   break;
-    case 3:  layout = glw::rgb8_i;  break;
-    case 4:  layout = glw::rgba8_i; break;
-    default: layout = glw::r8_i;    break;
-    }
-    
-    
-    Handle_->upload(pixels, { width, height }, { 0, 0 }, 0, layout, glw::uint8);
-    Handle_->generate_mipmaps();
-    stbi_image_free(pixels);
+	Texture::Read(src);
 }
 
 Texture::~Texture()
@@ -85,6 +52,27 @@ Texture::~Texture()
 void Texture::Open()
 {
     EditorSystem::Get<Renderer>()->OpenTexture(this);
+}
+
+void Texture::Read(const FileManager::Path &path)
+{
+	int width, height, channels;
+	uint8_t* pixels = stbi_load(path.string().c_str(), &width, &height, &channels, 0);
+	Handle_ = new HandleType({ width, height });
+	glw::enum_t layout;
+
+	switch (channels)
+	{
+		case 1: layout = glw::r; break;
+		case 2: layout = glw::rg; break;
+		case 3: layout = glw::rgb; break;
+		case 4: layout = glw::rgba; break;
+		default: layout = glw::r; break;
+	}
+    
+	Handle_->upload(pixels, { width, height }, { 0, 0 }, 0, layout, glw::uint8);
+	Handle_->generate_mipmaps();
+	stbi_image_free(pixels);
 }
 
 FileManager::Asset* Texture::Create(const FileManager::Path &path)

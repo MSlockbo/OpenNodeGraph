@@ -43,7 +43,7 @@ void Engine::Start(const Window::Configuration& config)
 
     Initialize();
 
-    Console::Log(Console::Message, "Starting Main Loop");
+    Console::Log(Console::Alert, "Starting Main Loop");
     while(MainWindow->IsOpen())
     {
         Update();
@@ -68,17 +68,17 @@ void Engine::Initialize()
     EditorSystem::Open<ConsoleWindow>();
 
     Console::Log(Console::Message, "Opening Profiler");
-    EditorSystem::Open<Profiler>();
+	EditorSystem::Open<Profiler>();
 
-    Console::Log(Console::Message, "Opening File Manager");
-    EditorSystem::Open<FileManager>();
-
-    Console::Log(Console::Message, "Opening Shader Graph");
-    EditorSystem::Open<ShaderGraph>();
-    EditorSystem::Open<Inspector>();
+	Console::Log(Console::Message, "Opening Shader Graph");
+	EditorSystem::Open<ShaderGraph>();
+	EditorSystem::Open<Inspector>();
 
     Console::Log(Console::Message, "Opening Renderer");
-    EditorSystem::Open<Renderer>();
+	EditorSystem::Open<Renderer>();
+
+	Console::Log(Console::Message, "Opening File Manager");
+	EditorSystem::Open<FileManager>();
 
     Console::Log(Console::Message, "Setting up Project");
     EditorSystem::SetMainMenuBar<Project>();

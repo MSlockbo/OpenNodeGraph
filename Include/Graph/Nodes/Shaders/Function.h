@@ -19,10 +19,13 @@
 #ifndef OSD_SHADERS_H
 #define OSD_SHADERS_H
 
-#include <glm/vec4.hpp>
 #include <Graph/ShaderGraph.h>
 
-#include "glw/shader.h"
+#include <rapidjson/document.h>
+
+#include <glm/vec4.hpp>
+
+#include <glw/shader.h>
 
 namespace OpenShaderDesigner::Nodes::Shaders
 {
@@ -49,7 +52,7 @@ public:
     ~FunctionInputs() override = default;
 
     [[nodiscard]] Node* Copy(ShaderGraph& graph) const override;
-    void Inspect() override;
+    bool Inspect() override;
 
     std::string GetCode() const override;
 };
@@ -66,11 +69,23 @@ public:
 class Function : public Node, public ShaderAsset
 {
 public:
+	enum FunctionVersion_ : uint32_t
+	{
+		FunctionVersion_0 = 0
+
+	,	FunctionVersion_Count
+	,	FunctionVersion_Latest = FunctionVersion_Count - 1
+	};
+
+	template<uint32_t V> using Version = std::integral_constant<uint32_t, V>;
+	
+	Function(ShaderGraph& graph, ImVec2 pos);
     Function(const FileManager::Path& path, ShaderGraph& graph);
+    Function(const FileManager::Path& src, const FileManager::Path& dst, ShaderGraph& graph);
     ~Function() override;
 
     [[nodiscard]] Node* Copy(ShaderGraph& graph) const override;
-    void Inspect() override;
+    bool Inspect() override;
 
     void Compile() override;
     void Open() override;
@@ -82,8 +97,16 @@ public:
     std::string GetCode() const override;
     void View(HDRTexture::HandleType* Target) override;
 
+	void Write(const FileManager::Path &path) override;
+	void Read(const FileManager::Path &path) override;
+
+	Node* GetSingletonNode(const std::string& alias) override;
+
 private:
     using InputMap = ocu::map<int, glw::enum_t>;
+	using WriteAlloc = rapidjson::MemoryPoolAllocator<>&;
+	using JsonDocument = rapidjson::Document;
+	using JsonValue = rapidjson::Value;
 
     enum FuncInput_ : glw::enum_t
     {
@@ -136,11 +159,15 @@ private:
     ,	"t"
     ,	"dt"
     };
-    
+
     void DrawImage_(HDRTexture::HandleType* Target);
     void DrawInputs_();
     void Render_(HDRTexture::HandleType* Target);
     void CompileDisplayShader_();
+
+
+	void                      Read_(uint32_t version, const JsonDocument& document);
+	template<typename V> void Read_(const JsonDocument& document);
 
     glw::shader*     Shader_;
     std::string DisplayCode_;

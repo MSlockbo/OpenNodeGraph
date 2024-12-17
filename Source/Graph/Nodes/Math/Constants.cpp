@@ -23,6 +23,7 @@
 using namespace OpenShaderDesigner;
 using namespace OpenShaderDesigner::Nodes::Math;
 
+// User Defined Constants
 RegisterNode("Math/Constants/Integer",          Integer);
 RegisterNode("Math/Constants/Unsigned Integer", UnsignedInteger);
 RegisterNode("Math/Constants/Scalar",           Scalar);
@@ -31,7 +32,7 @@ RegisterNode("Math/Constants/Vector",           Vector);
 // Numeric Constants
 RegisterNode("Math/Constants/π", Pi);
 RegisterNode("Math/Constants/e", EulersNumber);
-RegisterNode("Math/Constants/π", GoldenRatio);
+RegisterNode("Math/Constants/φ", GoldenRatio);
 
 // =====================================================================================================================
 // User Defined Constants
@@ -43,7 +44,6 @@ RegisterNode("Math/Constants/π", GoldenRatio);
 Integer::Integer(ShaderGraph& graph, ImVec2 pos)
     : Node(graph, pos)
 {
-    Info.Alias          = "Integer";
     Header.Title        = HeaderMarker + "Integer";
     Header.Color        = HeaderColor;
     Header.HoveredColor = HeaderHoveredColor;
@@ -55,11 +55,6 @@ Integer::Integer(ShaderGraph& graph, ImVec2 pos)
 Node* Integer::Copy(ShaderGraph& graph) const
 {
     return new Integer(graph, Position);
-}
-
-void Integer::Inspect()
-{
-
 }
 
 std::string Integer::GetCode() const
@@ -76,7 +71,6 @@ std::string Integer::GetCode() const
 UnsignedInteger::UnsignedInteger(ShaderGraph& graph, ImVec2 pos)
     : Node(graph, pos)
 {
-    Info.Alias          = "UnsignedInteger";
     Header.Title        = HeaderMarker + "Unsigned Integer";
     Header.Color        = HeaderColor;
     Header.HoveredColor = HeaderHoveredColor;
@@ -88,11 +82,6 @@ UnsignedInteger::UnsignedInteger(ShaderGraph& graph, ImVec2 pos)
 Node* UnsignedInteger::Copy(ShaderGraph& graph) const
 {
     return new UnsignedInteger(graph, Position);
-}
-
-void UnsignedInteger::Inspect()
-{
-
 }
 
 std::string UnsignedInteger::GetCode() const
@@ -109,7 +98,6 @@ std::string UnsignedInteger::GetCode() const
 Scalar::Scalar(ShaderGraph& graph, ImVec2 pos)
 	: Node(graph, pos)
 {
-    Info.Alias          = "Scalar";
     Header.Title        = HeaderMarker + "Scalar";
     Header.Color        = HeaderColor;
     Header.HoveredColor = HeaderHoveredColor;
@@ -121,11 +109,6 @@ Scalar::Scalar(ShaderGraph& graph, ImVec2 pos)
 Node* Scalar::Copy(ShaderGraph& graph) const
 {
 	return new Scalar(graph, Position);
-}
-
-void Scalar::Inspect()
-{
-
 }
 
 std::string Scalar::GetCode() const
@@ -147,7 +130,6 @@ std::string Scalar::GetCode() const
 Pi::Pi(ShaderGraph& graph, ImVec2 pos)
 	: Scalar(graph, pos)
 {
-	Info.Alias          = "Pi";
 	Header.Title        = HeaderMarker + "π";
 
 	IO.Outputs[0].Value = glm::pi<float>();
@@ -158,11 +140,6 @@ Pi::Pi(ShaderGraph& graph, ImVec2 pos)
 Node* Pi::Copy(ShaderGraph& graph) const
 {
 	return new Scalar(graph, Position);
-}
-
-void Pi::Inspect()
-{
-
 }
 
 std::string Pi::GetCode() const
@@ -179,7 +156,6 @@ std::string Pi::GetCode() const
 EulersNumber::EulersNumber(ShaderGraph& graph, ImVec2 pos)
 	: Scalar(graph, pos)
 {
-	Info.Alias          = "EulersNumber";
 	Header.Title        = HeaderMarker + "e";
 
 	IO.Outputs[0].Value = glm::euler<float>();
@@ -190,11 +166,6 @@ EulersNumber::EulersNumber(ShaderGraph& graph, ImVec2 pos)
 Node* EulersNumber::Copy(ShaderGraph& graph) const
 {
 	return new Scalar(graph, Position);
-}
-
-void EulersNumber::Inspect()
-{
-
 }
 
 std::string EulersNumber::GetCode() const
@@ -211,7 +182,6 @@ std::string EulersNumber::GetCode() const
 GoldenRatio::GoldenRatio(ShaderGraph& graph, ImVec2 pos)
 	: Scalar(graph, pos)
 {
-	Info.Alias          = "GoldenRatio";
 	Header.Title        = HeaderMarker + "φ";
 
 	IO.Outputs[0].Value = glm::golden_ratio<float>();
@@ -222,11 +192,6 @@ GoldenRatio::GoldenRatio(ShaderGraph& graph, ImVec2 pos)
 Node* GoldenRatio::Copy(ShaderGraph& graph) const
 {
 	return new Scalar(graph, Position);
-}
-
-void GoldenRatio::Inspect()
-{
-
 }
 
 std::string GoldenRatio::GetCode() const
@@ -243,7 +208,6 @@ std::string GoldenRatio::GetCode() const
 Vector::Vector(ShaderGraph &graph, ImVec2 pos)
 	: Node(graph, pos)
 {
-    Info.Alias          = "Vector";
     Header.Title        = HeaderMarker + "Vector";
     Header.Color        = HeaderColor;
     Header.HoveredColor = HeaderHoveredColor;
@@ -257,11 +221,6 @@ Vector::Vector(ShaderGraph &graph, ImVec2 pos)
 Node* Vector::Copy(ShaderGraph &graph) const
 {
 	return new Vector(graph, Position);
-}
-
-void Vector::Inspect()
-{
-
 }
 
 std::string Vector::GetCode() const

@@ -19,12 +19,17 @@
 #ifndef EDITORSYSTEM_H
 #define EDITORSYSTEM_H
 
-#include <SDL_events.h>
+#include <SDL3/SDL_events.h>
+
 #include <open-cpp-utils/unique_id.h>
 #include <unordered_map>
 
+#include <glw/framebuffer.h>
+
 #include <Editor/EditorWindow.h>
 #include <Editor/MainMenuBar.h>
+
+#include "glw/shader.h"
 
 #define MAX_EDITORS 256
 
@@ -33,6 +38,10 @@ namespace OpenShaderDesigner
 
 class EditorSystem
 {
+private:
+	using FrameBuffer = glw::framebuffer<glw::texture2D, glw::depth16, glw::rgba16f>;
+	using HDRTexture  = glw::texture<glw::texture2D, glw::rgba16f>;
+	
 public:
     using WindowID = uint64_t;
 
@@ -62,11 +71,21 @@ public:
     static void Initialize();
     static void Draw();
     static void Shutdown();
-    static void HandleEvents(SDL_Event* event);
+	static void HandleEvents(SDL_Event* event);
+	static void OpenHDRCalibration();
+	
 
 private:
+	static void RebuildWhitepointDisplay_();
+	
     inline static EditorWindow* Windows_[MAX_EDITORS] { nullptr };
     inline static MainMenuBar*  MainMenuBar_ = nullptr;
+	inline static FrameBuffer*  DrawBuffer_ = nullptr;
+	inline static glw::shader*  ColorCorrection_ = nullptr;
+	inline static float         Whitepoint = 5.5f;
+	inline static float         Gamma = 2.2f;
+	inline static HDRTexture*   WhitepointDisplay_ = nullptr;
+	inline static bool          OpenCalibration_ = false;
 };
 
 }

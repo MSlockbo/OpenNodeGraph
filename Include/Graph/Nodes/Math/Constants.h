@@ -37,7 +37,6 @@ struct Integer : public Node
 	~Integer() override = default;
 
 	[[nodiscard]] Node* Copy(ShaderGraph& graph) const override;
-	void Inspect() override;
 
 	std::string GetCode() const override;
 };
@@ -53,7 +52,6 @@ struct UnsignedInteger : public Node
 	~UnsignedInteger() override = default;
 
 	[[nodiscard]] Node* Copy(ShaderGraph& graph) const override;
-	void Inspect() override;
 
 	std::string GetCode() const override;
 };
@@ -69,7 +67,6 @@ struct Scalar : public Node
 	~Scalar() override = default;
 
 	[[nodiscard]] Node* Copy(ShaderGraph& graph) const override;
-	void Inspect() override;
 
 	std::string GetCode() const override;
 };
@@ -85,7 +82,6 @@ struct Pi : public Scalar
 	~Pi() override = default;
 
 	[[nodiscard]] Node* Copy(ShaderGraph& graph) const override;
-	void Inspect() override;
 
 	std::string GetCode() const override;
 };
@@ -101,7 +97,6 @@ struct EulersNumber : public Scalar
 	~EulersNumber() override = default;
 
 	[[nodiscard]] Node* Copy(ShaderGraph& graph) const override;
-	void Inspect() override;
 
 	std::string GetCode() const override;
 };
@@ -117,7 +112,6 @@ struct GoldenRatio : public Scalar
 	~GoldenRatio() override = default;
 
 	[[nodiscard]] Node* Copy(ShaderGraph& graph) const override;
-	void Inspect() override;
 
 	std::string GetCode() const override;
 };
@@ -133,7 +127,6 @@ struct Vector : public Node
 	~Vector() override = default;
 
 	[[nodiscard]] Node* Copy(ShaderGraph& graph) const override;
-	void Inspect() override;
 
 	std::string GetCode() const override;
 };

@@ -19,7 +19,9 @@
 #ifndef WINDOW_H
 #define WINDOW_H
 
-#include <SDL2/SDL.h>
+#include <SDL3/SDL_video.h>
+#include <SDL3/SDL_events.h>
+
 #include <glm/glm.hpp>
 #include <string>
 #include <Core/EventSystem.h>
@@ -65,7 +67,7 @@ public:
     {
         WINDOWED = 0,
         FULLSCREEN = SDL_WINDOW_FULLSCREEN,
-        FULLSCREEN_WINDOW = SDL_WINDOW_FULLSCREEN_DESKTOP,
+        FULLSCREEN_WINDOW = SDL_WINDOW_BORDERLESS,
     };
 
     struct Configuration
@@ -86,7 +88,7 @@ public:
 
         Configuration()
             : Application { "App" }
-            , Video { FullscreenMode::WINDOWED, glm::ivec2(1280, 720), VSyncMode::DISABLED, false }
+            , Video { FullscreenMode::WINDOWED, glm::ivec2(0, 0), VSyncMode::DISABLED, false }
         { }
     };
 
@@ -109,6 +111,8 @@ public:
     [[nodiscard]] const SDL_GLContext GetContext() const { return Context_; }
 
     [[nodiscard]] glm::ivec2 Size() const { return Config_.Video.Resolution; }
+
+	[[nodiscard]] const Configuration& Config() const { return Config_; }
 private:
     Configuration Config_;
     SDL_Window*   Handle_;

@@ -26,7 +26,7 @@
 #include <open-cpp-utils/startup.h>
 
 #define RegisterAsset(Name, Type, ...) \
-    STARTUP(_Register##Type) { FileManager::Register(Name, { __VA_ARGS__ }, ##Type::Create, ##Type::Load, ##Type::Import); }
+    STARTUP(_RegisterAsset##Type) { FileManager::Register(Name, { __VA_ARGS__ }, ##Type::Create, ##Type::Load, ##Type::Import); }
 
 namespace ocu = open_cpp_utils;
 
@@ -65,8 +65,8 @@ private:
     };
 
     using AssetMenuHierarchy = ocu::directed_tree<AssetDetail>;
-    using AssetType = AssetMenuHierarchy::node;
-    using ExtensionMapping = ocu::map<std::string, AssetType>;
+    using AssetType          = AssetMenuHierarchy::node;
+    using ExtensionMapping   = ocu::map<std::string, AssetType>;
     
     static AssetMenuHierarchy& AssetMenu() { static AssetMenuHierarchy Menu; return Menu; }
     static ExtensionMapping& ExtensionMap() { static ExtensionMapping Map; return Map; }
@@ -82,7 +82,8 @@ public:
         bool Dirty() const { return Dirty_; }
 
         virtual void Open() { };
-        virtual void Save(const Path& path) { Dirty_ = false; }
+        virtual void Write(const Path& path) { Dirty_ = false; }
+    	virtual void Read(const Path& path) { Dirty_ = false; }
 
         File& GetFile() { return Manager_->Get(File_); }
         FileID GetID() const { return File_; }
@@ -125,10 +126,12 @@ public:
     FileID Import(const Path& path)        { return Filesystem_.import(path, CurrentDirectory_); }
     FileID LoadDirectory(const Path& path) { return Filesystem_.load_directory(path); }
     void   CloseDirectory(FileID dir)      { Filesystem_.close_directory(dir); }
+
+	void Save(FileID file);
     
-    FileID Get(const Path& path) const { return Filesystem_.find(path); }
-    File&  Get(FileID id)              { return Filesystem_[id]; }
-    const File& Get(FileID id) const   { return Filesystem_[id]; }
+    FileID      Get(const Path& path) const { return Filesystem_.find(path); }
+    File&       Get(FileID id)              { return Filesystem_[id]; }
+    const File& Get(FileID id) const        { return Filesystem_[id]; }
 
     FileID Parent(FileID id) const { return Filesystem_.parent(id); }
 

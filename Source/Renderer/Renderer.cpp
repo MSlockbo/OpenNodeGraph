@@ -19,16 +19,18 @@
 #include <Renderer/Renderer.h>
 
 #include "Core/Console.h"
+#include "Editor/EditorSystem.h"
 
 using namespace OpenShaderDesigner;
 
 Renderer::Renderer()
-    : EditorWindow("View", 0)
+    : EditorWindow("View", ImGuiWindowFlags_MenuBar)
     , Mode_(view_texture)
     , ViewTexture_(nullptr)
     , Shader_(nullptr)
     , RenderTarget_(new HDRTexture::HandleType({ 512, 512 }))
-{ }
+{
+}
 
 Renderer::~Renderer()
 {
@@ -38,7 +40,6 @@ Renderer::~Renderer()
 
 void Renderer::DrawMenu()
 {
-    
 }
 
 void Renderer::DrawWindow()

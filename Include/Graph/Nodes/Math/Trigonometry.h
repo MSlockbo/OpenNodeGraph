@@ -37,7 +37,6 @@ struct Sine : public MathOp
     ~Sine() override = default;
 
     [[nodiscard]] Node* Copy(ShaderGraph& graph) const override;
-    void Inspect() override;
 
     std::string GetCode() const override;
 };
@@ -51,7 +50,6 @@ struct Cosine : public MathOp
 	~Cosine() override = default;
 
 	[[nodiscard]] Node* Copy(ShaderGraph& graph) const override;
-	void Inspect() override;
 
 	std::string GetCode() const override;
 };
@@ -65,8 +63,7 @@ struct Tangent : public MathOp
 	~Tangent() override = default;
 
 	[[nodiscard]] Node* Copy(ShaderGraph& graph) const override;
-	void Inspect() override;
-
+	
 	std::string GetCode() const override;
 };
 
@@ -79,7 +76,6 @@ struct ArcSine : public MathOp
 	~ArcSine() override = default;
 
 	[[nodiscard]] Node* Copy(ShaderGraph& graph) const override;
-	void Inspect() override;
 
 	std::string GetCode() const override;
 };
@@ -93,7 +89,6 @@ struct ArcCosine : public MathOp
 	~ArcCosine() override = default;
 
 	[[nodiscard]] Node* Copy(ShaderGraph& graph) const override;
-	void Inspect() override;
 
 	std::string GetCode() const override;
 };
@@ -107,7 +102,6 @@ struct ArcTangent : public MathOp
 	~ArcTangent() override = default;
 
 	[[nodiscard]] Node* Copy(ShaderGraph& graph) const override;
-	void Inspect() override;
 
 	std::string GetCode() const override;
 };

@@ -5,12 +5,14 @@ set(VERSION_MINOR 0)
 set(VERSION_PATCH 1)
 set(PROJECT_VERSION "${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}")
 
-# Initialize the project
-project(OpenShaderDesigner VERSION ${PROJECT_VERSION})
-
 # Set CPP Standard
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_C_STANDARD 23)
+
+# Initialize the project
+project(OpenShaderDesigner VERSION ${PROJECT_VERSION})
+
+add_compile_definitions(SDL_ENABLE_OLD_NAMES)
 
 # Setup Build Folder
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/${CMAKE_SYSTEM_NAME})
@@ -19,12 +21,12 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${CMAKE_SYSTEM_NAME})
 # Find dependenices
 find_package(PkgConfig REQUIRED)
 find_package(assimp REQUIRED)
-find_package(stb REQUIRED)
+find_package(Stb REQUIRED)
 find_package(Freetype REQUIRED)
 find_package(GLEW REQUIRED)
 find_package(glm REQUIRED)
 find_package(OpenGL REQUIRED COMPONENTS OpenGL)
-find_package(SDL2 REQUIRED)
+find_package(SDL3 REQUIRED)
 find_package(RapidJSON REQUIRED)
 
 if(MSVC)
@@ -41,10 +43,10 @@ add_subdirectory(External/open-cpp-utils)
 add_subdirectory(External/glw)
 
 # Configure ImGui
-set(IMGUI_BACKEND_SDL2 ON)
+set(IMGUI_BACKEND_SDL3   ON)
 set(IMGUI_BACKEND_OPENGL ON)
-set(IMGUI_STDLIB ON)
-set(IMGUI_FREETYPE ON)
+set(IMGUI_STDLIB         ON)
+set(IMGUI_FREETYPE       ON)
 
 # Add ImGui and any extensions
 add_subdirectory(External/imgui-docking)
@@ -79,8 +81,13 @@ add_executable(OpenShaderDesigner
         # Graph
         Source/Graph/ShaderGraph.cpp Include/Graph/ShaderGraph.h
 
-        # Nodes
-        Source/Graph/Nodes/Shaders.cpp           Include/Graph/Nodes/Shaders.h
+# Nodes ----------------------------------------------------------------------------------------------------------------
+        
+        # Shaders
+        Source/Graph/Nodes/Shaders/Function.cpp  Include/Graph/Nodes/Shaders/Function.h
+        
+        # Math
+        Source/Graph/Nodes/Math/Common.cpp       Include/Graph/Nodes/Math/Common.h
         Source/Graph/Nodes/Math/Constants.cpp    Include/Graph/Nodes/Math/Constants.h
         Source/Graph/Nodes/Math/Functions.cpp    Include/Graph/Nodes/Math/Functions.h
         Source/Graph/Nodes/Math/Comparison.cpp   Include/Graph/Nodes/Math/Comparison.h
@@ -89,8 +96,6 @@ add_executable(OpenShaderDesigner
         
         # Utilities
         Include/Utility/Timer.h
-        Include/Graph/Nodes/Math/Common.h
-        Source/Graph/Nodes/Math/Common.cpp
 )
 
 # Preprocessor Definitions
@@ -100,13 +105,15 @@ target_compile_definitions(OpenShaderDesigner PRIVATE
         PROJECT_VERSION_MINOR=${VERSION_MINOR}
         PROJECT_VERSION_PATCH=${VERSION_PATCH}
         PROJECT_DIR="${CMAKE_CURRENT_SOURCE_DIR}"
+        
+        RAPIDJSON_HAS_STDSTRING=1
 )
 
 target_link_libraries(OpenShaderDesigner PRIVATE
         Freetype::Freetype
         GLEW::GLEW
         OpenGL::GL
-        ${SDL2_LIBRARIES}
+        SDL3::SDL3
         assimp::assimp
         rapidjson
         open-cpp-utils

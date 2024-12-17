@@ -52,11 +52,6 @@ Node* MakeVector::Copy(ShaderGraph& graph) const
     return new MakeVector(graph, Position);
 }
 
-void MakeVector::Inspect()
-{
-
-}
-
 std::string MakeVector::GetCode() const
 {
     // TODO: Support more than 2 inputs
@@ -90,11 +85,6 @@ BreakVector::BreakVector(ShaderGraph& graph, ImVec2 pos)
 Node* BreakVector::Copy(ShaderGraph& graph) const
 {
     return new MakeVector(graph, Position);
-}
-
-void BreakVector::Inspect()
-{
-
 }
 
 std::string BreakVector::GetCode() const

@@ -36,7 +36,6 @@ RegisterNode("Math/Comparison/Saturate", Saturate);
 Minimum::Minimum(ShaderGraph& graph, ImVec2 pos)
 	: MathOp(graph, pos)
 {
-	Info.Alias          = "Minimum";
 	Header.Title        = HeaderMarker + "Min";
 	Header.Color        = HeaderColor;
 	Header.HoveredColor = HeaderHoveredColor;
@@ -52,11 +51,6 @@ Minimum::Minimum(ShaderGraph& graph, ImVec2 pos)
 Node* Minimum::Copy(ShaderGraph& graph) const
 {
 	return new Minimum(graph, Position);
-}
-
-void Minimum::Inspect()
-{
-
 }
 
 std::string Minimum::GetCode() const
@@ -76,7 +70,6 @@ std::string Minimum::GetCode() const
 Maximum::Maximum(ShaderGraph& graph, ImVec2 pos)
 	: MathOp(graph, pos)
 {
-	Info.Alias          = "Maximum";
 	Header.Title        = HeaderMarker + "Max";
 	Header.Color        = HeaderColor;
 	Header.HoveredColor = HeaderHoveredColor;
@@ -92,11 +85,6 @@ Maximum::Maximum(ShaderGraph& graph, ImVec2 pos)
 Node* Maximum::Copy(ShaderGraph& graph) const
 {
 	return new Maximum(graph, Position);
-}
-
-void Maximum::Inspect()
-{
-
 }
 
 std::string Maximum::GetCode() const
@@ -115,7 +103,6 @@ std::string Maximum::GetCode() const
 Clamp::Clamp(ShaderGraph& graph, ImVec2 pos)
 	: MathOp(graph, pos)
 {
-	Info.Alias          = "Clamp";
 	Header.Title        = HeaderMarker + "Clamp";
 	Header.Color        = HeaderColor;
 	Header.HoveredColor = HeaderHoveredColor;
@@ -132,11 +119,6 @@ Clamp::Clamp(ShaderGraph& graph, ImVec2 pos)
 Node* Clamp::Copy(ShaderGraph& graph) const
 {
 	return new Clamp(graph, Position);
-}
-
-void Clamp::Inspect()
-{
-
 }
 
 std::string Clamp::GetCode() const
@@ -156,7 +138,6 @@ std::string Clamp::GetCode() const
 Saturate::Saturate(ShaderGraph& graph, ImVec2 pos)
 	: MathOp(graph, pos)
 {
-	Info.Alias          = "Saturate";
 	Header.Title        = HeaderMarker + "Saturate";
 	Header.Color        = HeaderColor;
 	Header.HoveredColor = HeaderHoveredColor;
@@ -171,11 +152,6 @@ Saturate::Saturate(ShaderGraph& graph, ImVec2 pos)
 Node* Saturate::Copy(ShaderGraph& graph) const
 {
 	return new Saturate(graph, Position);
-}
-
-void Saturate::Inspect()
-{
-
 }
 
 std::string Saturate::GetCode() const

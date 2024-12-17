@@ -36,7 +36,7 @@ static ShaderGraph* GCurrentGraph = nullptr;
 
 static bool ValidateConnection(ImPinPtr a, ImPinPtr b)
 {
-    ShaderGraph& Graph = *GCurrentGraph;
+    const ShaderGraph& Graph = *GCurrentGraph;
 
     bool result = false;
     result |= Graph.FindNode(a)->CheckConnection(&Graph.FindPin(a), &Graph.FindPin(b));
@@ -52,34 +52,351 @@ ImColor operator*(const ImColor& c, float f)
 	return ImVec4(c.Value.x * f, c.Value.y * f, c.Value.z * f, c.Value.w);
 }
 
-GraphState::GraphState(ShaderGraph& parent)
-	: Parent(parent)
+GraphState::GraphState(ShaderGraph& parent, ShaderAsset* asset)
+	: Asset_(asset)
+	, Parent_(parent)
 {
 }
 
 GraphState::GraphState(const GraphState& other)
-	: Parent(other.Parent)
-	, Nodes(other.Nodes)
+	: Asset_(other.Asset_)
+	, Parent_(other.Parent_)
+	, Nodes_(other.Nodes_)
 {
-    for(Node*& node : Nodes)
+    for(Node*& node : Nodes_)
     {
-        node = node->Copy(Parent);
+        node = node->Copy(Parent_);
     }
 }
 
 GraphState::~GraphState()
 {
-	for(Node* node : Nodes)
+	for(Node* node : Nodes_)
 	{
-		if(node) delete node;
+		delete node;
 	}
+}
+
+NodeId GraphState::AddNode(Node *node)
+{
+	Asset_->MakeDirty();
+	return Nodes_.insert(node);
+}
+
+void GraphState::RemoveNode(NodeId node, bool erase, bool override_flags)
+{
+	if(not override_flags && Nodes_[node]->Info.Flags & NodeFlags_Const) return;
+	if(erase) delete Nodes_[node];
+	Nodes_.erase(node);
+	Asset_->MakeDirty();
+}
+
+void GraphState::Clear()
+{
+	for(Node* node : Nodes_)
+	{
+		delete node;
+	}
+
+	Nodes_.clear();
+}
+
+void GraphState::Draw()
+{
+	for(ImGuiID id = 0; id < Nodes_.size(); ++id)
+	{
+		if(Nodes_(id) == false) continue;
+
+		Nodes_[id]->Draw(id);
+	}
+}
+
+void GraphState::Read(const JsonValue& data)
+{
+	uint32_t version = data.FindMember("Version")->value.GetInt();
+
+	// Disambiguation function
+	Read_(version, data);
+}
+
+template<>
+void GraphState::Read_<GraphState::Version<GraphState::GraphVersion_0>>(const JsonValue& data)
+{
+	// Typedefs and necessary locals
+	using                        AliasMapping = ShaderGraph::AliasMapping;
+	using                ContextMenuHierarchy = ShaderGraph::ContextMenuHierarchy;
+	const AliasMapping&              AliasMap = ShaderGraph::AliasMap();
+	const ContextMenuHierarchy& NodeRegistrar = ShaderGraph::ContextMenu();
+	const JsonValue&                    nodes = data.FindMember("Nodes")->value;
+	const JsonValue&              connections = data.FindMember("Connections")->value;
+	
+	// Read Nodes
+	for(uint32_t n = 0; n < nodes.Size(); ++n)
+	{
+		// Locals
+		const JsonValue& node_data = nodes[n];
+		const JsonValue&    inputs = node_data.FindMember("Inputs")->value;
+		const JsonValue&   outputs = node_data.FindMember("Outputs")->value;
+		std::string          alias = node_data.FindMember("Alias")->value.GetString();
+		Node*                 node = Asset_->GetSingletonNode(alias);
+
+		if(node == nullptr)
+		{
+			// Create a node
+			node = NodeRegistrar[AliasMap.find(alias)->second].Constructor(Parent_, { 0, 0 });
+			node->Info.Alias = alias;
+			AddNode(node);
+		}
+		
+		const JsonValue& position = node_data.FindMember("Position")->value;
+
+		node->Position.x   = position.FindMember("X")->value.GetFloat();
+		node->Position.y   = position.FindMember("Y")->value.GetFloat();
+		node->Header.Title = node_data.FindMember("Title")->value.GetString();
+
+		// Inputs
+		for(uint32_t p = 0; p < inputs.Size(); ++p)
+		{
+			if(node->IO.Inputs.size() <= p) node->IO.Inputs.push_back(Pin("", PinType_Any));
+			ReadPin_(node->IO.Inputs[p], inputs[p]);
+		}
+
+		// Outputs
+		for(uint32_t p = 0; p < outputs.Size(); ++p)
+		{
+			if(node->IO.Outputs.size() <= p) node->IO.Outputs.push_back(Pin("", PinType_Any));
+			ReadPin_(node->IO.Outputs[p], outputs[p]);
+		}
+	}
+	
+	// Connections
+	for(uint32_t c = 0; c < connections.Size(); ++c)
+	{
+		const JsonValue& connection = connections[c];
+		const JsonValue& a = connection.FindMember("A")->value;
+		const JsonValue& b = connection.FindMember("B")->value;
+		ImUserPinPtr A, B;
+
+		A.Node      = a.FindMember("Node")->value.GetInt();
+		A.Pin       = a.FindMember("Pin")->value.GetInt();
+		A.Direction = a.FindMember("Direction")->value.GetBool();
+		
+		B.Node      = b.FindMember("Node")->value.GetInt();
+		B.Pin       = b.FindMember("Pin")->value.GetInt();
+		B.Direction = b.FindMember("Direction")->value.GetBool();
+
+		QueuedConnections_.push_back({ A, B });
+	}
+}
+
+void GraphState::Read_(uint32_t version, const JsonValue& value)
+{
+	switch (version)
+	{
+		//case FunctionVersion_0: Read_<FunctionVersion_0>(document); return;
+		default: case GraphVersion_Latest: Read_<Version<GraphVersion_Latest>>(value); return;
+	}
+}
+
+rapidjson::Value GraphState::Write(rapidjson::MemoryPoolAllocator<>& alloc)
+{
+	JsonValue out; out.SetObject();
+
+	// Node Array
+	ocu::map<NodeId, uint32_t> node_map;
+	JsonValue nodes,  connections;
+	nodes.SetArray(); connections.SetArray();
+
+	for(auto it = Nodes_.begin(); it != Nodes_.end(); ++it)
+	{
+		const auto& node_data = *it;
+		node_map[it.id()] = nodes.Size();
+		
+		// Setup JSON Objects
+		JsonValue node, inputs, outputs, position;
+		bool dyn_inputs  = node_data->Info.Flags & NodeFlags_DynamicInputs;
+		bool dyn_outputs = node_data->Info.Flags & NodeFlags_DynamicOutputs;
+
+		node.SetObject();
+		inputs.SetArray();
+		outputs.SetArray();
+		position.SetObject();
+
+		position.AddMember("X", node_data->Position.x, alloc);
+		position.AddMember("Y", node_data->Position.y, alloc);
+
+		node.AddMember("Alias",    node_data->Info.Alias,   alloc);
+		node.AddMember("Title",    node_data->Header.Title, alloc);
+		node.AddMember("Position", position,                alloc);
+
+		// Write Input Pins
+		for(const Pin& input : node_data->IO.Inputs)
+		{
+			JsonValue value = WritePin_(input, alloc);
+			
+			inputs.PushBack(value, alloc);
+		}
+
+		// Write Output Pins
+		for(Pin& output : node_data->IO.Outputs)
+		{
+			JsonValue value = WritePin_(output, alloc);
+			
+			outputs.PushBack(value, alloc);
+		}
+
+		node.AddMember("Inputs",  inputs,  alloc);
+		node.AddMember("Outputs", outputs, alloc);
+		
+		nodes.PushBack(node, alloc);
+	}
+
+	// Write Connections
+	for(const ImPinConnection& conn : ImNodeGraph::GetConnections())
+	{
+		JsonValue connection, A, B;
+		connection.SetObject(); A.SetObject(); B.SetObject();
+
+		A.AddMember("Node",      ImNodeGraph::GetUserID(conn.A.Node), alloc);
+		A.AddMember("Pin",       ImNodeGraph::GetUserID(conn.A),      alloc);
+		A.AddMember("Direction", conn.A.Direction,                    alloc);
+
+		B.AddMember("Node",      ImNodeGraph::GetUserID(conn.B.Node), alloc);
+		B.AddMember("Pin",       ImNodeGraph::GetUserID(conn.B),      alloc);
+		B.AddMember("Direction", conn.B.Direction,                    alloc);
+
+		connection.AddMember("A", A, alloc);
+		connection.AddMember("B", B, alloc);
+
+		connections.PushBack(connection, alloc);
+	}
+	
+	out.AddMember("Nodes",       nodes,        alloc);
+	out.AddMember("Connections", connections,  alloc);
+
+	return out;
+}
+
+const Node* GraphState::GetNode(NodeId node) const
+{
+	return Nodes_[node];
+}
+
+const Node* GraphState::FindNode(ImGuiID node) const
+{
+	return Nodes_[ImNodeGraph::GetUserID("ShaderGraph", node)];
+}
+
+const Pin& GraphState::FindPin(ImPinPtr ptr) const
+{
+	Node* node = Nodes_[ImNodeGraph::GetUserID(ptr.Node)]; // Get the node
+	auto& pins = ptr.Direction ? node->IO.Outputs : node->IO.Inputs; // Get the correct set of pins
+	int idx = ImNodeGraph::GetUserID(ptr); // Get our id for the pin
+	if(ptr.Direction) idx *= -1; // Outputs have negative ids
+	idx -= 1; // Offset for indexing
+	return pins[idx];
+}
+
+Node* GraphState::GetNode(NodeId node)
+{
+	return Nodes_[node];
+}
+
+Node* GraphState::FindNode(ImGuiID node)
+{
+	return Nodes_[ImNodeGraph::GetUserID("ShaderGraph", node)];
+}
+
+Pin& GraphState::FindPin(ImPinPtr ptr)
+{
+	Node* node = Nodes_[ImNodeGraph::GetUserID(ptr.Node)]; // Get the node
+	auto& pins = ptr.Direction ? node->IO.Outputs : node->IO.Inputs; // Get the correct set of pins
+	int idx = ImNodeGraph::GetUserID(ptr); // Get our id for the pin
+	if(ptr.Direction) idx *= -1; // Outputs have negative ids
+	idx -= 1; // Offset for indexing
+	return pins[idx];
+}
+
+void GraphState::ReadPin_(Pin& pin, const JsonValue& value)
+{
+	pin.Name  = value.FindMember("Name")->value.GetString();
+	pin.Flags = value.FindMember("Flags")->value.GetUint();
+	pin.Type  = value.FindMember("Type")->value.GetUint();
+
+	switch(pin.Type)
+	{
+		case PinType_Int:    pin.Value = value.FindMember("Value")->value.GetInt();   break;
+		case PinType_UInt:   pin.Value = value.FindMember("Value")->value.GetUint();  break;
+			
+		default:
+		case PinType_Float:  pin.Value = value.FindMember("Value")->value.GetFloat(); break;
+			
+		case PinType_Vector:
+			const JsonValue& data = value.FindMember("Value")->value;
+		glm::vec3& val  = pin.Value;
+		val.x = data.FindMember("X")->value.GetFloat();
+		val.y = data.FindMember("Y")->value.GetFloat();
+		val.z = data.FindMember("Z")->value.GetFloat();
+		break;
+	}
+}
+
+rapidjson::Value GraphState::WritePin_(const Pin &pin, JsonAlloc& alloc)
+{
+	JsonValue out;
+	out.SetObject();
+
+	out.AddMember("Name",  pin.Name, alloc);
+	out.AddMember("Flags", pin.Flags, alloc);
+	out.AddMember("Type",  pin.Type, alloc);
+
+	switch(pin.Type)
+	{
+	case PinType_Int:    out.AddMember("Value", static_cast<int32_t>(pin.Value), alloc); break;
+	case PinType_UInt:   out.AddMember("Value", static_cast<uint32_t>(pin.Value), alloc); break;
+		
+	default:
+	case PinType_Float:  out.AddMember("Value", static_cast<float>(pin.Value), alloc); break;
+		
+	case PinType_Vector:
+		JsonValue vec; vec.SetObject();
+		vec.AddMember("X", pin.Value.get<glm::vec3>().x, alloc);
+		vec.AddMember("Y", pin.Value.get<glm::vec3>().y, alloc);
+		vec.AddMember("Z", pin.Value.get<glm::vec3>().z, alloc);
+		out.AddMember("Value", vec, alloc);
+		break;
+	}
+
+	return out;
+}
+
+bool GraphState::ResolveConnections_()
+{
+	bool compile = not QueuedConnections_.empty();
+	while(QueuedConnections_.empty() == false)
+	{
+		const auto& connection = QueuedConnections_.back();		
+		ImNodeGraph::MakeConnection(connection.first, connection.second);
+		QueuedConnections_.pop_back();
+	}
+
+	return compile;
+}
+
+void ShaderAsset::View(HDRTexture::HandleType *Target)
+{
+	ImNodeGraph::BeginGraphPostOp("ShaderGraph");
+
+	if(State_.ResolveConnections_()) Compile();
+
+	ImNodeGraph::EndGraphPostOp();
 }
 
 GraphState& GraphState::operator=(const GraphState& other)
 {
-    Nodes = other.Nodes;
+    Nodes_ = other.Nodes_;
 
-    for(Node*& node : Nodes) if(node) node = node->Copy(Parent);
+    for(Node*& node : Nodes_) if(node) node = node->Copy(Parent_);
 
     return *this;
 }
@@ -111,7 +428,7 @@ void Node::DrawPin(int id, Pin& pin, ImPinDirection direction)
     pin.Ptr = ImNodeGraph::GetPinPtr();
     if(res)
     {
-        const ImVector<ImGuiID>&  connections  = ImNodeGraph::GetConnections();
+        const ImVector<ImGuiID>&  connections  = ImNodeGraph::GetPinConnections();
         const ImVector<ImPinPtr>& new_conns    = ImNodeGraph::GetNewConnections();
 
         if(pin.Flags & PinFlags_Ambiguous)
@@ -257,13 +574,7 @@ void ShaderGraph::DrawWindow()
         ImGui::SetNavWindow(ImGui::GetCurrentWindow());
     }
 
-    GraphState& State = Shader_->GetState();
-    for(ImGuiID id = 0; id < State.Nodes.size(); ++id)
-    {
-        if(State.Nodes(id) == false) continue;
-
-        State.Nodes[id]->Draw(id);
-    }
+	Shader_->GetState().Draw();
 
     DrawContextMenu();
 
@@ -287,7 +598,7 @@ void ShaderGraph::DrawWindow()
     Selected_.reset();
     if(Selected.Size == 1)
     {
-        Selected_ = ImNodeGraph::GetUserID(*Selected.cbegin()).Int;
+        Selected_ = ImNodeGraph::GetUserID(*Selected.cbegin());
     }
 
     ImNodeGraph::EndGraphPostOp();
@@ -296,7 +607,7 @@ void ShaderGraph::DrawWindow()
 
 void ShaderGraph::DrawContextMenu()
 {
-    ContextMenuHierarchy& ContextMenu = ShaderGraph::ContextMenu();
+    ContextMenuHierarchy& ContextMenu = ShaderGraph::ContextMenu_();
     
     if(ImGui::IsMouseClicked(ImGuiMouseButton_Right))
     {
@@ -326,28 +637,39 @@ void ShaderGraph::DrawContextMenu()
         {
             bool operator()(ContextMenuItem& item, ContextID id)
             {
-                ContextMenuHierarchy& ContextMenu = ShaderGraph::ContextMenu();
+                ContextMenuHierarchy& ContextMenu = ShaderGraph::ContextMenu_();
                 const auto depth = ContextMenu.depth(id);
+
+            	// If the node is at a greater depth than the context, skip it
                 if(depth > Context.size()) return false;
 
+            	// if the depth is less than the depth of the context, pop the sub menus
                 while(depth < Context.size())
                 {
                     Context.pop();
                     ImGui::EndMenu();
                 }
 
+            	if(item.Name == "##") return false;
+            		
+            	// If we are in a different sub-tree than the context, skip it
                 if(Context.top() != ContextMenu.parent(id)) return false;
+
+            	// Generate a string to identify the node for ImGUI, tack on the id just in case of duplicates
                 std::string name = std::format("{}##{}", item.Name, id);
 
+            	// Check if this is a subfolder or a node
                 if(item.Constructor)
                 {
+                	// Clickable menu to create the node
                     if(ImGui::MenuItem(item.Name.c_str()))
                     {
-                        Graph.Shader_->GetState().AddNode(item.Constructor(Graph, Location));
+                        NodeId id = Graph.Shader_->GetState().AddNode(item.Constructor(Graph, Location));
                     }
                 }
                 else
                 {
+                	// Begin a submenu
                     if(ImGui::BeginMenu(item.Name.c_str()))
                     {
                         Context.push(id);
@@ -370,10 +692,13 @@ void ShaderGraph::DrawContextMenu()
         ,	.Location = position
         };
 
+    	// Push a null node to represent the root
         MenuVisitor.Context.push(0);
 
+    	// Traverser-Visitor Pattern
         ContextMenu.traverse<ContextMenuHierarchy::pre_order>(MenuVisitor);
 
+    	// Pop the context to end the sub-menus
         MenuVisitor.Context.pop();
         while(MenuVisitor.Context.empty() == false)
         {
@@ -396,7 +721,7 @@ void ShaderGraph::Erase()
     ImSet<ImGuiID>& Selected = *ImNodeGraph::GetSelected();
     for(ImGuiID node : Selected)
     {
-        State.RemoveNode(ImNodeGraph::GetUserID(node).Int);
+        State.RemoveNode(ImNodeGraph::GetUserID(node));
     }
     Selected.Clear();
 }
@@ -411,49 +736,66 @@ void ShaderGraph::Clear()
     
 }
 
+const Node * ShaderGraph::GetNode(NodeId node) const
+{
+	return Shader_->GetState().GetNode(node);
+}
+
+const Node* ShaderGraph::FindNode(ImPinPtr ptr) const
+{
+    return Shader_->GetState().FindNode(ptr.Node);
+}
+
+const Node* ShaderGraph::FindNode(ImGuiID id) const
+{
+    return Shader_->GetState().FindNode(id);
+}
+
+const Pin& ShaderGraph::FindPin(ImPinPtr ptr) const
+{
+    return Shader_->GetState().FindPin(ptr);
+}
+
+Node * ShaderGraph::GetNode(NodeId node)
+{
+	return Shader_->GetState().GetNode(node);
+}
+
 Node* ShaderGraph::FindNode(ImPinPtr ptr)
 {
-    return Shader_->GetState().Nodes[ImNodeGraph::GetUserID("ShaderGraph", ptr.Node).Int];
+	return Shader_->GetState().FindNode(ptr.Node);
 }
 
 Node* ShaderGraph::FindNode(ImGuiID id)
 {
-    return Shader_->GetState().Nodes[ImNodeGraph::GetUserID("ShaderGraph", id).Int];
+	return Shader_->GetState().FindNode(id);
 }
 
 Pin& ShaderGraph::FindPin(ImPinPtr ptr)
 {
-    Node* node = Shader_->GetState().Nodes[ImNodeGraph::GetUserID(ptr.Node).Int];
-    auto& pins = ptr.Direction ? node->IO.Outputs : node->IO.Inputs;
-    int idx = ImNodeGraph::GetUserID(ptr).Int;
-    if(ptr.Direction) idx *= -1;
-    idx -= 1;
-    return pins[idx];
+    return Shader_->GetState().FindPin(ptr);
 }
 
 std::string ShaderGraph::GetValue(ImPinPtr ptr)
 {
     if(ptr.Direction == ImPinDirection_Output)
     {
-        NodeId node_id = ImNodeGraph::GetUserID(ptr.Node).Int;
-        Node* node = Shader_->GetState().Nodes[node_id];
-    
-        NodeId pin_id = ImNodeGraph::GetUserID(ptr).Int;
-        Pin& pin = FindPin(ptr);
+        const Pin& pin = FindPin(ptr);
 
+    	// L-Value
     	if(pin.Flags & PinFlags_Literal)
     	{
     		switch(pin.Type)
     		{
-    			case PinType_UInt:   return std::to_string(pin.Value.get<glm::uint32>());
-    			case PinType_Int:    return std::to_string(pin.Value.get<glm::int32>());
-    			case PinType_Float:  return std::to_string(pin.Value.get<glm::float32>());
-    			case PinType_Vector:
-    			{
-    				const glm::vec3& val = pin.Value.get<glm::vec3>();
-    				return std::format("vec3({},{},{})", val.x, val.y, val.z);
-    			}
-    			default: return "0";
+    		case PinType_UInt:   return std::to_string(pin.Value.get<glm::uint32>());
+    		case PinType_Int:    return std::to_string(pin.Value.get<glm::int32>());
+    		case PinType_Float:  return std::to_string(pin.Value.get<glm::float32>());
+    		case PinType_Vector:
+    		{
+    			const glm::vec3& val = pin.Value.get<glm::vec3>();
+    			return std::format("vec3({},{},{})", val.x, val.y, val.z);
+    		}
+    		default: return "0";
     		}
     	}
     
@@ -461,8 +803,8 @@ std::string ShaderGraph::GetValue(ImPinPtr ptr)
     }
     else
     {
-        const ImVector<ImGuiID>& connections = ImNodeGraph::GetConnections(ptr);
-        Pin& pin = FindPin(ptr);
+        const ImVector<ImGuiID>& connections = ImNodeGraph::GetPinConnections(ptr);
+        const Pin& pin = FindPin(ptr);
 
         // L-Value
         if(connections.empty())
@@ -488,10 +830,11 @@ std::string ShaderGraph::GetValue(ImPinPtr ptr)
     }
 }
 
-void ShaderGraph::Register(const std::filesystem::path& path, ConstructorPtr constructor)
+void ShaderGraph::Register(const std::filesystem::path& path, const std::string &alias, ConstructorPtr constructor)
 {
-	const std::string name = path.filename().string();
-    ContextMenuHierarchy& ContextMenu = ShaderGraph::ContextMenu();
+	const std::string            name = path.filename().string();
+    ContextMenuHierarchy& ContextMenu = ContextMenu_();
+	AliasMapping&            AliasMap = AliasMap_();
 
 	ContextID node = 0;
 	for(auto it = path.begin(); it != path.end();)
@@ -512,12 +855,13 @@ void ShaderGraph::Register(const std::filesystem::path& path, ConstructorPtr con
 
 		if(node == 0 || node != child)
 		{
-			node = ContextMenu.insert({ it->string(), nullptr }, node);
+			node = ContextMenu.insert({ it->string(), alias, nullptr }, node);
 			++it;
 		}
 	}
 
 	ContextMenu[node].Constructor = constructor;
+	AliasMap[alias] = node;
 }
 
 Inspector::Inspector()
@@ -532,6 +876,6 @@ void Inspector::DrawWindow()
 
     if(Graph->Selected_())
     {
-        Graph->Shader_->GetState().Nodes[Graph->Selected_]->Inspect();
+        Graph->GetNode(Graph->Selected_)->Inspect();
     }
 }

@@ -37,7 +37,6 @@ struct Minimum : public MathOp
 	~Minimum() override = default;
 
 	[[nodiscard]] Node* Copy(ShaderGraph& graph) const override;
-	void Inspect() override;
 
 	std::string GetCode() const override;
 };
@@ -51,7 +50,6 @@ struct Maximum : public MathOp
 	~Maximum() override = default;
 
 	[[nodiscard]] Node* Copy(ShaderGraph& graph) const override;
-	void Inspect() override;
 
 	std::string GetCode() const override;
 };
@@ -65,7 +63,6 @@ struct Clamp : public MathOp
 	~Clamp() override = default;
 
 	[[nodiscard]] Node* Copy(ShaderGraph& graph) const override;
-	void Inspect() override;
 
 	std::string GetCode() const override;
 };
@@ -79,7 +76,6 @@ struct Saturate : public MathOp
 	~Saturate() override = default;
 
 	[[nodiscard]] Node* Copy(ShaderGraph& graph) const override;
-	void Inspect() override;
 
 	std::string GetCode() const override;
 };

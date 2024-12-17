@@ -36,6 +36,7 @@ public:
     ~Texture() override;
 
     void Open() override;
+	void Read(const FileManager::Path &path) override;
 
     static Asset* Create(const FileManager::Path& path);
     static Asset* Load(const FileManager::Path& path);
@@ -50,7 +51,7 @@ private:
 class HDRTexture : public FileManager::Asset
 {
 public:
-    using HandleType = glw::texture<glw::texture2D, glw::rgba16>;
+    using HandleType = glw::texture<glw::texture2D, glw::rgba16f>;
 
     HDRTexture(const FileManager::Path& path);
     HDRTexture(const FileManager::Path& src, const FileManager::Path& dst);

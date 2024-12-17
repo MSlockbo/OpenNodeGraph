@@ -40,7 +40,6 @@ RegisterNode("Math/Trigonometry/ATan", ArcTangent);
 Sine::Sine(ShaderGraph &graph, ImVec2 pos)
     : MathOp(graph, pos)
 {
-    Info.Alias          = "Sine";
     Header.Title        = HeaderMarker + "Sin";
     Header.Color        = HeaderColor;
     Header.HoveredColor = HeaderHoveredColor;
@@ -53,11 +52,6 @@ Sine::Sine(ShaderGraph &graph, ImVec2 pos)
 Node* Sine::Copy(ShaderGraph &graph) const
 {
     return new Sine(graph, Position);
-}
-
-void Sine::Inspect()
-{
-	
 }
 
 std::string Sine::GetCode() const
@@ -76,7 +70,6 @@ std::string Sine::GetCode() const
 Cosine::Cosine(ShaderGraph &graph, ImVec2 pos)
 	: MathOp(graph, pos)
 {
-	Info.Alias          = "Cosine";
 	Header.Title        = HeaderMarker + "Cos";
 	Header.Color        = HeaderColor;
 	Header.HoveredColor = HeaderHoveredColor;
@@ -89,11 +82,6 @@ Cosine::Cosine(ShaderGraph &graph, ImVec2 pos)
 Node* Cosine::Copy(ShaderGraph &graph) const
 {
 	return new Cosine(graph, Position);
-}
-
-void Cosine::Inspect()
-{
-	
 }
 
 std::string Cosine::GetCode() const
@@ -111,7 +99,6 @@ std::string Cosine::GetCode() const
 Tangent::Tangent(ShaderGraph &graph, ImVec2 pos)
 	: MathOp(graph, pos)
 {
-	Info.Alias          = "Tangent";
 	Header.Title        = HeaderMarker + "Tan";
 	Header.Color        = HeaderColor;
 	Header.HoveredColor = HeaderHoveredColor;
@@ -124,11 +111,6 @@ Tangent::Tangent(ShaderGraph &graph, ImVec2 pos)
 Node* Tangent::Copy(ShaderGraph &graph) const
 {
 	return new Tangent(graph, Position);
-}
-
-void Tangent::Inspect()
-{
-	
 }
 
 std::string Tangent::GetCode() const
@@ -146,7 +128,6 @@ std::string Tangent::GetCode() const
 ArcSine::ArcSine(ShaderGraph &graph, ImVec2 pos)
     : MathOp(graph, pos)
 {
-    Info.Alias          = "ArcSine";
     Header.Title        = HeaderMarker + "ASin";
     Header.Color        = HeaderColor;
     Header.HoveredColor = HeaderHoveredColor;
@@ -159,11 +140,6 @@ ArcSine::ArcSine(ShaderGraph &graph, ImVec2 pos)
 Node* ArcSine::Copy(ShaderGraph &graph) const
 {
     return new ArcSine(graph, Position);
-}
-
-void ArcSine::Inspect()
-{
-	
 }
 
 std::string ArcSine::GetCode() const
@@ -182,7 +158,6 @@ std::string ArcSine::GetCode() const
 ArcCosine::ArcCosine(ShaderGraph &graph, ImVec2 pos)
 	: MathOp(graph, pos)
 {
-	Info.Alias          = "ArcCosine";
 	Header.Title        = HeaderMarker + "ACos";
 	Header.Color        = HeaderColor;
 	Header.HoveredColor = HeaderHoveredColor;
@@ -195,11 +170,6 @@ ArcCosine::ArcCosine(ShaderGraph &graph, ImVec2 pos)
 Node* ArcCosine::Copy(ShaderGraph &graph) const
 {
 	return new Cosine(graph, Position);
-}
-
-void ArcCosine::Inspect()
-{
-	
 }
 
 std::string ArcCosine::GetCode() const
@@ -217,7 +187,6 @@ std::string ArcCosine::GetCode() const
 ArcTangent::ArcTangent(ShaderGraph &graph, ImVec2 pos)
 	: MathOp(graph, pos)
 {
-	Info.Alias          = "ArcTangent";
 	Header.Title        = HeaderMarker + "ATan";
 	Header.Color        = HeaderColor;
 	Header.HoveredColor = HeaderHoveredColor;
@@ -230,11 +199,6 @@ ArcTangent::ArcTangent(ShaderGraph &graph, ImVec2 pos)
 Node* ArcTangent::Copy(ShaderGraph &graph) const
 {
 	return new ArcTangent(graph, Position);
-}
-
-void ArcTangent::Inspect()
-{
-	
 }
 
 std::string ArcTangent::GetCode() const

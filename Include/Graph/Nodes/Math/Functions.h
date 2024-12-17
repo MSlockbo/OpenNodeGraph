@@ -39,7 +39,6 @@ struct Add : public MathOp
     ~Add() override = default;
 
     [[nodiscard]] Node* Copy(ShaderGraph& graph) const override;
-    void Inspect() override;
 
     std::string GetCode() const override;
 };
@@ -53,7 +52,6 @@ struct Subtract : public MathOp
     ~Subtract() override = default;
 
     [[nodiscard]] Node* Copy(ShaderGraph& graph) const override;
-    void Inspect() override;
 
     std::string GetCode() const override;
 };
@@ -66,7 +64,6 @@ struct Multiply : public MathOp
     ~Multiply() override = default;
 
     [[nodiscard]] Node* Copy(ShaderGraph& graph) const override;
-    void Inspect() override;
 
     std::string GetCode() const override;
 };
@@ -80,7 +77,6 @@ struct Divide : public MathOp
     ~Divide() override = default;
 
     [[nodiscard]] Node* Copy(ShaderGraph& graph) const override;
-    void Inspect() override;
 
     std::string GetCode() const override;
 };
@@ -94,7 +90,6 @@ struct AbsoluteValue : public MathOp
 	~AbsoluteValue() override = default;
 
 	[[nodiscard]] Node* Copy(ShaderGraph& graph) const override;
-	void Inspect() override;
 
 	std::string GetCode() const override;
 };
@@ -108,7 +103,6 @@ struct Power : public MathOp
 	~Power() override = default;
 
 	[[nodiscard]] Node* Copy(ShaderGraph& graph) const override;
-	void Inspect() override;
 
 	std::string GetCode() const override;
 };
@@ -122,7 +116,6 @@ struct SquareRoot : public MathOp
 	~SquareRoot() override = default;
 
 	[[nodiscard]] Node* Copy(ShaderGraph& graph) const override;
-	void Inspect() override;
 
 	std::string GetCode() const override;
 };
@@ -136,7 +129,6 @@ struct InverseSquareRoot : public MathOp
 	~InverseSquareRoot() override = default;
 
 	[[nodiscard]] Node* Copy(ShaderGraph& graph) const override;
-	void Inspect() override;
 
 	std::string GetCode() const override;
 };
@@ -150,7 +142,6 @@ struct Logarithm2 : public MathOp
 	~Logarithm2() override = default;
 
 	[[nodiscard]] Node* Copy(ShaderGraph& graph) const override;
-	void Inspect() override;
 
 	std::string GetCode() const override;
 };
@@ -164,7 +155,6 @@ struct LogarithmE : public MathOp
 	~LogarithmE() override = default;
 
 	[[nodiscard]] Node* Copy(ShaderGraph& graph) const override;
-	void Inspect() override;
 
 	std::string GetCode() const override;
 };
@@ -178,7 +168,6 @@ struct Logarithm : public MathOp
 	~Logarithm() override = default;
 
 	[[nodiscard]] Node* Copy(ShaderGraph& graph) const override;
-	void Inspect() override;
 
 	std::string GetCode() const override;
 };
@@ -192,7 +181,6 @@ struct Exponential : public MathOp
 	~Exponential() override = default;
 
 	[[nodiscard]] Node* Copy(ShaderGraph& graph) const override;
-	void Inspect() override;
 
 	std::string GetCode() const override;
 };

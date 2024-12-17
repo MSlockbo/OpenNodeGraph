@@ -30,6 +30,8 @@
 #include <rapidjson/ostreamwrapper.h>
 #include <rapidjson/prettywriter.h>
 
+#include "Renderer/Renderer.h"
+
 using namespace OpenShaderDesigner;
 
 RegisterAsset("##/Project", Project, ".sgp");
@@ -145,6 +147,16 @@ void Project::DrawMenuBar()
 
         ImGui::EndMenu();
     }
+
+	if(ImGui::BeginMenu("Help"))
+	{
+		if(ImGui::MenuItem("HDR Calibration..."))
+		{
+			EditorSystem::OpenHDRCalibration();
+		}
+
+		ImGui::EndMenu();
+	}
 }
 
 void Project::Open()
@@ -152,7 +164,7 @@ void Project::Open()
     
 }
 
-void Project::Save(const FileManager::Path& path)
+void Project::Write(const FileManager::Path& path)
 {
     // Setup
     rapidjson::Document document;
@@ -166,7 +178,7 @@ void Project::Save(const FileManager::Path& path)
     file.close();
 
     // Clear Dirty Flag
-    Asset::Save(path);
+    Asset::Write(path);
 
     Console::Log(Console::Alert, "Saved Project {} to {}", path.filename().string(), path.parent_path().string());
 }

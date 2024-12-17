@@ -47,7 +47,6 @@ RegisterNode("Math/Functions/Exp",  Exponential);
 Add::Add(ShaderGraph& graph, ImVec2 pos)
 	: MathOp(graph, pos)
 {
-    Info.Alias          = "Add";
     Header.Title        = HeaderMarker + "Add";
     Header.Color        = HeaderColor;
     Header.HoveredColor = HeaderHoveredColor;
@@ -63,11 +62,6 @@ Add::Add(ShaderGraph& graph, ImVec2 pos)
 Node* Add::Copy(ShaderGraph& graph) const
 {
 	return new Add(graph, Position);
-}
-
-void Add::Inspect()
-{
-
 }
 
 std::string Add::GetCode() const
@@ -87,7 +81,6 @@ std::string Add::GetCode() const
 Subtract::Subtract(ShaderGraph& graph, ImVec2 pos)
     : MathOp(graph, pos)
 {
-    Info.Alias          = "Subtract";
     Header.Title        = HeaderMarker + "Subtract";
     Header.Color        = HeaderColor;
     Header.HoveredColor = HeaderHoveredColor;
@@ -103,11 +96,6 @@ Subtract::Subtract(ShaderGraph& graph, ImVec2 pos)
 Node* Subtract::Copy(ShaderGraph& graph) const
 {
     return new Subtract(graph, Position);
-}
-
-void Subtract::Inspect()
-{
-
 }
 
 std::string Subtract::GetCode() const
@@ -127,7 +115,6 @@ std::string Subtract::GetCode() const
 Multiply::Multiply(ShaderGraph& graph, ImVec2 pos)
     : MathOp(graph, pos)
 {
-    Info.Alias          = "Multiply";
     Header.Title        = HeaderMarker + "Multiply";
     Header.Color        = HeaderColor;
     Header.HoveredColor = HeaderHoveredColor;
@@ -147,11 +134,6 @@ Node* Multiply::Copy(ShaderGraph& graph) const
     return new Multiply(graph, Position);
 }
 
-void Multiply::Inspect()
-{
-
-}
-
 std::string Multiply::GetCode() const
 {
     // TODO: Support more than 2 inputs
@@ -169,7 +151,6 @@ std::string Multiply::GetCode() const
 Divide::Divide(ShaderGraph& graph, ImVec2 pos)
     : MathOp(graph, pos)
 {
-    Info.Alias          = "Divide";
     Header.Title        = HeaderMarker + "Divide";
     Header.Color        = HeaderColor;
     Header.HoveredColor = HeaderHoveredColor;
@@ -189,11 +170,6 @@ Node* Divide::Copy(ShaderGraph& graph) const
     return new Divide(graph, Position);
 }
 
-void Divide::Inspect()
-{
-
-}
-
 std::string Divide::GetCode() const
 {
     // TODO: Support more than 2 inputs
@@ -211,7 +187,6 @@ std::string Divide::GetCode() const
 AbsoluteValue::AbsoluteValue(ShaderGraph& graph, ImVec2 pos)
 	: MathOp(graph, pos)
 {
-	Info.Alias          = "AbsoluteValue";
 	Header.Title        = HeaderMarker + "Abs";
 	Header.Color        = HeaderColor;
 	Header.HoveredColor = HeaderHoveredColor;
@@ -224,11 +199,6 @@ AbsoluteValue::AbsoluteValue(ShaderGraph& graph, ImVec2 pos)
 Node* AbsoluteValue::Copy(ShaderGraph& graph) const
 {
 	return new Divide(graph, Position);
-}
-
-void AbsoluteValue::Inspect()
-{
-
 }
 
 std::string AbsoluteValue::GetCode() const
@@ -247,7 +217,6 @@ std::string AbsoluteValue::GetCode() const
 Power::Power(ShaderGraph& graph, ImVec2 pos)
 	: MathOp(graph, pos)
 {
-	Info.Alias          = "Power";
 	Header.Title        = HeaderMarker + "Pow";
 	Header.Color        = HeaderColor;
 	Header.HoveredColor = HeaderHoveredColor;
@@ -261,11 +230,6 @@ Power::Power(ShaderGraph& graph, ImVec2 pos)
 Node* Power::Copy(ShaderGraph& graph) const
 {
 	return new Divide(graph, Position);
-}
-
-void Power::Inspect()
-{
-
 }
 
 std::string Power::GetCode() const
@@ -300,11 +264,6 @@ Node* SquareRoot::Copy(ShaderGraph& graph) const
 	return new Divide(graph, Position);
 }
 
-void SquareRoot::Inspect()
-{
-
-}
-
 std::string SquareRoot::GetCode() const
 {
 	// TODO: Support more than 2 inputs
@@ -321,7 +280,6 @@ std::string SquareRoot::GetCode() const
 InverseSquareRoot::InverseSquareRoot(ShaderGraph& graph, ImVec2 pos)
 	: MathOp(graph, pos)
 {
-	Info.Alias          = "InverseSquareRoot";
 	Header.Title        = HeaderMarker + "RSqrt";
 	Header.Color        = HeaderColor;
 	Header.HoveredColor = HeaderHoveredColor;
@@ -334,11 +292,6 @@ InverseSquareRoot::InverseSquareRoot(ShaderGraph& graph, ImVec2 pos)
 Node* InverseSquareRoot::Copy(ShaderGraph& graph) const
 {
 	return new Divide(graph, Position);
-}
-
-void InverseSquareRoot::Inspect()
-{
-
 }
 
 std::string InverseSquareRoot::GetCode() const
@@ -357,7 +310,6 @@ std::string InverseSquareRoot::GetCode() const
 Logarithm::Logarithm(ShaderGraph& graph, ImVec2 pos)
 	: MathOp(graph, pos)
 {
-	Info.Alias          = "Logarithm";
 	Header.Title        = HeaderMarker + "Log";
 	Header.Color        = HeaderColor;
 	Header.HoveredColor = HeaderHoveredColor;
@@ -371,11 +323,6 @@ Logarithm::Logarithm(ShaderGraph& graph, ImVec2 pos)
 Node* Logarithm::Copy(ShaderGraph& graph) const
 {
 	return new Divide(graph, Position);
-}
-
-void Logarithm::Inspect()
-{
-
 }
 
 std::string Logarithm::GetCode() const
@@ -395,7 +342,6 @@ std::string Logarithm::GetCode() const
 Logarithm2::Logarithm2(ShaderGraph& graph, ImVec2 pos)
 	: MathOp(graph, pos)
 {
-	Info.Alias          = "Logarithm2";
 	Header.Title        = HeaderMarker + "Log2";
 	Header.Color        = HeaderColor;
 	Header.HoveredColor = HeaderHoveredColor;
@@ -408,11 +354,6 @@ Logarithm2::Logarithm2(ShaderGraph& graph, ImVec2 pos)
 Node* Logarithm2::Copy(ShaderGraph& graph) const
 {
 	return new Divide(graph, Position);
-}
-
-void Logarithm2::Inspect()
-{
-
 }
 
 std::string Logarithm2::GetCode() const
@@ -431,7 +372,6 @@ std::string Logarithm2::GetCode() const
 LogarithmE::LogarithmE(ShaderGraph& graph, ImVec2 pos)
 	: MathOp(graph, pos)
 {
-	Info.Alias          = "LogarithmE";
 	Header.Title        = HeaderMarker + "LogE";
 	Header.Color        = HeaderColor;
 	Header.HoveredColor = HeaderHoveredColor;
@@ -444,11 +384,6 @@ LogarithmE::LogarithmE(ShaderGraph& graph, ImVec2 pos)
 Node* LogarithmE::Copy(ShaderGraph& graph) const
 {
 	return new Divide(graph, Position);
-}
-
-void LogarithmE::Inspect()
-{
-
 }
 
 std::string LogarithmE::GetCode() const
@@ -467,7 +402,6 @@ std::string LogarithmE::GetCode() const
 Exponential::Exponential(ShaderGraph& graph, ImVec2 pos)
 	: MathOp(graph, pos)
 {
-	Info.Alias          = "Exponential";
 	Header.Title        = HeaderMarker + "Exp";
 	Header.Color        = HeaderColor;
 	Header.HoveredColor = HeaderHoveredColor;
@@ -480,11 +414,6 @@ Exponential::Exponential(ShaderGraph& graph, ImVec2 pos)
 Node* Exponential::Copy(ShaderGraph& graph) const
 {
 	return new Exponential(graph, Position);
-}
-
-void Exponential::Inspect()
-{
-
 }
 
 std::string Exponential::GetCode() const

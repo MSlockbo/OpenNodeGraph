@@ -20,10 +20,14 @@
 #define OSD_SHADERGRAPH_H
 
 #include <Editor/EditorWindow.h>
+#include <FileSystem/FileManager.h>
+#include <Renderer/Assets/Texture.h>
 
 #include <vector>
 #include <filesystem>
+#include <functional>
 #include <unordered_set>
+#include <unordered_map>
 #include <stack>
 
 #include <glm/glm.hpp>
@@ -35,19 +39,19 @@
 #include <open-cpp-utils/object_pool.h>
 
 #include <imnode-graph/imnode_graph.h>
-
-#include "FileSystem/FileManager.h"
-#include <Renderer/Assets/Texture.h>
+#include <rapidjson/document.h>
 
 
 namespace ocu = open_cpp_utils;
 
 #define RegisterNode(Name, Type) \
-	inline Node* Create##Type(ShaderGraph& graph, ImVec2 pos) { return new Type(graph, pos); } \
-	STARTUP(_Register##Type) { ShaderGraph::Register(Name, Create##Type); }
+	inline Node* Create##Type(ShaderGraph& graph, ImVec2 pos) \
+	{ Node* node = new Type(graph, pos); node->Info.Alias = #Type; return node; } \
+	STARTUP(_RegisterNode##Type) { ShaderGraph::Register(Name, #Type, Create##Type); }
 
 namespace OpenShaderDesigner
 {
+	class ShaderAsset;
 	class ShaderGraph;
 
     using PinType = int;
@@ -82,7 +86,7 @@ namespace OpenShaderDesigner
 
 	struct Pin
 	{
-		inline const static ImColor Colors[PinType_COUNT] = {
+		inline static constexpr ImColor Colors[PinType_COUNT] = {
 			ImColor(0x7A, 0x9F, 0x82) // Unsigned Int
 		,	ImColor(0x64, 0x94, 0xAA) // Int
 		,	ImColor(0xA6, 0x3D, 0x40) // Float
@@ -159,7 +163,7 @@ namespace OpenShaderDesigner
 
 		struct
 		{
-		    std::string Alias;
+		    std::string Alias; // Node Class Alias, do not change, automatically set by the graph
 		    FlagT       Flags;
 		} Info;
 
@@ -169,11 +173,11 @@ namespace OpenShaderDesigner
 	    void DrawPin(int id, Pin& pin, ImPinDirection direction);
 	    void Draw(ImGuiID id);
 
-	    inline virtual bool CheckConnection(Pin*, Pin*) { return true; }
+	    inline virtual bool CheckConnection(const Pin*, const Pin*) const { return true; }
 	    virtual void ValidateConnections() { }
 	    
 		virtual Node* Copy(ShaderGraph& graph) const = 0;
-		virtual void Inspect() = 0;
+		virtual bool Inspect() { return false; };
 	    virtual std::string GetCode() const = 0;
 	};
     
@@ -195,20 +199,71 @@ namespace OpenShaderDesigner
         glw::size_t Count; // For arrays
     };
     
-    struct GraphState
+    class GraphState
     {
-        
-        ShaderGraph& Parent;
-        NodeList     Nodes;
+    public:
+    	enum GraphVersion_ : uint32_t
+    	{
+    		GraphVersion_0 = 0
 
-        GraphState(ShaderGraph& parent);
+		,	GraphVersion_Count
+		,	GraphVersion_Latest = GraphVersion_Count - 1
+		};
+    	
+    	template<uint32_t V> using Version = std::integral_constant<uint32_t, V>;
+    	
+    private:
+    	
+    	using ConnectionStack = ocu::dynarray<std::pair<ImUserPinPtr, ImUserPinPtr>>;
+    	using JsonValue       = rapidjson::Value;
+    	using JsonAlloc       = rapidjson::MemoryPoolAllocator<>;
+
+    public:
+        GraphState(ShaderGraph& parent, ShaderAsset* asset);
         GraphState(const GraphState& other);
         ~GraphState();
 
-        NodeId AddNode(Node* node) { return Nodes.insert(node); }
-        void RemoveNode(NodeId node) { if(Nodes[node]->Info.Flags & NodeFlags_Const) return; Nodes.erase(node); }
+        NodeId AddNode(Node* node);
+        void RemoveNode(NodeId node, bool erase = true, bool override_flags = false);
+    	void Clear();
 
-        GraphState& operator=(const GraphState& other);
+    	void Draw();
+
+    	void Read(const rapidjson::Value& data);
+    	rapidjson::Value Write(rapidjson::MemoryPoolAllocator<>& alloc);
+
+    	GraphState& operator=(const GraphState& other);
+
+    	bool Dirty() const { return Dirty_; }
+    	void MakeDirty() { Dirty_ = true; }
+
+    	const Node* GetNode(NodeId node) const;
+	    const Node* FindNode(ImGuiID node) const;
+    	const Pin&  FindPin(ImPinPtr ptr)  const;
+
+    	const NodeList& GetNodes() const { return Nodes_; }
+
+    private:
+		Node* GetNode(NodeId node);
+    	Node* FindNode(ImGuiID id);
+    	Pin&  FindPin(ImPinPtr ptr);
+    	
+    	static void             ReadPin_(Pin& pin, const JsonValue& value);
+    	static rapidjson::Value WritePin_(const Pin& pin, JsonAlloc& alloc);
+
+    	bool ResolveConnections_();
+
+    	void                      Read_(uint32_t version, const JsonValue& data);
+    	template<typename V> void Read_(const JsonValue& data);
+    	
+    	ShaderAsset*    Asset_;
+    	ShaderGraph&    Parent_;
+    	NodeList        Nodes_;
+    	ConnectionStack QueuedConnections_;
+    	bool            Dirty_;
+
+    	friend class ShaderAsset;
+    	friend class ShaderGraph;
     };
 
     class ShaderAsset : public FileManager::Asset
@@ -218,48 +273,59 @@ namespace OpenShaderDesigner
         
         ShaderAsset(const FileManager::Path& path, ShaderGraph& graph)
             : Asset(path)
-            , State_(graph)
+            , State_(graph, this)
         { }
 
-        void        PushState()            { History_.push(State_); }
-        void        PopState()             { State_ = History_.top(); History_.pop();}
+        void PushState()  { History_.push(State_); }
+        void PopState()   { State_ = History_.top(); History_.pop();}
+    	void ClearState() { State_.Clear(); }
         
-        GraphState& GetState()             { return State_; }
+        GraphState&       GetState()       { return State_; }
         const GraphState& GetState() const { return State_; }
 
-        ShaderGraph& GetGraph() { return State_.Parent; }
-        const ShaderGraph& GetGraph() const { return State_.Parent; }
+        ShaderGraph&       GetGraph()       { return State_.Parent_; }
+        const ShaderGraph& GetGraph() const { return State_.Parent_; }
 
         virtual void Compile() = 0;
-        virtual void View(HDRTexture::HandleType* Target) = 0;
+        virtual void View(HDRTexture::HandleType* Target);
 
     protected:
         std::string Code;
+
+    	virtual Node* GetSingletonNode(const std::string& alias) { return nullptr; }
         
 
     private:
         GraphState             State_;
         std::stack<GraphState> History_;
+
+    	friend class GraphState;
     };
 
 	class ShaderGraph
 		: public EditorWindow
 	{
-	private:
+	public:
 		friend Node;
 
 		using ConstructorPtr = Node*(*)(ShaderGraph&, ImVec2);
 		struct ContextMenuItem
 		{
-			std::string    Name;
+			std::string    Name, Alias;
 			ConstructorPtr Constructor;
 		};
 
 		using ContextMenuHierarchy = ocu::directed_tree<ContextMenuItem>;
-		using ContextID = ContextMenuHierarchy::node;
-	    
-		static ContextMenuHierarchy& ContextMenu() { static ContextMenuHierarchy Menu {{ "", nullptr }}; return Menu; }
+		using ContextID            = ContextMenuHierarchy::node;
+		using AliasMapping         = std::unordered_map<std::string, ContextID>;
 
+	private:
+		static ContextMenuHierarchy& ContextMenu_() { static ContextMenuHierarchy Menu {{ "", "", nullptr }}; return Menu; }
+		static AliasMapping&            AliasMap_() { static AliasMapping Map; return Map; }
+
+	public:
+		static const ContextMenuHierarchy& ContextMenu() { return ContextMenu_(); }
+		static const AliasMapping&         AliasMap()    { return AliasMap_();    }
 
 	public:
 		ShaderGraph();
@@ -271,30 +337,52 @@ namespace OpenShaderDesigner
 
 	    void DrawContextMenu();
 
-	    void Copy();
-	    void Erase();
-	    void Paste(ImVec2 pos);
-	    void Clear();
+		/**
+		 * \brief Copy the selected nodes
+		 */
+		void Copy();
 
-	    Node* FindNode(ImPinPtr ptr);
-	    Node* FindNode(ImGuiID id);
-	    Pin&  FindPin(ImPinPtr ptr);
+		/**
+		 * \brief Erase the selected nodes
+		 */
+		void Erase();
+
+		/**
+		 * \brief Paste the selected nodes
+		 * \param pos Position to place them at
+		 */
+		void Paste(ImVec2 pos);
+
+		/**
+		 * \brief Clear the selection
+		 */
+		void Clear();
+
+		const Node* GetNode(NodeId node)   const;
+	    const Node* FindNode(ImPinPtr ptr) const;
+	    const Node* FindNode(ImGuiID id)   const;
+	    const Pin&  FindPin(ImPinPtr ptr)  const;
 
 	    std::string GetValue(ImPinPtr ptr);
 
 	    void OpenShader(ShaderAsset* asset) { Shader_ = asset; }
 
-	    static void Register(const std::filesystem::path& path, ConstructorPtr constructor);
+	    static void Register(const std::filesystem::path& path, const std::string& alias, ConstructorPtr constructor);
+
+		ShaderAsset* GetActive() { return Shader_; }
 
 	private:
+		Node* GetNode(NodeId node);
+		Node* FindNode(ImPinPtr ptr);
+		Node* FindNode(ImGuiID id);
+		Pin&  FindPin(ImPinPtr ptr);
+		
 	    // TODO: Make bitfield
         bool GrabFocus_;
 	    ShaderAsset* Shader_;
 	    ImVec2 ContextMenuPosition_;
 	    ocu::optional<NodeId> Selected_;
-	    
-	    
-
+		
 		friend class Inspector;
 	};
 

@@ -105,26 +105,35 @@ void FileManager::DrawMenu()
 {
 	if(ImGui::BeginMenu("File"))
 	{
+		// Create a file
         if(ImGui::BeginMenu("Create"))
         {
+        	// Display all the registered assets
             struct Visitor
             {
                 bool operator()(AssetDetail& item, AssetType id)
                 {
                     AssetMenuHierarchy& AssetMenu = FileManager::AssetMenu();
-                    const auto depth = AssetMenu.depth(id);
+                    const auto depth = AssetMenu.depth(id); // Depth into the hierarchy
+
+                	// Verify this is a valid asset
                     if(depth > Context.size()) return false;
                     if(item.Name == "##") return false;
 
+                	// This checks if we have left a sub-tree
                     while(depth < Context.size())
                     {
                         Context.pop();
                         ImGui::EndMenu();
                     }
 
+                	// This checks if we are in an unopened sub-tree
                     if(Context.top() != AssetMenu.parent(id)) return false;
+
+                	// display name for the item, tack on the ID just in case of duplicates
                     std::string name = std::format("{}##{}", item.Name, id);
 
+                	// 
                     if(item.Create != nullptr)
                     {
                         if(ImGui::MenuItem(name.c_str()))
@@ -167,6 +176,12 @@ void FileManager::DrawMenu()
 
             ImGui::EndPopup();
         }
+
+		Asset* selected = Filesystem_[Selected_].get_data();
+		if(ImGui::MenuItem("\uf0b0 Save", nullptr, false, selected ? selected->Dirty() : false))
+		{
+			Save(Selected_);
+		}
 	    
 	    ImGui::EndMenu();
 	}
@@ -325,6 +340,11 @@ void FileManager::DrawWindow()
 
 		ImGui::EndTable();
     }
+}
+
+void FileManager::Save(FileID file)
+{
+	Filesystem_[file]->Write(Filesystem_[file].path());
 }
 
 bool FileManager::AnyDirty()
