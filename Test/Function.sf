@@ -1,0 +1,433 @@
+{
+    "Version": 0,
+    "DisplayVar": 0,
+    "GraphState": {
+        "Nodes": [
+            {
+                "Alias": "Function",
+                "Title": " Outputs",
+                "Position": {
+                    "X": 1400.0,
+                    "Y": 0.0
+                },
+                "Inputs": [
+                    {
+                        "Name": "Out",
+                        "Flags": 0,
+                        "Type": 2,
+                        "Value": 0.0
+                    }
+                ],
+                "Outputs": []
+            },
+            {
+                "Alias": "FunctionInputs",
+                "Title": " Inputs",
+                "Position": {
+                    "X": 0.0,
+                    "Y": 0.0
+                },
+                "Inputs": [],
+                "Outputs": [
+                    {
+                        "Name": "X",
+                        "Flags": 0,
+                        "Type": 2,
+                        "Value": 0.0
+                    },
+                    {
+                        "Name": "T",
+                        "Flags": 0,
+                        "Type": 2,
+                        "Value": 0.0
+                    },
+                    {
+                        "Name": "Freq",
+                        "Flags": 0,
+                        "Type": 2,
+                        "Value": 20.0
+                    },
+                    {
+                        "Name": "Rate",
+                        "Flags": 0,
+                        "Type": 2,
+                        "Value": 5.0
+                    }
+                ]
+            },
+            {
+                "Alias": "Multiply",
+                "Title": " Multiply",
+                "Position": {
+                    "X": 200.0,
+                    "Y": 0.0
+                },
+                "Inputs": [
+                    {
+                        "Name": "A",
+                        "Flags": 8,
+                        "Type": 2,
+                        "Value": 0.0
+                    },
+                    {
+                        "Name": "B",
+                        "Flags": 8,
+                        "Type": 2,
+                        "Value": 0.0
+                    }
+                ],
+                "Outputs": [
+                    {
+                        "Name": "Out",
+                        "Flags": 8,
+                        "Type": 2,
+                        "Value": 0.0
+                    }
+                ]
+            },
+            {
+                "Alias": "Multiply",
+                "Title": " Multiply",
+                "Position": {
+                    "X": 200.0,
+                    "Y": 140.0
+                },
+                "Inputs": [
+                    {
+                        "Name": "A",
+                        "Flags": 8,
+                        "Type": 2,
+                        "Value": 0.0
+                    },
+                    {
+                        "Name": "B",
+                        "Flags": 8,
+                        "Type": 2,
+                        "Value": 0.0
+                    }
+                ],
+                "Outputs": [
+                    {
+                        "Name": "Out",
+                        "Flags": 8,
+                        "Type": 2,
+                        "Value": 0.0
+                    }
+                ]
+            },
+            {
+                "Alias": "Add",
+                "Title": " Add",
+                "Position": {
+                    "X": 400.0,
+                    "Y": 0.0
+                },
+                "Inputs": [
+                    {
+                        "Name": "A",
+                        "Flags": 8,
+                        "Type": 2,
+                        "Value": 0.0
+                    },
+                    {
+                        "Name": "B",
+                        "Flags": 8,
+                        "Type": 2,
+                        "Value": 0.0
+                    }
+                ],
+                "Outputs": [
+                    {
+                        "Name": "Out",
+                        "Flags": 8,
+                        "Type": 2,
+                        "Value": 0.0
+                    }
+                ]
+            },
+            {
+                "Alias": "Multiply",
+                "Title": " Multiply",
+                "Position": {
+                    "X": 600.0,
+                    "Y": 0.0
+                },
+                "Inputs": [
+                    {
+                        "Name": "A",
+                        "Flags": 8,
+                        "Type": 2,
+                        "Value": 0.0
+                    },
+                    {
+                        "Name": "B",
+                        "Flags": 8,
+                        "Type": 2,
+                        "Value": 0.0
+                    }
+                ],
+                "Outputs": [
+                    {
+                        "Name": "Out",
+                        "Flags": 8,
+                        "Type": 2,
+                        "Value": 0.0
+                    }
+                ]
+            },
+            {
+                "Alias": "Pi",
+                "Title": " π",
+                "Position": {
+                    "X": 480.0,
+                    "Y": 140.0
+                },
+                "Inputs": [],
+                "Outputs": [
+                    {
+                        "Name": "π",
+                        "Flags": 22,
+                        "Type": 2,
+                        "Value": 3.1415927410125732
+                    }
+                ]
+            },
+            {
+                "Alias": "Add",
+                "Title": " Add",
+                "Position": {
+                    "X": 1000.0,
+                    "Y": 0.0
+                },
+                "Inputs": [
+                    {
+                        "Name": "A",
+                        "Flags": 8,
+                        "Type": 2,
+                        "Value": 0.0
+                    },
+                    {
+                        "Name": "B",
+                        "Flags": 8,
+                        "Type": 2,
+                        "Value": 1.0
+                    }
+                ],
+                "Outputs": [
+                    {
+                        "Name": "Out",
+                        "Flags": 8,
+                        "Type": 2,
+                        "Value": 0.0
+                    }
+                ]
+            },
+            {
+                "Alias": "Multiply",
+                "Title": " Multiply",
+                "Position": {
+                    "X": 1200.0,
+                    "Y": 0.0
+                },
+                "Inputs": [
+                    {
+                        "Name": "A",
+                        "Flags": 8,
+                        "Type": 2,
+                        "Value": 0.0
+                    },
+                    {
+                        "Name": "B",
+                        "Flags": 8,
+                        "Type": 2,
+                        "Value": 0.5
+                    }
+                ],
+                "Outputs": [
+                    {
+                        "Name": "Out",
+                        "Flags": 8,
+                        "Type": 2,
+                        "Value": 0.0
+                    }
+                ]
+            },
+            {
+                "Alias": "Sine",
+                "Title": " Sin",
+                "Position": {
+                    "X": 800.0,
+                    "Y": 0.0
+                },
+                "Inputs": [
+                    {
+                        "Name": "In",
+                        "Flags": 8,
+                        "Type": 2,
+                        "Value": 0.0
+                    }
+                ],
+                "Outputs": [
+                    {
+                        "Name": "Out",
+                        "Flags": 8,
+                        "Type": 2,
+                        "Value": 0.0
+                    }
+                ]
+            }
+        ],
+        "Connections": [
+            {
+                "A": {
+                    "Node": 2,
+                    "Pin": 1,
+                    "Direction": false
+                },
+                "B": {
+                    "Node": 1,
+                    "Pin": -1,
+                    "Direction": true
+                }
+            },
+            {
+                "A": {
+                    "Node": 2,
+                    "Pin": 2,
+                    "Direction": false
+                },
+                "B": {
+                    "Node": 1,
+                    "Pin": -3,
+                    "Direction": true
+                }
+            },
+            {
+                "A": {
+                    "Node": 3,
+                    "Pin": 1,
+                    "Direction": false
+                },
+                "B": {
+                    "Node": 1,
+                    "Pin": -2,
+                    "Direction": true
+                }
+            },
+            {
+                "A": {
+                    "Node": 3,
+                    "Pin": 2,
+                    "Direction": false
+                },
+                "B": {
+                    "Node": 1,
+                    "Pin": -4,
+                    "Direction": true
+                }
+            },
+            {
+                "A": {
+                    "Node": 4,
+                    "Pin": 1,
+                    "Direction": false
+                },
+                "B": {
+                    "Node": 2,
+                    "Pin": -1,
+                    "Direction": true
+                }
+            },
+            {
+                "A": {
+                    "Node": 4,
+                    "Pin": 2,
+                    "Direction": false
+                },
+                "B": {
+                    "Node": 3,
+                    "Pin": -1,
+                    "Direction": true
+                }
+            },
+            {
+                "A": {
+                    "Node": 5,
+                    "Pin": 2,
+                    "Direction": false
+                },
+                "B": {
+                    "Node": 6,
+                    "Pin": -1,
+                    "Direction": true
+                }
+            },
+            {
+                "A": {
+                    "Node": 5,
+                    "Pin": 1,
+                    "Direction": false
+                },
+                "B": {
+                    "Node": 4,
+                    "Pin": -1,
+                    "Direction": true
+                }
+            },
+            {
+                "A": {
+                    "Node": 9,
+                    "Pin": 1,
+                    "Direction": false
+                },
+                "B": {
+                    "Node": 5,
+                    "Pin": -1,
+                    "Direction": true
+                }
+            },
+            {
+                "A": {
+                    "Node": 8,
+                    "Pin": 1,
+                    "Direction": false
+                },
+                "B": {
+                    "Node": 7,
+                    "Pin": -1,
+                    "Direction": true
+                }
+            },
+            {
+                "A": {
+                    "Node": 0,
+                    "Pin": 1,
+                    "Direction": false
+                },
+                "B": {
+                    "Node": 8,
+                    "Pin": -1,
+                    "Direction": true
+                }
+            },
+            {
+                "A": {
+                    "Node": 7,
+                    "Pin": 1,
+                    "Direction": false
+                },
+                "B": {
+                    "Node": 9,
+                    "Pin": -1,
+                    "Direction": true
+                }
+            }
+        ]
+    },
+    "DebugValues": [
+        4,
+        7,
+        0,
+        0
+    ]
+}
