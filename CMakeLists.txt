@@ -41,6 +41,7 @@ include_directories(External)
 add_subdirectory(External/portable-file-dialogs)
 add_subdirectory(External/open-cpp-utils)
 add_subdirectory(External/glw)
+add_subdirectory(External/mini)
 
 # Configure ImGui
 set(IMGUI_BACKEND_SDL3   ON)
@@ -105,6 +106,7 @@ target_compile_definitions(OpenShaderDesigner PRIVATE
         PROJECT_VERSION_MINOR=${VERSION_MINOR}
         PROJECT_VERSION_PATCH=${VERSION_PATCH}
         PROJECT_DIR="${CMAKE_CURRENT_SOURCE_DIR}"
+        PROJECT_NAME="${CMAKE_PROJECT_NAME}"
         
         RAPIDJSON_HAS_STDSTRING=1
 )
@@ -115,6 +117,7 @@ target_link_libraries(OpenShaderDesigner PRIVATE
         OpenGL::GL
         SDL3::SDL3
         assimp::assimp
+        mINI
         rapidjson
         open-cpp-utils
         imgui-docking

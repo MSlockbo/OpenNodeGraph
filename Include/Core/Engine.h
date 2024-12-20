@@ -22,37 +22,44 @@
 
 #include <Core/Window.h>
 #include <Utility/Timer.h>
+#include <mini/src/mini/ini.h>
+
+using namespace mINI;
 
 namespace OpenShaderDesigner
 {
     
 class Engine
 {
-public:
-    static void Start(const Window::Configuration& config);
+public:	
+    static void Start();
     static void Stop();
 
-    static inline const char* VersionString() { return PROJECT_VERSION; }
-    static inline int VersionMajor() { return PROJECT_VERSION_MAJOR; }
-    static inline int VersionMinor() { return PROJECT_VERSION_MINOR; }
-    static inline int VersionPatch() { return PROJECT_VERSION_PATCH; }
+	static inline const char* ApplicationName() { return PROJECT_NAME; }
+    static inline const char* VersionString()   { return PROJECT_VERSION; }
+    static inline int         VersionMajor()    { return PROJECT_VERSION_MAJOR; }
+    static inline int         VersionMinor()    { return PROJECT_VERSION_MINOR; }
+    static inline int         VersionPatch()    { return PROJECT_VERSION_PATCH; }
 
-    static Window& GetMainWindow() { return *MainWindow; }
+    static Window& GetMainWindow() { return *MainWindow_; }
+
+	static INIStructure& Settings() { return Settings_; }
     
 private:
     static void Initialize();
     static void Shutdown();
     static void Update();
 
-    inline static Timer   Time;
-    inline static Timer   Frame;
-    inline static double _Delta;
-    inline static double _Runtime;
-    inline static Window* MainWindow;
+	inline static INIStructure Settings_;
+    inline static Timer        Time_;
+    inline static Timer        Frame_;
+    inline static double       Delta_;
+    inline static double       Runtime_;
+    inline static Window*      MainWindow_;
 
 public:
-    inline static const double& Delta   = _Delta;
-    inline static const double& Runtime = _Runtime;
+    inline static const double& Delta   = Delta_;
+    inline static const double& Runtime = Runtime_;
 };
     
 }

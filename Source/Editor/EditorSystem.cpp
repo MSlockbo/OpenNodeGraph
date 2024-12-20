@@ -204,6 +204,10 @@ void EditorSystem::Initialize()
 		);
 	}
 
+	auto& Settings = Engine::Settings();
+	Whitepoint_ = std::stof(Settings["graphics"]["whitepoint"]);
+	Gamma_      = std::stof(Settings["graphics"]["gamma"]);
+
 	WhitepointDisplay_ = new HDRTexture({ 2, 1 });
 	WhitepointDisplay_->set_mag_filter(glw::nearest);
 	RebuildWhitepointDisplay_();
@@ -249,17 +253,19 @@ void EditorSystem::Draw()
 	
 	if(OpenCalibration_)
 	{
-		ImGui::OpenPopup("HDRCalibration");
+		ImGui::OpenPopup("HDR Calibration");
 	}
 	
-	if(ImGui::BeginPopupModal("HDRCalibration", &OpenCalibration_, ImGuiWindowFlags_None))
+	if(ImGui::BeginPopupModal("HDR Calibration", &OpenCalibration_, ImGuiWindowFlags_None))
 	{
-		if(ImGui::SliderFloat("White Point", &Whitepoint, 0.0f, 10.0f))
+		float Rescale = Whitepoint_ * 100.0f;
+		if(ImGui::SliderFloat("White Point", &Rescale, 0.0f, 1000.0f, "%.0f"))
 		{
+			Whitepoint_ = Rescale / 100.0f;
 			RebuildWhitepointDisplay_();
 		}
 		
-		ImGui::SliderFloat("Gamma", &Gamma, 0.0f, 10.0f);
+		ImGui::SliderFloat("Gamma", &Gamma_, 0.0f, 10.0f);
 		
 		ImVec2 Avail = ImGui::GetContentRegionAvail();
 		float  Width = Avail.x;
@@ -267,7 +273,7 @@ void EditorSystem::Draw()
 		
 		ImGui::Image(
 			reinterpret_cast<ImTextureID>(static_cast<intptr_t>(WhitepointDisplay_->handle()))
-		,	{ Width, Width / 2 }
+		,	Avail
 		);
 
 		ImGui::EndPopup();
@@ -282,8 +288,8 @@ void EditorSystem::Draw()
 		if(Window.Config().Video.HDR && not OpenCalibration_)
 		{
 			ColorCorrection_->bind();
-			ColorCorrection_->operator[]("Whitepoint") = Whitepoint;
-			ColorCorrection_->operator[]("Gamma") = Gamma;
+			ColorCorrection_->operator[]("Whitepoint") = Whitepoint_;
+			ColorCorrection_->operator[]("Gamma") = Gamma_;
 			DrawBuffer_->get<1>().bind_image(0, glw::access_read_write);
 			ColorCorrection_->dispatch(Window.Size().x, Window.Size().y, 1);
 		}
@@ -305,7 +311,7 @@ void EditorSystem::OpenHDRCalibration()
 
 void EditorSystem::RebuildWhitepointDisplay_()
 {
-	glm::vec3 Pixels[] = { glm::vec3(Whitepoint), glm::vec3(10.0f) };
+	glm::vec3 Pixels[] = { glm::vec3(Whitepoint_), glm::vec3(10.0f) };
 
 	WhitepointDisplay_->upload(Pixels, { 2, 1 }, { 0, 0 }, 0, glw::rgb, glw::float32);
 }
@@ -321,6 +327,10 @@ void EditorSystem::Shutdown()
 
     ImNodeGraph::DestroyContext();
 	ImGui::DestroyContext();
+
+	auto& Settings = Engine::Settings();
+	Settings["graphics"]["whitepoint"] = std::to_string(Whitepoint_);
+	Settings["graphics"]["gamma"]      = std::to_string(Gamma_);
 }
 
 void EditorSystem::HandleEvents(SDL_Event* event)

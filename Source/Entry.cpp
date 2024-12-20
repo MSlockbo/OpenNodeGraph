@@ -23,15 +23,8 @@
 int main(int, char**)
 {
     using namespace OpenShaderDesigner;
-
-    Window::Configuration config;
-    config.Application.Title = "OpenShaderDesigner";
-    //config.Video.Multisamples = 16;
-    config.Video.Fullscreen = Window::FullscreenMode::FULLSCREEN;
-    //config.Video.Resolution = { 1280, 720 };
-    config.Video.HDR = true;
-
-    Engine::Start(config);
+	
+    Engine::Start();
 
     return 0;
 }

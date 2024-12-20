@@ -26,6 +26,7 @@
 #include <string>
 #include <Core/EventSystem.h>
 
+#include "open-cpp-utils/map.h"
 #include "open-cpp-utils/optional.h"
 
 namespace ocu = open_cpp_utils;
@@ -63,12 +64,52 @@ public:
         DEFAULT = DISABLED,
     };
 
+	inline static const ocu::map<std::string, VSyncMode> VSyncTranslateString = {
+		{ "disabled", VSyncMode::DISABLED }
+	,	{ "enabled",  VSyncMode::ENABLED  }
+	,	{ "adaptive", VSyncMode::ADAPTIVE }
+	};
+
+	inline static const ocu::map<VSyncMode, std::string> VSyncTranslateEnum = {
+		{ VSyncMode::DISABLED, "disabled" }
+	,	{ VSyncMode::ENABLED,  "enabled"  }
+	,	{ VSyncMode::ADAPTIVE, "adaptive" }
+	};
+
     enum class FullscreenMode : int
     {
         WINDOWED = 0,
+        BORDERLESS = SDL_WINDOW_BORDERLESS,
         FULLSCREEN = SDL_WINDOW_FULLSCREEN,
-        FULLSCREEN_WINDOW = SDL_WINDOW_BORDERLESS,
     };
+
+	inline static const ocu::map<std::string, FullscreenMode> FullScreenTranslateString = {
+		{ "windowed",   FullscreenMode::WINDOWED   }
+	,	{ "borderless", FullscreenMode::BORDERLESS }
+	,	{ "fullscreen", FullscreenMode::FULLSCREEN }
+	};
+
+	inline static const ocu::map<FullscreenMode, std::string> FullScreenTranslateEnum = {
+		{ FullscreenMode::WINDOWED,   "windowed"   }
+	,	{ FullscreenMode::BORDERLESS, "borderless" }
+	,	{ FullscreenMode::FULLSCREEN, "fullscreen" }
+	};
+
+	inline static const ocu::map<std::string, int> MSAATranslateString = {
+		{ "off", 1 }
+	,	{ "2x",  2 }
+	,	{ "4x",  4 }
+	,	{ "8x",  8 }
+	,	{ "16x", 16 }
+	};
+
+	inline static const ocu::map<int, std::string> MSAATranslateInt = {
+		{ 1,  "off" }
+	,	{ 2,  "2x"  }
+	,	{ 4,  "4x"  }
+	,	{ 8,  "8x"  }
+	,	{ 16, "16x" }
+	};
 
     struct Configuration
     {
@@ -82,13 +123,13 @@ public:
             FullscreenMode     Fullscreen;
             glm::ivec2         Resolution;
             VSyncMode          VSync;
-            bool               HDR;
+            bool               HDR, Maximized;
             ocu::optional<int> Multisamples;
         } Video;
 
         Configuration()
             : Application { "App" }
-            , Video { FullscreenMode::WINDOWED, glm::ivec2(0, 0), VSyncMode::DISABLED, false }
+            , Video { FullscreenMode::WINDOWED, glm::ivec2(0, 0), VSyncMode::DISABLED, false, false }
         { }
     };
 
@@ -100,6 +141,8 @@ public:
     void HandleEvents();
     void BeginFrame();
     void EndFrame();
+
+	void Restore();
 
     void Close() { Open_ = false; }
     [[nodiscard]] bool IsOpen() const { return Open_; }

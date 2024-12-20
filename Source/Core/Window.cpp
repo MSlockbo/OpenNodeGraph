@@ -58,6 +58,7 @@ Window::Window(const Configuration& config)
 {
 	int flags = static_cast<int>(Config_.Video.Fullscreen) | SDL_WINDOW_OPENGL;
 	flags |= Config_.Video.Fullscreen == FullscreenMode::WINDOWED ? SDL_WINDOW_RESIZABLE : 0;
+	flags |= Config_.Video.Maximized ? SDL_WINDOW_MAXIMIZED : 0; 
 	
 	SDL_Init(
 		SDL_INIT_VIDEO
@@ -124,16 +125,6 @@ Window::Window(const Configuration& config)
         assert(false);
         return;
     }
-
-	if(Config_.Video.HDR)
-	{
-		SDL_Surface* WindowSurface = SDL_GetWindowSurface(Handle_);
-		
-		//if(not SDL_SetSurfaceColorspace(WindowSurface, SDL_COLORSPACE_SRGB_LINEAR))
-		{
-			Console::Log(Console::Severity::Fatal, "Failed to set colorspace: {}", SDL_GetError());
-		}
-	}
 
     Context_ = SDL_GL_CreateContext(Handle_);
 
@@ -210,7 +201,7 @@ Window::Window(const Configuration& config)
 }
 
 Window::~Window()
-{
+{	
     SDL_GL_DeleteContext(Context_);
     SDL_DestroyWindow(Handle_);
     SDL_Quit();
@@ -227,22 +218,20 @@ void Window::HandleEvents()
         if (event.type == SDL_QUIT)
         {
             Close();
-            return;
+        	SDL_RestoreWindow(Handle_);
         }
 
 
-        if (event.type >= SDL_EVENT_WINDOW_FIRST && event.type <= SDL_EVENT_WINDOW_LAST)
-        {
-            switch(event.type)
-            {
-            case SDL_EVENT_WINDOW_PIXEL_SIZE_CHANGED:
-                Config_.Video.Resolution.x = event.window.data1;
-                Config_.Video.Resolution.y = event.window.data2;
-                break;
-            default:
-                break;
-            }
-        }
+    	switch(event.type)
+    	{
+    		case SDL_EVENT_WINDOW_PIXEL_SIZE_CHANGED:
+    			Config_.Video.Resolution.x = event.window.data1;
+    			Config_.Video.Resolution.y = event.window.data2;
+    			Config_.Video.Maximized    = Open_ ? SDL_GetWindowFlags(Handle_) & SDL_WINDOW_MAXIMIZED : Config_.Video.Maximized;
+    		break;
+    		default:
+    			break;
+    	}
 
         EditorSystem::HandleEvents(&event);
 
@@ -270,4 +259,9 @@ void Window::EndFrame()
 
     OpenShaderDesigner::EndFrame event;
     EventSystem::PostEvent(&event);
+}
+
+void Window::Restore()
+{
+	SDL_RestoreWindow(Handle_);
 }

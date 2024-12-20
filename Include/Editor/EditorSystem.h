@@ -73,7 +73,6 @@ public:
     static void Shutdown();
 	static void HandleEvents(SDL_Event* event);
 	static void OpenHDRCalibration();
-	
 
 private:
 	static void RebuildWhitepointDisplay_();
@@ -82,8 +81,8 @@ private:
     inline static MainMenuBar*  MainMenuBar_ = nullptr;
 	inline static FrameBuffer*  DrawBuffer_ = nullptr;
 	inline static glw::shader*  ColorCorrection_ = nullptr;
-	inline static float         Whitepoint = 5.5f;
-	inline static float         Gamma = 2.2f;
+	inline static float         Whitepoint_ = 5.6f;
+	inline static float         Gamma_ = 2.2f;
 	inline static HDRTexture*   WhitepointDisplay_ = nullptr;
 	inline static bool          OpenCalibration_ = false;
 };

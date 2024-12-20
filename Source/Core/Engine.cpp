@@ -33,28 +33,48 @@
 
 using namespace OpenShaderDesigner;
 
-void Engine::Start(const Window::Configuration& config)
+void Engine::Start()
 {
-    std::string version = VersionString();
-    Console::Log(Console::Severity::Alert, "Starting {} ({})", config.Application.Title, version);
+	INIFile File = INIFile(PROJECT_NAME ".ini");
+	auto& AppConfig = Settings();
+	File.read(AppConfig);
+	
+	std::string Title   = ApplicationName();
+    std::string Version = VersionString();
+    Console::Log(Console::Severity::Alert, "Starting {} ({})", Title, Version);
+
+	Window::Configuration Config;
+	auto& Application = Config.Application;
+	auto& Video       = Config.Video;
+	
+	Application.Title  = Title;
+	Video.Fullscreen   = Window::FullScreenTranslateString.get(AppConfig["video"]["fullscreen"]);
+	Video.Maximized    = std::stoi(AppConfig["video"]["maximized"]);
+	Video.VSync        = Window::VSyncTranslateString.get(AppConfig["video"]["vsync"]);
+	Video.Resolution.x = std::stoi(AppConfig["video"]["resolution_x"]);
+	Video.Resolution.y = std::stoi(AppConfig["video"]["resolution_y"]);
+	Video.Multisamples = Window::MSAATranslateString.get(AppConfig["video"]["msaa"]);
+	Video.HDR          = std::stoi(AppConfig["video"]["hdr"]);
 
     Console::Log(Console::Message, "Creating Main Window");
-    MainWindow = new Window(config);
+    MainWindow_ = new Window(Config);
 
     Initialize();
 
     Console::Log(Console::Alert, "Starting Main Loop");
-    while(MainWindow->IsOpen())
+    while(MainWindow_->IsOpen())
     {
         Update();
     }
+
+	Update();
 
     Shutdown();
 }
 
 void Engine::Stop()
 {
-    MainWindow->Close();
+    MainWindow_->Close();
 }
 
 void Engine::Initialize()
@@ -88,24 +108,43 @@ void Engine::Initialize()
     FileManager::FileID root = filesystem->LoadDirectory("./Test/");
     filesystem->CurrentDirectory(root);
 
-	Time.Reset();
+	Time_.Reset();
 }
 
 void Engine::Shutdown()
-{
+{	
+	INIFile File = INIFile(PROJECT_NAME ".ini");
     EditorSystem::Shutdown();
+	
+	auto&       AppConfig   = Settings();
+	const auto& Config      = MainWindow_->Config();
+	const auto& Application = Config.Application;
+	const auto& Video       = Config.Video;
+	const bool  Fullscreen  = Video.Fullscreen != Window::FullscreenMode::WINDOWED;
+	
+	AppConfig["video"]["fullscreen"]   = Window::FullScreenTranslateEnum.get(Video.Fullscreen);
+	AppConfig["video"]["maximized"]    = std::to_string(Fullscreen ? false : Video.Maximized);
+	AppConfig["video"]["resolution_x"] = std::to_string(Video.Resolution.x);
+	AppConfig["video"]["resolution_y"] = std::to_string(Video.Resolution.y);
+	AppConfig["video"]["vsync"]        = Window::VSyncTranslateEnum.get(Video.VSync);
+	AppConfig["video"]["msaa"]         = Window::MSAATranslateInt.get(Video.Multisamples() ? 1 : Video.Multisamples);
+	AppConfig["video"]["hdr"]          = std::to_string(Video.HDR);
+
+	File.write(AppConfig);
+
+	delete MainWindow_;
 }
 
 void Engine::Update()
 {
-    _Runtime = Time.Poll();
+    Runtime_ = Time_.Poll();
     
-    _Delta = Frame.Poll();
-    Frame.Reset();
+    Delta_ = Frame_.Poll();
+    Frame_.Reset();
 
-    MainWindow->BeginFrame();
+    MainWindow_->BeginFrame();
 
     EditorSystem::Draw();
 
-    MainWindow->EndFrame();
+    MainWindow_->EndFrame();
 }
